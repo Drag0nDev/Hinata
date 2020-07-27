@@ -1,5 +1,9 @@
-module.exports = client => {
-    console.log(`Logged in as ${client.user.tag}!`);
+module.exports = bot => {
+    console.log(`Logged in as ${bot.user.tag}!`);
 
-    client.user.setActivity("my owner struggle with code", {type: "WATCHING"});
+    bot.user.setActivity({
+        name: 'Under construction',
+        type: 'STREAMING',
+        url: 'https://www.twitch.tv/zwoil'
+    });
 };
