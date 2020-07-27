@@ -1,8 +1,12 @@
+const config = {
+    prefix: process.env.PREFIX
+};
+
 module.exports = (bot, message) => {
     if (message.author.bot) return;
-    if (message.content.indexOf(prefix) !== 0) return;
+    if (message.content.indexOf(config.prefix) !== 0) return;
 
-    const args = message.content.slice(prefix.length).trim().split(/ +/g);
+    const args = message.content.slice(config.prefix.length).trim().split(/ +/g);
     const command = args.shift().toLowerCase();
 
     const cmd = bot.commands.get(command);

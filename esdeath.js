@@ -7,8 +7,7 @@ const bot = new Client();
 bot.commands = new Enmap();
 
 const config = {
-    token: process.env.TOKEN,
-    prefix: process.env.PREFIX
+    token: process.env.TOKEN
 }
 
 //command loader
