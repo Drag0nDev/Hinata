@@ -30,7 +30,7 @@ fs.readdir('./Esdeath.Core/events/', (err, files) => {
         if(!file.endsWith('.js')) return;
         const evt = require(`./Esdeath.Core/events/${file}`);
         let  evtName = file.split('.')[0];
-        console.log(`Loaded command '${evtName}'.`);
+        console.log(`Loaded event '${evtName}'.`);
         bot.on(evtName, evt.bind(null, bot));
     });
 });
