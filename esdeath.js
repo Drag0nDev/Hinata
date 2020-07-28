@@ -6,6 +6,7 @@ require('dotenv-flow').config()
 const bot = new Client();
 bot.commands = new Enmap();
 
+//get token from .env
 const config = {
     token: process.env.TOKEN
 }
@@ -34,4 +35,5 @@ fs.readdir('./Esdeath.Core/events/', (err, files) => {
     });
 });
 
+//bot connection to discord
 bot.login(config.token);
