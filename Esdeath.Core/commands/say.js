@@ -1,6 +1,7 @@
 exports.run = (client, message, args) => {
     const response = args.join(' ');
-    if (response === 'my creator is big gay' || response === 'my creator is gay')
+    if ((response.contains('gay').toLowerCase() || response.contains('gae').toLowerCase())
+        && (response.contains('master').toLowerCase() || response.contains('owner').toLowerCase()))
         message.channel.send(`No u ${message.author}`);
     else
         message.channel.send(response);
