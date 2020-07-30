@@ -10,6 +10,7 @@ module.exports = (bot, message) => {
     const args = message.content.slice(config.prefix.length).trim().split(/ +/g);
     const command = args.shift().toLowerCase();
 
+    console.log(args)
     const cmd = bot.commands.get(command);
     if (!cmd) return;
 
