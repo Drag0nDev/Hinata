@@ -25,7 +25,7 @@ fs.readdir('./Esdeath.Core/commands/', async (err, files) => {
 
 //event loader
 fs.readdir('./Esdeath.Core/events/', (err, files) => {
-   if(err)return console.error;
+    if(err)return console.error;
     files.forEach(file => {
         if(!file.endsWith('.js')) return;
         const evt = require(`./Esdeath.Core/events/${file}`);
@@ -35,5 +35,6 @@ fs.readdir('./Esdeath.Core/events/', (err, files) => {
     });
 });
 
+
 //bot connection to discord
-bot.login(config.token);
+bot.login(config.token.toString());

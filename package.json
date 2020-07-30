@@ -10,9 +10,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "ascii-table": "0.0.9",
     "discord.js": "^12.2.0",
     "dotenv-flow": "^3.2.0",
     "enmap": "^5.4.1",
+    "eslint": "^7.5.0",
+    "nodemon": "^2.0.4",
     "request": "^2.88.2"
   }
 }
