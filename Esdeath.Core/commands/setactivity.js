@@ -9,9 +9,9 @@ exports.run = (bot, message, args) => {
         //splitting in to parts
         const type = args.shift().toUpperCase();
         if(type === 'STREAMING'){
-            const name = args.pop();
-            console.log(args)
-            const link = args;
+            const link = args.pop();
+
+            const name = args.join(' ');
 
             bot.user.setActivity({
                 name: `${name}`,
