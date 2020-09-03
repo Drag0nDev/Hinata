@@ -8,7 +8,6 @@ exports.run = (bot, message, args) => {
     }else{
         //splitting in to parts
         const type = args.shift().toUpperCase();
-        console.log(type)
         if(type === 'STREAMING'){
             const link = args.pop();
 
