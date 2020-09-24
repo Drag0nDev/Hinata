@@ -11,9 +11,8 @@ const config = {
     token: process.env.TOKEN
 }
 
-const PORT = process.env.PORT || 3000;
-bot.listen(PORT, () => {
-    console.log(`Our app is running on port ${ PORT }`);
+bot.listen(3000, function () {
+    console.log('Example app listening on port 3000!');
 });
 
 //command loader
