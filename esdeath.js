@@ -11,6 +11,11 @@ const config = {
     token: process.env.TOKEN
 }
 
+const PORT = process.env.PORT || 3000;
+bot.listen(PORT, () => {
+    console.log(`Our app is running on port ${ PORT }`);
+});
+
 //command loader
 fs.readdir('./Esdeath.Core/commands/', async (err, files) => {
     if(err) return console.error;
