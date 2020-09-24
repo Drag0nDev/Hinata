@@ -1,5 +1,5 @@
 exports.run = (client, message, args) => {
-    message.channel.send("`" + `${message.createdTimestamp - Date.now()}` + " ms`");
+    message.channel.send("`" + `${Date.now() - message.createdTimestamp}` + " ms`");
 }
 
 exports.help = {
