@@ -11,10 +11,6 @@ const config = {
     token: process.env.TOKEN
 }
 
-bot.listen(3000, function () {
-    console.log('Example app listening on port 3000!');
-});
-
 //command loader
 fs.readdir('./Esdeath.Core/commands/', async (err, files) => {
     if(err) return console.error;
