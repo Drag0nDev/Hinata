@@ -4,7 +4,7 @@
   "description": "",
   "main": "esdeath.js",
   "scripts": {
-    "start": "echo \"Error: no test specified\" && exit 1"
+    "start": "node esdeath.js"
   },
   "keywords": [],
   "author": "",
