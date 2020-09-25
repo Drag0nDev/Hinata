@@ -1,9 +1,7 @@
-const config = {
-    owner: process.env.OWNER
-};
+const config = require("./config.json");
 
 exports.run = (bot, message, args) => {
-    if(message.member.id === config.owner.toString()){
+    if(message.member.id === config.owner){
         bot.user.setUsername(args.toString());
         message.channel.send('Username changed successfully!');
     }else{

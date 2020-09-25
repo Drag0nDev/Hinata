@@ -1,9 +1,7 @@
-const config = {
-    owner: process.env.OWNER
-};
+const config = require("./config.json");
 
 exports.run = (client, message, args) => {
-    if(message.member.id !== config.owner.toString())
+    if(message.member.id !== config.owner)
         return;
 
     message.delete();

@@ -1,15 +1,16 @@
 const { Client } = require('discord.js');
 const fs = require('fs');
 const Enmap = require('enmap');
-require('dotenv-flow').config()
+require('dotenv-flow').config();
+const config = require("./config.json");
 
 const bot = new Client();
 bot.commands = new Enmap();
 
 //get token from .env
-const config = {
+/*const config = {
     token: process.env.TOKEN
-}
+}*/
 
 //command loader
 fs.readdir('./Esdeath.Core/commands/', async (err, files) => {
@@ -37,4 +38,4 @@ fs.readdir('./Esdeath.Core/events/', (err, files) => {
 
 
 //bot connection to discord
-bot.login(config.token.toString());
+bot.login(config.TOKEN);

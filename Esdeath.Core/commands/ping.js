@@ -1,5 +1,7 @@
 exports.run = (client, message, args) => {
-    message.channel.send("`" + `${Date.now() - message.createdTimestamp}` + " ms`");
+    let ping = message.createdTimestamp - Date.now();
+    if(ping < 0) ping *= -1;
+    message.channel.send("`" + `${ping}` + " ms`");
 }
 
 exports.help = {

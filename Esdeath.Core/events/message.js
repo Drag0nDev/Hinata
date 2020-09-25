@@ -1,11 +1,8 @@
-const config = {
-    prefix: process.env.PREFIX,
-    botId: process.env.BOTID
-};
+const config = require("./config.json");
 
 module.exports = (bot, message) => {
     if (message.author.bot) return;
-    if (message.content.toLowerCase().indexOf(config.prefix.toString()) !== 0) return;
+    if (message.content.toLowerCase().indexOf(config.prefix) !== 0) return;
 
     const args = message.content.slice(config.prefix.length).trim().split(/ +/g);
     const command = args.shift().toLowerCase();
