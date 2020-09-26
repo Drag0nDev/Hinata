@@ -1,7 +1,7 @@
 const config = require("../../config.json");
 
 exports.run = (client, message, args) => {
-    if(message.member.id === config.owner) {
+    if(message.member.id === config.OWNER) {
         message.channel.send(`Hello master.\nYou are the best <@${config.owner.toString()}>!!! <:heart_diamond:738026632891334677>`);
         return;
     }

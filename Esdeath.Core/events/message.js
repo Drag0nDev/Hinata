@@ -1,10 +1,10 @@
-const config = require("./config.json");
+const config = require("../../config.json");
 
 module.exports = (bot, message) => {
     if (message.author.bot) return;
-    if (message.content.toLowerCase().indexOf(config.prefix) !== 0) return;
+    if (message.content.toLowerCase().indexOf(config.PREFIX) !== 0) return;
 
-    const args = message.content.slice(config.prefix.length).trim().split(/ +/g);
+    const args = message.content.slice(config.PREFIX.length).trim().split(/ +/g);
     const command = args.shift().toLowerCase();
 
     const cmd = bot.commands.get(command);

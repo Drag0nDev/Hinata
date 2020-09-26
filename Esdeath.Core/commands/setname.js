@@ -1,7 +1,7 @@
 const config = require("../../config.json");
 
 exports.run = (bot, message, args) => {
-    if(message.member.id === config.owner){
+    if(message.member.id === config.OWNER){
         bot.user.setUsername(args.toString());
         message.channel.send('Username changed successfully!');
     }else{
