@@ -22,14 +22,19 @@ var start = log.scheduleJob('0 * * *', function () {
 });
 
 //command loader
-fs.readdir('./Esdeath.Core/commands/', async (err, files) => {
+fs.readdir('./Esdeath.Core/commands/', async (err, dir) => {
     if(err) return console.error;
-    files.forEach(file => {
-        if(!file.endsWith('.js')) return;
-        let props = require(`./Esdeath.Core/commands/${file}`);
-        let cmdName = file.split('.')[0];
-        console.log(`Loaded command '${cmdName}'.`);
-        bot.commands.set(cmdName, props);
+    dir.forEach(dir => {
+        fs.readdir(`./Esdeath.Core/commands/${dir}`, async (err, files) => {
+            if(err) return console.error;
+            files.forEach(file => {
+                if(!file.endsWith('.js')) return;
+                let props = require(`./Esdeath.Core/commands/${dir}/${file}`);
+                let cmdName = file.split('.')[0];
+                console.log(`Loaded command '${cmdName}'.`);
+                bot.commands.set(cmdName, props);
+            });
+        });
     });
 });
 
