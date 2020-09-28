@@ -1,7 +1,7 @@
 const config = require("../../config.json");
 
 exports.run = (client, message, args) => {
-    if(message.member.id !== config.owner)
+    if(message.member.id !== config.OWNER)
         return;
 
     message.delete();
