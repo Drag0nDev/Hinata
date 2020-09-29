@@ -1,6 +1,6 @@
 const config = require("../../../config.json");
 
-exports.help = {
+module.exports = {
     name: 'setavatar',
     aliases: ['changeavatar', 'newavatar'],
     category: 'owner',
