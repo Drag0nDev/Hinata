@@ -1,7 +1,12 @@
-exports.run = (client, message, args) => {
-    if(message.mentions.members.first()) {
+module.exports = {
+    name: 'getip',
+    aliases: ['gi'],
+    category: 'fun',
+    description: 'Get a users ip (not really)',
+    usage: '[command | alias] [mention user]',
+    run: (client, message, args) => {
+        if (message.mentions.members.first()) {
 
-        if (args[0] === '2') {
             let arg = args[1];
             message.channel.send('Getting ip ...').then((msg) => {
                 setTimeout(function () {
@@ -9,23 +14,11 @@ exports.run = (client, message, args) => {
                 }, 1250);
             });
         } else {
-            let arg = args;
-            message.channel.send('Getting ip ...').then((msg) => {
-                setTimeout(function () {
-                    msg.edit(`${arg}'s ip: 127.0.0.1`);
-                }, 1250);
-            });
+            message.channel.send('Please mention a user!');
         }
-    } else {
-        message.channel.send('Please mention a user!');
     }
-
 }
 
 function getRandomInt(max) {
     return Math.floor(Math.random() * Math.floor(max));
-}
-
-exports.help = {
-    name: 'getip'
 }

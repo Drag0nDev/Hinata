@@ -1,5 +1,5 @@
 //imports
-const { Client } = require('discord.js');
+const { Client, MessageEmbed, Collection } = require('discord.js');
 const fs = require('fs');
 const Enmap = require('enmap');
 const config = require("./config.json");
@@ -7,11 +7,11 @@ var log = require('node-schedule');
 
 //variables
 const bot = new Client();
-bot.commands = new Enmap();
-const logFolder = './logs'
+bot.commands = new Collection();
+bot.categories = fs.readdirSync("./Esdeath.Core/commands/");
 
 //New log file at 12AM
-var start = log.scheduleJob('0 * * *', function () {
+var start = log.scheduleJob('0 0 0 * * *', function () {
     let date = new Date();
     fs.writeFile(`./logs/esdeathlog-${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}.txt`, '', function (err) {
         if (err) throw err;
@@ -49,7 +49,6 @@ fs.readdir('./Esdeath.Core/events/', (err, files) => {
         bot.on(evtName, evt.bind(null, bot));
     });
 });
-
 
 //bot connection to discord
 bot.login(config.TOKEN);
