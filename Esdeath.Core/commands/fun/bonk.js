@@ -2,7 +2,6 @@ const config = require("../../../config.json");
 
 module.exports = {
     name: 'bonk',
-    aliases: [],
     category: 'fun',
     description: 'Bonk a user',
     usage: '[command | alias] [mention user]',

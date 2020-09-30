@@ -2,7 +2,6 @@ const config = require("../../../config.json");
 
 module.exports = {
     name: 'perfix',
-    aliases: [],
     category: 'info',
     description: 'Get the prefix for the bot',
     usage: 'esdeath prefix',

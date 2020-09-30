@@ -2,7 +2,7 @@ const config = require("../../../config.json");
 
 module.exports = {
     name: 'dragon',
-    aliases: ['d'],
+    aliases: ["d"],
     category: 'fun',
     description: 'A mysterious command',
     usage: '[command | alias]',
