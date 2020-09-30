@@ -1,1 +1,5 @@
+#ignored files
 config.json
+
+#ignored directories
+logs/
