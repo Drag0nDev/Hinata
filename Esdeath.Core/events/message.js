@@ -9,10 +9,10 @@ module.exports = (bot, message) => {
     const args = message.content.slice(config.PREFIX.length).trim().split(/ +/g);
     const command = args.shift().toLowerCase();
 
-    const cmd = bot.commands.get(command);
-    if (!cmd) return;
+    let cmd = bot.commands.get(command);
+    if (!cmd) cmd = bot.commands.get(bot.aliases.get(command));
 
-    var logging = `------------------------------\nCommand: '${command}'\nArguments: '${args.join(' ')}' \nUser: '${message.author.tag}' \nServer: '${message.guild.name}' \nChannel: '${message.channel.name}'`
+    var logging = `------------------------------\nCommand: '${cmd.name}'\nArguments: '${args.join(' ')}' \nUser: '${message.author.tag}' \nServer: '${message.guild.name}' \nChannel: '${message.channel.name}'`
 
     fs.appendFile(`./logs/esdeathlog-${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}.txt`, `${logging}\n`, function (err) {
         if (err) throw err;
@@ -21,5 +21,7 @@ module.exports = (bot, message) => {
         }
     });
 
-    cmd.run(bot, message, args);
+    if(cmd){
+        cmd.run(bot, message, args);
+    }
 };
