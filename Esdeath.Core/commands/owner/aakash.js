@@ -5,7 +5,7 @@ module.exports = {
     category: 'owner',
     description: 'Dragon bonks aakash',
     usage: '[command | alias]',
-    run: (client, message, args) => {
+    run: (bot, message, args) => {
         if (message.member.id !== config.OWNER)
             return;
 

@@ -4,7 +4,7 @@ module.exports = {
     category: 'fun',
     description: 'Get the simprate of a person',
     usage: '[command | alias] <user mention>',
-    run: (client, message, args) => {
+    run: (bot, message, args) => {
         if (message.mentions.members.first()) {
             let arg = args;
             message.channel.send('Calculating').then((msg) => {

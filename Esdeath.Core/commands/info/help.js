@@ -25,7 +25,7 @@ function getAll(bot, message){
 
     //embed creation
     const embed = new MessageEmbed()
-        .setColor('#2f4fd2')
+        .setColor('#85C1E9')
         .setTitle('Help')
         .setURL('https://discord.gg/ReBJ4AB')
         .setThumbnail('https://i.imgur.com/SgO68RV.png')
@@ -63,7 +63,7 @@ function getCmd(bot, message, input){
         return message.channel.send(embed);
     }
 
-    embed.setColor('#2f4fd2').setTimestamp();
+    embed.setColor('#85C1E9').setTimestamp();
 
     //add all cmd info
     if(cmd.name){

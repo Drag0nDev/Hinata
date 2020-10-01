@@ -1,4 +1,5 @@
 const config = require("../../../config.json");
+const {MessageEmbed} = require('discord.js');
 
 module.exports = {
     name: 'dragon',
@@ -6,12 +7,19 @@ module.exports = {
     category: 'fun',
     description: 'A mysterious command',
     usage: '[command | alias]',
-    run: (client, message, args) => {
-        if(message.member.id === config.OWNER) {
-            message.channel.send(`Hello master.\nYou are the best <@${config.OWNER}>!!! <:heart_diamond:738026632891334677>`);
-            return;
-        }
+    run: (bot, message, args) => {
+        let embed = new MessageEmbed()
+            .setColor('#85C1E9')
+            .setTitle('Dragon')
+            .setTimestamp();
 
-        message.channel.send('My owner is the coolest! <:heart_diamond:738026632891334677>');
+        if(message.member.id === config.OWNER)
+            embed.setDescription(`Hello master.\nYou are the best <@${config.OWNER}>!!! <:heart_diamond:738026632891334677>`)
+                .setImage('https://media1.tenor.com/images/be48d6abbe29fefd1bf85d07bbe395d5/tenor.gif?itemid=5525035');
+        else
+            embed.setDescription('My owner is the coolest! <:heart_diamond:738026632891334677>')
+
+
+        message.channel.send(embed);
     }
 }

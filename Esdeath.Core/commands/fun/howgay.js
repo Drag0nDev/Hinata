@@ -1,21 +1,31 @@
+const {MessageEmbed} = require('discord.js');
+
 module.exports = {
     name: 'howgay',
     aliases: ['gayrate'],
     category: 'fun',
     description: 'Calculates how gay someone is',
     usage: '[command | alias] <mention user>',
-    run: (client, message, args) => {
+    run: (bot, message, args) => {
+        let embed = new MessageEmbed().setTitle('howgay')
+            .setColor('#85C1E9')
+            .setDescription('Calculating')
+            .setTimestamp();
+
         if (message.mentions.members.first()) {
             let arg = args;
-            message.channel.send('Calculating').then((msg) => {
-                setTimeout(function () {
-                    msg.edit(`${arg} is ${getRandomInt(100)}% gay!`);
+
+            message.channel.send(embed).then((msg) => {
+                embed.setDescription(`${arg} is ${getRandomInt(100)}% gay!`);
+                setTimeout(function (){
+                    msg.edit(embed);
                 }, 1250);
             });
         } else {
-            message.channel.send('counting...').then((msg) => {
+            message.channel.send(embed).then((msg) => {
+                embed.setDescription(`${message.author} is ${getRandomInt(100)}% gay!`);
                 setTimeout(function () {
-                    msg.edit(`${message.author} is ${getRandomInt(100)}% gay!`);
+                    msg.edit(embed);
                 }, 1250);
             });
         }

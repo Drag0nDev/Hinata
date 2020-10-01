@@ -1,20 +1,26 @@
 const config = require("../../../config.json");
+const {MessageEmbed} = require('discord.js');
 
 module.exports = {
     name: 'bonk',
     category: 'fun',
     description: 'Bonk a user',
     usage: '[command | alias] [mention user]',
-    run: (client, message, args) => {
+    run: (bot, message, args) => {
+        let embed = new MessageEmbed().setTitle('bonk')
+            .setTimestamp()
+            .setColor('#85C1E9');
+
         if (message.mentions.members.first()) {
-            console.log(args[0]);
             if (args[0] === `<@!${config.OWNER}>`) {
-                message.channel.send(`${message.author} <a:bonk:735549944814895115>, don't bonk my master!`);
+                embed.setDescription(`${message.author} <a:bonk:735549944814895115>, don't bonk my master!`);
             } else {
-                message.channel.send(`${args[0]} <a:bonk:735549944814895115>`);
+                embed.setDescription(`${args[0]} <a:bonk:735549944814895115>`);
             }
         } else {
-            message.channel.send('Please mention a user!');
+            embed.setDescription('Please mention a user!');
         }
+
+        message.channel.send(embed);
     }
 }

@@ -4,7 +4,7 @@ module.exports = {
     category: 'fun',
     description: 'Get a users ip (not really)',
     usage: '[command | alias] [mention user]',
-    run: (client, message, args) => {
+    run: (bot, message, args) => {
         if (message.mentions.members.first()) {
 
             let arg = args[1];
