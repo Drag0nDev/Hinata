@@ -1,5 +1,7 @@
+const logger = require("log4js").getLogger("esdeath");
+
 module.exports = bot => {
-    console.log(`Logged in as ${bot.user.tag}!`);
+    logger.info(`Logged in as ${bot.user.tag}!`);
 
     bot.user.setActivity({
         name: 'Under construction',

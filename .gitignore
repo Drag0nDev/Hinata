@@ -3,3 +3,5 @@ config.json
 
 #ignored directories
 logs/
+node_modules/
+.idea/
