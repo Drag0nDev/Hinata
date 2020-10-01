@@ -1,6 +1,0 @@
-------------------------------
-Command: 'dragon'
-Arguments: '' 
-User: 'Drag0n#6666' 
-Server: 'dragons server' 
-Channel: 'esdeath-test'
