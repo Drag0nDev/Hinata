@@ -1,5 +1,6 @@
 #ignored files
 config.json
+test.js
 
 #ignored directories
 logs/
