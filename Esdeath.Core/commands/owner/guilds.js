@@ -15,7 +15,7 @@ module.exports = {
         } else {
             bot.guilds.cache.forEach(guild => {
                 embed.setColor('#85C1E9')
-                    .addField(guild.name, guild.memberCount, true);
+                    .addField(guild.name, `Member count: ${guild.memberCount}`, true);
             });
         }
 
