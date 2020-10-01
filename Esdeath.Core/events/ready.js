@@ -1,4 +1,4 @@
-const logger = require("log4js").getLogger("esdeath");
+const logger = require("log4js").getLogger();
 
 module.exports = bot => {
     logger.info(`Logged in as ${bot.user.tag}!`);

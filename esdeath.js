@@ -12,7 +12,7 @@ bot.aliases = new Collection();
 
 bot.categories = fs.readdirSync("./Esdeath.Core/commands/");
 
-let debug = config.DEBUG === undefined || config.DEBUG;
+let debug = config.DEBUG !== undefined && config.DEBUG;
 
 log4js.configure({
     appenders: {
