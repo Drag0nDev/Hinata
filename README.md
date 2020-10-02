@@ -1,7 +1,7 @@
 <h1>Esdeath - Discord bot</h1>
-<div align="left">
+<div>
   <p>
-    <a href="https://discord.gg/ReBJ4AB"><img src="https://imgur.com/gallery/D3bvEII" alt="Discord server" /></a>
+    <a href="https://discord.gg/ReBJ4AB"><img src="https://i.imgur.com/Pih2tZP.png" alt="Discord server" /></a>
 </div>
 
 <h3>A bot made for fun</h3>
