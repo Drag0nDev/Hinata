@@ -5,3 +5,4 @@ test.js
 #ignored directories
 logs/
 .idea/
+/node_modules/
