@@ -7,11 +7,11 @@ module.exports = {
     category: 'info',
     description: 'A function to show all commands',
     usage: '[command | alias]',
-    run: (bot, message, args) => {
+    run: async (bot, message, args) => {
         if (args[0])
-            return getCmd(bot, message, args[0]);
+            return await getCmd(bot, message, args[0]);
         else
-            return getAll(bot, message);
+            return await getAll(bot, message);
     }
 }
 

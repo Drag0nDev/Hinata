@@ -3,8 +3,8 @@ module.exports = {
     category: 'fun',
     description: 'Let Esdeath say something that you want',
     usage: '[command | alias] [text]',
-    run: (bot, message, args) => {
+    run: async (bot, message, args) => {
         const response = args.join(' ');
-        message.channel.send(response);
+        await message.channel.send(response);
     }
 }

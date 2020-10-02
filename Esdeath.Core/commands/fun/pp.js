@@ -1,24 +1,21 @@
+const delay = require("delay");
+
 module.exports = {
     name: 'pp',
     aliases: ['penis', 'howbig', 'pickle'],
     category: 'fun',
     description: 'Shows how long someones pp is',
     usage: '[command | alias] <user mention>',
-    run: (bot, message, args) => {
+    run: async (bot, message, args) => {
         if (message.mentions.members.first()) {
             let arg = args;
-            message.channel.send('looking').then((msg) => {
-                setTimeout(function () {
-                    msg.edit(`${arg}'s pp:\n8${lenght()}D`);
-                }, 1250);
-            });
-
+            let msg = await message.channel.send('looking');
+            await delay(1250);
+            await msg.edit(`${arg}'s pp:\n8${lenght()}D`);
         } else {
-            message.channel.send('looking').then((msg) => {
-                setTimeout(function () {
-                    msg.edit(`${message.author}'s pp:\n8${lenght()}D`);
-                }, 1250);
-            });
+            let msg = await message.channel.send('looking');
+            await delay(1250);
+            await msg.edit(`${message.author}'s pp:\n8${lenght()}D`);
         }
     }
 }

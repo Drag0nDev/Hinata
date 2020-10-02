@@ -6,7 +6,7 @@ module.exports = {
     category: 'owner',
     description: 'Displaying all joined guilds with their respective member count',
     usage: '[command | alias]',
-    run: (bot, message, args) => {
+    run: async (bot, message) => {
         let embed = new MessageEmbed().setTitle('Guilds');
 
         if (!(message.member.id === config.OWNER)) {
@@ -19,6 +19,6 @@ module.exports = {
             });
         }
 
-        message.channel.send(embed);
+        await message.channel.send(embed);
     }
 }

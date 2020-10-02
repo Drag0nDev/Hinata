@@ -7,7 +7,7 @@ module.exports = {
     category: 'fun',
     description: 'A mysterious command',
     usage: '[command | alias]',
-    run: (bot, message, args) => {
+    run: async (bot, message) => {
         let embed = new MessageEmbed()
             .setColor('#85C1E9')
             .setTitle('Dragon')
@@ -20,6 +20,6 @@ module.exports = {
             embed.setDescription('My owner is the coolest! <:heart_diamond:738026632891334677>')
 
 
-        message.channel.send(embed);
+        await message.channel.send(embed);
     }
 }
