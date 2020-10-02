@@ -12,7 +12,9 @@ bot.aliases = new Collection();
 
 bot.categories = fs.readdirSync("./Esdeath.Core/commands/");
 
-let debug = config.DEBUG !== undefined && config.DEBUG;
+let debug = false;
+if (config.DEBUG !== undefined)
+    debug = config.DEBUG;
 
 log4js.configure({
     appenders: {
@@ -100,7 +102,7 @@ fs.readdir('./Esdeath.Core/commands/',  (err, dir) => {
 
                 let cmdName = file.split('.')[0];
 
-                if(bot.commands.get(cmdName).aliases && Array.isArray(bot.commands.get(cmdName).aliases)){
+                if(bot.commands.get(cmdName)?.aliases !== undefined && Array.isArray(bot.commands.get(cmdName).aliases)){
                     bot.commands.get(cmdName).aliases.forEach(alias => {
                         bot.aliases.set(alias, cmdName);
                         logger.debug(`alias "${alias}" set for command "${cmdName}"`);
@@ -112,4 +114,4 @@ fs.readdir('./Esdeath.Core/commands/',  (err, dir) => {
 });
 
 //bot connection to discord
-bot.login(config.TOKEN);
+bot.login(config.TOKEN).catch(err => logger.error(err));

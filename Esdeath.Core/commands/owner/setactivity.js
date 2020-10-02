@@ -6,10 +6,10 @@ module.exports = {
     category: 'owner',
     description: 'Change the displayed activity of Esdeath.',
     usage: '[command | alias] [type (streaming|watching|listening)] [text]',
-    run: (bot, message, args) => {
-        if(!(message.member.id === config.OWNER)){
-            message.channel.send(`${message.author} this is a command only for my creator!`);
-        }else{
+    run: async (bot, message, args) => {
+        if (!(message.member.id === config.OWNER)) {
+            await message.channel.send(`${message.author} this is a command only for my creator!`);
+        } else {
             //splitting in to parts
             const type = args.shift().toUpperCase();
             if(type === 'STREAMING'){
@@ -17,27 +17,27 @@ module.exports = {
 
                 const name = args.join(' ');
 
-                bot.user.setActivity({
+                await bot.user.setActivity({
                     name: `${name}`,
                     type: `${type}`,
                     url: `${link}`
                 });
-            }else if (type === 'DEFAULT'){
-                bot.user.setActivity({
+            } else if (type === 'DEFAULT') {
+                await bot.user.setActivity({
                     name: 'Under construction',
                     type: 'STREAMING',
                     url: 'https://www.twitch.tv/zwoil'
                 });
-            }else{
+            } else {
                 const name = args.join(' ');
 
-                bot.user.setActivity({
+                await bot.user.setActivity({
                     name: `${name}`,
                     type: `${type}`
                 });
             }
 
-            message.channel.send('Activity changed successfully');
+            await message.channel.send('Activity changed successfully');
         }
     }
 }

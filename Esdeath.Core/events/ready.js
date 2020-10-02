@@ -1,9 +1,9 @@
 const logger = require("log4js").getLogger();
 
-module.exports = bot => {
+module.exports = async bot => {
     logger.info(`Logged in as ${bot.user.tag}!`);
 
-    bot.user.setActivity({
+    await bot.user.setActivity({
         name: 'Under construction',
         type: 'STREAMING',
         url: 'https://www.twitch.tv/zwoil'

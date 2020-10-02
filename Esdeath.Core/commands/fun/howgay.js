@@ -1,4 +1,5 @@
 const {MessageEmbed} = require('discord.js');
+const delay = require("delay");
 
 module.exports = {
     name: 'howgay',
@@ -6,7 +7,7 @@ module.exports = {
     category: 'fun',
     description: 'Calculates how gay someone is',
     usage: '[command | alias] <mention user>',
-    run: (bot, message, args) => {
+    run: async (bot, message, args) => {
         let embed = new MessageEmbed().setTitle('howgay')
             .setColor('#85C1E9')
             .setDescription('Calculating')
@@ -14,20 +15,15 @@ module.exports = {
 
         if (message.mentions.members.first()) {
             let arg = args;
-
-            message.channel.send(embed).then((msg) => {
-                embed.setDescription(`${arg} is ${getRandomInt(100)}% gay!`);
-                setTimeout(function (){
-                    msg.edit(embed);
-                }, 1250);
-            });
+            let msg = await message.channel.send(embed);
+            await delay(1250);
+            embed.setDescription(`${arg} is ${getRandomInt(100)}% gay!`);
+            await msg.edit(embed);
         } else {
-            message.channel.send(embed).then((msg) => {
-                embed.setDescription(`${message.author} is ${getRandomInt(100)}% gay!`);
-                setTimeout(function () {
-                    msg.edit(embed);
-                }, 1250);
-            });
+            let msg = await message.channel.send(embed);
+            await delay(1250);
+            embed.setDescription(`${message.author} is ${getRandomInt(100)}% gay!`);
+            await msg.edit(embed);
         }
     }
 }

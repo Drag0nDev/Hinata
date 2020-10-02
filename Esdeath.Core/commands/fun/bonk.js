@@ -6,7 +6,7 @@ module.exports = {
     category: 'fun',
     description: 'Bonk a user',
     usage: '[command | alias] [mention user]',
-    run: (bot, message, args) => {
+    run: async (bot, message, args) => {
         let embed = new MessageEmbed().setTitle('bonk')
             .setTimestamp()
             .setColor('#85C1E9');
@@ -21,6 +21,6 @@ module.exports = {
             embed.setDescription('Please mention a user!');
         }
 
-        message.channel.send(embed);
+        await message.channel.send(embed);
     }
 }
