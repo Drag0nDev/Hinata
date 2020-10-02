@@ -1,5 +1,5 @@
 <h1>Esdeath - Discord bot</h1>
-<div align="center">
+<div align="left">
   <p>
     <a href="https://discord.gg/ReBJ4AB"><img src="https://img.shields.io/discord/222078108977594368?color=7289da&logo=discord&logoColor=white" alt="Discord server" /></a>
 </div>
