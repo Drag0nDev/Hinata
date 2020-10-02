@@ -56,7 +56,7 @@ fs.readdir('./Esdeath.Core/commands/', (err, dir) => {
                 let props = require(`./Esdeath.Core/commands/${dir}/${file}`);
                 let cmdName = file.split('.')[0];
 
-                logger.debug(`Loaded command '${cmdName}'.`);
+                logger.info(`Loaded command '${cmdName}'.`);
                 bot.commands.set(cmdName, props);
             });
         });
@@ -76,7 +76,7 @@ fs.readdir('./Esdeath.Core/events/', (err, files) => {
         const evt = require(`./Esdeath.Core/events/${file}`);
         let  evtName = file.split('.')[0];
 
-        logger.debug(`Loaded event '${evtName}'.`);
+        logger.info(`Loaded event '${evtName}'.`);
         bot.on(evtName, evt.bind(null, bot));
     });
 });

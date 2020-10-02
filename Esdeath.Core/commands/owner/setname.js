@@ -8,7 +8,8 @@ module.exports = {
     usage: '[command | alias] [new name]',
     run: (bot, message, args) => {
         if(message.member.id === config.OWNER){
-            bot.user.setUsername(args.toString());
+            const newName = args.join(' ');
+            bot.user.setUsername(newName);
             message.channel.send('Username changed successfully!');
         }else{
             message.channel.send(`${message.author} this is a command only for my creator!`);
