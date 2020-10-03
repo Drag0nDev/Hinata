@@ -20,7 +20,7 @@ module.exports = {
     }
 }
 
-function lenght() {
+function GetPP() {
     let length = '8';
     for (let i = 0; i < getRandomInt(1000) % 20; i++) {
         length += '=';
