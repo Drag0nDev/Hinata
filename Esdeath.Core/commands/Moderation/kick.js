@@ -4,7 +4,7 @@ module.exports = {
     name: 'kick',
     category: 'Moderation',
     description: 'Kick a member from the server',
-    usage: '[command | alias] [Member mention/id]',
+    usage: '[command | alias] [Member mention/id] <reason>',
     run: async (bot, message, args) => {
         let response;
 
