@@ -1,5 +1,5 @@
 //imports
-const { Client, MessageEmbed, Collection } = require('discord.js');
+const {Client, MessageEmbed, Collection} = require('discord.js');
 const fs = require('fs');
 const Enmap = require('enmap');
 const config = require("./config.json");
@@ -12,9 +12,7 @@ bot.aliases = new Collection();
 
 bot.categories = fs.readdirSync("./Esdeath.Core/commands/");
 
-let debug = false;
-if (config.DEBUG !== undefined)
-    debug = config.DEBUG;
+let debug = config.DEBUG !== undefined && config.DEBUG;
 
 log4js.configure({
     appenders: {
@@ -40,20 +38,20 @@ const logger = log4js.getLogger()
 
 //command loader
 fs.readdir('./Esdeath.Core/commands/', (err, dir) => {
-    if(err) {
+    if (err) {
         logger.error(err);
         return;
     }
 
     dir.forEach(dir => {
         fs.readdir(`./Esdeath.Core/commands/${dir}`, async (err, files) => {
-            if(err) {
+            if (err) {
                 logger.error(err);
                 return;
             }
 
             files.forEach(file => {
-                if(!file.endsWith('.js')) return;
+                if (!file.endsWith('.js')) return;
 
                 let props = require(`./Esdeath.Core/commands/${dir}/${file}`);
                 let cmdName = file.split('.')[0];
@@ -67,16 +65,16 @@ fs.readdir('./Esdeath.Core/commands/', (err, dir) => {
 
 //event loader
 fs.readdir('./Esdeath.Core/events/', (err, files) => {
-    if(err) {
+    if (err) {
         logger.error(err);
         return;
     }
 
     files.forEach(file => {
-        if(!file.endsWith('.js')) return;
+        if (!file.endsWith('.js')) return;
 
         const evt = require(`./Esdeath.Core/events/${file}`);
-        let  evtName = file.split('.')[0];
+        let evtName = file.split('.')[0];
 
         logger.info(`Loaded event '${evtName}'.`);
         bot.on(evtName, evt.bind(null, bot));
@@ -84,25 +82,25 @@ fs.readdir('./Esdeath.Core/events/', (err, files) => {
 });
 
 //set aliases
-fs.readdir('./Esdeath.Core/commands/',  (err, dir) => {
-    if(err) {
+fs.readdir('./Esdeath.Core/commands/', (err, dir) => {
+    if (err) {
         logger.error(err);
         return;
     }
 
     dir.forEach(dir => {
         fs.readdir(`./Esdeath.Core/commands/${dir}`, async (err, files) => {
-            if(err) {
+            if (err) {
                 logger.error(err);
                 return;
             }
 
             files.forEach(file => {
-                if(!file.endsWith('.js')) return;
+                if (!file.endsWith('.js')) return;
 
                 let cmdName = file.split('.')[0];
 
-                if(bot.commands.get(cmdName)?.aliases !== undefined && Array.isArray(bot.commands.get(cmdName).aliases)){
+                if (bot.commands.get(cmdName).aliases && Array.isArray(bot.commands.get(cmdName).aliases)) {
                     bot.commands.get(cmdName).aliases.forEach(alias => {
                         bot.aliases.set(alias, cmdName);
                         logger.debug(`alias "${alias}" set for command "${cmdName}"`);
@@ -114,4 +112,4 @@ fs.readdir('./Esdeath.Core/commands/',  (err, dir) => {
 });
 
 //bot connection to discord
-bot.login(config.TOKEN).catch(err => logger.error(err));
+bot.login(config.TOKEN);
