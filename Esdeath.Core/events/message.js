@@ -11,11 +11,10 @@ module.exports = async (bot, message) => {
     let cmd = bot.commands.get(command);
     if (!cmd) cmd = bot.commands.get(bot.aliases.get(command));
 
-    let logging = `------------------------------\nCommand: '${cmd.name}'\nArguments: '${args.join(' ')}' \nUser: '${message.author.tag}' \nServer: '${message.guild.name}' \nChannel: '${message.channel.name}'`
-    logger.info(logging);
-
     if (cmd) {
         try {
+            let logging = `------------------------------\nCommand: '${cmd.name}'\nArguments: '${args.join(' ')}' \nUser: '${message.author.tag}' \nServer: '${message.guild.name}' \nChannel: '${message.channel.name}'`
+            logger.info(logging);
             await cmd.run(bot, message, args);
         } catch (ex) {
             logger.error(ex)
