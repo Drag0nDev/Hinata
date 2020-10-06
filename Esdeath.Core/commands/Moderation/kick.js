@@ -30,9 +30,9 @@ module.exports = {
             return message.channel.send(`I can't kick ${member.user.tag} due to role hierarchy!`);
         }
 
-        //check if it is self kick
-        if (member.user.id === message.author.id) {
-            return message.channel.send("You can't kick yourself!");
+        //check if it is self kick, or bot kick
+        if (member.user.id === message.author.id || message.guild.me.id === member.user.id) {
+            return message.channel.send("You can't kick yourself/the bot!");
         }
 
         args.shift();

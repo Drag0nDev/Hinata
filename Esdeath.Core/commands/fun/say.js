@@ -5,6 +5,8 @@ module.exports = {
     usage: '[command | alias] [text]',
     run: async (bot, message, args) => {
         const response = args.join(' ');
-        await message.channel.send(response);
+        if (response.length < 1900) { //Discord limit is ~2000 chars.
+        	await message.channel.send(response);
+    	}
     }
 }

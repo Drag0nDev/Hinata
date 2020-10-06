@@ -12,7 +12,7 @@ module.exports = {
             let arg = args[1];
             let msg = await message.channel.send('Getting ip ...');
             await delay(1250);
-            await msg.edit(`${arg}'s ip: ${getRandomInt(255)}.${getRandomInt(255)}.${getRandomInt(255)}.${getRandomInt(255)}`);
+            await msg.edit(`${arg}'s IP is \`${getRandomInt(255)}.${getRandomInt(255)}.${getRandomInt(255)}.${getRandomInt(255)}\``);
         } else {
             await message.channel.send('Please mention a user!');
         }

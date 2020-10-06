@@ -11,21 +11,21 @@ module.exports = {
             let arg = args;
             let msg = await message.channel.send('looking');
             await delay(1250);
-            await msg.edit(`${arg}'s pp:\n8${lenght()}D`);
+            await msg.edit(`${arg}'s pp:\n${GetPP()}`);
         } else {
             let msg = await message.channel.send('looking');
             await delay(1250);
-            await msg.edit(`${message.author}'s pp:\n8${lenght()}D`);
+            await msg.edit(`${message.author}'s pp:\n${GetPP()}`);
         }
     }
 }
 
-function lenght() {
-    let length = '';
+function GetPP() {
+    let length = '8';
     for (let i = 0; i < getRandomInt(1000) % 20; i++) {
         length += '=';
     }
-    return length;
+    return length+'D';
 }
 
 function getRandomInt(max) {
