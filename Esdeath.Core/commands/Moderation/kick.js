@@ -1,4 +1,4 @@
-const {Guild} = require("discord.js")
+const { MessageEmbed } = require("discord.js");
 
 module.exports = {
     name: 'kick',
@@ -6,7 +6,8 @@ module.exports = {
     description: 'Kick a member from the server',
     usage: '[command | alias] [Member mention/id] <reason>',
     run: async (bot, message, args) => {
-        let response;
+        let reason;
+        let embed = new MessageEmbed().setTimestamp().setColor('#e4e868').setTitle('User kicked');
 
         //check member permissions
         if (!message.member.hasPermission('KICK_MEMBERS')) {
@@ -39,13 +40,20 @@ module.exports = {
 
         //kick the member
         if (!args[0]) {
-            await member.kick('No reason provided');
-            message.channel.send(`**${member.user.tag}** got kicked for reason: no reason provided`);
-
+            reason = 'No reason provided';
         } else {
-            await member.kick(`${args.join(' ')}`);
-            message.channel.send(`**${member.user.tag}** got kicked for reason: **${args.join(' ')}**`);
-
+            reason = args.join(' ');
         }
+
+        await member.kick(`${reason}`);
+        message.channel.send(`**${member.user.tag}** got kicked for reason: **${reason}**`);
+
+        embed.setDescription(`**Member:** ${member.user.tag}\n` +
+                `**Reason:** ${reason}\n` +
+                `**Responsible moderator:** ${message.author.tag}`)
+            .setFooter(`ID: ${member.id}`);
+
+        const channel = bot.channels.cache.find(channel => channel.id === '763039768870649856');
+        channel.send(embed);
     }
 }
