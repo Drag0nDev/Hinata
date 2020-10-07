@@ -1,7 +1,7 @@
 {
-  "COLOR_NORMAL": "#85C1E9",
-  "COLOR_ERROR": "#FF0000",
-  "COLOR_KICK": "#E4E868",
-  "COLOR_WARN": "#D69636",
-  "COLOR_BAN": "#DC143C"
+  "NORMAL": "#85C1E9",
+  "ERROR": "#FF0000",
+  "KICK": "#E4E868",
+  "WARN": "#D69636",
+  "BAN": "#DC143C"
 }
