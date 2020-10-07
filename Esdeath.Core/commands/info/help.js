@@ -54,7 +54,7 @@ function getCmd(bot, message, input) {
 
     //check if command exists
     if (!cmd) {
-        embed.setColor(bot.colorError)
+        embed.setColor(bot.embedColors.error)
             .setTitle('No command found')
             .setDescription(info)
             .setTimestamp()
@@ -63,7 +63,7 @@ function getCmd(bot, message, input) {
         return message.channel.send(embed);
     }
 
-    embed.setColor(bot.colorNormal).setTimestamp();
+    embed.setColor(bot.embedColors.normal).setTimestamp();
 
     //add all cmd info
     if (cmd.name) {
