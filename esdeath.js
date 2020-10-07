@@ -3,14 +3,22 @@ const {Client, MessageEmbed, Collection} = require('discord.js');
 const fs = require('fs');
 const Enmap = require('enmap');
 const config = require("./config.json");
+const colorsJson = require("./colors.json");
 const log4js = require("log4js");
 
 //variables
 const bot = new Client();
 bot.commands = new Collection();
 bot.aliases = new Collection();
+bot.embedColors = new Collection();
 
 bot.categories = fs.readdirSync("./Esdeath.Core/commands/");
+
+bot.embedColors.normal = colorsJson.NORMAL;
+bot.embedColors.error = colorsJson.ERROR;
+bot.embedColors._kick = colorsJson.KICK;
+bot.embedColors.warn = colorsJson.WARN;
+bot.embedColors._ban = colorsJson.BAN;
 
 let debug = config.DEBUG !== undefined && config.DEBUG;
 

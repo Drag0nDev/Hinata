@@ -9,13 +9,14 @@ module.exports = {
     run: async (bot, message, args) => {
         let embed = new MessageEmbed().setTitle('bonk')
             .setTimestamp()
-            .setColor('#85C1E9');
+            .setColor(bot.embedColors.normal);
 
         if (message.mentions.members.first()) {
-            if (args[0] === `<@!${config.OWNER}>`) {
+            const member = message.mentions.members.first();
+            if (message.mentions.members.first().user.id === `${config.OWNER}`) {
                 embed.setDescription(`${message.author} <a:bonk:735549944814895115>, don't bonk my master!`);
             } else {
-                embed.setDescription(`${args[0]} <a:bonk:735549944814895115>`);
+                embed.setDescription(`<@${member.user.id}> <a:bonk:735549944814895115>`);
             }
         } else {
             embed.setDescription('Please mention a user!');

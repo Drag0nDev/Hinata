@@ -7,7 +7,7 @@ module.exports = {
     usage: '[command | alias] [Member mention/id] <reason>',
     run: async (bot, message, args) => {
         let reason;
-        let embed = new MessageEmbed().setTimestamp().setColor('#e4e868').setTitle('User kicked');
+        let embed = new MessageEmbed().setTimestamp().setColor(bot.embedColors._kick).setTitle('User kicked');
 
         //check member permissions
         if (!message.member.hasPermission('KICK_MEMBERS')) {
@@ -28,12 +28,12 @@ module.exports = {
 
         //check if member is kickable
         if (!member.kickable) {
-            return message.channel.send(`I can't kick ${member.user.tag} due to role hierarchy!`);
+            return message.channel.send(`I can't kick **${member.user.tag}** due to role hierarchy!`);
         }
 
         //check if it is self kick, or bot kick
-        if (member.user.id === message.author.id || message.guild.me.id === member.user.id) {
-            return message.channel.send("You can't kick yourself/the bot!");
+        if (member.user.id === message.author.id) {
+            return message.channel.send("You can't kick yourself");
         }
 
         args.shift();

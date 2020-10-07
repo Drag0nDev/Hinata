@@ -9,7 +9,7 @@ module.exports = {
     usage: '[command | alias] <mention user>',
     run: async (bot, message, args) => {
         let embed = new MessageEmbed().setTitle('howgay')
-            .setColor('#85C1E9')
+            .setColor(bot.embedColors.normal)
             .setDescription('Calculating')
             .setTimestamp();
 

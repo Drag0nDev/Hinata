@@ -2,6 +2,7 @@ const config = require("../../config.json");
 const logger = require("log4js").getLogger();
 
 module.exports = async (bot, message) => {
+
     if (message.author.bot) return;
     if (message.content.toLowerCase().indexOf(config.PREFIX) !== 0) return;
 
@@ -16,8 +17,8 @@ module.exports = async (bot, message) => {
             let logging = `------------------------------\nCommand: '${cmd.name}'\nArguments: '${args.join(' ')}' \nUser: '${message.author.tag}' \nServer: '${message.guild.name}' \nChannel: '${message.channel.name}'`
             logger.info(logging);
             await cmd.run(bot, message, args);
-        } catch (ex) {
-            logger.error(ex)
+        } catch (err) {
+            logger.error(err)
         }
     }
 };
