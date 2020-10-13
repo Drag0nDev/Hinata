@@ -10,12 +10,13 @@ module.exports = {
         let embed = new MessageEmbed().setTitle('Guilds');
 
         if (!(message.member.id === config.OWNER)) {
-            embed.setColor('#FF0000')
+            embed.setColor(bot.embedColors.error)
                 .setDescription('This command is only for my owner!');
         } else {
             bot.guilds.cache.forEach(guild => {
-                embed.setColor('#85C1E9')
-                    .addField(guild.name, `Member count: ${guild.memberCount}`, true);
+                embed.setColor(bot.embedColors.normal)
+                    .addField(guild.name, `Member count: ${guild.memberCount}` + '\n' +
+                    `Server ID: ${guild.id}`, true);
             });
         }
 
