@@ -54,6 +54,6 @@ module.exports = {
             .setFooter(`ID: ${member.id}`);
 
         const channel = bot.channels.cache.find(channel => channel.id === '763039768870649856');
-        channel.send(embed);
+        await channel.send(embed);
     }
 }
