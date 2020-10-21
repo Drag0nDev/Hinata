@@ -1,6 +1,7 @@
 #ignored files
 config.json
 test.js
+test_server.ps1
 
 #ignored directories
 logs/
