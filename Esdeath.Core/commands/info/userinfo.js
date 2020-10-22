@@ -127,8 +127,6 @@ function getPermissions(member) {
     if(textPerms !== "") permissions.textPerms = textPerms;
     if(voicePerms !== "") permissions.voicePerms = voicePerms;
 
-    console.log(permissions)
-
     return permissions;
 }
 
