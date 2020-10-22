@@ -1,12 +1,13 @@
-//imports
+//<editor-fold defaultstate="collapsed" desc="imports">
 const {Client, MessageEmbed, Collection} = require('discord.js');
 const fs = require('fs');
 const Enmap = require('enmap');
 const config = require("./config.json");
 const colorsJson = require("./colors.json");
 const log4js = require("log4js");
+//</editor-fold>
 
-//variables
+//<editor-fold defaultstate="collapsed" desc="variables">
 const bot = new Client();
 bot.commands = new Collection();
 bot.aliases = new Collection();
@@ -19,7 +20,9 @@ bot.embedColors.error = colorsJson.ERROR;
 bot.embedColors._kick = colorsJson.KICK;
 bot.embedColors.warn = colorsJson.WARN;
 bot.embedColors._ban = colorsJson.BAN;
+//</editor-fold>
 
+//<editor-fold defaultstate="collapsed" desc="logger">
 let debug = config.DEBUG !== undefined && config.DEBUG;
 
 log4js.configure({
@@ -43,8 +46,9 @@ log4js.configure({
 });
 
 const logger = log4js.getLogger()
+//</editor-fold>
 
-//command loader
+//<editor-fold defaultstate="collapsed" desc="command loader">
 fs.readdir('./Esdeath.Core/commands/', (err, dir) => {
     if (err) {
         logger.error(err);
@@ -70,8 +74,9 @@ fs.readdir('./Esdeath.Core/commands/', (err, dir) => {
         });
     });
 });
+//</editor-fold>
 
-//event loader
+//<editor-fold defaultstate="collapsed" desc="event loader">
 fs.readdir('./Esdeath.Core/events/', (err, files) => {
     if (err) {
         logger.error(err);
@@ -88,8 +93,9 @@ fs.readdir('./Esdeath.Core/events/', (err, files) => {
         bot.on(evtName, evt.bind(null, bot));
     });
 });
+//</editor-fold>
 
-//set aliases
+//<editor-fold defaultstate="collapsed" desc="set aliasses">
 fs.readdir('./Esdeath.Core/commands/', (err, dir) => {
     if (err) {
         logger.error(err);
@@ -118,6 +124,7 @@ fs.readdir('./Esdeath.Core/commands/', (err, dir) => {
         });
     });
 });
+//</editor-fold>
 
 //bot connection to discord
 bot.login(config.TOKEN);

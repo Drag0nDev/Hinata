@@ -1,14 +1,17 @@
 const {MessageEmbed} = require('discord.js');
 
 module.exports = {
+    //<editor-fold defaultstate="collapsed" desc="serverinfo help">
     name: 'serverinfo',
     aliases: ['sinfo'],
     category: 'info',
     description: 'see info about the server',
     usage: '[command | alias]',
-    run: async (bot, message, args) => {
+    //</editor-fold>
+    run: async (bot, message) => {
         let embed = new MessageEmbed().setColor(bot.embedColors.normal);
 
+        //<editor-fold defaultstate="collapsed" desc="Used variable declarations">
         //simplify the guild
         let guild = message.guild;
 
@@ -34,9 +37,10 @@ module.exports = {
         let afkChannel = getAfkChannel(guild);
 
         //get the date
-        let date = getDate(guild);
+        let date = getDate(guild.createdTimestamp);
+        //</editor-fold>
 
-        //assemble the embed
+        //<editor-fold defaultstate="collapsed" desc="embed creation">
         embed.setTitle(guild.name)
             .setThumbnail(guild.iconURL())
             .addFields(
@@ -53,12 +57,13 @@ module.exports = {
                 {name: `Boost tier`, value: `${guild.premiumTier}`, inline: true},
                 {name: `Boosts`, value: `${guild.premiumSubscriptionCount}`, inline: true},
             );
-
+        //</editor-fold>
 
         await message.channel.send(embed);
     }
 }
 
+// <editor-fold defaultstate="collapsed" desc="used functions">
 function getBots(guild){
     let amount = 0;
 
@@ -99,8 +104,8 @@ function getAfkChannel(guild){
     return afkChannel.name;
 }
 
-function getDate(guild){
-    let date = new Date(guild.joinedTimestamp * 1000);
+function getDate(timestamp){
+    let date = new Date(timestamp);
 
     let hours = date.getHours();
     let minutes = date.getMinutes();
@@ -109,9 +114,11 @@ function getDate(guild){
 
     hours = hours % 12;
     hours = hours ? hours : 12; // the hour '0' should be '12'
-    minutes = minutes < 10 ? '0'+minutes : minutes;
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+    seconds = seconds < 10 ? '0' + seconds : seconds;
 
     let time = hours + ':' + minutes + ':' + seconds + ' ' + ampm;
 
-    return `${date.getFullYear()}/${date.getMonth()}/${date.getUTCDate()}\n${time}`
+    return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getUTCDate()}\n${time}`
 }
+//</editor-fold>
