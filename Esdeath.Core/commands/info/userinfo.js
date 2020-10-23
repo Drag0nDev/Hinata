@@ -4,16 +4,21 @@ module.exports = {
     //<editor-fold defaultstate="collapsed" desc="userinfo help">
     name: 'userinfo',
     aliases: ['uinfo'],
-    category: 'owner',
-    description: 'command to test out code',
-    usage: '[command | alias]',
+    category: 'info',
+    description: 'Get the info of yourself/another person',
+    usage: '[command | alias] <mention/id>',
     //</editor-fold>
-    run: async (bot, message) => {
+    run: async (bot, message, args) => {
         let embed = new MessageEmbed().setColor(bot.embedColors.normal);
 
         //<editor-fold defaultstate="collapsed" desc="Used variable declarations">
-        //simplify the member
-        let member = message.guild.members.cache.get(message.author.id);
+        //find the member if one is asked if not then use the author
+        let member;
+
+        if (!args)
+            member = message.guild.members.cache.get(message.author.id);
+        else
+            member = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
 
         //get Join date
         let date = getDate(member.joinedTimestamp);
