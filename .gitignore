@@ -5,5 +5,8 @@ test_server.ps1
 
 #ignored directories
 logs/
-node_modules/
 .idea/
+
+#ignored node_modules
+node_modules/*
+!node_modules/discord.js/
