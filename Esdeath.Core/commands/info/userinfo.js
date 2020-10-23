@@ -15,7 +15,7 @@ module.exports = {
         //find the member if one is asked if not then use the author
         let member;
 
-        if (!args)
+        if (!args[0])
             member = message.guild.members.cache.get(message.author.id);
         else
             member = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
