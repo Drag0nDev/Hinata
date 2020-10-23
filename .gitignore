@@ -10,3 +10,5 @@ logs/
 #ignored node_modules
 node_modules/*
 !node_modules/discord.js/
+!node_modules/log4js/
+!node_modules/nodemon/
