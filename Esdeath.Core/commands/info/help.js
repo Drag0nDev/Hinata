@@ -70,6 +70,8 @@ function getCmd(bot, message, input) {
         embed.setTitle(cmd.name);
         embed.addField(`Command name:`, cmd.name, false);
     }
+    if (cmd.category)
+        embed.addField('Category', cmd.category, false);
     if (cmd.aliases)
         embed.addField('Aliases:', cmd.aliases.map(a => `\`${a}\``).join(", "), false);
     if (cmd.description)
