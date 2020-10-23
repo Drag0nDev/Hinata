@@ -61,7 +61,7 @@ fs.readdir('./Esdeath.Core/commands/', (err, dir) => {
                 logger.error(err);
                 return;
             }
-
+            logger.info(`Loading category: '${dir}'`)
             files.forEach(file => {
                 if (!file.endsWith('.js')) return;
 
@@ -71,6 +71,7 @@ fs.readdir('./Esdeath.Core/commands/', (err, dir) => {
                 logger.info(`Loaded command '${cmdName}'.`);
                 bot.commands.set(cmdName, props);
             });
+            logger.info(`Loaded category: '${dir}'\n`);
         });
     });
 });
@@ -92,6 +93,7 @@ fs.readdir('./Esdeath.Core/events/', (err, files) => {
         logger.info(`Loaded event '${evtName}'.`);
         bot.on(evtName, evt.bind(null, bot));
     });
+    logger.info('All events loaded!\n');
 });
 //</editor-fold>
 
