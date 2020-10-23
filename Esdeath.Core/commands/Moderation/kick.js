@@ -9,6 +9,10 @@ module.exports = {
         let reason;
         let embed = new MessageEmbed().setTimestamp().setColor(bot.embedColors._kick).setTitle('User kicked');
 
+        //check if there is an argument
+        if (!args[0])
+            return message.channel.send('Please provide a user to kick!');
+
         //check member permissions
         if (!message.member.hasPermission('KICK_MEMBERS')) {
             return message.channel.send(`${message.author} you do not have the **kick** permission!`);
