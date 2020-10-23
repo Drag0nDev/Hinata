@@ -28,7 +28,7 @@ function getAll(bot, message) {
         .setColor(bot.embedColors.normal)
         .setTitle('Help')
         .setURL('https://discord.gg/ReBJ4AB')
-        .setThumbnail('https://i.imgur.com/SgO68RV.png')
+        .setThumbnail(bot.user?.avatarURL())
         .setTimestamp()
         .setFooter(`For more help type esdeath help [command]`);
 
