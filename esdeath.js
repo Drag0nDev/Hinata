@@ -66,7 +66,7 @@ fs.readdir('./Esdeath.Core/commands/', (err, dir) => {
                 if (!file.endsWith('.js')) return;
 
                 let props = require(`./Esdeath.Core/commands/${dir}/${file}`);
-                let cmdName = file.split('.')[0];
+                let cmdName = props.name.toLowerCase();
 
                 bot.commands.set(cmdName, props);
                 logger.info(`Loaded command '${cmdName}'.`);
