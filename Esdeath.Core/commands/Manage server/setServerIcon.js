@@ -12,15 +12,21 @@ module.exports = {
     run: (bot, message, args) => {
         const logger = log4js.getLogger();
         let embed = new MessageEmbed().setColor(bot.embedColors.normal);
+        let neededPerm = 'MANAGE_GUILD';
 
         if (!args[0])
             return message.channel.send(embed.setColor(bot.embedColors.error)
                 .setDescription('Please provide a valid link'));
 
-        if (!message.member.hasPermission('MANAGE_GUILD'))
+        if (!message.member.hasPermission(neededPerm))
             return message.channel.send(embed.setColor(bot.embedColors.error)
-                .setDescription('You do not have the required permission to run this command\n' +
-                    '**Missing requirements:** MANAGE_GUILD'));
+                .setDescription(`You don't have the required permission to run this command\n` +
+                    `**Missing requirements:** ${neededPerm}`));
+
+        if (!message.guild.me.hasPermission(neededPerm))
+            return message.channel.send(embed.setColor(bot.embedColors.error)
+                .setDescription(`I don't have the required permission to run this command\n` +
+                    `**Missing requirements:** ${neededPerm}`));
 
         let guild = message.guild;
 
