@@ -68,8 +68,16 @@ fs.readdir('./Esdeath.Core/commands/', (err, dir) => {
                 let props = require(`./Esdeath.Core/commands/${dir}/${file}`);
                 let cmdName = file.split('.')[0];
 
-                logger.info(`Loaded command '${cmdName}'.`);
                 bot.commands.set(cmdName, props);
+                logger.info(`Loaded command '${cmdName}'.`);
+
+                //loading all the aliasses
+                if (bot.commands.get(cmdName).aliases && Array.isArray(bot.commands.get(cmdName).aliases)) {
+                    bot.commands.get(cmdName).aliases.forEach(alias => {
+                        bot.aliases.set(alias, cmdName);
+                        logger.info(`alias "${alias}" set for command "${cmdName}"`);
+                    });
+                }
             });
             logger.info(`Loaded category: '${dir}'\n`);
         });
@@ -94,37 +102,6 @@ fs.readdir('./Esdeath.Core/events/', (err, files) => {
         bot.on(evtName, evt.bind(null, bot));
     });
     logger.info('All events loaded!\n');
-});
-//</editor-fold>
-
-//<editor-fold defaultstate="collapsed" desc="set aliasses">
-fs.readdir('./Esdeath.Core/commands/', (err, dir) => {
-    if (err) {
-        logger.error(err);
-        return;
-    }
-
-    dir.forEach(dir => {
-        fs.readdir(`./Esdeath.Core/commands/${dir}`, async (err, files) => {
-            if (err) {
-                logger.error(err);
-                return;
-            }
-
-            files.forEach(file => {
-                if (!file.endsWith('.js')) return;
-
-                let cmdName = file.split('.')[0];
-
-                if (bot.commands.get(cmdName).aliases && Array.isArray(bot.commands.get(cmdName).aliases)) {
-                    bot.commands.get(cmdName).aliases.forEach(alias => {
-                        bot.aliases.set(alias, cmdName);
-                        logger.debug(`alias "${alias}" set for command "${cmdName}"`);
-                    });
-                }
-            });
-        });
-    });
 });
 //</editor-fold>
 
