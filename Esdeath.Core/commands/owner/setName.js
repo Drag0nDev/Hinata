@@ -2,7 +2,7 @@ const config = require("../../../config.json");
 
 module.exports = {
     name: 'setname',
-    aliases: ['changename'],
+    aliases: ['changename', 'newname'],
     category: 'owner',
     description: 'Change esdeaths displayname',
     usage: '[command | alias] [new name]',
