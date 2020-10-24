@@ -13,12 +13,7 @@ module.exports = {
 
         //<editor-fold defaultstate="collapsed" desc="Used variable declarations">
         //find the member if one is asked if not then use the author
-        let member;
-
-        if (!args[0])
-            member = message.guild.members.cache.get(message.author.id);
-        else
-            member = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
+        let member = !args[0] ? message.guild.members.cache.get(message.author.id) : message.mentions.members.first() || message.guild.members.cache.get(args[0]);
 
         //get nickname
         let nickname = member.nickname === null ? '-' : member.nickname;
