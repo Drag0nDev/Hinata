@@ -20,11 +20,14 @@ module.exports = {
         else
             member = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
 
+        //get nickname
+        let nickname = member.nickname === null ? '-' : member.nickname;
+
         //get Join date
         let date = getDate(member.joinedTimestamp);
 
         //get account creation date
-        let creation = getDate(member.user?.createdTimestamp);
+        let creation = getDate(member.user.createdTimestamp);
 
         //get roles
         let roles = getRoles(member);
@@ -38,7 +41,7 @@ module.exports = {
             .setThumbnail(member.user.avatarURL({dynamic: true}))
             .addFields(
                 {name: 'Username', value: `${member.user.username}#${member.user.discriminator}`, inline: true},
-                {name: 'Nickname', value: `${member.nickname}`, inline: true},
+                {name: 'Nickname', value: `${nickname}`, inline: true},
                 {name: `Id`, value: `${member.user.id}`, inline: true},
                 {name: 'Joined server', value: `${date}`, inline: true},
                 {name: 'Created at', value: `${creation}`, inline: true},
@@ -101,16 +104,16 @@ function getRoles(member) {
 
 function getPermissions(member) {
     let permissions = {
-        managePerms: "No manage permissions",
-        textPerms: "No special text permissions",
-        voicePerms: "No special voice permissions"
+        managePerms: "",
+        textPerms: "",
+        voicePerms: ""
     };
 
     let managePerms = '';
     let textPerms = '';
     let voicePerms = '';
 
-    //check for the managing permissions
+//check for the managing permissions
     if (member.hasPermission(`ADMINISTRATOR`)) managePerms += `Administrator\n`;
     if (member.hasPermission(`MANAGE_GUILD`)) managePerms += `Manage server\n`;
     if (member.hasPermission(`MANAGE_ROLES`)) managePerms += `Manage roles\n`;
@@ -128,9 +131,9 @@ function getPermissions(member) {
     if (member.hasPermission(`MUTE_MEMBERS`)) voicePerms += `Mute members\n`;
     if (member.hasPermission(`MOVE_MEMBERS`)) voicePerms += `Move members\n`;
 
-    if(managePerms !== "") permissions.managePerms = managePerms;
-    if(textPerms !== "") permissions.textPerms = textPerms;
-    if(voicePerms !== "") permissions.voicePerms = voicePerms;
+    permissions.managePerms = managePerms !== "" ? managePerms : `No manage permissions`;
+    permissions.textPerms = textPerms !== "" ? textPerms : 'No special text permissions';
+    permissions.voicePerms = voicePerms !== "" ? voicePerms : 'No special voice permissions';
 
     return permissions;
 }
