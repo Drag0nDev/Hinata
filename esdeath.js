@@ -15,11 +15,11 @@ bot.embedColors = new Collection();
 
 bot.categories = fs.readdirSync("./Esdeath.Core/commands/");
 
-bot.embedColors.normal = colorsJson.NORMAL;
-bot.embedColors.error = colorsJson.ERROR;
-bot.embedColors._kick = colorsJson.KICK;
-bot.embedColors.warn = colorsJson.WARN;
-bot.embedColors._ban = colorsJson.BAN;
+bot.embedColors.normal = colorsJson.colors.normal.color;
+bot.embedColors.error = colorsJson.colors.error.color;
+bot.embedColors._kick = colorsJson.colors._kick.color;
+bot.embedColors.warn = colorsJson.colors.warn.color;
+bot.embedColors._ban = colorsJson.colors._ban.color;
 //</editor-fold>
 
 //<editor-fold defaultstate="collapsed" desc="logger">
