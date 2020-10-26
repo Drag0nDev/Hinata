@@ -14,7 +14,14 @@ module.exports = async (bot, message) => {
 
     if (cmd) {
         try {
-            let logging = `------------------------------\nCommand: '${cmd.name}'\nArguments: '${args.join(' ')}' \nUser: '${message.author.tag}' \nServer: '${message.guild.name}' \nChannel: '${message.channel.name}'`
+            let logging = `------------------------------\n` +
+                `Command: '${cmd.name}'\n` +
+                `Arguments: '${args.join(' ')}'\n` +
+                `User: '${message.author.tag}'\n` +
+                `Server: '${message.guild.name}'\n` +
+                `Guild ID: '${message.guild.id}'\n` +
+                `Channel: '${message.channel.name}'`;
+
             logger.info(logging);
             await cmd.run(bot, message, args);
         } catch (err) {
