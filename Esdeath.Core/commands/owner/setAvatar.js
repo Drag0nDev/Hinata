@@ -1,6 +1,5 @@
 const config = require("../../../config.json");
 const {MessageEmbed} = require('discord.js');
-const log4js = require("log4js");
 
 module.exports = {
     name: 'setavatar',
@@ -9,7 +8,6 @@ module.exports = {
     description: 'Command to change Esdeaths profilepicture',
     usage: '[command | alias] [link new picture]',
     run: (bot, message, args) => {
-        const logger = log4js.getLogger();
         let embed = new MessageEmbed();
 
         if (!(message.member.id === config.OWNER))
