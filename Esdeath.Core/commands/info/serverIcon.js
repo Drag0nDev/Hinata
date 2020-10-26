@@ -9,7 +9,7 @@ module.exports = {
     usage: '[command | alias]',
     //</editor-fold>
     run: async (bot, message) => {
-        let embed = new MessageEmbed().setColor(bot.embedColors.normal);
+        let embed = new MessageEmbed().setColor(bot.embedColors.normal.code);
 
         //<editor-fold defaultstate="collapsed" desc="Used variable declarations">
         //simplify the guild

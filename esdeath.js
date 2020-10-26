@@ -3,7 +3,7 @@ const {Client, MessageEmbed, Collection} = require('discord.js');
 const fs = require('fs');
 const Enmap = require('enmap');
 const config = require("./config.json");
-const colorsJson = require("./colors.json");
+const colorsJs = require("./colors.js");
 const log4js = require("log4js");
 //</editor-fold>
 
@@ -14,12 +14,6 @@ bot.aliases = new Collection();
 bot.embedColors = new Collection();
 
 bot.categories = fs.readdirSync("./Esdeath.Core/commands/");
-
-bot.embedColors.normal = colorsJson.colors.normal.color;
-bot.embedColors.error = colorsJson.colors.error.color;
-bot.embedColors._kick = colorsJson.colors._kick.color;
-bot.embedColors.warn = colorsJson.colors.warn.color;
-bot.embedColors._ban = colorsJson.colors._ban.color;
 //</editor-fold>
 
 //<editor-fold defaultstate="collapsed" desc="logger">
@@ -46,6 +40,11 @@ log4js.configure({
 });
 
 const logger = log4js.getLogger()
+//</editor-fold>
+
+//<editor-fold defaultstate="collapsed" desc="read in all color codes">
+bot.embedColors = colorsJs;
+console.log(bot.embedColors.ban)
 //</editor-fold>
 
 //<editor-fold defaultstate="collapsed" desc="command loader">

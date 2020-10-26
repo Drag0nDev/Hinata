@@ -17,17 +17,17 @@ module.exports = {
         //check if the user is the bot owner
         if (!(message.member.id === config.OWNER))
             return message.channel.send(embed.setDescription(`${message.author} this is a command only for my creator!`)
-                .setColor(bot.embedColors.error));
+                .setColor(bot.embedColors.error.code));
 
         //check if serverid is given
         if (!args[0])
             return message.channel.send(embed.setDescription(`No server id given`)
-                .setColor(bot.embedColors.error));
+                .setColor(bot.embedColors.error.code));
 
         //see if bot is in the server
         if (!bot.guilds.cache.get(args[0]))
             return message.channel.send(embed.setDescription(`I am not in a server with id ${args[0]}`)
-                .setColor(bot.embedColors.error));
+                .setColor(bot.embedColors.error.code));
         //</editor-fold>
 
         //assign guild
@@ -79,7 +79,7 @@ module.exports = {
                     {name: `Boosts`, value: `${guild.premiumSubscriptionCount}`, inline: true},
                     {name: 'Invite link', value: `[Goto ${guild.name}](https://discord.gg/${invite.code})`, inline: false},
                 )
-                .setColor(bot.embedColors.normal))
+                .setColor(bot.embedColors.normal.code))
         });
     }
 }

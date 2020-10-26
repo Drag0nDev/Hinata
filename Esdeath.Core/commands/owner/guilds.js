@@ -7,10 +7,10 @@ module.exports = {
     description: 'Displaying all joined guilds with their respective member count',
     usage: '[command | alias]',
     run: async (bot, message) => {
-        let embed = new MessageEmbed().setTitle('Guilds').setColor(bot.embedColors.normal);
+        let embed = new MessageEmbed().setTitle('Guilds').setColor(bot.embedColors.normal.code);
 
         if (!(message.member.id === config.OWNER)) {
-            embed.setColor(bot.embedColors.error)
+            embed.setColor(bot.embedColors.error.code)
                 .setDescription('This command is only for my owner!');
         } else {
             bot.guilds.cache.forEach(guild => {
