@@ -1,4 +1,4 @@
-const {MessageEmbed, MessageCollector} = require('discord.js');
+const {MessageEmbed} = require('discord.js');
 
 module.exports = {
     //<editor-fold defaultstate="collapsed" desc="userinfo help">
