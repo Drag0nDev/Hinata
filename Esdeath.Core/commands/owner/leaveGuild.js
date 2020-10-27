@@ -11,14 +11,14 @@ module.exports = {
         let embed = new MessageEmbed().setTitle('Leave Guild');
 
         if (!(message.member.id === config.OWNER)) {
-            embed.setColor(bot.embedColors.error)
+            embed.setColor(bot.embedColors.error.code)
                 .setDescription('This command is only for my owner!');
         } else {
 
             //check if serverid is given
             if (!args[0]){
                 embed.setDescription(`No server id given`)
-                    .setColor(bot.embedColors.error);
+                    .setColor(bot.embedColors.error.code);
                 return message.channel.send(embed);
             }
 
@@ -27,13 +27,13 @@ module.exports = {
                     .leave()
                     .catch(err => {
                         embed.setDescription(err)
-                            .setColor(bot.embedColors.error);
+                            .setColor(bot.embedColors.error.code);
                     });
                 embed.setDescription(`Left the guild **${bot.guilds.cache.get(args[0])}**`)
-                    .setColor(bot.embedColors.normal);
+                    .setColor(bot.embedColors.normal.code);
             } catch {
                 embed.setDescription(`No server found with id: **${args[0]}**`)
-                    .setColor(bot.embedColors.error);
+                    .setColor(bot.embedColors.error.code);
             }
         }
 

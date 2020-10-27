@@ -11,20 +11,20 @@ module.exports = {
     //</editor-fold>
     run: (bot, message, args) => {
         const logger = log4js.getLogger();
-        let embed = new MessageEmbed().setColor(bot.embedColors.normal);
+        let embed = new MessageEmbed().setColor(bot.embedColors.normal.code);
         let neededPerm = 'MANAGE_GUILD';
 
         if (!args[0])
-            return message.channel.send(embed.setColor(bot.embedColors.error)
+            return message.channel.send(embed.setColor(bot.embedColors.error.code)
                 .setDescription('Please provide a valid link'));
 
         if (!message.member.hasPermission(neededPerm))
-            return message.channel.send(embed.setColor(bot.embedColors.error)
+            return message.channel.send(embed.setColor(bot.embedColors.error.code)
                 .setDescription(`You don't have the required permission to run this command\n` +
                     `**Missing requirements:** ${neededPerm}`));
 
         if (!message.guild.me.hasPermission(neededPerm))
-            return message.channel.send(embed.setColor(bot.embedColors.error)
+            return message.channel.send(embed.setColor(bot.embedColors.error.code)
                 .setDescription(`I don't have the required permission to run this command\n` +
                     `**Missing requirements:** ${neededPerm}`));
 
@@ -32,7 +32,7 @@ module.exports = {
 
         guild.setIcon(args.toString()).then(updated => {
                 embed.setTitle('setservericon')
-                    .setColor(bot.embedColors.normal)
+                    .setColor(bot.embedColors.normal.code)
                     .setDescription('Server icon changed successfully to:')
                     .setImage(guild.iconURL({dynamic: true, size: 4096}));
 
@@ -40,7 +40,7 @@ module.exports = {
             }
         ).catch(err => {
             embed.setDescription(err.message.toString().replace("Invalid Form Body\n", ""))
-                .setColor(bot.embedColors.error);
+                .setColor(bot.embedColors.error.code);
             message.channel.send(embed);
         })
     }

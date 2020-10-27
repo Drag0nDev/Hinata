@@ -9,7 +9,7 @@ module.exports = {
     run: async (bot, message, args) => {
         let embed = new MessageEmbed().setTitle('bonk')
             .setTimestamp()
-            .setColor(bot.embedColors.normal);
+            .setColor(bot.embedColors.normal.code);
 
         if (message.mentions.members.first()) {
             const member = message.mentions.members.first();

@@ -25,7 +25,7 @@ function getAll(bot, message) {
 
     //embed creation
     const embed = new MessageEmbed()
-        .setColor(bot.embedColors.normal)
+        .setColor(bot.embedColors.normal.code)
         .setTitle('Help')
         .setURL('https://discord.gg/ReBJ4AB')
         .setThumbnail(bot.user.avatarURL())
@@ -54,7 +54,7 @@ function getCmd(bot, message, input) {
 
     //check if command exists
     if (!cmd) {
-        embed.setColor(bot.embedColors.error)
+        embed.setColor(bot.embedColors.error.code)
             .setTitle('No command found')
             .setDescription(info)
             .setTimestamp()
@@ -63,7 +63,7 @@ function getCmd(bot, message, input) {
         return message.channel.send(embed);
     }
 
-    embed.setColor(bot.embedColors.normal).setTimestamp();
+    embed.setColor(bot.embedColors.normal.code).setTimestamp();
 
     //add all cmd info
     if (cmd.name) {
