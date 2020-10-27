@@ -10,8 +10,7 @@ module.exports = {
     run: async (bot, message, args) => {
         let embed = new MessageEmbed().setTitle('howgay')
             .setColor(bot.embedColors.normal)
-            .setDescription('Calculating')
-            .setTimestamp();
+            .setDescription('Calculating');
 
         if (message.mentions.members.first()) {
             let arg = args;

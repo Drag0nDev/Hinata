@@ -1,4 +1,5 @@
 const delay = require("delay");
+const {MessageEmbed} = require('discord.js');
 
 module.exports = {
     name: 'pp',
@@ -7,15 +8,26 @@ module.exports = {
     description: 'Shows how long someones pp is',
     usage: '[command | alias] <user mention>',
     run: async (bot, message, args) => {
+        let embed = new MessageEmbed().setTitle('howgay')
+            .setColor(bot.embedColors.normal)
+            .setDescription('Looking')
+
         if (message.mentions.members.first()) {
-            let arg = args;
-            let msg = await message.channel.send('looking');
+            let member = message.mentions.members.first();
+
+            let msg = await message.channel.send(embed);
             await delay(1250);
-            await msg.edit(`${arg}'s pp:\n${GetPP()}`);
+
+            embed.setDescription(`${member.user.tag}'s pp:\n**${GetPP()}**`);
+
+            await msg.edit(embed);
         } else {
-            let msg = await message.channel.send('looking');
+            let msg = await message.channel.send(embed);
             await delay(1250);
-            await msg.edit(`${message.author}'s pp:\n${GetPP()}`);
+
+            embed.setDescription(`${message.author.tag}'s pp:\n**${GetPP()}**`);
+
+            await msg.edit(embed);
         }
     }
 }
