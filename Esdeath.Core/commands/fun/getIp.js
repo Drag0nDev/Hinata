@@ -1,4 +1,5 @@
 const delay = require("delay");
+const {MessageEmbed} = require('discord.js');
 
 module.exports = {
     name: 'getip',
@@ -7,14 +8,28 @@ module.exports = {
     description: 'Get a users ip (not really)',
     usage: '[command | alias] [mention user]',
     run: async (bot, message, args) => {
-        if (message.mentions.members.first()) {
+        let embed = new MessageEmbed()
+            .setTitle('getip')
 
-            let arg = args[1];
-            let msg = await message.channel.send('Getting ip ...');
+        if (message.mentions.members.first()) {
+            let member = message.mentions.members.first();
+
+            embed.setImage('https://media1.tenor.com/images/b7cd57136bb82a1784bedc5408149eb1/tenor.gif?itemid=13247943')
+                .setDescription('Getting ip ...')
+                .setColor(bot.embedColors.normal);
+
+            let msg = await message.channel.send(embed);
             await delay(1250);
-            await msg.edit(`${arg}'s IP: \`${getRandomInt(255)}.${getRandomInt(255)}.${getRandomInt(255)}.${getRandomInt(255)}\``);
+
+            embed.setDescription(`${member.user.tag}'s IP: **${getRandomInt(255)}.${getRandomInt(255)}.${getRandomInt(255)}.${getRandomInt(255)}**`)
+                .setImage('');
+
+            await msg.edit(embed);
         } else {
-            await message.channel.send('Please mention a user!');
+            embed.setDescription('Please mention a user!')
+                .setColor(bot.embedColors.error);
+
+            await message.channel.send(embed);
         }
     }
 }
