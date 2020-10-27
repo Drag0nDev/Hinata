@@ -10,13 +10,11 @@ module.exports = {
     run: async (bot, message, args) => {
         let embed = new MessageEmbed().setColor(bot.embedColors.normal);
 
-        let text = "";
+        let text;
 
         let member = !args[0] ? message.guild.members.cache.get(message.author.id) : message.mentions.members.first() || message.guild.members.cache.get(args[0]);
 
         let author = message.guild.members.cache.get(message.author.id);
-
-        console.log(getGif(bot).toString())
 
         embed.setImage(getGif(bot).toString())
             .setFooter('Powered by lost hopes and dreams');
