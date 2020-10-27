@@ -14,7 +14,7 @@ module.exports = {
 
         if (!(message.member.id === config.OWNER))
             return message.channel.send(embed.setDescription(`${message.author} this is a command only for my creator!`)
-                .setColor(bot.embedColors.error.code));
+                .setColor(bot.embedColors.error));
 
         const newName = args.join(' ');
 
@@ -22,7 +22,7 @@ module.exports = {
 
         await bot.user.setUsername(newName);
 
-        embed.setColor(bot.embedColors.normal.code)
+        embed.setColor(bot.embedColors.normal)
             .setDescription('Username changed successfully!')
             .addField('Old name', oldName)
             .addField('New name', bot.user.tag);

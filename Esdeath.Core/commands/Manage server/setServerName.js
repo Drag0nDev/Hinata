@@ -9,7 +9,7 @@ module.exports = {
     usage: '[command | alias] [new name]',
     //</editor-fold>
     run: async (bot, message, args) => {
-        let embed = new MessageEmbed().setColor(bot.embedColors.normal.code);
+        let embed = new MessageEmbed().setColor(bot.embedColors.normal);
         let neededPerm = 'MANAGE_GUILD';
 
         //<editor-fold defaultstate="collapsed" desc="Used variable declarations">
@@ -46,12 +46,12 @@ module.exports = {
                 embed.setTitle(guild.name)
                     .setThumbnail(guild.iconURL())
                     .setDescription(`Successfully changed the name from **${oldName}** to **${updated.name}**`)
-                    .setColor(bot.embedColors.normal.code);
+                    .setColor(bot.embedColors.normal);
                 message.channel.send(embed);
             })
             .catch(err => {
                 embed.setDescription(err.message.toString().replace("Invalid Form Body\n", ""))
-                    .setColor(bot.embedColors.error.code);
+                    .setColor(bot.embedColors.error);
                 message.channel.send(embed);
             });
     }

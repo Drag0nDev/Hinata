@@ -79,7 +79,7 @@ module.exports = {
                     {name: `Boosts`, value: `${guild.premiumSubscriptionCount}`, inline: true},
                     {name: 'Invite link', value: `[Goto ${guild.name}](https://discord.gg/${invite.code})`, inline: false},
                 )
-                .setColor(bot.embedColors.normal.code))
+                .setColor(bot.embedColors.normal))
         });
     }
 }

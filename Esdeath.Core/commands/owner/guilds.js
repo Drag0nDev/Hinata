@@ -7,7 +7,7 @@ module.exports = {
     description: 'Displaying all joined guilds with their respective member count',
     usage: '[command | alias]',
     run: async (bot, message) => {
-        let embed = new MessageEmbed().setTitle('Guilds').setColor(bot.embedColors.normal.code);
+        let embed = new MessageEmbed().setTitle('Guilds').setColor(bot.embedColors.normal);
 
         if (!(message.member.id === config.OWNER)) {
             embed.setColor(bot.embedColors.error.code)

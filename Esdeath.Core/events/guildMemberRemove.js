@@ -32,7 +32,7 @@ module.exports = async (bot, member) => {
 
     if (target.id === member.id) {
         embed.setTitle('User kicked')
-            .setColor(bot.embedColors.kick.code)
+            .setColor(bot.embedColors.kick)
             .setDescription(`**Member:** ${member.user.tag}\n` +
                 `**Reason:** ${reason}\n` +
                 `**Responsible moderator:** ${executor.tag}`)

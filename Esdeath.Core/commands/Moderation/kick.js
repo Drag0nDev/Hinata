@@ -7,7 +7,7 @@ module.exports = {
     usage: '[command | alias] [Member mention/id] <reason>',
     run: async (bot, message, args) => {
         let reason;
-        let embed = new MessageEmbed().setTimestamp().setColor(bot.embedColors.kick.code).setTitle('User kicked');
+        let embed = new MessageEmbed().setTimestamp().setColor(bot.embedColors.kick).setTitle('User kicked');
 
         //check if there is an argument
         if (!args[0])

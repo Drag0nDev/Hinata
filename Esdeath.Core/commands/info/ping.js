@@ -10,7 +10,7 @@ module.exports = {
         if (ping < 0) ping *= -1;
 
         const embed = new MessageEmbed().setTitle('Ping')
-            .setColor(bot.embedColors.normal.code)
+            .setColor(bot.embedColors.normal)
             .setDescription(`\`${ping}\``)
             .setTimestamp();
 

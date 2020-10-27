@@ -12,7 +12,7 @@ module.exports = {
 
         if (!(message.member.id === config.OWNER))
             return message.channel.send(embed.setDescription(`${message.author} this is a command only for my creator!`)
-                .setColor(bot.embedColors.error.code));
+                .setColor(bot.embedColors.error));
 
             //splitting in to parts
             const type = args.shift().toUpperCase();
@@ -42,7 +42,7 @@ module.exports = {
             }
 
             embed.setDescription('Activity changed successfully!')
-                .setColor(bot.embedColors.normal.code);
+                .setColor(bot.embedColors.normal);
 
             await message.channel.send(embed);
 

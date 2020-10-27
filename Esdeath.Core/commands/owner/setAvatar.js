@@ -12,11 +12,11 @@ module.exports = {
 
         if (!(message.member.id === config.OWNER))
             return message.channel.send(embed.setDescription(`${message.author} this is a command only for my creator!`)
-                .setColor(bot.embedColors.error.code));
+                .setColor(bot.embedColors.error));
 
         bot.user.setAvatar(args.toString()).then(updated => {
             embed.setTitle(`setavatar`)
-                .setColor(bot.embedColors.normal.code)
+                .setColor(bot.embedColors.normal)
                 .setDescription('Avatar changed successfully to:')
                 .setImage(bot.user.avatarURL({dynamic: true, size: 4096}));
 
@@ -25,7 +25,7 @@ module.exports = {
         ).catch(err => {
             embed.setDescription(err.message.toString().replace("Invalid Form Body\n" +
                 "avatar:", ""))
-                .setColor(bot.embedColors.error.code);
+                .setColor(bot.embedColors.error);
             message.channel.send(embed);
         })
 
