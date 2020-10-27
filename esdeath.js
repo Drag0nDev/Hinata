@@ -104,4 +104,17 @@ fs.readdir('./Esdeath.Core/events/', (err, files) => {
 //</editor-fold>
 
 //bot connection to discord
-bot.login(config.TOKEN);
+bot.login(config.TOKEN)
+    .then(bot => {
+        logger.info('loggin in the bot');
+    }).catch(err => {
+        logger.error(err)
+    }
+);
+
+/*
+TODO: create blush, cry and slap command with matching gifs
+TODO: delete voice-, text, categorychannel
+TODO: Make all moderation commands
+TODO: Make the needed permissions visible in a nice table
+ */
