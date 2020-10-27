@@ -18,14 +18,14 @@ module.exports = {
             let msg = await message.channel.send(embed);
             await delay(1250);
 
-            embed.setDescription(`${member.user.tag}'s pp:\n**${GetPP()}**`);
+            embed.setDescription(`**${member.user.tag}**'s pp:\n**${GetPP()}**`);
 
             await msg.edit(embed);
         } else {
             let msg = await message.channel.send(embed);
             await delay(1250);
 
-            embed.setDescription(`${message.author.tag}'s pp:\n**${GetPP()}**`);
+            embed.setDescription(`**${message.author.tag}**'s pp:\n**${GetPP()}**`);
 
             await msg.edit(embed);
         }

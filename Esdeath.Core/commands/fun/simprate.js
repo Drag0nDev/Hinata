@@ -24,7 +24,7 @@ module.exports = {
             let editEmbed = new MessageEmbed()
                 .setTitle('simprate')
                 .setColor(bot.embedColors.normal)
-                .setDescription(`${member.user.tag} is ${simprate}% simp!`);
+                .setDescription(`**${member.user.tag}** is ${simprate}% simp!`);
 
             if (simprate > 50)
                 editEmbed.setImage('https://media1.tenor.com/images/b5cfc5d13e8640543a528c5da6412e8e/tenor.gif');

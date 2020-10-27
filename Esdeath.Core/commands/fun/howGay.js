@@ -13,15 +13,15 @@ module.exports = {
             .setDescription('Calculating');
 
         if (message.mentions.members.first()) {
-            let arg = args;
+            let member = message.mentions.members.first();
             let msg = await message.channel.send(embed);
             await delay(1250);
-            embed.setDescription(`${arg} is ${getRandomInt(100)}% gay!`);
+            embed.setDescription(`${member.user.tag} is ${getRandomInt(100)}% gay!`);
             await msg.edit(embed);
         } else {
             let msg = await message.channel.send(embed);
             await delay(1250);
-            embed.setDescription(`${message.author} is ${getRandomInt(100)}% gay!`);
+            embed.setDescription(`${message.author.tag} is ${getRandomInt(100)}% gay!`);
             await msg.edit(embed);
         }
     }
