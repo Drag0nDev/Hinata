@@ -20,7 +20,7 @@ module.exports = {
             .setFooter('Powered by lost hopes and dreams');
 
         if (!args[0])
-            text = `*kisses* ${author}!`;
+            text = `*Kisses* ${author}!`;
         else
             text = `<@!${member.id}> you have been kissed by **${author.nickname}**!`;
 
@@ -34,7 +34,7 @@ module.exports = {
 }
 
 function getGif(bot) {
-    let number = getRandom(Object.keys(bot.reactions.hug).length);
+    let number = getRandom(Object.keys(bot.reactions.hug).length - 1);
 
     return bot.reactions.kiss[number];
 }

@@ -34,7 +34,7 @@ module.exports = {
 }
 
 function getGif(bot) {
-    let number = getRandom(Object.keys(bot.reactions.hug).length);
+    let number = getRandom(Object.keys(bot.reactions.hug).length - 1);
 
     return bot.reactions.hug[number];
 }
