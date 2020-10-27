@@ -4,6 +4,7 @@ const fs = require('fs');
 const Enmap = require('enmap');
 const config = require("./config.json");
 const colors = require("./colors.js");
+const reactions = require('./reactions.json')
 const log4js = require("log4js");
 //</editor-fold>
 
@@ -12,9 +13,11 @@ const bot = new Client();
 bot.commands = new Collection();
 bot.aliases = new Collection();
 bot.embedColors = new Collection();
+bot.reactions = new Collection();
 
 bot.categories = fs.readdirSync("./Esdeath.Core/commands/");
 bot.embedColors = colors;
+bot.reactions = reactions;
 //</editor-fold>
 
 //<editor-fold defaultstate="collapsed" desc="logger">
