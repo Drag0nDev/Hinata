@@ -7,7 +7,7 @@ module.exports = {
     category: 'Manage server',
     description: 'Create a new text channel',
     usage: '[command | alias] [text channel name]',
-    neededPermissions: 'MANAGE_CHANNELS',
+    neededPermissions: ['MANAGE_CHANNELS'],
     //</editor-fold>
     run: async (bot, message, args) => {
         let embed = new MessageEmbed().setColor(bot.embedColors.normal);

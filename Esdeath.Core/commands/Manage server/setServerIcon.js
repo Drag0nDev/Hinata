@@ -12,7 +12,7 @@ module.exports = {
     run: (bot, message, args) => {
         const logger = log4js.getLogger();
         let embed = new MessageEmbed().setColor(bot.embedColors.normal);
-        let neededPerm = 'MANAGE_GUILD';
+        let neededPerm = ['MANAGE_GUILD'];
 
         if (!args[0])
             return message.channel.send(embed.setColor(bot.embedColors.error)

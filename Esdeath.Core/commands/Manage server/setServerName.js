@@ -10,7 +10,7 @@ module.exports = {
     //</editor-fold>
     run: async (bot, message, args) => {
         let embed = new MessageEmbed().setColor(bot.embedColors.normal);
-        let neededPerm = 'MANAGE_GUILD';
+        let neededPerm = ['MANAGE_GUILD'];
 
         //<editor-fold defaultstate="collapsed" desc="Used variable declarations">
         //simplify the guild

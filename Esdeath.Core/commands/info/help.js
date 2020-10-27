@@ -80,6 +80,8 @@ function getCmd(bot, message, input) {
         embed.addField('Usage:', cmd.usage, false);
         embed.setFooter(`Syntax: [] = required, <> = optional`);
     }
+    if (cmd.neededPermissions)
+        embed.addField('Needed permissions:', cmd.neededPermissions.map(a => `${a}`).join('\n'), false);
 
     return message.channel.send(embed);
 }
