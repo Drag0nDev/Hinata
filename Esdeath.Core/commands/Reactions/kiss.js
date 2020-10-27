@@ -2,9 +2,9 @@ const {MessageEmbed} = require('discord.js');
 
 module.exports = {
     //<editor-fold defaultstate="collapsed" desc="userinfo help">
-    name: 'hug',
+    name: 'kiss',
     category: 'Reactions',
-    description: 'Hug someone',
+    description: 'kiss someone',
     usage: '[command | alias] <mention / id>',
     //</editor-fold>
     run: async (bot, message, args) => {
