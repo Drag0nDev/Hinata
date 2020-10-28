@@ -43,7 +43,7 @@ log4js.configure({
     }
 });
 
-const logger = log4js.getLogger()
+const logger = log4js.getLogger();
 //</editor-fold>
 
 //<editor-fold defaultstate="collapsed" desc="command loader">
