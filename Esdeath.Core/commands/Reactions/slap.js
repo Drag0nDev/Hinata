@@ -19,8 +19,6 @@ module.exports = {
         embed.setImage(getGif(bot).toString())
             .setFooter('Powered by lost hopes and dreams');
 
-        console.log(author)
-
         if (!args[0])
             text = `*slaps ${author}!*`;
         else
