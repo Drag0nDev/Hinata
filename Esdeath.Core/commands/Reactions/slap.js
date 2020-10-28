@@ -24,7 +24,7 @@ module.exports = {
         if (!args[0])
             text = `*slaps ${author}!*`;
         else
-            text = `<@!${member.id}> you have been slapped by **${author.nickname === null ? author.name : author.user.nickname}**!`;
+            text = `<@!${member.id}> you have been slapped by **${author.nickname === null ? author.user.username : author.nickname}**!`;
 
         await message.channel.send(
             {
