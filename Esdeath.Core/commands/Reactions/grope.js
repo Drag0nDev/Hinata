@@ -22,7 +22,7 @@ module.exports = {
         if (!args[0])
             text = `*Gropes ${author}, lewd*!`;
         else
-            text = `<@!${member.id}> you have been groped by **${author.nickname}**!`;
+            text = `<@!${member.id}> you have been groped by **${author.nickname === null ? author.name : author.user.nickname}**!`;
 
         await message.channel.send(
             {

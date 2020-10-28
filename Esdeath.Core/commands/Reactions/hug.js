@@ -22,7 +22,7 @@ module.exports = {
         if (!args[0])
             text = `*Hugs* ${author}!`;
         else
-            text = `<@!${member.id}> you have been hugged by **${author.nickname}**!`;
+            text = `<@!${member.id}> you have been hugged by **${author.nickname === null ? author.name : author.user.nickname}**!`;
 
         await message.channel.send(
             {
