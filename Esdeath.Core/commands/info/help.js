@@ -1,5 +1,6 @@
 const {MessageEmbed} = require('discord.js');
 const config = require("../../../config.json");
+const AsciiTable = require('ascii-table');
 
 module.exports = {
     name: 'help',
@@ -45,6 +46,7 @@ function getAll(bot, message) {
 
 function getCmd(bot, message, input) {
     const embed = new MessageEmbed();
+
     //info string default is the error message
     let info = `No information is found for command **${input.toLowerCase()}**`;
 
@@ -80,8 +82,20 @@ function getCmd(bot, message, input) {
         embed.addField('Usage:', cmd.usage, false);
         embed.setFooter(`Syntax: [] = required, <> = optional`);
     }
-    if (cmd.neededPermissions)
-        embed.addField('Needed permissions:', cmd.neededPermissions.map(a => `${a}`).join('\n'), false);
+    if (cmd.neededPermissions) {
+        let table = new AsciiTable('Permissions')
+            .setHeading('Permission', 'Bot', 'You');
+
+        cmd.neededPermissions.forEach(permission => {
+            let checkBot = message.guild.me.hasPermission(permission) ? '✔️' : '❌';
+            let checkUser = message.member.hasPermission(permission) ? '✔️' : '❌';
+
+            table.addRow(permission, checkBot, checkUser);
+        });
+
+        embed.addField('Needed permissions', `\`${table}\``, false);
+    }
+
 
     return message.channel.send(embed);
 }
