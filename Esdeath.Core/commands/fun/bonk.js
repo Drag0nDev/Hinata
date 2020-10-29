@@ -31,7 +31,7 @@ function getMentions(bot, message, input) {
 
     if (message.mentions.users.size > 0) {
         message.mentions.users.forEach(user => {
-            if (user.id !== `${config.OWNER}`)
+            if (user.id !== `${config.owner}`)
                 members += `<@!${user.id}> `
             else {
                 let embed = new MessageEmbed().setTitle('bonk')
@@ -43,7 +43,7 @@ function getMentions(bot, message, input) {
         });
     } else {
         input.forEach(id => {
-            if (id !== `${config.OWNER}`)
+            if (id !== `${config.owner}`)
                 members += `<@!${id}> `
             if (isNaN(parseInt(id))) {
             } else {

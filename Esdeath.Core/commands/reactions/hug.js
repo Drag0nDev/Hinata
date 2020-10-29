@@ -3,7 +3,7 @@ const {MessageEmbed} = require('discord.js');
 module.exports = {
     //<editor-fold defaultstate="collapsed" desc="userinfo help">
     name: 'hug',
-    category: 'Reactions',
+    category: 'reactions',
     description: 'Hug someone',
     usage: '[command | alias] <mention / id>',
     //</editor-fold>

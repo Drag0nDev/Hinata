@@ -5,7 +5,7 @@ module.exports = {
     //<editor-fold defaultstate="collapsed" desc="userinfo help">
     name: 'setservericon',
     aliases: ['ssi', 'seticon'],
-    category: 'Manage server',
+    category: 'manage server',
     description: 'Set the server logo',
     usage: '[command | alias] [link]',
     //</editor-fold>

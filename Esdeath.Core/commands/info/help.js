@@ -18,7 +18,8 @@ module.exports = {
             //info string default is the error message
             let info = `No information is found for command/category **${args[0].toLowerCase()}**`;
             //look for category
-            let cat = bot.categories.includes(args.toLowerCase().join(' '));
+            let cat = bot.categories.includes(args.join(' ').toLowerCase());
+            let catVal = args.join(' ').toLowerCase();
 
             //look for command
             let cmd = bot.commands.get(args[0].toLowerCase());
@@ -27,7 +28,7 @@ module.exports = {
             if (cmd)
                 return await getCmd(bot, message, cmd);
             if (cat)
-                return await getCat(bot, message, cat);
+                return await getCat(bot, message, catVal);
             else {
                 embed.setColor(bot.embedColors.error)
                     .setTitle('No command found')
@@ -61,7 +62,7 @@ function getAll(bot, message) {
         .setFooter(`For more help type esdeath help [command]`);
 
     bot.categories.forEach(cat => {
-        if (message.member.id !== config.OWNER && cat === 'owner')
+        if (message.member.id !== config.owner && cat === 'owner')
             return;
         const _name = cat;
         const _value = commands(cat);

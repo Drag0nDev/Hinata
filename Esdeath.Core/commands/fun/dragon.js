@@ -13,8 +13,8 @@ module.exports = {
             .setTitle('Dragon')
             .setTimestamp();
 
-        if(message.member.id === config.OWNER)
-            embed.setDescription(`Hello master.\nYou are the best <@${config.OWNER}>!!! <:heart_diamond:738026632891334677>`)
+        if(message.member.id === config.owner)
+            embed.setDescription(`Hello master.\nYou are the best <@${config.owner}>!!! <:heart_diamond:738026632891334677>`)
                 .setImage('https://media1.tenor.com/images/be48d6abbe29fefd1bf85d07bbe395d5/tenor.gif?itemid=5525035');
         else
             embed.setDescription('My owner is the coolest! <:heart_diamond:738026632891334677>')

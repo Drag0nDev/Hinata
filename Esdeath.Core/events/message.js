@@ -3,10 +3,11 @@ const logger = require("log4js").getLogger();
 
 module.exports = async (bot, message) => {
 
+    if (config.testing && message.author.id !== config.owner) return;
     if (message.author.bot) return;
-    if (message.content.toLowerCase().indexOf(config.PREFIX) !== 0) return;
+    if (message.content.toLowerCase().indexOf(config.prefix) !== 0) return;
 
-    const args = message.content.slice(config.PREFIX.length).trim().split(/ +/g);
+    const args = message.content.slice(config.prefix.length).trim().split(/ +/g);
     const command = args.shift().toLowerCase();
 
     let cmd = bot.commands.get(command);

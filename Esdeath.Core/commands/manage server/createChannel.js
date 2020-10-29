@@ -4,7 +4,7 @@ module.exports = {
     //<editor-fold defaultstate="collapsed" desc="userinfo help">
     name: 'createchannel',
     aliases: ['nc', 'newchannel'],
-    category: 'Manage server',
+    category: 'manage server',
     description: 'Create a new text channel',
     usage: '[command | alias] [text channel name]',
     neededPermissions: ['MANAGE_CHANNELS'],

@@ -4,7 +4,7 @@ module.exports = {
     //<editor-fold defaultstate="collapsed" desc="userinfo help">
     name: 'createcategory',
     aliases: ['cc', 'newcategory'],
-    category: 'Manage server',
+    category: 'manage server',
     description: 'Create a new category',
     usage: '[command | alias] [category name]',
     neededPermissions: ['MANAGE_CHANNELS'],

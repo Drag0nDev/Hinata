@@ -4,7 +4,7 @@ module.exports = {
     //<editor-fold defaultstate="collapsed" desc="serverinfo help">
     name: 'setservername',
     aliases: ['ssn', 'servername'],
-    category: 'Manage server',
+    category: 'manage server',
     description: 'Set a new server name',
     usage: '[command | alias] [new name]',
     //</editor-fold>

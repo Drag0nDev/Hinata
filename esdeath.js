@@ -21,7 +21,7 @@ bot.reactions = reactions;
 //</editor-fold>
 
 //<editor-fold defaultstate="collapsed" desc="logger">
-let debug = config.DEBUG !== undefined && config.DEBUG;
+let debug = config.debug !== undefined && config.debug;
 
 log4js.configure({
     appenders: {
@@ -104,7 +104,7 @@ fs.readdir('./Esdeath.Core/events/', (err, files) => {
 //</editor-fold>
 
 //bot connection to discord
-bot.login(config.TOKEN)
+bot.login(config.token)
     .then(bot => {
         logger.info('Logging in the bot');
     }).catch(err => {

@@ -4,7 +4,7 @@ module.exports = {
     //<editor-fold defaultstate="collapsed" desc="userinfo help">
     name: 'createvoice',
     aliases: ['cv', 'newvoice'],
-    category: 'Manage server',
+    category: 'manage server',
     description: 'Create a new voice channel',
     usage: '[command | alias] [voice channel name]',
     neededPermissions: ['MANAGE_CHANNELS'],

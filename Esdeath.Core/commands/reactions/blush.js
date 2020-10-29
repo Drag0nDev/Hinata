@@ -3,7 +3,7 @@ const {MessageEmbed} = require('discord.js');
 module.exports = {
     //<editor-fold defaultstate="collapsed" desc="userinfo help">
     name: 'blush',
-    category: 'Reactions',
+    category: 'reactions',
     description: 'Show a blushing gif',
     usage: '[command | alias]',
     //</editor-fold>
