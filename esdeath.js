@@ -113,7 +113,6 @@ bot.login(config.TOKEN)
 );
 
 /*
-TODO: create blush, cry and slap command with matching gifs
 TODO: delete voice-, text, categorychannel
 TODO: Make all moderation commands
  */

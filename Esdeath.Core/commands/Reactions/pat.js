@@ -24,17 +24,29 @@ module.exports = {
                 });
             }
 
-            members = getMentions(userMentions);
+            if (userMentions.includes('@everyone')){
+                for (let i = 0; i < userMentions.length; i++){
+                    if (userMentions[i] === '@everyone')
+                        userMentions.splice(i, 1);
+                }
+            }
+
+            if (userMentions[0])
+                members = getMentions(userMentions);
         }
+
+        if (message.mentions.everyone)
+            members += ' @everyone';
 
         let author = message.guild.members.cache.get(message.author.id);
 
         embed.setImage(getGif(bot).toString())
             .setFooter('Powered by lost hopes and dreams');
 
-        if (!args[0])
+        if (!userMentions[0]) {
+            userMentions.push(author.user.id)
             text = `*Pats* ${author}!`;
-        else
+        } else
             text = `${members} you have been patted by **${author.nickname === null ? author.user.username : author.nickname}**!`;
 
         await message.channel.send(
