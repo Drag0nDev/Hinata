@@ -18,16 +18,16 @@ module.exports = {
             //info string default is the error message
             let info = `No information is found for command/category **${args[0].toLowerCase()}**`;
             //look for category
-            let cat = bot.categories.includes(args[0].toLowerCase());
+            let cat = bot.categories.includes(args.toLowerCase().join(' '));
 
             //look for command
             let cmd = bot.commands.get(args[0].toLowerCase());
             if (!cmd) cmd = bot.commands.get(bot.aliases.get(args[0].toLowerCase()));
 
             if (cmd)
-                return await getCmd(bot, message, args[0]);
+                return await getCmd(bot, message, cmd);
             if (cat)
-                return await getCat(bot, message, args[0]);
+                return await getCat(bot, message, cat);
             else {
                 embed.setColor(bot.embedColors.error)
                     .setTitle('No command found')

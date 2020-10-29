@@ -2,21 +2,20 @@ const {MessageEmbed} = require('discord.js');
 
 module.exports = {
     //<editor-fold defaultstate="collapsed" desc="userinfo help">
-    name: 'hug',
+    name: 'pat',
     category: 'Reactions',
-    description: 'Hug someone',
+    description: 'Pat someone',
     usage: '[command | alias] <mention / id>',
     //</editor-fold>
     run: async (bot, message, args) => {
         let embed = new MessageEmbed().setColor(bot.embedColors.normal);
         let userMentions = [];
         let text;
-        let members;
+        let members = '';
 
-        if (args[0]) {
+        if (args[0]){
             if (message.mentions.users.size > 0) {
                 message.mentions.users.forEach(user => {
-                    console.log(user)
                     userMentions.push(user.id);
                 });
             } else {
@@ -44,11 +43,11 @@ module.exports = {
         embed.setImage(getGif(bot).toString())
             .setFooter('Powered by lost hopes and dreams');
 
-        if (!userMentions[0]) {
-            userMentions.push(author.user.id);
-            text = `*Hugs* ${author}!`;
+        if (!members) {
+            userMentions.push(author.user.id)
+            text = `*Pats* ${author}!`;
         } else
-            text = `${members} you have been hugged by **${author.nickname === null ? author.user.username : author.nickname}**!`;
+            text = `${members} you have been patted by **${author.nickname === null ? author.user.username : author.nickname}**!`;
 
         await message.channel.send(
             {
@@ -56,7 +55,6 @@ module.exports = {
                 embed: embed,
                 allowedMentions: {
                     users: userMentions,
-                    parse: ['users']
                 }
             }
         );
@@ -64,16 +62,16 @@ module.exports = {
 }
 
 function getGif(bot) {
-    let number = getRandom(Object.keys(bot.reactions.hug).length - 1);
+    let number = getRandom(Object.keys(bot.reactions.pat).length - 1);
 
-    return bot.reactions.hug[number];
+    return bot.reactions.pat[number];
 }
 
 function getRandom(max) {
     return Math.floor(Math.random() * Math.floor(max));
 }
 
-function getMentions(usermentions) {
+function getMentions(usermentions){
     let members = [];
 
     usermentions.forEach(id => {

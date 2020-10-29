@@ -2,34 +2,31 @@ const {MessageEmbed} = require('discord.js');
 
 module.exports = {
     //<editor-fold defaultstate="collapsed" desc="userinfo help">
-    name: 'grope',
+    name: 'hug',
     category: 'Reactions',
-    description: 'Grope someone',
+    description: 'Hug someone',
     usage: '[command | alias] <mention / id>',
     //</editor-fold>
     run: async (bot, message, args) => {
         let embed = new MessageEmbed().setColor(bot.embedColors.normal);
         let userMentions = [];
         let text;
-        let members;
+        let members = '';
 
         if (args[0]) {
             if (message.mentions.users.size > 0) {
                 message.mentions.users.forEach(user => {
+                    console.log(user)
                     userMentions.push(user.id);
-                    console.log(userMentions)
                 });
             } else {
                 args.forEach(id => {
-                    if (!isNaN(parseInt(id))) {
-                        if (message.guild.members.cache.get(id))
-                            userMentions.push(id);
-                    }
+                    userMentions.push(id);
                 });
             }
 
-            if (userMentions.includes('@everyone')) {
-                for (let i = 0; i < userMentions.length; i++) {
+            if (userMentions.includes('@everyone')){
+                for (let i = 0; i < userMentions.length; i++){
                     if (userMentions[i] === '@everyone')
                         userMentions.splice(i, 1);
                 }
@@ -39,7 +36,7 @@ module.exports = {
                 members = getMentions(userMentions);
         }
 
-        if (message.mentions.everyone || message.content.includes('@everyone'))
+        if (message.mentions.everyone)
             members += ' @everyone';
 
         let author = message.guild.members.cache.get(message.author.id);
@@ -47,11 +44,11 @@ module.exports = {
         embed.setImage(getGif(bot).toString())
             .setFooter('Powered by lost hopes and dreams');
 
-        if (!userMentions[0]) {
-            userMentions.push(author.user.id)
-            text = `*Gropes ${author}, lewd!*`;
+        if (!members) {
+            userMentions.push(author.user.id);
+            text = `*Hugs* ${author}!`;
         } else
-            text = `${members} you have been groped by **${author.nickname === null ? author.user.username : author.nickname}**!`;
+            text = `${members} you have been hugged by **${author.nickname === null ? author.user.username : author.nickname}**!`;
 
         await message.channel.send(
             {
@@ -59,6 +56,7 @@ module.exports = {
                 embed: embed,
                 allowedMentions: {
                     users: userMentions,
+                    parse: ['users']
                 }
             }
         );
@@ -66,9 +64,9 @@ module.exports = {
 }
 
 function getGif(bot) {
-    let number = getRandom(Object.keys(bot.reactions.grope).length - 1);
+    let number = getRandom(Object.keys(bot.reactions.hug).length - 1);
 
-    return bot.reactions.grope[number];
+    return bot.reactions.hug[number];
 }
 
 function getRandom(max) {
