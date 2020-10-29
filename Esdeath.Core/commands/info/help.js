@@ -6,11 +6,38 @@ module.exports = {
     name: 'help',
     aliases: ['h'],
     category: 'info',
-    description: 'A function to show all commands',
-    usage: '[command | alias]',
+    description: 'A function to show one of the following:\n' +
+        '- All commands and categories.\n' +
+        '- A category with all its commands and explanation of the command.\n' +
+        '- A command and all the info of the command',
+    usage: '[command | alias] <categoryname/commandname>',
     run: async (bot, message, args) => {
-        if (args[0])
-            return await getCmd(bot, message, args[0]);
+        const embed = new MessageEmbed();
+
+        if (args[0]) {
+            //info string default is the error message
+            let info = `No information is found for command/category **${args[0].toLowerCase()}**`;
+            //look for category
+            let cat = bot.categories.includes(args[0].toLowerCase());
+
+            //look for command
+            let cmd = bot.commands.get(args[0].toLowerCase());
+            if (!cmd) cmd = bot.commands.get(bot.aliases.get(args[0].toLowerCase()));
+
+            if (cmd)
+                return await getCmd(bot, message, args[0]);
+            if (cat)
+                return await getCat(bot, message, args[0]);
+            else {
+                embed.setColor(bot.embedColors.error)
+                    .setTitle('No command found')
+                    .setDescription(info)
+                    .setTimestamp()
+                    .setFooter('Maybe you typed it wrong?');
+
+                return message.channel.send(embed);
+            }
+        }
         else
             return await getAll(bot, message);
     }
@@ -47,23 +74,9 @@ function getAll(bot, message) {
 function getCmd(bot, message, input) {
     const embed = new MessageEmbed();
 
-    //info string default is the error message
-    let info = `No information is found for command **${input.toLowerCase()}**`;
-
     //look for command
     let cmd = bot.commands.get(input.toLowerCase());
     if (!cmd) cmd = bot.commands.get(bot.aliases.get(input.toLowerCase()));
-
-    //check if command exists
-    if (!cmd) {
-        embed.setColor(bot.embedColors.error)
-            .setTitle('No command found')
-            .setDescription(info)
-            .setTimestamp()
-            .setFooter('Maybe you typed it wrong?');
-
-        return message.channel.send(embed);
-    }
 
     embed.setColor(bot.embedColors.normal).setTimestamp();
 
@@ -96,6 +109,25 @@ function getCmd(bot, message, input) {
         embed.addField('Needed permissions', `\`${table}\``, false);
     }
 
+
+    return message.channel.send(embed);
+}
+
+function getCat(bot, message, input) {
+    const embed = new MessageEmbed()
+
+    embed.setColor(bot.embedColors.normal).setTimestamp();
+
+    const commands = (category) => {
+        return bot.commands
+            .filter(cmd => cmd.category === input);
+    }
+
+    embed.setTitle(`Module: ${input}`);
+
+    commands(input).forEach(cmd => {
+        embed.addField(cmd.name, cmd.description, false);
+    })
 
     return message.channel.send(embed);
 }
