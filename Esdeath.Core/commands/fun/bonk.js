@@ -11,17 +11,50 @@ module.exports = {
             .setTimestamp()
             .setColor(bot.embedColors.normal);
 
-        if (message.mentions.members.first()) {
-            const member = message.mentions.members.first();
-            if (message.mentions.members.first().user.id === `${config.OWNER}`) {
-                embed.setDescription(`${message.author} <a:bonk:735549944814895115>, don't bonk my master!`);
-            } else {
-                embed.setDescription(`<@${member.user.id}> <a:bonk:735549944814895115>`);
-            }
-        } else {
-            embed.setDescription('Please mention a user!');
+        if (!args[0]) {
+            embed.setDescription('Please mention a user or give his/her id!');
+            return await message.channel.send(embed);
         }
 
-        await message.channel.send(embed);
+
+        const members = getMentions(bot, message, args);
+        if (members !== ''){
+            embed.setDescription(`${members} <a:bonk:735549944814895115>`);
+
+            await message.channel.send(embed);
+        }
     }
+}
+
+function getMentions(bot, message, input) {
+    let members = '';
+
+    if (message.mentions.users.size > 0) {
+        message.mentions.users.forEach(user => {
+            if (user.id !== `${config.OWNER}`)
+                members += `<@!${user.id}> `
+            else {
+                let embed = new MessageEmbed().setTitle('bonk')
+                    .setTimestamp()
+                    .setColor(bot.embedColors.normal)
+                    .setDescription(`${message.author} <a:bonk:735549944814895115>, don't bonk my master!`);
+                message.channel.send(embed);
+            }
+        });
+    } else {
+        input.forEach(id => {
+            if (id !== `${config.OWNER}`)
+                members += `<@!${id}> `
+            if (isNaN(parseInt(id))) {
+            } else {
+                let embed = new MessageEmbed().setTitle('bonk')
+                    .setTimestamp()
+                    .setColor(bot.embedColors.normal)
+                    .setDescription(`${message.author} <a:bonk:735549944814895115>, don't bonk my master!`);
+                message.channel.send(embed);
+            }
+        });
+    }
+
+    return members;
 }

@@ -50,7 +50,6 @@ function getMentions(message, input){
 
     if (message.mentions.users.size > 0) {
         message.mentions.users.forEach(user => {
-            console.log(user)
             members += `<@!${user.id}> `
         });
     } else {
