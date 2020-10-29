@@ -9,12 +9,23 @@ module.exports = {
     //</editor-fold>
     run: async (bot, message, args) => {
         let embed = new MessageEmbed().setColor(bot.embedColors.normal);
-
+        let userMentions = [];
         let text;
         let members;
 
-        if (args[0])
-            members = getMentions(message, args);
+        if (args[0]){
+            if (message.mentions.users.size > 0) {
+                message.mentions.users.forEach(user => {
+                    userMentions.push(user.id);
+                });
+            } else {
+                args.forEach(id => {
+                    userMentions.push(id);
+                });
+            }
+
+            members = getMentions(userMentions);
+        }
 
         let author = message.guild.members.cache.get(message.author.id);
 
@@ -29,7 +40,10 @@ module.exports = {
         await message.channel.send(
             {
                 content: text,
-                embed: embed
+                embed: embed,
+                allowedMentions: {
+                    users: userMentions,
+                }
             }
         );
     }
@@ -45,18 +59,12 @@ function getRandom(max) {
     return Math.floor(Math.random() * Math.floor(max));
 }
 
-function getMentions(message, input){
-    let members = '';
+function getMentions(usermentions){
+    let members = [];
 
-    if (message.mentions.users.size > 0) {
-        message.mentions.users.forEach(user => {
-            members += `<@!${user.id}> `
-        });
-    } else {
-        input.forEach(id => {
-            members += `<@!${id}> `
-        });
-    }
+    usermentions.forEach(id => {
+        members.push(`<@!${id}>`)
+    });
 
-    return members;
+    return members.join(' ');
 }

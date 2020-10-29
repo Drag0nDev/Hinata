@@ -7,9 +7,25 @@ module.exports = {
     usage: '[command | alias] [text]',
     run: async (bot, message, args) => {
         let response = args.join(' ');
+        let userMentions = [];
+        let roleMentions = [];
+
         if (response.length < 1900) { //Discord limit is ~2000 chars.
-            response = Util.removeMentions(response)
-        	await message.channel.send(response);
+            message.mentions.users.forEach(user => {
+                userMentions.push(user.id);
+            });
+
+            message.mentions.roles.forEach(role => {
+                roleMentions.push(role.id);
+            });
+
+        	await message.channel.send({
+                content: response,
+                allowedMentions: {
+                    users: userMentions,
+                    roles: roleMentions
+                }
+            });
     	}
     }
 }
