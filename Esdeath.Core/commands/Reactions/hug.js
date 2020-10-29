@@ -24,7 +24,7 @@ module.exports = {
         if (!args[0])
             text = `*Hugs* ${author}!`;
         else
-            text = `<@!${members}> you have been hugged by **${author.nickname === null ? author.user.username : author.nickname}**!`;
+            text = `${members} you have been hugged by **${author.nickname === null ? author.user.username : author.nickname}**!`;
 
         await message.channel.send(
             {
@@ -48,14 +48,14 @@ function getRandom(max) {
 function getMentions(message, input){
     let members = '';
 
-    if (message.mentions) {
-        input.forEach(id => {
-            members += `<@!${id}> `
+    if (message.mentions.users.size > 0) {
+        message.mentions.users.forEach(user => {
+            console.log(user)
+            members += `<@!${user.id}> `
         });
     } else {
-        console.log('mentions')
-        message.mentions.users.forEach(user => {
-            members += `<@!${user.id}> `
+        input.forEach(id => {
+            members += `<@!${id}> `
         });
     }
 
