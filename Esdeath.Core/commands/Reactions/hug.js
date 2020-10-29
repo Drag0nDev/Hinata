@@ -11,8 +11,10 @@ module.exports = {
         let embed = new MessageEmbed().setColor(bot.embedColors.normal);
 
         let text;
+        let members;
 
-        let member = !args[0] ? message.guild.members.cache.get(message.author.id) : message.mentions.members.first() || message.guild.members.cache.get(args[0]);
+        if (args[0])
+            members = getMentions(message, args);
 
         let author = message.guild.members.cache.get(message.author.id);
 
@@ -22,7 +24,7 @@ module.exports = {
         if (!args[0])
             text = `*Hugs* ${author}!`;
         else
-            text = `<@!${member.id}> you have been hugged by **${author.nickname === null ? author.user.username : author.nickname}**!`;
+            text = `<@!${members}> you have been hugged by **${author.nickname === null ? author.user.username : author.nickname}**!`;
 
         await message.channel.send(
             {
@@ -41,4 +43,21 @@ function getGif(bot) {
 
 function getRandom(max) {
     return Math.floor(Math.random() * Math.floor(max));
+}
+
+function getMentions(message, input){
+    let members = '';
+
+    if (message.mentions) {
+        input.forEach(id => {
+            members += `<@!${id}> `
+        });
+    } else {
+        console.log('mentions')
+        message.mentions.users.forEach(user => {
+            members += `<@!${user.id}> `
+        });
+    }
+
+    return members;
 }
