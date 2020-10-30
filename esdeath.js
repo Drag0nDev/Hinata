@@ -14,10 +14,12 @@ bot.commands = new Collection();
 bot.aliases = new Collection();
 bot.embedColors = new Collection();
 bot.reactions = new Collection();
+bot.testingFile = new Collection();
 
 bot.categories = fs.readdirSync("./Esdeath.Core/commands/");
 bot.embedColors = colors;
 bot.reactions = reactions;
+bot.testing = config.testing;
 //</editor-fold>
 
 //<editor-fold defaultstate="collapsed" desc="logger">
@@ -102,6 +104,13 @@ fs.readdir('./Esdeath.Core/events/', (err, files) => {
     logger.info('All events loaded!\n');
 });
 //</editor-fold>
+
+//set the testing error file
+let props = require(`./Esdeath.Core/testing/testing.js`);
+let testing = props.name.toLowerCase();
+
+bot.testingFile.set(testing, props);
+logger.info(`Loaded '${testing}'.`);
 
 //bot connection to discord
 bot.login(config.token)

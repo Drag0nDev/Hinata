@@ -33,7 +33,7 @@ module.exports = {
 
             if (userMentions[0])
                 members = getMentions(userMentions);
-            if (message.mentions.roles)
+            if (message.mentions.roles > 0)
                 members = getRoles(message.mentions.roles);
         }
 

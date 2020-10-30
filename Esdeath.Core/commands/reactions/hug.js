@@ -37,7 +37,7 @@ module.exports = {
                 members = getRoles(message.mentions.roles);
         }
 
-        if (message.mentions.everyone)
+        if (message.mentions.everyone > 0)
             members += ' @everyone';
 
         let author = message.guild.members.cache.get(message.author.id);
