@@ -18,7 +18,7 @@ module.exports = {
                 message.mentions.users.forEach(user => {
                     userMentions.push(user.id);
                 });
-            } else {
+            } else if(message.mentions.roles > 0) {
                 args.forEach(id => {
                     userMentions.push(id);
                 });
@@ -33,6 +33,8 @@ module.exports = {
 
             if (userMentions[0])
                 members = getMentions(userMentions);
+            if (message.mentions.roles)
+                members = getRoles(message.mentions.roles);
         }
 
         if (message.mentions.everyone)
@@ -48,6 +50,8 @@ module.exports = {
             text = `*Pats* ${author}!`;
         } else
             text = `${members} you have been patted by **${author.nickname === null ? author.user.username : author.nickname}**!`;
+
+        console.log(userMentions)
 
         await message.channel.send(
             {
@@ -76,6 +80,16 @@ function getMentions(usermentions){
 
     usermentions.forEach(id => {
         members.push(`<@!${id}>`)
+    });
+
+    return members.join(' ');
+}
+
+function getRoles(roleMentions){
+    let members = [];
+
+    roleMentions.forEach(role => {
+        members.push(`<@&${role.id}>`)
     });
 
     return members.join(' ');

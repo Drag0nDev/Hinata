@@ -12,7 +12,7 @@ module.exports = {
         const logger = log4js.getLogger();
         let embed = new MessageEmbed();
 
-        if (!(message.member.id === config.OWNER))
+        if (!(message.member.id === config.owner))
             return message.channel.send(embed.setDescription(`${message.author} this is a command only for my creator!`)
                 .setColor(bot.embedColors.error));
 

@@ -4,7 +4,7 @@ module.exports = {
     //<editor-fold defaultstate="collapsed" desc="userinfo help">
     name: 'esdeath',
     category: 'reactions',
-    description: 'show a gif of esdeath',
+    description: 'Show a gif of esdeath',
     usage: '[command | alias]',
     //</editor-fold>
     run: async (bot, message) => {

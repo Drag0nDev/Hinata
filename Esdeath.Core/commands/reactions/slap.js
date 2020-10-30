@@ -13,19 +13,19 @@ module.exports = {
         let text;
         let members = '';
 
-        if (args[0]) {
+        if (args[0]){
             if (message.mentions.users.size > 0) {
                 message.mentions.users.forEach(user => {
                     userMentions.push(user.id);
                 });
-            } else {
+            } else if(message.mentions.roles > 0) {
                 args.forEach(id => {
                     userMentions.push(id);
                 });
             }
 
-            if (userMentions.includes('@everyone')) {
-                for (let i = 0; i < userMentions.length; i++) {
+            if (userMentions.includes('@everyone')){
+                for (let i = 0; i < userMentions.length; i++){
                     if (userMentions[i] === '@everyone')
                         userMentions.splice(i, 1);
                 }
@@ -33,6 +33,8 @@ module.exports = {
 
             if (userMentions[0])
                 members = getMentions(userMentions);
+            if (message.mentions.roles)
+                members = getRoles(message.mentions.roles);
         }
 
         if (message.mentions.everyone)
@@ -76,6 +78,16 @@ function getMentions(usermentions) {
 
     usermentions.forEach(id => {
         members.push(`<@!${id}>`)
+    });
+
+    return members.join(' ');
+}
+
+function getRoles(roleMentions){
+    let members = [];
+
+    roleMentions.forEach(role => {
+        members.push(`<@&${role.id}>`)
     });
 
     return members.join(' ');

@@ -72,12 +72,8 @@ function getAll(bot, message) {
     return message.channel.send(embed);
 }
 
-function getCmd(bot, message, input) {
+function getCmd(bot, message, cmd) {
     const embed = new MessageEmbed();
-
-    //look for command
-    let cmd = bot.commands.get(input.toLowerCase());
-    if (!cmd) cmd = bot.commands.get(bot.aliases.get(input.toLowerCase()));
 
     embed.setColor(bot.embedColors.normal).setTimestamp();
 

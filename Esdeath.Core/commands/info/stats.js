@@ -27,7 +27,7 @@ module.exports = {
         });
 
         //get bot developer info
-        let dev = bot.users.cache.get(config.OWNER);
+        let dev = bot.users.cache.get(config.owner);
         let devTag = `${dev.username}#${dev.discriminator}`;
         let devId = `${dev.id}`;
 

@@ -10,7 +10,7 @@ module.exports = {
     run: async (bot, message, args) => {
         let embed = new MessageEmbed().setTitle('Leave Guild');
 
-        if (!(message.member.id === config.OWNER)) {
+        if (!(message.member.id === config.owner)) {
             embed.setColor(bot.embedColors.error)
                 .setDescription('This command is only for my owner!');
         } else {

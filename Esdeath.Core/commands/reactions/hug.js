@@ -13,13 +13,12 @@ module.exports = {
         let text;
         let members = '';
 
-        if (args[0]) {
+        if (args[0]){
             if (message.mentions.users.size > 0) {
                 message.mentions.users.forEach(user => {
-                    console.log(user)
                     userMentions.push(user.id);
                 });
-            } else {
+            } else if(message.mentions.roles > 0) {
                 args.forEach(id => {
                     userMentions.push(id);
                 });
@@ -34,6 +33,8 @@ module.exports = {
 
             if (userMentions[0])
                 members = getMentions(userMentions);
+            if (message.mentions.roles)
+                members = getRoles(message.mentions.roles);
         }
 
         if (message.mentions.everyone)
@@ -45,8 +46,8 @@ module.exports = {
             .setFooter('Powered by lost hopes and dreams');
 
         if (!members) {
-            userMentions.push(author.user.id);
-            text = `*Hugs* ${author}!`;
+            userMentions.push(author.user.id)
+            text = `*hugs* ${author}!`;
         } else
             text = `${members} you have been hugged by **${author.nickname === null ? author.user.username : author.nickname}**!`;
 
@@ -56,7 +57,6 @@ module.exports = {
                 embed: embed,
                 allowedMentions: {
                     users: userMentions,
-                    parse: ['users']
                 }
             }
         );
@@ -73,11 +73,21 @@ function getRandom(max) {
     return Math.floor(Math.random() * Math.floor(max));
 }
 
-function getMentions(usermentions) {
+function getMentions(userMentions){
     let members = [];
 
-    usermentions.forEach(id => {
+    userMentions.forEach(id => {
         members.push(`<@!${id}>`)
+    });
+
+    return members.join(' ');
+}
+
+function getRoles(roleMentions){
+    let members = [];
+
+    roleMentions.forEach(role => {
+        members.push(`<@&${role.id}>`)
     });
 
     return members.join(' ');

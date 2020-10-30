@@ -9,7 +9,7 @@ module.exports = {
     run: async (bot, message) => {
         let embed = new MessageEmbed().setTitle('Guilds').setColor(bot.embedColors.normal);
 
-        if (!(message.member.id === config.OWNER)) {
+        if (!(message.member.id === config.owner)) {
             embed.setColor(bot.embedColors.error.code)
                 .setDescription('This command is only for my owner!');
         } else {
