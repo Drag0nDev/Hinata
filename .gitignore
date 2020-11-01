@@ -7,7 +7,7 @@ database.sqlite
 #ignored directories
 logs/
 .idea/
-Esdeath.Core/testing/
+Esdeath.Core/commands/testing/
 
 #ignored node_modules
 node_modules/*
