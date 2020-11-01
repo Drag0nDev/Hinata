@@ -10,8 +10,6 @@ logs/
 
 #ignored files in the core
 Esdeath.Core/commands/testing/
-Esdeath.Core/Database/*
-!Esdeath.Core/Database/dbObjects/*
 
 #ignored node_modules
 node_modules/*

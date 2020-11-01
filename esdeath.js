@@ -53,7 +53,7 @@ const sequelize = new Sequelize('database', 'username', 'password', {
     dialect: 'sqlite',
     logging: false,
     // SQLite only
-    storage: './Esdeath.Core/Database/database.sqlite',
+    storage: 'database.sqlite',
 });
 
 bot.Tags = sequelize.define('tags', {
