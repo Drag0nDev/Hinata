@@ -1,7 +1,6 @@
 //<editor-fold defaultstate="collapsed" desc="imports">
 const {Client, Collection} = require('discord.js');
 const fs = require('fs');
-const Enmap = require('enmap');
 const config = require("./config.json");
 const colors = require("./colors.js");
 const reactions = require('./reactions.json')
@@ -49,12 +48,26 @@ log4js.configure({
 const logger = log4js.getLogger();
 //</editor-fold>
 
-const sequelize = new Sequelize('database', 'user', 'password', {
+const sequelize = new Sequelize('database', 'username', 'password', {
     host: 'localhost',
     dialect: 'sqlite',
     logging: false,
     // SQLite only
-    storage: 'database.sqlite',
+    storage: './Esdeath.Core/Database/database.sqlite',
+});
+
+bot.Tags = sequelize.define('tags', {
+    name: {
+        type: Sequelize.TEXT,
+        unique: true,
+    },
+    description: Sequelize.TEXT,
+    username: Sequelize.TEXT,
+    usage_count: {
+        type: Sequelize.INTEGER,
+        defaultValue: 0,
+        allowNull: false,
+    },
 });
 
 //<editor-fold defaultstate="collapsed" desc="command loader">
