@@ -2,6 +2,7 @@
 config.json
 test.js
 test_server.ps1
+database.sqlite
 
 #ignored directories
 logs/

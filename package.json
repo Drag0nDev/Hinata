@@ -20,6 +20,8 @@
     "log4js": "^6.3.0",
     "nodemon": "^2.0.6",
     "pretty-ms": "^7.0.1",
-    "request": "^2.88.2"
+    "request": "^2.88.2",
+    "sequelize": "^6.3.5",
+    "sqlite3": "^5.0.0"
   }
 }

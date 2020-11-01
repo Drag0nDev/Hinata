@@ -1,11 +1,12 @@
 //<editor-fold defaultstate="collapsed" desc="imports">
-const {Client, MessageEmbed, Collection} = require('discord.js');
+const {Client, Collection} = require('discord.js');
 const fs = require('fs');
 const Enmap = require('enmap');
 const config = require("./config.json");
 const colors = require("./colors.js");
 const reactions = require('./reactions.json')
 const log4js = require("log4js");
+const Sequelize = require('sequelize');
 //</editor-fold>
 
 //<editor-fold defaultstate="collapsed" desc="variables">
@@ -47,6 +48,14 @@ log4js.configure({
 
 const logger = log4js.getLogger();
 //</editor-fold>
+
+const sequelize = new Sequelize('database', 'user', 'password', {
+    host: 'localhost',
+    dialect: 'sqlite',
+    logging: false,
+    // SQLite only
+    storage: 'database.sqlite',
+});
 
 //<editor-fold defaultstate="collapsed" desc="command loader">
 fs.readdir('./Esdeath.Core/commands/', (err, dir) => {

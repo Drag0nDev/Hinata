@@ -1,5 +1,6 @@
 const logger = require("log4js").getLogger();
 const {MessageEmbed} = require('discord.js');
+const Sequelize = require('sequelize');
 
 module.exports = async bot => {
     let embed = new MessageEmbed()
