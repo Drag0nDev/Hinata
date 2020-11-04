@@ -41,7 +41,7 @@ module.exports = {
         }).then(link => {
             inviteLink = link.toString();
             let links = `• [**Join my support sever!** - Join if you need extra help!](${supportServer})\n` +
-                `• [**My invite link** - It's always fun with my in the server!](${inviteLink})`;
+                `• [**My invite link** - It's always fun with me in the server!](${inviteLink})`;
 
             embed.setAuthor(botName, avatar)
                 .setColor(bot.embedColors.normal)
@@ -64,6 +64,8 @@ module.exports = {
 
 function getDate(timestamp) {
     let date = new Date(timestamp);
+
+    console.log(date)
 
     let months = date.getMonth() + 1;
     let days = date.getUTCDate();

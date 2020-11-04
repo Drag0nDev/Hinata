@@ -1,4 +1,4 @@
-const { MessageEmbed } = require("discord.js");
+const {MessageEmbed} = require("discord.js");
 
 module.exports = {
     name: 'kick',
@@ -25,11 +25,14 @@ module.exports = {
         }
 
         const member = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
+        const author = message.guild.members.cache.get(message.author.id);
 
         //check if member is in the server
         if (!member) {
             return message.channel.send("No member found with this id/name!");
         }
+
+        const canKick = compareRoles(author, member);
 
         //check if member is kickable
         if (!member.kickable) {
@@ -40,6 +43,10 @@ module.exports = {
         if (member.user.id === message.author.id) {
             return message.channel.send("You can't kick yourself");
         }
+
+        //check if the author has a higher role then the member
+        if (!canKick)
+            return message.channel.send(`You can't kick **${member.user.tag}** due to role hierarchy!`);
 
         args.shift();
 
@@ -52,17 +59,35 @@ module.exports = {
 
         const dmChannel = await member.createDM()
         await dmChannel.send(`You got kicked from **${guild.name}** with reason: **${reason}**!`);
-        await dmChannel.deleteDM();
 
         await member.kick(`${reason}`);
         message.channel.send(`**${member.user.tag}** got kicked for reason: **${reason}**`);
 
         embed.setDescription(`**Member:** ${member.user.tag}\n` +
-                `**Reason:** ${reason}\n` +
-                `**Responsible moderator:** ${message.author.tag}`)
+            `**Reason:** ${reason}\n` +
+            `**Responsible moderator:** ${message.author.tag}`)
             .setFooter(`ID: ${member.id}`);
 
         const channel = bot.channels.cache.find(channel => channel.id === '763039768870649856');
         await channel.send(embed);
     }
+}
+
+function compareRoles(author, member) {
+    let roleArrayAuth = [];
+    let roleArrayMemb = [];
+
+    //get all the roles and their objects in an array
+    author._roles.forEach(roleId => {
+        roleArrayAuth.push(member.guild.roles.cache.get(roleId));
+    });
+
+    member._roles.forEach(roleId => {
+        roleArrayMemb.push(member.guild.roles.cache.get(roleId));
+    });
+
+    roleArrayAuth.sort((a, b) => b.position - a.position);
+    roleArrayMemb.sort((a, b) => b.position - a.position);
+
+    return roleArrayAuth[0].position > roleArrayMemb[0].position;
 }

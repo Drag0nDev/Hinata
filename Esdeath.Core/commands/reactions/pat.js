@@ -18,7 +18,7 @@ module.exports = {
                 message.mentions.users.forEach(user => {
                     userMentions.push(user.id);
                 });
-            } else if(message.mentions.roles > 0) {
+            } else if(message.mentions.roles.size > 0) {
                 args.forEach(id => {
                     userMentions.push(id);
                 });
@@ -29,15 +29,17 @@ module.exports = {
                     if (userMentions[i] === '@everyone')
                         userMentions.splice(i, 1);
                 }
+            } else if (message.mentions.everyone) {
+
             }
 
             if (userMentions[0])
                 members = getMentions(userMentions);
-            if (message.mentions.roles)
+            if (message.mentions.roles.size > 0)
                 members = getRoles(message.mentions.roles);
         }
 
-        if (message.mentions.everyone > 0)
+        if (message.mentions.everyone)
             members += ' @everyone';
 
         let author = message.guild.members.cache.get(message.author.id);
@@ -45,13 +47,11 @@ module.exports = {
         embed.setImage(getGif(bot).toString())
             .setFooter('Powered by lost hopes and dreams');
 
-        if (!members) {
+        if (members.length === 0) {
             userMentions.push(author.user.id)
             text = `*Pats* ${author}!`;
         } else
             text = `${members} you have been patted by **${author.nickname === null ? author.user.username : author.nickname}**!`;
-
-        console.log(userMentions)
 
         await message.channel.send(
             {

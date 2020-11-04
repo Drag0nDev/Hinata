@@ -18,7 +18,7 @@ module.exports = {
                 message.mentions.users.forEach(user => {
                     userMentions.push(user.id);
                 });
-            } else if(message.mentions.roles > 0) {
+            } else if(message.mentions.roles.size > 0) {
                 args.forEach(id => {
                     userMentions.push(id);
                 });
@@ -33,7 +33,7 @@ module.exports = {
 
             if (userMentions[0])
                 members = getMentions(userMentions);
-            if (message.mentions.roles > 0)
+            if (message.mentions.roles.size > 0)
                 members = getRoles(message.mentions.roles);
         }
 
@@ -45,7 +45,7 @@ module.exports = {
         embed.setImage(getGif(bot).toString())
             .setFooter('Powered by lost hopes and dreams');
 
-        if (!members) {
+        if (members.length === 0) {
             userMentions.push(author.user.id)
             text = `*Gropes ${author}, lewd!*`;
         } else
@@ -64,7 +64,7 @@ module.exports = {
 }
 
 function getGif(bot) {
-    let number = getRandom(Object.keys(bot.reactions.grope).length - 1);
+    let number = getRandom(Object.keys(bot.reactions.grope).length);
 
     return bot.reactions.grope[number];
 }
