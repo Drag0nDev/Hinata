@@ -2,7 +2,7 @@
 config.json
 test.js
 test_server.ps1
-database.sqlite
+EsdeathDb.sqlite
 
 #ignored directories
 logs/

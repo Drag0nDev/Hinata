@@ -5,7 +5,8 @@ const config = require("./config.json");
 const colors = require("./colors.js");
 const reactions = require('./reactions.json')
 const log4js = require("log4js");
-const Sequelize = require('sequelize');
+const { Op } = require('sequelize');
+//const { User } = require('./Esdeath.Core/Database/dbObjects/User');
 //</editor-fold>
 
 //<editor-fold defaultstate="collapsed" desc="variables">
@@ -20,6 +21,7 @@ bot.categories = fs.readdirSync("./Esdeath.Core/commands/");
 bot.embedColors = colors;
 bot.reactions = reactions;
 bot.testing = config.testing;
+bot.currencyEmoji = config.currencyEmoji;
 //</editor-fold>
 
 //<editor-fold defaultstate="collapsed" desc="logger">
@@ -47,28 +49,6 @@ log4js.configure({
 
 const logger = log4js.getLogger();
 //</editor-fold>
-
-const sequelize = new Sequelize('database', 'username', 'password', {
-    host: 'localhost',
-    dialect: 'sqlite',
-    logging: false,
-    // SQLite only
-    storage: 'database.sqlite',
-});
-
-bot.Tags = sequelize.define('tags', {
-    name: {
-        type: Sequelize.TEXT,
-        unique: true,
-    },
-    description: Sequelize.TEXT,
-    username: Sequelize.TEXT,
-    usage_count: {
-        type: Sequelize.INTEGER,
-        defaultValue: 0,
-        allowNull: false,
-    },
-});
 
 //<editor-fold defaultstate="collapsed" desc="command loader">
 fs.readdir('./Esdeath.Core/commands/', (err, dir) => {

@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
-    return sequelize.define('users', {
-            user_id: {
+    return sequelize.define('user', {
+            userId: {
                 type: DataTypes.STRING,
                 primaryKey: true,
             },
@@ -14,9 +14,23 @@ module.exports = (sequelize, DataTypes) => {
                 defaultValue: 0,
                 allowNull: false,
             },
-            lastMessageDate: DataTypes.STRING,
-            isBanned: DataTypes.INTEGER,
+            level: {
+                type: DataTypes.INTEGER,
+                defaultValue: 0,
+            },
+            lastMessageDate: {
+                type: DataTypes.STRING,
+                defaultValue: '0',
+            },
+            isBanned: {
+                type: DataTypes.INTEGER,
+                defaultValue: 0,
+            },
             dailyTaken: DataTypes.STRING,
+            dailyStreak: {
+                type: DataTypes.INTEGER,
+                defaultValue: 0,
+            },
         },
         {
             timestamps: false,

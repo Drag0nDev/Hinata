@@ -4,7 +4,8 @@
   "description": "",
   "main": "esdeath.js",
   "scripts": {
-    "start": "node esdeath.js"
+    "start": "node esdeath.js",
+    "db": "node loadDb.js"
   },
   "keywords": [],
   "author": "",
@@ -19,6 +20,7 @@
     "eslint": "^7.5.0",
     "log4js": "^6.3.0",
     "nodemon": "^2.0.6",
+    "parse-ms": "^2.1.0",
     "pretty-ms": "^7.0.1",
     "request": "^2.88.2",
     "sequelize": "^6.3.5",

@@ -26,7 +26,7 @@ module.exports = async bot => {
         url: 'https://www.twitch.tv/zwoil'
     });
 
-    bot.Tags.sync();
+    //bot.Tags.sync();
 
     channel.send(embed);
 };

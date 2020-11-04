@@ -6,7 +6,7 @@ module.exports = {
     description: 'Dragon bonks aakash',
     usage: '[command | alias]',
     run: async (bot, message) => {
-        if (message.member.id !== config.owner)
+        if (message.author.id !== config.owner)
             return;
 
         await message.delete();
