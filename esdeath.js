@@ -120,8 +120,7 @@ bot.login(config.token)
         logger.info('Logging in the bot');
     }).catch(err => {
         logger.error(err)
-    }
-);
+    });
 
 /*
 TODO: delete voice-, text, categorychannel

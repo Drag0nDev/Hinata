@@ -8,14 +8,20 @@ module.exports = async (bot, member) => {
 
     //get current date timestamp
     let date = new Date();
+    let fetchedLogs;
 
-    const fetchedLogs = await member.guild.fetchAuditLogs({
-        limit: 1,
-        type: 'MEMBER_KICK',
-    }).catch(err => {
-            logger.error(err);
-        }
-    );
+    try {
+        fetchedLogs = await member.guild.fetchAuditLogs({
+            limit: 1,
+            type: 'MEMBER_KICK',
+        });
+    } catch (err) {
+        logger.error(err);
+    }
+
+
+    if (fetchedLogs === undefined)
+        return;
 
     const kickLog = fetchedLogs.entries.first();
 
