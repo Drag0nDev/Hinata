@@ -21,9 +21,23 @@ module.exports = {
 
             const diff = pm(now.getTime() - parseInt(user.dailyTaken))
 
+            let hours = 23 - diff.hours;
+            let minutes = 59 - diff.minutes;
+            let seconds = 59 - diff.seconds;
+
+            let timeLeft = '';
+
+            if (hours > 0)
+                timeLeft = `${hours} hours ${minutes} minutes ${seconds} seconds`;
+            else {
+                if (minutes > 0)
+                    timeLeft = `${minutes} minutes ${seconds} seconds`;
+                else
+                    timeLeft = `${seconds} seconds`;
+            }
+
             if (diff.days !== 1){
                 if (diff.days === 0){
-                    let timeLeft = `${23 - diff.hours} hours ${59 - diff.minutes} minutes ${59 - diff.seconds} seconds`;
                     embed.setColor(bot.embedColors.error)
                         .setDescription(`You can claim your next daily in: **${timeLeft}**`);
                     message.channel.send(embed);

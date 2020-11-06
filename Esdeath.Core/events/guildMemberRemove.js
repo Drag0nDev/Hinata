@@ -23,7 +23,7 @@ module.exports = async (bot, member) => {
         !kickLog ||
         kickLog.createdTimestamp !== date.getTime()
     )
-        return console.log(`${member.user.tag} left the guild, most likely of their own will.`);
+        return;
 
     const {executor, target, reason} = kickLog;
 

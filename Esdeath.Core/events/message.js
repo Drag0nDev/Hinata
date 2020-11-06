@@ -1,15 +1,17 @@
 const config = require("../../config.json");
 const logger = require("log4js").getLogger();
-const {MessageEmbed} = require('discord.js');
-const {User} = require('../../dbObjects');
+const {User, ServerUser} = require('../../dbObjects');
 const pm = require('parse-ms');
 
 module.exports = async (bot, message) => {
 
     if (message.author.bot) return;
 
-    await check(message);
-    level(message);
+    await checkUser(message);
+    await globalLevel(message);
+
+    await checkServerUser(message);
+    await serverLevel(message);
 
     if (message.content.toLowerCase().indexOf(config.prefix) !== 0) return;
     if (bot.testing && message.author.id !== config.owner) {
@@ -42,8 +44,8 @@ module.exports = async (bot, message) => {
     }
 };
 
-function level(message) {
-    const lvlxp = 30;
+function globalLevel(message) {
+    const lvlxp = config.levelXp;
 
     User.findOne({
         where: {
@@ -51,33 +53,68 @@ function level(message) {
         }
     }).then(user => {
         let now = new Date();
-        let embed = new MessageEmbed();
 
-        if (user.lastMessageDate !== '0'){
+        if (user.lastMessageDate !== '0') {
             const diff = pm(now.getTime() - parseInt(user.lastMessageDate));
 
             if (diff.minutes < 1 && diff.hours === 0)
                 return;
         }
 
-        user.xp++;
+        user.xp += 5;
         user.lastMessageDate = message.createdTimestamp;
 
-        let nextLvlXp = lvlxp + (lvlxp * user.level);
+        let nextLvlXp = lvlxp + ((lvlxp / 2) * user.level);
 
         if (user.xp >= nextLvlXp) {
             user.level++;
             user.xp -= nextLvlXp;
+            user.balance += 10;
         }
 
         user.save();
     });
 }
 
-async function check(message) {
+async function checkUser(message) {
     await User.findOrCreate({
         where: {
             userId: message.author.id
+        },
+        defaults: {
+            userTag: `${message.author.username}#${message.author.discriminator}`
+        }
+    });
+}
+
+function serverLevel(message) {
+    ServerUser.findOne({
+        where: {
+            userId: message.author.id,
+            guildId: message.guild.id
+        }
+    }).then(serverUser => {
+        let now = new Date();
+
+        if (serverUser.lastMessageDate !== '0') {
+            const diff = pm(now.getTime() - parseInt(serverUser.lastMessageDate));
+
+            if (diff.minutes < 1 && diff.hours === 0)
+                return;
+        }
+
+        serverUser.xp += 5;
+        serverUser.lastMessageDate = message.createdTimestamp;
+
+        serverUser.save();
+    });
+}
+
+async function checkServerUser(message) {
+    await ServerUser.findOrCreate({
+        where: {
+            userId: message.author.id,
+            guildId: message.guild.id
         }
     });
 }

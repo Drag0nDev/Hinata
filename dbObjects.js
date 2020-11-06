@@ -15,7 +15,7 @@ const ServerUser = require('./Esdeath.Core/Database/dbObjects/ServerUser')(seque
 const Timers = require('./Esdeath.Core/Database/dbObjects/Timers')(sequelize, Sequelize.DataTypes);
 const Warnings = require('./Esdeath.Core/Database/dbObjects/Warnings')(sequelize, Sequelize.DataTypes);
 
-ServerUser.belongsTo(Server, { foreignKey: 'severId', as: 'server' });
+ServerUser.belongsTo(Server, { foreignKey: 'guildId', as: 'server' });
 ServerUser.belongsTo(User, { foreignKey: 'UserId', as: 'user' });
 
 module.exports = { User, Server, ServerUser, Timers, Warnings };

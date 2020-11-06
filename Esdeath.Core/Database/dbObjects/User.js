@@ -1,5 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
-    return sequelize.define('user', {
+    return sequelize.define('users', {
+            userTag: DataTypes.STRING,
             userId: {
                 type: DataTypes.STRING,
                 primaryKey: true,
@@ -7,7 +8,6 @@ module.exports = (sequelize, DataTypes) => {
             balance: {
                 type: DataTypes.INTEGER,
                 defaultValue: 0,
-                allowNull: false,
             },
             xp: {
                 type: DataTypes.INTEGER,
