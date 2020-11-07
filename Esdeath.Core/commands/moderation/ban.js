@@ -1,4 +1,5 @@
 const { MessageEmbed } = require("discord.js");
+const {ServerUser} = require('../../../dbObjects');
 
 module.exports = {
     name: 'ban',
@@ -75,6 +76,12 @@ module.exports = {
 
         const channel = bot.channels.cache.find(channel => channel.id === '763039768870649856');
         await channel.send(embed);
+
+        await ServerUser.destroy({
+            where: {
+                userId: member.user.id
+            }
+        });
     }
 }
 
