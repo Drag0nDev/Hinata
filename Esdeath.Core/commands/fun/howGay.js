@@ -1,5 +1,6 @@
 const {MessageEmbed} = require('discord.js');
 const delay = require("delay");
+const tools = require('../../../tools');
 
 module.exports = {
     name: 'howgay',
@@ -12,7 +13,7 @@ module.exports = {
             .setColor(bot.embedColors.normal)
             .setDescription('Calculating');
 
-        let member = !args[0] ? message.guild.members.cache.get(message.author.id) : message.mentions.members.first() || message.guild.members.cache.get(args[0]);
+        let member = tools.getMember(message, args)
 
         if (!member)
             return message.channel.send(embed.setColor(bot.embedColors.error)

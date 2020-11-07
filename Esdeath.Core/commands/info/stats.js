@@ -61,27 +61,3 @@ module.exports = {
         })
     }
 }
-
-function getDate(timestamp) {
-    let date = new Date(timestamp);
-
-    console.log(date)
-
-    let months = date.getMonth() + 1;
-    let days = date.getUTCDate();
-    let hours = date.getHours();
-    let minutes = date.getMinutes();
-    let seconds = date.getSeconds();
-    let ampm = hours >= 12 ? 'PM' : 'AM';
-
-    months = months < 10 ? '0' + months : months;
-    days = days < 10 ? '0' + days : days;
-    hours = hours % 12;
-    hours = hours ? hours : 12;
-    minutes = minutes < 10 ? '0' + minutes : minutes;
-    seconds = seconds < 10 ? '0' + seconds : seconds;
-
-    let time = hours + ':' + minutes + ':' + seconds + ' ' + ampm;
-
-    return `${date.getFullYear()}/${months}/${days}\n${time}`;
-}

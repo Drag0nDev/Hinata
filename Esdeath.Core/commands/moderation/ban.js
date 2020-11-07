@@ -1,5 +1,6 @@
 const { MessageEmbed } = require("discord.js");
 const {ServerUser} = require('../../../dbObjects');
+const tools = require('../../../tools');
 
 module.exports = {
     name: 'ban',
@@ -34,7 +35,7 @@ module.exports = {
             return message.channel.send("No member found with this id/name!");
         }
 
-        const canBan = compareRoles(author, member);
+        const canBan = tools.compareRoles(author, member);
 
         //check if member is banable
         if (!member.bannable) {
@@ -83,23 +84,4 @@ module.exports = {
             }
         });
     }
-}
-
-function compareRoles(author, member) {
-    let roleArrayAuth = [];
-    let roleArrayMemb = [];
-
-    //get all the roles and their objects in an array
-    author._roles.forEach(roleId => {
-        roleArrayAuth.push(member.guild.roles.cache.get(roleId));
-    });
-
-    member._roles.forEach(roleId => {
-        roleArrayMemb.push(member.guild.roles.cache.get(roleId));
-    });
-
-    roleArrayAuth.sort((a, b) => b.position - a.position);
-    roleArrayMemb.sort((a, b) => b.position - a.position);
-
-    return roleArrayAuth[0].position > roleArrayMemb[0].position;
 }

@@ -1,5 +1,6 @@
 const delay = require("delay");
 const {MessageEmbed} = require('discord.js');
+const tools = require('../../../tools');
 
 module.exports = {
     name: 'simprate',
@@ -15,7 +16,7 @@ module.exports = {
 
         let msg = await message.channel.send(embed);
 
-        let member = !args[0] ? message.guild.members.cache.get(message.author.id) : message.mentions.members.first() || message.guild.members.cache.get(args[0]);
+        let member = tools.getMember(message, args);
 
         if (!member)
             return message.channel.send(embed.setColor(bot.embedColors.error)

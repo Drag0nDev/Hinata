@@ -1,6 +1,7 @@
 const config = require("../../../config.json")
 const {MessageEmbed} = require('discord.js');
 const log4js = require("log4js");
+const tools = require('../../../tools');
 
 const logger = log4js.getLogger();
 
@@ -38,12 +39,12 @@ module.exports = {
         let owner = guild.members.cache.get(guild.ownerID);
 
         //find the amount of bots in the server
-        let bots = getBots(guild);
+        let bots = tools.getBots(guild);
 
         //check the amount of each channel sort
-        let textCh = getChannelAmount(guild.channels.cache, 'text');
-        let voiceCh = getChannelAmount(guild.channels.cache, 'voice');
-        let categoryCh = getChannelAmount(guild.channels.cache, 'category');
+        let textCh = tools.getChannelAmount(guild.channels.cache, 'text');
+        let voiceCh = tools.getChannelAmount(guild.channels.cache, 'voice');
+        let categoryCh = tools.getChannelAmount(guild.channels.cache, 'category');
 
         let channelString = `**Categories:** ${categoryCh}\n` +
             `**Text channels:** ${textCh}\n` +
@@ -56,7 +57,7 @@ module.exports = {
         let afkChannel = getAfkChannel(guild);
 
         //get the date
-        let date = getDate(guild.createdTimestamp);
+        let date = tools.getDate(guild.createdTimestamp);
         //</editor-fold>
 
         //get an invite code and make the embed
@@ -85,26 +86,6 @@ module.exports = {
 }
 
 // <editor-fold defaultstate="collapsed" desc="used functions">
-function getBots(guild) {
-    let amount = 0;
-
-    guild.members.cache.forEach(member => {
-        if (member.user.bot) amount++;
-    });
-
-    return amount;
-}
-
-function getChannelAmount(channels, sort) {
-    let amount = 0;
-
-    channels.forEach(channel => {
-        if (channel.type === sort) amount++;
-    });
-
-    return amount;
-}
-
 function getSystemChannel(guild) {
 
     //check for null on guld.systemChannel
@@ -123,23 +104,5 @@ function getAfkChannel(guild) {
     let afkChannel = guild.channels.cache.get(guild.afkChannelID);
 
     return afkChannel.name;
-}
-
-function getDate(timestamp) {
-    let date = new Date(timestamp);
-
-    let hours = date.getHours();
-    let minutes = date.getMinutes();
-    let seconds = date.getSeconds();
-    let ampm = hours >= 12 ? 'PM' : 'AM';
-
-    hours = hours % 12;
-    hours = hours ? hours : 12; // the hour '0' should be '12'
-    minutes = minutes < 10 ? '0' + minutes : minutes;
-    seconds = seconds < 10 ? '0' + seconds : seconds;
-
-    let time = hours + ':' + minutes + ':' + seconds + ' ' + ampm;
-
-    return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getUTCDate()}\n${time}`
 }
 //</editor-fold>

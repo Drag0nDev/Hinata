@@ -1,5 +1,6 @@
 const {MessageEmbed} = require('discord.js');
 const pm = require('pretty-ms');
+const tools = require('../../../tools');
 
 module.exports = {
     name: 'accountage',
@@ -11,7 +12,7 @@ module.exports = {
         let embed = new MessageEmbed().setColor(bot.embedColors.normal);
         let date = new Date();
 
-        let member = !args[0] ? message.guild.members.cache.get(message.author.id) : message.mentions.members.first() || message.guild.members.cache.get(args[0]);
+        let member = await tools.getMember(message, args);
 
         if (!member)
             return message.channel.send(embed.setColor(bot.embedColors.error)

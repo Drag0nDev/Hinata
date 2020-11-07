@@ -1,4 +1,5 @@
 const {MessageEmbed} = require('discord.js');
+const tools = require('../../../tools');
 
 module.exports = {
     //<editor-fold defaultstate="collapsed" desc="userinfo help">
@@ -13,7 +14,7 @@ module.exports = {
 
         //<editor-fold defaultstate="collapsed" desc="Used variable declarations">
         //find the member if one is asked if not then use the author
-        let member = !args[0] ? message.guild.members.cache.get(message.author.id) : message.mentions.members.first() || message.guild.members.cache.get(args[0]);
+        let member = await tools.getMember(message, args);
 
         if (!member)
             return message.channel.send(embed.setColor(bot.embedColors.error)
@@ -23,10 +24,10 @@ module.exports = {
         let nickname = member.nickname === null ? '-' : member.nickname;
 
         //get Join date
-        let date = getDate(member.joinedTimestamp);
+        let date = tools.getDate(member.joinedTimestamp);
 
         //get account creation date
-        let creation = getDate(member.user.createdTimestamp);
+        let creation = tools.getDate(member.user.createdTimestamp);
 
         //get roles
         let roles = getRoles(member);
@@ -57,27 +58,6 @@ module.exports = {
 }
 
 // <editor-fold defaultstate="collapsed" desc="functions of userinfo">
-function getDate(timestamp) {
-    let date = new Date(timestamp);
-
-    let months = date.getMonth() + 1;
-    let days = date.getUTCDate();
-    let hours = date.getHours();
-    let minutes = date.getMinutes();
-    let seconds = date.getSeconds();
-    let ampm = hours >= 12 ? 'PM' : 'AM';
-
-    months = months < 10 ? '0' + months : months;
-    days = days < 10 ? '0' + days : days;
-    hours = hours % 12;
-    hours = hours ? hours : 12;
-    minutes = minutes < 10 ? '0' + minutes : minutes;
-    seconds = seconds < 10 ? '0' + seconds : seconds;
-
-    let time = hours + ':' + minutes + ':' + seconds + ' ' + ampm;
-
-    return `${date.getFullYear()}/${months}/${days}\n${time}`;
-}
 
 function getRoles(member) {
     let roleList = ``;

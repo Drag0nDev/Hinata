@@ -1,4 +1,5 @@
 const {MessageEmbed} = require("discord.js");
+const tools = require('../../../tools');
 
 module.exports = {
     name: 'kick',
@@ -32,7 +33,7 @@ module.exports = {
             return message.channel.send("No member found with this id/name!");
         }
 
-        const canKick = compareRoles(author, member);
+        const canKick = tools.compareRoles(author, member);
 
         //check if member is kickable
         if (!member.kickable) {
@@ -71,23 +72,4 @@ module.exports = {
         const channel = bot.channels.cache.find(channel => channel.id === '763039768870649856');
         await channel.send(embed);
     }
-}
-
-function compareRoles(author, member) {
-    let roleArrayAuth = [];
-    let roleArrayMemb = [];
-
-    //get all the roles and their objects in an array
-    author._roles.forEach(roleId => {
-        roleArrayAuth.push(member.guild.roles.cache.get(roleId));
-    });
-
-    member._roles.forEach(roleId => {
-        roleArrayMemb.push(member.guild.roles.cache.get(roleId));
-    });
-
-    roleArrayAuth.sort((a, b) => b.position - a.position);
-    roleArrayMemb.sort((a, b) => b.position - a.position);
-
-    return roleArrayAuth[0].position > roleArrayMemb[0].position;
 }
