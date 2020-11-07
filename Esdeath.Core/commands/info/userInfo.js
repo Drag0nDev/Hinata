@@ -15,6 +15,10 @@ module.exports = {
         //find the member if one is asked if not then use the author
         let member = !args[0] ? message.guild.members.cache.get(message.author.id) : message.mentions.members.first() || message.guild.members.cache.get(args[0]);
 
+        if (!member)
+            return message.channel.send(embed.setColor(bot.embedColors.error)
+                .setDescription('Please provide a valid user ID or mention!'));
+
         //get nickname
         let nickname = member.nickname === null ? '-' : member.nickname;
 

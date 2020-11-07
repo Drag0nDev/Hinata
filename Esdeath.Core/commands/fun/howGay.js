@@ -12,32 +12,23 @@ module.exports = {
             .setColor(bot.embedColors.normal)
             .setDescription('Calculating');
 
-        if (message.mentions.members.first()) {
-            let member = message.mentions.members.first();
-            let gayrate = getRandomInt(100);
+        let member = !args[0] ? message.guild.members.cache.get(message.author.id) : message.mentions.members.first() || message.guild.members.cache.get(args[0]);
 
-            let msg = await message.channel.send(embed);
-            await delay(1250);
+        if (!member)
+            return message.channel.send(embed.setColor(bot.embedColors.error)
+                .setDescription('Please provide a valid user ID or mention!'));
 
-            embed.setDescription(`**${member.user.tag}** is ${gayrate}% gay!`);
+        let gayrate = getRandomInt(100);
 
-            if (gayrate > 50)
-                embed.setImage('https://media1.tenor.com/images/07ca40330ec6b96b50de2f7539ca718d/tenor.gif');
+        let msg = await message.channel.send(embed);
+        await delay(1250);
 
-            await msg.edit(embed);
-        } else {
-            let msg = await message.channel.send(embed);
-            let gayrate = getRandomInt(100);
+        embed.setDescription(`**${member.user.tag}** is ${gayrate}% gay!`);
 
-            await delay(1250);
+        if (gayrate > 50)
+            embed.setImage('https://media1.tenor.com/images/07ca40330ec6b96b50de2f7539ca718d/tenor.gif');
 
-            embed.setDescription(`**${message.author.tag}** is ${gayrate}% gay!`);
-
-            if (gayrate > 50)
-                embed.setImage('https://media1.tenor.com/images/07ca40330ec6b96b50de2f7539ca718d/tenor.gif');
-
-            await msg.edit(embed);
-        }
+        await msg.edit(embed);
     }
 }
 

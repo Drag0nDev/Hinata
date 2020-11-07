@@ -19,8 +19,8 @@ module.exports = {
                     userMentions.push(user.id);
                 });
             } else if(message.mentions.roles.size > 0) {
-                args.forEach(id => {
-                    userMentions.push(id);
+                message.mentions.roles.forEach(role => {
+                    userMentions.push(role.id);
                 });
             }
 

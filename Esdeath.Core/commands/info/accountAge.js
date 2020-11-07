@@ -13,6 +13,10 @@ module.exports = {
 
         let member = !args[0] ? message.guild.members.cache.get(message.author.id) : message.mentions.members.first() || message.guild.members.cache.get(args[0]);
 
+        if (!member)
+            return message.channel.send(embed.setColor(bot.embedColors.error)
+                .setDescription('Please provide a valid user ID or mention!'));
+
         let creation = member.user.createdTimestamp;
 
         let age = date.getTime() - creation;

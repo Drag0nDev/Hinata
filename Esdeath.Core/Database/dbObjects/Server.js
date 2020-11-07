@@ -12,6 +12,8 @@ module.exports = (sequelize, DataTypes) => {
             modlogChannel: DataTypes.STRING,
             joinLeaveLogChannel: DataTypes.STRING,
             logChannel: DataTypes.STRING,
+            levelUpMessage: DataTypes.STRING,
+            levelUpRoleMessage: DataTypes.STRING
         },
         {
             timestamps: false,

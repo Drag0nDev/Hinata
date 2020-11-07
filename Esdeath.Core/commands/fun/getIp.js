@@ -11,26 +11,23 @@ module.exports = {
         let embed = new MessageEmbed()
             .setTitle('getip')
 
-        if (message.mentions.members.first()) {
-            let member = message.mentions.members.first();
+        let member = !args[0] ? message.guild.members.cache.get(message.author.id) : message.mentions.members.first() || message.guild.members.cache.get(args[0]);
 
-            embed.setImage('https://media1.tenor.com/images/b7cd57136bb82a1784bedc5408149eb1/tenor.gif?itemid=13247943')
-                .setDescription('Getting ip ...')
-                .setColor(bot.embedColors.normal);
+        if (!member)
+            return message.channel.send(embed.setColor(bot.embedColors.error)
+                .setDescription('Please provide a valid user ID or mention!'));
 
-            let msg = await message.channel.send(embed);
-            await delay(1250);
+        embed.setImage('https://media1.tenor.com/images/b7cd57136bb82a1784bedc5408149eb1/tenor.gif?itemid=13247943')
+            .setDescription('Getting ip ...')
+            .setColor(bot.embedColors.normal);
 
-            embed.setDescription(`${member.user.tag}'s IP: **${getRandomInt(255)}.${getRandomInt(255)}.${getRandomInt(255)}.${getRandomInt(255)}**`)
-                .setImage('');
+        let msg = await message.channel.send(embed);
+        await delay(1250);
 
-            await msg.edit(embed);
-        } else {
-            embed.setDescription('Please mention a user!')
-                .setColor(bot.embedColors.error);
+        embed.setDescription(`${member.user.tag}'s IP: **${getRandomInt(255)}.${getRandomInt(255)}.${getRandomInt(255)}.${getRandomInt(255)}**`)
+            .setImage('');
 
-            await message.channel.send(embed);
-        }
+        await msg.edit(embed);
     }
 }
 

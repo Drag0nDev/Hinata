@@ -12,23 +12,18 @@ module.exports = {
             .setColor(bot.embedColors.normal)
             .setDescription('Looking')
 
-        if (message.mentions.members.first()) {
-            let member = message.mentions.members.first();
+        let member = !args[0] ? message.guild.members.cache.get(message.author.id) : message.mentions.members.first() || message.guild.members.cache.get(args[0]);
 
-            let msg = await message.channel.send(embed);
-            await delay(1250);
+        if (!member)
+            return message.channel.send(embed.setColor(bot.embedColors.error)
+                .setDescription('Please provide a valid user ID or mention!'));
 
-            embed.setDescription(`**${member.user.tag}**'s pp:\n**${GetPP()}**`);
+        let msg = await message.channel.send(embed);
+        await delay(1250);
 
-            await msg.edit(embed);
-        } else {
-            let msg = await message.channel.send(embed);
-            await delay(1250);
+        embed.setDescription(`**${member.user.tag}**'s pp:\n**${GetPP()}**`);
 
-            embed.setDescription(`**${message.author.tag}**'s pp:\n**${GetPP()}**`);
-
-            await msg.edit(embed);
-        }
+        await msg.edit(embed);
     }
 }
 
@@ -37,7 +32,7 @@ function GetPP() {
     for (let i = 0; i < getRandomInt(1000) % 20; i++) {
         length += '=';
     }
-    return length+'D';
+    return length + 'D';
 }
 
 function getRandomInt(max) {

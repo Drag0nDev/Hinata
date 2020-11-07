@@ -19,8 +19,8 @@ module.exports = {
                     userMentions.push(user.id);
                 });
             } else if(message.mentions.roles.size > 0) {
-                args.forEach(id => {
-                    userMentions.push(id);
+                message.mentions.roles.forEach(role => {
+                    userMentions.push(role.id);
                 });
             }
 
@@ -29,8 +29,6 @@ module.exports = {
                     if (userMentions[i] === '@everyone')
                         userMentions.splice(i, 1);
                 }
-            } else if (message.mentions.everyone) {
-
             }
 
             if (userMentions[0])
