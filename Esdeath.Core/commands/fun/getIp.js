@@ -12,7 +12,11 @@ module.exports = {
         let embed = new MessageEmbed()
             .setTitle('getip')
 
-        let member = tools.getMember(message, args);
+        let member;
+
+        await tools.getMember(message, args).then(memberPromise => {
+            member = memberPromise;
+        });
 
         if (!member)
             return message.channel.send(embed.setColor(bot.embedColors.error)

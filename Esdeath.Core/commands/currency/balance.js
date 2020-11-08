@@ -9,7 +9,12 @@ module.exports = {
     description: 'Show your balance',
     usage: '[command | alias]',
     run: async (bot, message, args) => {
-        let member = tools.getMember(message, args);
+        let embed = new MessageEmbed().setColor(bot.embedColors.normal);
+        let member;
+
+        await tools.getMember(message, args).then(memberPromise => {
+            member = memberPromise;
+        });
 
         if (!member)
             return message.channel.send(embed.setColor(bot.embedColors.error)
@@ -20,7 +25,7 @@ module.exports = {
                 userId: member.user.id
             }
         }).then(user => {
-            let embed = new MessageEmbed().setColor(bot.embedColors.normal);
+
 
             if (member.user.id !== message.author.id)
                 embed.setDescription(`**${member.user.username}#${member.user.discriminator}** has **${user.balance} ${bot.currencyEmoji}**`);

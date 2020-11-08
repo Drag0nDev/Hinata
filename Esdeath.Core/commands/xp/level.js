@@ -1,7 +1,7 @@
 const {MessageEmbed} = require('discord.js');
 const { User, ServerUser } = require('../../../dbObjects');
 const config = require("../../../config.json");
-const Sequelize = require('sequelize');
+const tools = require('../../../tools');
 const pm = require('parse-ms');
 
 module.exports = {
@@ -13,8 +13,11 @@ module.exports = {
     run: async (bot, message, args) => {
         const levelXp = config.levelXp;
         let embed = new MessageEmbed().setColor(bot.embedColors.normal);
+        let member;
 
-        let member = !args[0] ? await message.guild.members.cache.get(message.author.id) : await message.mentions.members.first() || await message.guild.members.cache.get(args[0]);
+        await tools.getMember(message, args).then(memberPromise => {
+            member = memberPromise;
+        });
 
         if (!member)
             return message.channel.send(embed.setColor(bot.embedColors.error)

@@ -11,8 +11,11 @@ module.exports = {
     run: async (bot, message, args) => {
         let embed = new MessageEmbed().setColor(bot.embedColors.normal);
         let date = new Date();
+        let member;
 
-        let member = await tools.getMember(message, args);
+        await tools.getMember(message, args).then(memberPromise => {
+            member = memberPromise;
+        });
 
         if (!member)
             return message.channel.send(embed.setColor(bot.embedColors.error)
