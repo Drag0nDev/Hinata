@@ -6,7 +6,7 @@ const colors = require("./colors.js");
 const reactions = require('./reactions.json')
 const log4js = require("log4js");
 const { Op } = require('sequelize');
-//const { User } = require('./Esdeath.Core/Database/dbObjects/User');
+//const { User } = require('./Stella.Core/Database/dbObjects/User');
 //</editor-fold>
 
 //<editor-fold defaultstate="collapsed" desc="variables">
@@ -17,7 +17,7 @@ bot.embedColors = new Collection();
 bot.reactions = new Collection();
 bot.testingFile = new Collection();
 
-bot.categories = fs.readdirSync("./Esdeath.Core/commands/");
+bot.categories = fs.readdirSync("./Stella.Core/commands/");
 bot.embedColors = colors;
 bot.reactions = reactions;
 bot.testing = config.testing;
@@ -34,7 +34,7 @@ log4js.configure({
         },
         fileLog: {
             type: "dateFile",
-            filename: "logs/esdeath-log.log",
+            filename: "logs/Stella-log.log",
             pattern: "-yyyy-MM-dd",
             keepFileExt: true
         }
@@ -51,14 +51,14 @@ const logger = log4js.getLogger();
 //</editor-fold>
 
 //<editor-fold defaultstate="collapsed" desc="command loader">
-fs.readdir('./Esdeath.Core/commands/', (err, dir) => {
+fs.readdir('./Stella.Core/commands/', (err, dir) => {
     if (err) {
         logger.error(err);
         return;
     }
 
     dir.forEach(dir => {
-        fs.readdir(`./Esdeath.Core/commands/${dir}`, async (err, files) => {
+        fs.readdir(`./Stella.Core/commands/${dir}`, async (err, files) => {
             if (err) {
                 logger.error(err);
                 return;
@@ -67,7 +67,7 @@ fs.readdir('./Esdeath.Core/commands/', (err, dir) => {
             files.forEach(file => {
                 if (!file.endsWith('.js')) return;
 
-                let props = require(`./Esdeath.Core/commands/${dir}/${file}`);
+                let props = require(`./Stella.Core/commands/${dir}/${file}`);
                 let cmdName = props.name.toLowerCase();
 
                 bot.commands.set(cmdName, props);
@@ -88,7 +88,7 @@ fs.readdir('./Esdeath.Core/commands/', (err, dir) => {
 //</editor-fold>
 
 //<editor-fold defaultstate="collapsed" desc="event loader">
-fs.readdir('./Esdeath.Core/events/', (err, files) => {
+fs.readdir('./Stella.Core/events/', (err, files) => {
     if (err) {
         logger.error(err);
         return;
@@ -97,7 +97,7 @@ fs.readdir('./Esdeath.Core/events/', (err, files) => {
     files.forEach(file => {
         if (!file.endsWith('.js')) return;
 
-        const evt = require(`./Esdeath.Core/events/${file}`);
+        const evt = require(`./Stella.Core/events/${file}`);
         let evtName = file.split('.')[0];
 
         logger.info(`Loaded event '${evtName}'.`);
@@ -106,13 +106,6 @@ fs.readdir('./Esdeath.Core/events/', (err, files) => {
     logger.info('All events loaded!\n');
 });
 //</editor-fold>
-
-//set the testing error file
-let props = require(`./Esdeath.Core/testing/testing.js`);
-let testing = props.name.toLowerCase();
-
-bot.testingFile.set(testing, props);
-logger.info(`Loaded '${testing}'.`);
 
 //bot connection to discord
 bot.login(config.token)

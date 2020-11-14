@@ -6,13 +6,13 @@ const sequelize = new Sequelize('database', config.username, config.password, {
     host: 'localhost',
     dialect: 'sqlite',
     logging: false,
-    storage: 'EsdeathDb.sqlite',
+    storage: 'StellaDb.sqlite',
 });
 
-const User = require('./Esdeath.Core/Database/dbObjects/User')(sequelize, Sequelize.DataTypes);
-require('./Esdeath.Core/Database/dbObjects/Server')(sequelize, Sequelize.DataTypes);
-require('./Esdeath.Core/Database/dbObjects/ServerUser')(sequelize, Sequelize.DataTypes);
-require('./Esdeath.Core/Database/dbObjects/Timers')(sequelize, Sequelize.DataTypes);
-require('./Esdeath.Core/Database/dbObjects/Warnings')(sequelize, Sequelize.DataTypes);
+const User = require('./Stella.Core/Database/dbObjects/User')(sequelize, Sequelize.DataTypes);
+require('./Stella.Core/Database/dbObjects/Server')(sequelize, Sequelize.DataTypes);
+require('./Stella.Core/Database/dbObjects/ServerUser')(sequelize, Sequelize.DataTypes);
+require('./Stella.Core/Database/dbObjects/Timers')(sequelize, Sequelize.DataTypes);
+require('./Stella.Core/Database/dbObjects/Warnings')(sequelize, Sequelize.DataTypes);
 
 const force = process.argv.includes('--force') || process.argv.includes('-f');

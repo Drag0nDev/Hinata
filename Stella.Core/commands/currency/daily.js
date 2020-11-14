@@ -19,7 +19,7 @@ module.exports = {
         }).then(user => {
             let embed = new MessageEmbed();
 
-            const diff = pm(now.getTime() - parseInt(user.dailyTaken))
+            const diff = pm(now.getTime() - parseInt(user.dailyTaken));
 
             let hours = 23 - diff.hours;
             let minutes = 59 - diff.minutes;

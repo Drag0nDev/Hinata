@@ -15,16 +15,16 @@ module.exports = {
                 .setColor(bot.embedColors.error));
 
         bot.user.setAvatar(args.toString()).then(updated => {
+            console.log(updated)
             embed.setTitle(`setavatar`)
                 .setColor(bot.embedColors.normal)
                 .setDescription('Avatar changed successfully to:')
-                .setImage(bot.user.avatarURL({dynamic: true, size: 4096}));
+                .setImage(updated.avatarURL({dynamic: true, size: 4096}));
 
                 message.channel.send(embed);
             }
         ).catch(err => {
-            embed.setDescription(err.message.toString().replace("Invalid Form Body\n" +
-                "avatar:", ""))
+            embed.setDescription(err)
                 .setColor(bot.embedColors.error);
             message.channel.send(embed);
         })

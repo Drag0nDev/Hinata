@@ -2,6 +2,7 @@ const config = require("../../config.json");
 const logger = require("log4js").getLogger();
 const {User, ServerUser} = require('../../dbObjects');
 const pm = require('parse-ms');
+const tools = require('../../tools');
 
 module.exports = async (bot, message) => {
 
@@ -16,7 +17,7 @@ module.exports = async (bot, message) => {
     if (message.content.toLowerCase().indexOf(config.prefix) !== 0) return;
     if (bot.testing && message.author.id !== config.owner) {
         let testing = bot.testingFile.get('testing');
-        testing.run(bot, message)
+        await tools.testing(bot, message)
         return;
     }
 

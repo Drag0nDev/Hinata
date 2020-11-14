@@ -20,15 +20,21 @@ module.exports = {
 
         let oldName = bot.user.tag;
 
-        await bot.user.setUsername(newName);
+        bot.user.setUsername(newName)
+            .then(updated => {
+                embed.setColor(bot.embedColors.normal)
+                    .setDescription('Username changed successfully!')
+                    .addField('Old name', oldName)
+                    .addField('New name', updated.tag);
 
-        embed.setColor(bot.embedColors.normal)
-            .setDescription('Username changed successfully!')
-            .addField('Old name', oldName)
-            .addField('New name', bot.user.tag);
+                message.channel.send(embed);
 
-        await message.channel.send(embed);
-
-        logger.warn(`Name changed from '${oldName}' to '${bot.user.tag}'`)
+                logger.warn(`Name changed from '${oldName}' to '${bot.user.tag}'`);
+            })
+            .catch(err => {
+                embed.setDescription(err)
+                    .setColor(bot.embedColors.error);
+                message.channel.send(embed);
+            });
     }
 }

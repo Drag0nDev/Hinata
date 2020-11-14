@@ -25,7 +25,11 @@ module.exports = {
             return message.channel.send('I do not have the required permission to kick members!');
         }
 
-        const member = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
+        let member;
+
+        await tools.getMember(message, args).then(memberPromise => {
+            member = memberPromise;
+        });
         const author = message.guild.members.cache.get(message.author.id);
 
         //check if member is in the server

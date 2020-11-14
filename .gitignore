@@ -2,14 +2,14 @@
 config.json
 test.js
 test_server.ps1
-EsdeathDb.sqlite
+StellaDb.sqlite
 
 #ignored directories
 logs/
 .idea/
 
 #ignored files in the core
-Esdeath.Core/commands/testing/
+Stella.Core/commands/testing/
 
 #ignored node_modules
 node_modules/*

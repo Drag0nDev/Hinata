@@ -2,9 +2,9 @@
   "name": "esdeath",
   "version": "1.0.0",
   "description": "",
-  "main": "esdeath.js",
+  "main": "stella.js",
   "scripts": {
-    "start": "node esdeath.js",
+    "start": "node stella.js",
     "db": "node loadDb.js"
   },
   "keywords": [],
