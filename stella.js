@@ -15,7 +15,7 @@ bot.commands = new Collection();
 bot.aliases = new Collection();
 bot.embedColors = new Collection();
 bot.reactions = new Collection();
-bot.testingFile = new Collection();
+bot.testingEmbed = new Collection();
 
 bot.categories = fs.readdirSync("./Stella.Core/commands/");
 bot.embedColors = colors;

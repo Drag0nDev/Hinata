@@ -4,7 +4,7 @@ const tools = require('../../../tools');
 module.exports = {
     name: 'reloadserver',
     aliases: ['rs'],
-    category: 'owner',
+    category: 'ownerdb',
     description: 'Reload a server for the database',
     usage: '[command | alias] <server id>',
     run: async (bot, message, args) => {

@@ -1,4 +1,3 @@
-const {User, ServerUser, Server} = require('../../dbObjects');
 const tools = require('../../tools');
 
 module.exports = async (bot, server) => {

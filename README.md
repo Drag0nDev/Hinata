@@ -1,4 +1,4 @@
-<h1>Esdeath - Discord bot</h1>
+<h1>Stella - Discord bot</h1>
 <div>
   <p>
     <a href="https://discord.gg/ReBJ4AB"><img src="https://i.imgur.com/Pih2tZP.png" alt="Discord server" /></a>

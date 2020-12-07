@@ -1,5 +1,5 @@
 module.exports = {
-    normal: '#85C1E9',
+    normal: '#BE4F70',
     ready: '#00FF00',
     error: '#FF0000',
     warn: '#D69636',

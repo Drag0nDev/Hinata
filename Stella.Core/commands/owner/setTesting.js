@@ -16,6 +16,11 @@ module.exports = {
         bot.testing = !bot.testing;
 
         embed.setDescription(`Set the testing value from **${!bot.testing}** to **${bot.testing}**`);
+        await bot.user.setPresence({ activity: {
+            name: 'Problems being fixed',
+            type: "PLAYING"
+            },
+            status: 'dnd' });
 
         await message.channel.send(embed);
     }

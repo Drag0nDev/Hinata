@@ -7,7 +7,7 @@ const config = require("../../../config.json");
 module.exports = {
     name: 'resetuserxp',
     aliases: ['ruxp'],
-    category: 'owner',
+    category: 'ownerdb',
     description: 'Reset a users global xp',
     usage: '[command | alias] <id>',
     run: async (bot, message, args) => {

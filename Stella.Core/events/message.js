@@ -16,8 +16,7 @@ module.exports = async (bot, message) => {
 
     if (message.content.toLowerCase().indexOf(config.prefix) !== 0) return;
     if (bot.testing && message.author.id !== config.owner) {
-        let testing = bot.testingFile.get('testing');
-        await tools.testing(bot, message)
+        await tools.testing(bot, message);
         return;
     }
 
@@ -40,7 +39,8 @@ module.exports = async (bot, message) => {
             logger.info(logging);
             await cmd.run(bot, message, args);
         } catch (err) {
-            logger.error(err)
+            console.log(typeof err);
+            logger.error(err);
         }
     }
 };

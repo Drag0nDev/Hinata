@@ -2,6 +2,7 @@ const {MessageEmbed} = require('discord.js');
 const config = require("../../../config.json");
 const pm = require('pretty-ms');
 const log4js = require("log4js");
+const tools = require("../../../tools");
 
 module.exports = {
     //<editor-fold defaultstate="collapsed" desc="userinfo help">
@@ -16,7 +17,7 @@ module.exports = {
 
         //get bot stats
         let botName = `${bot.user.username}#${bot.user.discriminator}`;
-        let creationDate = getDate(bot.user.createdTimestamp);
+        let creationDate = tools.getDate(bot.user.createdTimestamp);
         let botId = bot.user.id;
         let uptime = pm(bot.uptime, {
             verbose: true,

@@ -1,4 +1,5 @@
 const {User, ServerUser, Server} = require('./dbObjects');
+const {MessageEmbed} = require('discord.js');
 
 module.exports = {
     compareRoles: function (author, member) {
@@ -45,6 +46,9 @@ module.exports = {
     },
     getMember: async function (message, args) {
         return !args[0] ? message.guild.members.cache.get(message.author.id) : message.mentions.members.first() || message.guild.members.cache.get(args[0]);
+    },
+    getGuild: async function (message) {
+        return message.guild;
     },
     getBots: function (guild) {
         let amount = 0;

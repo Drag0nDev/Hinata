@@ -19,14 +19,11 @@ module.exports = {
             member = memberPromise;
         });
 
-        if (!member)
-            return message.channel.send(embed.setColor(bot.embedColors.error)
-                .setDescription('Please provide a valid user ID or mention!'));
-
         User.findAll({
             order: [['level', 'DESC'], ['xp', 'DESC']]
         }).then(userList => {
             let userListId = [];
+            console.log()
 
             userList.forEach(user => {
                 userListId.push(user.userId);
@@ -44,8 +41,8 @@ module.exports = {
                     userServerListId.push(userServer.userId);
                 });
 
-                let globalRank = userServerListId.indexOf(member.user.id) + 1
-                let serverRank = userListId.indexOf(member.user.id) + 1
+                let globalRank = userListId.indexOf(member.user.id) + 1
+                let serverRank = userServerListId.indexOf(member.user.id) + 1
 
                 User.findOne({
                     where: {
