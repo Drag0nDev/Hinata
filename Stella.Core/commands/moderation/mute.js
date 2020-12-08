@@ -91,8 +91,11 @@ module.exports = {
 
         await member.roles.add(muteRole);
 
+        const dmChannel = await member.createDM()
+        await dmChannel.send(`You got muted in **${guild.name}** for **${time.join('')}${timeVal}** with reason: **${reason}**!`);
+
         confirmationEmbed.setTitle('Mute')
-            .setDescription(`**${member.user.tag}** is muted for **${timeVal}** for reason: **${reason}**.`)
+            .setDescription(`**${member.user.tag}** is muted for **${time.join('')}${timeVal}** for reason: **${reason}**.`)
             .setColor(bot.embedColors.normal);
 
         await message.channel.send(confirmationEmbed);
