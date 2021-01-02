@@ -69,20 +69,25 @@ function getRoles(member) {
     let amount = 0;
 
     //get all the roles and their objects in an array
-    member._roles.forEach(roleId => {
-        roleArray.push(member.guild.roles.cache.get(roleId));
-    });
+    if (member._roles.length === 0){
+        roleList = '\u200B';
+    }
+    else {
+        member._roles.forEach(roleId => {
+            roleArray.push(member.guild.roles.cache.get(roleId));
+        });
 
-    roleArray.sort((a, b) => b.position - a.position);
+        roleArray.sort((a, b) => b.position - a.position);
 
-    for (let role of roleArray) {
+        for (let role of roleArray) {
 
-        if (amount === 10) {
-            roleList += '``...``';
-            break;
+            if (amount === 10) {
+                roleList += '``...``';
+                break;
+            }
+            roleList += `<@&${role.id}>\n`;
+            amount++;
         }
-        roleList += `<@&${role.id}>\n`;
-        amount++;
     }
 
     return roleList;

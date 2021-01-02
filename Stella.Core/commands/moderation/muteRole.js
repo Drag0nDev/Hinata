@@ -76,7 +76,11 @@ module.exports = {
                 });
 
                 server.channels.cache.forEach(channel => {
-                    channel.updateOverwrite(muteRole , {"SEND_MESSAGES": false});
+                    channel.updateOverwrite(muteRole , {
+                        'SEND_MESSAGES': false,
+                        'ADD_REACTIONS': false,
+                        'SPEAK': false
+                    });
                 })
 
                 embed.setColor(bot.embedColors.normal)

@@ -1,4 +1,5 @@
 const config = require("../../../config.json");
+const tools = require("../../../tools");
 const {MessageEmbed} = require('discord.js');
 
 module.exports = {
@@ -10,8 +11,10 @@ module.exports = {
     run: async (bot, message) => {
         let embed = new MessageEmbed().setColor(bot.embedColors.normal);
 
-        if (message.member.id !== config.owner)
+        if (message.author.id !== config.owner) {
+            tools.ownerOnly(bot, message.channel)
             return;
+        }
 
         bot.testing = !bot.testing;
 

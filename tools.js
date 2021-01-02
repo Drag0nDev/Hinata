@@ -102,5 +102,11 @@ module.exports = {
             .setThumbnail(bot.user.avatarURL());
 
         await message.channel.send(embed);
+    },
+    ownerOnly: function (bot, channel) {
+        let embed = new MessageEmbed().setColor(bot.embedColors.error)
+            .setDescription('This command is only for the owner of the bot');
+
+        channel.send(embed);
     }
 }

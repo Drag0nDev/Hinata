@@ -1,4 +1,5 @@
 const config = require("../../../config.json");
+const tools = require("../../../tools");
 
 module.exports = {
     name: 'aakash',
@@ -6,8 +7,10 @@ module.exports = {
     description: 'Dragon bonks aakash',
     usage: '[command | alias]',
     run: async (bot, message) => {
-        if (message.author.id !== config.owner)
+        if (message.author.id !== config.owner) {
+            tools.ownerOnly(bot, message.channel)
             return;
+        }
 
         await message.delete();
         await message.channel.send('<@462968651713216522> <a:bonk:735549944814895115>');

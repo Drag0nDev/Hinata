@@ -3,21 +3,33 @@ const {User} = require('../../../dbObjects');
 const Sequelize = require('sequelize');
 const pm = require('parse-ms');
 const config = require("../../../config.json");
+const tools = require("../../../tools");
 
 module.exports = {
     name: 'finduser',
     aliases: ['fu', 'getuser'],
     category: 'owner',
-    description: 'Reset a users global xp',
-    usage: '[command | alias] <id>',
+    description: 'Find info about a user',
+    usage: '[command | alias] <id/mention>',
     run: async (bot, message, args) => {
+        if (message.author.id !== config.owner) {
+            tools.ownerOnly(bot, message.channel)
+            return;
+        }
+
+        if (!args[0]) {
+            let embed = new MessageEmbed().setColor(bot.embedColors.error)
+                .setDescription('Please provide a valid memberid / mention');
+
+            return message.channel.send(embed);
+        }
+
         let embed = new MessageEmbed().setColor(bot.embedColors.normal)
             .setDescription(`Getting the info of user with id **${args[0]}**`);
 
-        const userB = bot.users.cache.get(args[0]);
+        let member = message.mentions.members.first();
 
-        if (message.author.id !== config.owner)
-            return;
+        const userB = bot.users.cache.get(args[0]) || bot.users.cache.get(member.user.id);
 
         const $message = await message.channel.send(embed);
 
@@ -40,7 +52,7 @@ module.exports = {
 
         User.findOne({
             where: {
-                userId: args[0]
+                userId: userB.id
             }
         }).then(user => {
             edit.addField('Currency', `${user.balance} ${bot.currencyEmoji}`, true)

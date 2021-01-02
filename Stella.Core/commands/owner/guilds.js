@@ -1,4 +1,5 @@
 const config = require("../../../config.json")
+const tools = require("../../../tools");
 const {MessageEmbed} = require('discord.js');
 
 module.exports = {
@@ -9,9 +10,10 @@ module.exports = {
     run: async (bot, message) => {
         let embed = new MessageEmbed().setTitle('Guilds').setColor(bot.embedColors.normal);
 
-        if (!(message.member.id === config.owner))
-            return message.channel.send(embed.setDescription(`${message.author} this is a command only for my creator!`)
-                .setColor(bot.embedColors.error));
+        if (message.author.id !== config.owner) {
+            tools.ownerOnly(bot, message.channel)
+            return;
+        }
 
         bot.guilds.cache.forEach(guild => {
             embed.addField(guild.name, `Member count: ${guild.memberCount}` + '\n' +

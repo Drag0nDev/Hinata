@@ -55,9 +55,9 @@ module.exports = {
             user.save();
 
             embed.setColor(bot.embedColors.normal)
-                .setDescription(`You have claimed your daily of **${daily} ${bot.currencyEmoji}**\n
-                Your total balance now is at **${user.balance} ${bot.currencyEmoji}**\n
-                Your daily streak is at **${user.dailyStreak - 1} day(s)**`);
+                .setDescription(`You have claimed your daily of **${daily} ${bot.currencyEmoji}**\n` +
+                    `Your total balance now is at **${user.balance} ${bot.currencyEmoji}**\n` +
+                    `Your daily streak is at **${user.dailyStreak - 1} day(s)**`);
 
             message.channel.send(embed);
         });

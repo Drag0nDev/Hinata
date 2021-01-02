@@ -16,9 +16,10 @@ module.exports = {
 
         //<editor-fold defaultstate="collapsed" desc="Preparations">
         //check if the user is the bot owner
-        if (!(message.member.id === config.owner))
-            return message.channel.send(embed.setDescription(`${message.author} this is a command only for my creator!`)
-                .setColor(bot.embedColors.error.code));
+        if (message.author.id !== config.owner) {
+            tools.ownerOnly(bot, message.channel)
+            return;
+        }
 
         //check if serverid is given
         if (!args[0])

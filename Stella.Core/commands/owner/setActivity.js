@@ -1,4 +1,5 @@
 const config = require("../../../config.json");
+const tools = require("../../../tools");
 const {MessageEmbed} = require('discord.js');
 
 module.exports = {
@@ -10,41 +11,42 @@ module.exports = {
     run: async (bot, message, args) => {
         let embed = new MessageEmbed()
 
-        if (!(message.member.id === config.owner))
-            return message.channel.send(embed.setDescription(`${message.author} this is a command only for my creator!`)
-                .setColor(bot.embedColors.error));
+        if (message.author.id !== config.owner) {
+            tools.ownerOnly(bot, message.channel)
+            return;
+        }
 
-            //splitting in to parts
-            const type = args.shift().toUpperCase();
-            if(type === 'STREAMING'){
-                const link = args.pop();
+        //splitting in to parts
+        const type = args.shift().toUpperCase();
+        if (type === 'STREAMING') {
+            const link = args.pop();
 
-                const name = args.join(' ');
+            const name = args.join(' ');
 
-                await bot.user.setActivity({
-                    name: `${name}`,
-                    type: `${type}`,
-                    url: `${link}`
-                });
-            } else if (type === 'DEFAULT') {
-                await bot.user.setActivity({
-                    name: 'Under construction',
-                    type: 'STREAMING',
-                    url: 'https://www.twitch.tv/zwoil'
-                });
-            } else {
-                const name = args.join(' ');
+            await bot.user.setActivity({
+                name: `${name}`,
+                type: `${type}`,
+                url: `${link}`
+            });
+        } else if (type === 'DEFAULT') {
+            await bot.user.setActivity({
+                name: 'Under construction',
+                type: 'STREAMING',
+                url: 'https://www.twitch.tv/zwoil'
+            });
+        } else {
+            const name = args.join(' ');
 
-                await bot.user.setActivity({
-                    name: `${name}`,
-                    type: `${type}`
-                });
-            }
+            await bot.user.setActivity({
+                name: `${name}`,
+                type: `${type}`
+            });
+        }
 
-            embed.setDescription('Activity changed successfully!')
-                .setColor(bot.embedColors.normal);
+        embed.setDescription('Activity changed successfully!')
+            .setColor(bot.embedColors.normal);
 
-            await message.channel.send(embed);
+        await message.channel.send(embed);
 
     }
 }

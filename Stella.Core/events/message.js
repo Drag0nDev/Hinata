@@ -39,7 +39,6 @@ module.exports = async (bot, message) => {
             logger.info(logging);
             await cmd.run(bot, message, args);
         } catch (err) {
-            console.log(typeof err);
             logger.error(err);
         }
     }
