@@ -2,10 +2,10 @@ const {MessageEmbed} = require('discord.js');
 const config = require("../../../config.json");
 const pm = require('pretty-ms');
 const log4js = require("log4js");
-const tools = require("../../../tools");
+const tools = require("../../misc/tools");
 
 module.exports = {
-    //<editor-fold defaultstate="collapsed" desc="userinfo help">
+    //<editor-fold defaultstate="collapsed" desc="stats help">
     name: 'stats',
     category: 'info',
     description: 'Get the bot statistics',

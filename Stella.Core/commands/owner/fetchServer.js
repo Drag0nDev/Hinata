@@ -1,7 +1,7 @@
 const config = require("../../../config.json")
 const {MessageEmbed} = require('discord.js');
 const log4js = require("log4js");
-const tools = require('../../../tools');
+const tools = require('../../misc/tools');
 
 const logger = log4js.getLogger();
 

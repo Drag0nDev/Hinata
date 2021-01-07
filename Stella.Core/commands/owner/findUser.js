@@ -1,9 +1,9 @@
 const {MessageEmbed} = require('discord.js');
-const {User} = require('../../../dbObjects');
+const {User} = require('../../misc/dbObjects');
 const Sequelize = require('sequelize');
 const pm = require('parse-ms');
 const config = require("../../../config.json");
-const tools = require("../../../tools");
+const tools = require("../../misc/tools");
 
 module.exports = {
     name: 'finduser',

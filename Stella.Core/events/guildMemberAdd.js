@@ -1,4 +1,4 @@
-const {User, ServerUser} = require('../../dbObjects');
+const {User, ServerUser} = require('../misc/dbObjects');
 
 module.exports = async (bot, member) => {
     if (!member.bot) {

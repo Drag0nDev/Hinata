@@ -1,9 +1,9 @@
 const logger = require("log4js").getLogger();
 const {MessageEmbed} = require('discord.js');
 const Sequelize = require('sequelize');
-const {Timers, Server} = require('../../dbObjects');
+const {Timers, Server} = require('../misc/dbObjects');
 const pm = require('parse-ms');
-const tools = require('../../tools');
+const tools = require('../misc/tools');
 
 module.exports = async bot => {
     let embed = new MessageEmbed()
@@ -24,9 +24,8 @@ module.exports = async bot => {
     logger.info(`Logged in as ${bot.user.tag}!`);
 
     await bot.user.setActivity({
-        name: 'Under construction',
-        type: 'STREAMING',
-        url: 'https://www.twitch.tv/zwoil'
+        name: 'with Ikki',
+        type: 'PLAYING'
     });
 
     await channel.send(embed);

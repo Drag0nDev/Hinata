@@ -1,6 +1,6 @@
 const delay = require("delay");
 const {MessageEmbed} = require('discord.js');
-const tools = require('../../../tools');
+const tools = require('../../misc/tools');
 
 module.exports = {
     name: 'simprate',

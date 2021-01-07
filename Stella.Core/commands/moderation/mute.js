@@ -1,13 +1,13 @@
 const {MessageEmbed} = require("discord.js");
-const {Timers, Server} = require('../../../dbObjects');
-const tools = require('../../../tools');
+const {Timers, Server} = require('../../misc/dbObjects');
+const tools = require('../../misc/tools');
 
 module.exports = {
     name: 'mute',
     category: 'moderation',
-    description: 'Mute a member from the server',
-    usage: '[command | alias] [Member mention/id] <time> <reason>',
-    neededPermissions: ['MANAGE_ROLES'],
+    description: 'Mute a member from the server for a set time',
+    usage: '[command | alias] [Member mention/id] <time (h, m, s)> <reason>',
+    neededPermissions: ['MANAGE_ROLES', "MUTE_MEMBERS"],
     run: async (bot, message, args) => {
         let reason;
         let embedLog = new MessageEmbed().setTimestamp()
@@ -28,9 +28,17 @@ module.exports = {
             return message.channel.send(`${message.author} you do not have the **MANAGE_ROLES** permission!`);
         }
 
+        if(!message.member.hasPermission("MUTE_MEMBERS")) {
+            return message.channel.send(`${message.author} you do not have the **MUTE_MEMBERS** permission!`);
+        }
+
         //check bot permissions
         if (!message.guild.me.hasPermission("MANAGE_ROLES")) {
             return message.channel.send('I do not have the required permission to mute members!');
+        }
+
+        if(!message.guild.me.hasPermission("MUTE_MEMBERS")) {
+            return message.channel.send(`I do not have the **MUTE_MEMBERS** permission!`);
         }
 
         let member;

@@ -1,4 +1,4 @@
-const tools = require('../../tools');
+const tools = require('../misc/tools');
 
 module.exports = async (bot, server) => {
     for (const member of server.members.cache) {

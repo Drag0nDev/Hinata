@@ -5,7 +5,7 @@
   "main": "stella.js",
   "scripts": {
     "start": "node stella.js",
-    "db": "node loadDb.js"
+    "db": "node Stella.Core/misc/loadDb.js"
   },
   "keywords": [],
   "author": "",

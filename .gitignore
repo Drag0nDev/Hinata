@@ -3,7 +3,6 @@ config.json
 test.js
 test_server.ps1
 StellaDb.sqlite
-Stella.Core/Database/dbERD.mdj
 
 #ignored directories
 logs/

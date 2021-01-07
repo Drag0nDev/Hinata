@@ -1,31 +1,38 @@
 const config = require("../../config.json");
 const logger = require("log4js").getLogger();
-const {User, ServerUser} = require('../../dbObjects');
+const {User, ServerUser} = require('../misc/dbObjects');
 const pm = require('parse-ms');
-const tools = require('../../tools');
+const tools = require('../misc/tools');
 
 module.exports = async (bot, message) => {
 
+    //check if the new message is from a bot
     if (message.author.bot) return;
 
+    //check the global level of the user and if it already exists
     await checkUser(message);
     await globalLevel(message);
 
+    //check the server level of the user
     await checkServerUser(message);
     await serverLevel(message);
 
+    //check if the bot is in test mode
     if (message.content.toLowerCase().indexOf(config.prefix) !== 0) return;
     if (bot.testing && message.author.id !== config.owner) {
         await tools.testing(bot, message);
         return;
     }
 
+    //extractions of the command
     const args = message.content.slice(config.prefix.length).trim().split(/ +/g);
     const command = args.shift().toLowerCase();
 
+    //find the command
     let cmd = bot.commands.get(command);
     if (!cmd) cmd = bot.commands.get(bot.aliases.get(command));
 
+    //enter in the logger
     if (cmd) {
         try {
             let logging = `------------------------------\n` +

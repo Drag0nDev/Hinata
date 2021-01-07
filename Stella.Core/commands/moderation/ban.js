@@ -1,6 +1,6 @@
 const { MessageEmbed } = require("discord.js");
-const {ServerUser} = require('../../../dbObjects');
-const tools = require('../../../tools');
+const {ServerUser} = require('../../misc/dbObjects');
+const tools = require('../../misc/tools');
 
 module.exports = {
     name: 'ban',

@@ -1,6 +1,6 @@
 const {MessageEmbed} = require('discord.js');
 const pm = require('pretty-ms');
-const tools = require('../../../tools');
+const tools = require('../../misc/tools');
 
 module.exports = {
     name: 'accountage',

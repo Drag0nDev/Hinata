@@ -1,5 +1,5 @@
 const config = require("../../../config.json");
-const tools = require("../../../tools");
+const tools = require("../../misc/tools");
 
 module.exports = {
     name: 'aakash',

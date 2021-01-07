@@ -1,6 +1,6 @@
 const {MessageEmbed} = require('discord.js');
 const delay = require("delay");
-const tools = require('../../../tools');
+const tools = require('../../misc/tools');
 
 module.exports = {
     name: 'howgay',

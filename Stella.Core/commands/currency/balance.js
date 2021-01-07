@@ -1,6 +1,6 @@
 const {MessageEmbed} = require('discord.js');
-const { User } = require('../../../dbObjects');
-const tools = require('../../../tools');
+const { User } = require('../../misc/dbObjects');
+const tools = require('../../misc/tools');
 
 module.exports = {
     name: 'balance',

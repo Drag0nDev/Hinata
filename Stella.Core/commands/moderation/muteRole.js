@@ -1,6 +1,6 @@
 const {MessageEmbed} = require("discord.js");
-const {Server} = require('../../../dbObjects');
-const tools = require('../../../tools');
+const {Server} = require('../../misc/dbObjects');
+const tools = require('../../misc/tools');
 
 module.exports = {
     name: 'muterole',
