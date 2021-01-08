@@ -6,6 +6,7 @@ module.exports = {
     category: 'moderation',
     description: 'Kick a member from the server',
     usage: '[command | alias] [Member mention/id] <reason>',
+    neededPermissions: ['KICK_MEMBERS'],
     run: async (bot, message, args) => {
         let reason;
         let embed = new MessageEmbed().setTimestamp().setColor(bot.embedColors.kick).setTitle('User kicked');

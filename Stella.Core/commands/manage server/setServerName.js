@@ -7,6 +7,7 @@ module.exports = {
     category: 'manage server',
     description: 'Set a new server name',
     usage: '[command | alias] [new name]',
+    neededPermissions: ['MANAGE_GUILD'],
     //</editor-fold>
     run: async (bot, message, args) => {
         let embed = new MessageEmbed().setColor(bot.embedColors.normal);

@@ -2,7 +2,6 @@ const {MessageEmbed} = require('discord.js');
 const { User, ServerUser } = require('../../misc/dbObjects');
 const config = require("../../../config.json");
 const tools = require('../../misc/tools');
-const pm = require('parse-ms');
 
 module.exports = {
     name: 'level',

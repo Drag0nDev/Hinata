@@ -8,6 +8,7 @@ module.exports = {
     category: 'manage server',
     description: 'Set the server logo',
     usage: '[command | alias] [link]',
+    neededPermissions: ['MANAGE_GUILD'],
     //</editor-fold>
     run: (bot, message, args) => {
         const logger = log4js.getLogger();

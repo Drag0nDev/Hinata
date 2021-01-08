@@ -70,19 +70,7 @@ module.exports = {
             muteRole = guild.roles.cache.get(muteRoleId);
         }
 
-        args.shift();
-        let time = args[0].split('');
-        args.shift();
-        let timeVal;
 
-        reason = args.join(' ');
-
-        time.forEach(char => {
-            if (isNaN(parseInt(char))) {
-                timeVal = char;
-                time.splice(time.indexOf(char), time.length);
-            }
-        });
 
         if (!timeVal)
             return message.channel.send('Please give a good time');

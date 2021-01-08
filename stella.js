@@ -113,8 +113,3 @@ bot.login(config.token)
     }).catch(err => {
         logger.error(err)
     });
-
-/*
-TODO: delete voice-, text, categorychannel
-TODO: Make all moderation commands
- */

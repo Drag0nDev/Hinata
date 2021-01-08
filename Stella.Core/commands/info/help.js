@@ -58,10 +58,10 @@ function getAll(bot, message) {
         .setTitle('Help')
         .setURL('https://discord.gg/ReBJ4AB')
         .setTimestamp()
-        .setFooter(`For more help type esdeath help [command]`);
+        .setFooter(`For more help type stella help [command]`);
 
     bot.categories.forEach(cat => {
-        if (message.member.id !== config.owner && cat === 'owner')
+        if (message.member.id !== config.owner && cat.includes('owner'))
             return;
         const _name = cat;
         const _value = commands(cat);
@@ -121,9 +121,13 @@ function getCat(bot, message, input) {
 
     embed.setTitle(`Module: ${input}`);
 
-    commands(input).forEach(cmd => {
-        embed.addField(cmd.name, cmd.description, false);
-    })
+    if (input.includes('owner') && message.member.id !== config.owner) {
+        embed.setDescription(`You don't have permission to view this category`);
+    } else {
+        commands(input).forEach(cmd => {
+            embed.addField(cmd.name, cmd.description, false);
+        });
+    }
 
     return message.channel.send(embed);
 }
