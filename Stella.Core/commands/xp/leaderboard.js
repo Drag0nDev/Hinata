@@ -21,17 +21,15 @@ module.exports = {
                 .setDescription(`I don't have the required permission to execute this command\n` +
                     `**Missing requirements:** ${neededPerm}`));
 
-        console.log(message.content)
-
         if (message.content.includes('glb') || message.content.includes('globalleaderboard')) {
             globalLb(bot, message);
         } else {
-            serverLb(bot, message);
+            await serverLb(bot, message);
         }
     }
 }
 
-function serverLb(bot, message) {
+async function serverLb(bot, message) {
     const embed = new MessageEmbed()
         .setTitle('Server leaderboard')
         .setColor(bot.embedColors.normal)
@@ -47,24 +45,12 @@ function serverLb(bot, message) {
         order: [
             ['xp', 'DESC']
         ]
-    }).then(users => {
+    }).then(async users => {
         for (let i = 0; i < 10 && i < users.length; i++) {
-            let member = message.guild.members.cache.get(users[i].userId);
-            let xp = users[i].xp;
-            let lvlXp = config.levelXp;
-            let level = 0;
-            let nextLvlXp = 0;
+            let memberTag = await getUserTag(message, users[i].userId);
+            let level = getLevel(users[i].xp);
 
-            do {
-                nextLvlXp = lvlXp + ((lvlXp / 2) * level);
-
-                if (xp >= nextLvlXp) {
-                    level++;
-                    xp -= nextLvlXp;
-                }
-            } while (xp > nextLvlXp);
-
-            embed.addField(`${i + 1}. ${member.user.tag}`, `Level ${level}\n(${users[i].xp}xp)`, true);
+            embed.addField(`${i + 1}. ${memberTag}`, `Level ${level}\n(${users[i].xp}xp)`, true);
         }
 
         messageEditor(bot, message, embed, users);
@@ -147,37 +133,45 @@ function messageEditor(bot, message, embed, users) {
 
 async function pageSwitch(message, page, users, editEmbed) {
     for (let i = 10 * page; (i < 10 + (10 * page)) && (i < Object.keys(users).length); i++) {
-        let member = message.guild.members.cache.get(users[i].userId);
-        let xp = users[i].xp;
-        let lvlXp = config.levelXp;
-        let level = 0;
-        let nextLvlXp = 0;
-        let membertag;
+        let memberTag = await getUserTag(message, users[i].userId);
+        let level = getLevel(users[i].xp);
 
-        do {
-            nextLvlXp = lvlXp + ((lvlXp / 2) * level);
-
-            if (xp >= nextLvlXp) {
-                level++;
-                xp -= nextLvlXp;
-            }
-        } while (xp > nextLvlXp);
-
-        if (!member) {
-            await User.findOne({
-                where: {
-                    userId: users[i].userId
-                }
-            }).then(user => {
-                membertag = user.userTag;
-                console.log(user.userTag)
-            })
-        } else {
-            membertag = member.user.tag;
-        }
-
-        editEmbed.addField(`${i + 1}. ${membertag}`, `Level ${level}\n (${users[i].xp}xp)`, true);
+        editEmbed.addField(`${i + 1}. ${memberTag}`, `Level ${level}\n (${users[i].xp}xp)`, true);
     }
 
     editEmbed.setFooter(`Page ${page + 1}`);
+}
+
+async function getUserTag(message, id) {
+    let member = message.guild.members.cache.get(id);
+    let membertag;
+
+    if (!member) {
+        await User.findOne({
+            where: {
+                userId: users[i].userId
+            }
+        }).then(user => {
+            return membertag = user.userTag;
+        })
+    } else {
+        return membertag = member.user.tag;
+    }
+}
+
+function getLevel(userXp) {
+    let lvlXp = config.levelXp;
+    let level = 0;
+    let nextLvlXp = 0;
+
+    do {
+        nextLvlXp = lvlXp + ((lvlXp / 2) * level);
+
+        if (userXp >= nextLvlXp) {
+            level++;
+            userXp -= nextLvlXp;
+        }
+    } while (userXp > nextLvlXp);
+
+    return level;
 }
