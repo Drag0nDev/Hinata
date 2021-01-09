@@ -38,8 +38,7 @@ module.exports = {
 
                 return message.channel.send(embed);
             }
-        }
-        else
+        } else
             return await getAll(bot, message);
     }
 }
@@ -51,6 +50,7 @@ function getAll(bot, message) {
             .map(cmd => `${cmd.name}`)
             .join("\n");
     }
+    let categories = bot.categories;
 
     //embed creation
     const embed = new MessageEmbed()
@@ -58,17 +58,25 @@ function getAll(bot, message) {
         .setTitle('Help')
         .setURL('https://discord.gg/ReBJ4AB')
         .setTimestamp()
-        .setFooter(`For more help type stella help [command]`);
+        .setFooter(`For more help type stella help [command] | Page 1`);
 
-    bot.categories.forEach(cat => {
-        if (message.member.id !== config.owner && cat.includes('owner'))
-            return;
-        const _name = cat;
-        const _value = commands(cat);
-        embed.addField(`__${_name}__`, `${_value}`, true);
-    });
+    if (message.member.id !== config.owner) {
+        for (let i = 0; i < categories.length; i++) {
+            if (categories[i].includes('owner')) {
+                categories.splice(i, 1);
+                i--;
+            }
+        }
+    }
 
-    return message.channel.send(embed);
+    for (let i = 0; i < 9 && i < categories.length; i++) {
+        let cat = categories[i];
+        const name = cat;
+        const value = commands(cat);
+        embed.addField(`__${name}__`, `${value}`, true);
+    }
+
+    messageEditor(bot, message, embed, categories, commands);
 }
 
 function getCmd(bot, message, cmd) {
@@ -130,4 +138,56 @@ function getCat(bot, message, input) {
     }
 
     return message.channel.send(embed);
+}
+
+function messageEditor(bot, message, embed, categories, commands) {
+    message.channel.send(embed)
+        .then(async messageBot => {
+            await messageBot.react('◀');
+            await messageBot.react('▶');
+            let page = 0;
+
+            const filter = (reaction, user) => {
+                return (reaction.emoji.name === '◀' || reaction.emoji.name === '▶') && user.id === message.author.id;
+            };
+
+            const collector = messageBot.createReactionCollector(filter, {time: 60000});
+
+            collector.on('collect', async (reaction, user) => {
+                let editEmbed = new MessageEmbed()
+                    .setTitle('Help')
+                    .setURL('https://discord.gg/ReBJ4AB')
+                    .setColor(bot.embedColors.normal);
+
+                if (reaction.emoji.name === '▶') {
+                    page++;
+                    await pageSwitch(message, page, categories, editEmbed, commands);
+                } else if (reaction.emoji.name === '◀') {
+                    page--;
+                    if (page < 0)
+                        return;
+                    await pageSwitch(message, page, categories, editEmbed, commands);
+                }
+
+                if (Object.keys(editEmbed.fields).length !== 0) {
+                    await messageBot.edit(editEmbed);
+                }
+            });
+
+            collector.on('end', collected => {
+                messageBot.reactions.removeAll();
+            });
+        });
+}
+
+async function pageSwitch(message, page, categories, editEmbed, commands) {
+    for (let i = 9 * page; (i < 9 + (9 * page)) && (i < categories.length); i++) {
+        let cat = categories[i];
+        const name = cat;
+        const value = commands(cat);
+
+        editEmbed.addField(`__${name}__`, `${value}`, true);
+    }
+
+    editEmbed.setFooter(`For more help type stella help [command] | Page ${page + 1}`);
 }
