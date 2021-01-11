@@ -80,7 +80,7 @@ function globalLb(bot, message) {
             let level = users[i].level;
             let previousLvlXp = 0;
 
-            for (; level > 0; level--){
+            for (; level > 0; level--) {
                 previousLvlXp = lvlXp + ((lvlXp / 2) * (level - 1));
                 xp += previousLvlXp;
             }
@@ -144,18 +144,18 @@ async function pageSwitch(message, page, users, editEmbed) {
 
 async function getUserTag(message, id) {
     let member = message.guild.members.cache.get(id);
-    let membertag;
+    let memberTag;
 
     if (!member) {
-        await User.findOne({
+        return await User.findOne({
             where: {
-                userId: users[i].userId
+                userId: id
             }
         }).then(user => {
-            return membertag = user.userTag;
+            return user.userTag;
         })
     } else {
-        return membertag = member.user.tag;
+        return member.user.tag;
     }
 }
 

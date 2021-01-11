@@ -1,13 +1,16 @@
 const logger = require("log4js").getLogger();
+const {Server} = require('../misc/dbObjects');
 const {MessageEmbed} = require('discord.js');
-
+const pm = require('pretty-ms');
 
 module.exports = async (bot, member) => {
-    let embed = new MessageEmbed().setTimestamp()
-    const channel = bot.channels.cache.find(channel => channel.id === '763039768870649856');
-
-    //get current date timestamp
+    let embed = new MessageEmbed().setTimestamp();
     let date = new Date();
+    const modlogChannel = member.guild.channels.cache.get(await tools.getModlogChannel(member.guild.id));
+
+    if (!modlogChannel)
+        return;
+
     let fetchedLogs;
 
     try {
@@ -20,14 +23,14 @@ module.exports = async (bot, member) => {
     }
 
 
-    if (fetchedLogs === undefined)
+    if (!fetchedLogs)
         return;
 
     const kickLog = fetchedLogs.entries.first();
 
     if (
         !kickLog ||
-        kickLog.createdTimestamp !== date.getTime()
+        isClose(kickLog.createdTimestamp, date)
     )
         return;
 
@@ -47,5 +50,12 @@ module.exports = async (bot, member) => {
         logger.warn('Failed to load the audit log!');
     }
 
-    await channel.send(embed);
+    await modlogChannel.send(embed);
 };
+
+function isClose(logTime, programTime) {
+    let logDate = new Date(logTime);
+    let diff = programTime - logDate;
+
+    return diff > 1000
+}

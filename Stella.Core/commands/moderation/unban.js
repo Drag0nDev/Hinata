@@ -7,6 +7,7 @@ module.exports = {
     usage: '[command | alias] [Member mention/id] <reason>',
     neededPermissions: ['BAN_MEMBERS'],
     run: async (bot, message, args) => {
+        const neededPerm = ['BAN_MEMBERS'];
         let reason;
         let embed = new MessageEmbed().setTimestamp().setColor(bot.embedColors.unban).setTitle('User unbanned');
         let guild = message.guild;
@@ -21,16 +22,14 @@ module.exports = {
 
         const id = args.shift();
 
-        //check member permissions
-        if (!message.member.hasPermission('BAN_MEMBERS')) {
-            return message.channel.send(`${message.author} you do not have the required permission to unban members!\n
-            **Needed Permissions**: BAN_MEMBERS`);
-        }
+        //check member and bot permissions
+        let noUserPermission = tools.checkUserPermissions(bot, message, neededPerm, embed);
+        if (noUserPermission)
+            return await message.channel.send(embed);
 
-        //check bot permissions
-        if (!message.guild.me.hasPermission("BAN_MEMBERS")) {
-            return message.channel.send('I do not have the required permission to unban members!');
-        }
+        let noBotPermission = tools.checkBotPermissions(bot, message, neededPerm, embed);
+        if (noBotPermission)
+            return message.channel.send(embed);
 
         const author = message.guild.members.cache.get(message.author.id);
 

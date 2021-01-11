@@ -2,48 +2,7 @@ const {User, ServerUser, Server} = require('./dbObjects');
 const {MessageEmbed} = require('discord.js');
 
 module.exports = {
-    compareRoles: function (author, member) {
-        let roleArrayAuth = [];
-        let roleArrayMemb = [];
-
-        //get all the roles and their objects in an array
-        author._roles.forEach(roleId => {
-            roleArrayAuth.push(member.guild.roles.cache.get(roleId));
-        });
-
-        member._roles.forEach(roleId => {
-            roleArrayMemb.push(member.guild.roles.cache.get(roleId));
-        });
-
-        roleArrayAuth.sort((a, b) => b.position - a.position);
-        roleArrayMemb.sort((a, b) => b.position - a.position);
-
-        return roleArrayAuth[0].position > roleArrayMemb[0].position;
-    },
-    dbAdd: async function (member, server) {
-        await ServerUser.findOrCreate({
-            where: {
-                userId: member[1].user.id,
-                guildId: member[1].guild.id
-            }
-        });
-        await User.findOrCreate({
-            where: {
-                userId: member[1].user.id
-            },
-            defaults: {
-                userTag: `${member[1].user.username}#${member[1].user.discriminator}`
-            }
-        });
-        await Server.findOrCreate({
-            where: {
-                serverId: server.id
-            },
-            defaults: {
-                serverName: server.name
-            }
-        });
-    },
+    //guild checks
     getMember: async function (message, args) {
         return !args[0] ? message.guild.members.cache.get(message.author.id) : message.mentions.members.first() || message.guild.members.cache.get(args[0]);
     },
@@ -68,6 +27,26 @@ module.exports = {
 
         return amount;
     },
+
+    //conversions and comparisons
+    compareRoles: function (author, member) {
+        let roleArrayAuth = [];
+        let roleArrayMemb = [];
+
+        //get all the roles and their objects in an array
+        author._roles.forEach(roleId => {
+            roleArrayAuth.push(member.guild.roles.cache.get(roleId));
+        });
+
+        member._roles.forEach(roleId => {
+            roleArrayMemb.push(member.guild.roles.cache.get(roleId));
+        });
+
+        roleArrayAuth.sort((a, b) => b.position - a.position);
+        roleArrayMemb.sort((a, b) => b.position - a.position);
+
+        return roleArrayAuth[0].position > roleArrayMemb[0].position;
+    },
     getDate: function (timestamp) {
         let date = new Date(timestamp);
 
@@ -89,6 +68,8 @@ module.exports = {
 
         return `${date.getFullYear()}/${months}/${days}\n${time}`;
     },
+
+    //bot test message
     testing: async function (bot, message) {
         let embed = new MessageEmbed().setTitle('Currently out of order!')
             .setColor(bot.embedColors.error)
@@ -103,10 +84,69 @@ module.exports = {
 
         await message.channel.send(embed);
     },
+
+    //permission checks
     ownerOnly: function (bot, channel) {
         let embed = new MessageEmbed().setColor(bot.embedColors.error)
             .setDescription('This command is only for the owner of the bot');
 
         channel.send(embed);
+    },
+    checkUserPermissions: function (bot, message, neededPermissions, embed) {
+        for (let i = 0; i < neededPermissions.length; i++) {
+            let neededPerm = neededPermissions[i];
+
+            if (!message.member.hasPermission(neededPerm)) {
+                return embed.setColor(bot.embedColors.error)
+                    .setDescription(`You don't have the required permission to run this command\n` +
+                        `**Missing requirements:** ${neededPerm}`);
+            }
+        }
+    },
+    checkBotPermissions: function (bot, message, neededPermissions, embed) {
+        for (let i = 0; i < neededPermissions.length; i++) {
+            let neededPerm = neededPermissions[i];
+
+            if (!message.guild.me.hasPermission(neededPerm)) {
+                return embed.setColor(bot.embedColors.error)
+                    .setDescription(`I don't have the required permission to run this command\n` +
+                        `**Missing requirements:** ${neededPerm}`);
+            }
+        }
+    },
+
+    //database functions
+    dbAdd: async function (member, server) {
+        await ServerUser.findOrCreate({
+            where: {
+                userId: member[1].user.id,
+                guildId: member[1].guild.id
+            }
+        });
+        await User.findOrCreate({
+            where: {
+                userId: member[1].user.id
+            },
+            defaults: {
+                userTag: `${member[1].user.username}#${member[1].user.discriminator}`
+            }
+        });
+        await Server.findOrCreate({
+            where: {
+                serverId: server.id
+            },
+            defaults: {
+                serverName: server.name
+            }
+        });
+    },
+    getModlogChannel: async function (serverId) {
+        return Server.findOne({
+            where: {
+                serverId: serverId
+            }
+        }).then(server => {
+            return server.modlogChannel;
+        });
     }
 }

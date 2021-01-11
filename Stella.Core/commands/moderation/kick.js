@@ -8,6 +8,7 @@ module.exports = {
     usage: '[command | alias] [Member mention/id] <reason>',
     neededPermissions: ['KICK_MEMBERS'],
     run: async (bot, message, args) => {
+        const neededPerm = ['KICK_MEMBERS'];
         let reason;
         let embed = new MessageEmbed().setTimestamp().setColor(bot.embedColors.kick).setTitle('User kicked');
         let guild = message.guild;
@@ -16,15 +17,14 @@ module.exports = {
         if (!args[0])
             return message.channel.send('Please provide a user to kick!');
 
-        //check member permissions
-        if (!message.member.hasPermission('KICK_MEMBERS')) {
-            return message.channel.send(`${message.author} you do not have the **kick** permission!`);
-        }
+        //check member and bot permissions
+        let noUserPermission = tools.checkUserPermissions(bot, message, neededPerm, embed);
+        if (noUserPermission)
+            return await message.channel.send(embed);
 
-        //check bot permissions
-        if (!message.guild.me.hasPermission("KICK_MEMBERS")) {
-            return message.channel.send('I do not have the required permission to kick members!');
-        }
+        let noBotPermission = tools.checkBotPermissions(bot, message, neededPerm, embed);
+        if (noBotPermission)
+            return message.channel.send(embed);
 
         let member;
 

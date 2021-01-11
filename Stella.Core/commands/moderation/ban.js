@@ -9,6 +9,7 @@ module.exports = {
     usage: '[command | alias] [Member mention/id] <reason>',
     neededPermissions: ['BAN_MEMBERS'],
     run: async (bot, message, args) => {
+        const neededPerm = ['BAN_MEMBERS'];
         let reason;
         let embed = new MessageEmbed().setTimestamp().setColor(bot.embedColors.ban).setTitle('User banned');
         let guild = message.guild;
@@ -17,15 +18,14 @@ module.exports = {
         if (!args[0])
             return message.channel.send('Please provide a user to ban!');
 
-        //check member permissions
-        if (!message.member.hasPermission('BAN_MEMBERS')) {
-            return message.channel.send(`${message.author} you do not have the **ban** permission!`);
-        }
+        //check member and bot permissions
+        let noUserPermission = tools.checkUserPermissions(bot, message, neededPerm, embed);
+        if (noUserPermission)
+            return await message.channel.send(embed);
 
-        //check bot permissions
-        if (!message.guild.me.hasPermission("BAN_MEMBERS")) {
-            return message.channel.send('I do not have the required permission to ban members!');
-        }
+        let noBotPermission = tools.checkBotPermissions(bot, message, neededPerm, embed);
+        if (noBotPermission)
+            return message.channel.send(embed);
 
         let member;
 
@@ -79,7 +79,7 @@ module.exports = {
                 `**Responsible moderator:** ${message.author.tag}`)
             .setFooter(`ID: ${member.id}`);
 
-        const channel = bot.channels.cache.find(channel => channel.id === '763039768870649856');
+        const channel = member.guild.channels.cache.get(await tools.getModlogChannel(member.guild.id));
         await channel.send(embed);
 
         await ServerUser.destroy({

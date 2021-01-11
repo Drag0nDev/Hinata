@@ -24,31 +24,36 @@ module.exports = async (bot, message) => {
         return;
     }
 
-    //extractions of the command
-    const args = message.content.slice(config.prefix.length).trim().split(/ +/g);
-    const command = args.shift().toLowerCase();
+    try {
+        //extractions of the command
+        const args = message.content.slice(config.prefix.length).trim().split(/ +/g);
+        const command = args.shift().toLowerCase();
 
-    //find the command
-    let cmd = bot.commands.get(command);
-    if (!cmd) cmd = bot.commands.get(bot.aliases.get(command));
+        //find the command
+        let cmd = bot.commands.get(command);
+        if (!cmd) cmd = bot.commands.get(bot.aliases.get(command));
 
-    //enter in the logger
-    if (cmd) {
-        try {
-            let logging = `------------------------------\n` +
-                `Command: '${cmd.name}'\n` +
-                `Arguments: '${args.join(' ')}'\n` +
-                `User: '${message.author.tag}'\n` +
-                `Server: '${message.guild.name}'\n` +
-                `Guild ID: '${message.guild.id}'\n` +
-                `Channel: '${message.channel.name}'`;
+        //enter in the logger
+        if (cmd) {
+            try {
+                let logging = `------------------------------\n` +
+                    `Command: '${cmd.name}'\n` +
+                    `Arguments: '${args.join(' ')}'\n` +
+                    `User: '${message.author.tag}'\n` +
+                    `Server: '${message.guild.name}'\n` +
+                    `Guild ID: '${message.guild.id}'\n` +
+                    `Channel: '${message.channel.name}'`;
 
-            logger.info(logging);
-            await cmd.run(bot, message, args);
-        } catch (err) {
-            logger.error(err);
+                logger.info(logging);
+                await cmd.run(bot, message, args);
+            } catch (err) {
+                logger.error(err);
+            }
         }
+    } catch (error) {
+        logger.error(error);
     }
+
 };
 
 function globalLevel(message) {
