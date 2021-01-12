@@ -1,15 +1,12 @@
 const logger = require("log4js").getLogger();
 const {Server} = require('../misc/dbObjects');
 const {MessageEmbed} = require('discord.js');
+const tools = require('../misc/tools');
 const pm = require('pretty-ms');
 
 module.exports = async (bot, member) => {
     let embed = new MessageEmbed().setTimestamp();
     let date = new Date();
-    const modlogChannel = member.guild.channels.cache.get(await tools.getModlogChannel(member.guild.id));
-
-    if (!modlogChannel)
-        return;
 
     let fetchedLogs;
 

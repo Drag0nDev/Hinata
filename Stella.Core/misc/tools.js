@@ -141,6 +141,59 @@ module.exports = {
         });
     },
 
+    //moderation
+    calcExpiration: async function (date, time) {
+        let getVal = new RegExp('[smhd]');
+        let getTime = new RegExp('[0-9]*');
+
+        let timeVal = getVal.exec(time)[0];
+        let $time = getTime.exec(time)[0];
+
+        switch (timeVal) {
+            case 's':
+                date.setSeconds(date.getSeconds() + parseInt($time));
+                break;
+            case 'm':
+                date.setMinutes(date.getMinutes() + parseInt($time));
+                break;
+            case 'h':
+                date.setHours(date.getHours() + parseInt($time));
+                break;
+            case 'd':
+                date.setDate(date.getDate() + parseInt($time));
+                break;
+        }
+    },
+    getTimeval: async function (time) {
+        let getVal = new RegExp('[smhd]');
+
+        let timeVal = getVal.exec(time)[0];
+        let timeperiod;
+
+        switch (timeVal) {
+            case 's':
+                timeperiod = 'seconds';
+                break;
+            case 'm':
+                timeperiod = 'minutes';
+                break;
+            case 'h':
+                timeperiod = 'hours';
+                break;
+            case 'd':
+                timeperiod = 'days';
+                break;
+        }
+
+        return timeperiod;
+    },
+    getTime: async function (time) {
+        let getTime = new RegExp('[0-9]*');
+
+        return getTime.exec(time)[0];
+    },
+
+
     //post logs
     modlog: async function (member, embed) {
         const modlogChannel = member.guild.channels.cache.get(await getModlogChannel(member.guild.id));

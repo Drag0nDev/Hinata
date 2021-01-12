@@ -1,13 +1,14 @@
 const {MessageEmbed} = require("discord.js");
+const neededPerm = ['BAN_MEMBERS'];
+const tools = require('../../misc/tools');
 
 module.exports = {
     name: 'unban',
     category: 'moderation',
     description: 'Unban a member from the server',
     usage: '[command | alias] [Member mention/id] <reason>',
-    neededPermissions: ['BAN_MEMBERS'],
+    neededPermissions: neededPerm,
     run: async (bot, message, args) => {
-        const neededPerm = ['BAN_MEMBERS'];
         let reason;
         let embed = new MessageEmbed().setTimestamp().setColor(bot.embedColors.unban).setTitle('User unbanned');
         let guild = message.guild;

@@ -1,25 +1,25 @@
 const {MessageEmbed} = require("discord.js");
 const {Server} = require('../../misc/dbObjects');
 const tools = require('../../misc/tools');
+const neededPerm = ['MANAGE_ROLES'];
 
 module.exports = {
     name: 'muterole',
     category: 'moderation',
     description: 'Assign a mute role or create one if no role is given',
     usage: '[command | alias] <muteroleId / muterole mention>',
-    neededPermissions: ['MANAGE_ROLES'],
+    neededPermissions: neededPerm,
     run: async (bot, message, args) => {
         let embed = new MessageEmbed();
         let server;
         let muteRole;
         let dbServer;
-        await tools.getGuild(message).then(guildProm => {
-            server = guildProm;
-        });
+        await tools.getGuild(message).then(guildProm => server = guildProm);
 
-        if (!message.member.hasPermission('MANAGE_ROLES')) {
-            return message.channel.send(`${message.author} you do not have the **MANAGE_ROLES** permission!`);
-        }
+        //check member and bot permissions
+        let noUserPermission = tools.checkUserPermissions(bot, message, neededPerm, embed);
+        if (noUserPermission)
+            return await message.channel.send(embed);
 
         if (args[0]) {
             if (message.mentions.roles.size > 0) {

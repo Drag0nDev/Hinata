@@ -7,7 +7,7 @@ module.exports = {
     name: 'mute',
     category: 'moderation',
     description: 'Mute a member from the server for a set time',
-    usage: '[command | alias] [Member mention/id] <time (h, m, s)> <reason>',
+    usage: '[command | alias] [Member mention/id] <time (d, h, m, s)> <reason>',
     neededPermissions: neededPerm,
     run: async (bot, message, args) => {
         let checkTemp = new RegExp('^[0-9]*[smhd]');
@@ -60,62 +60,45 @@ module.exports = {
                 .setColor(bot.embedColors.error);
             return message.channel.send(embed);
         }
+
         muteRole = guild.roles.cache.get(muteRoleId);
 
         await args.shift();
 
         if (checkTemp.exec(args[0])) {
-            let time = checkTemp.exec(args[0]);
+            let time = checkTemp.exec(args[0])[0];
             await args.shift;
 
             if (!args[0]) {
-                reason = args.join(' ')
+                reason = args.join(' ');
             }
 
             await tempmute(bot, message, member, embed, muteRole, time, reason);
         } else {
-            await mute()
+            if (!args[0]) {
+                reason = args.join(' ');
+            }
+
+            await mute(bot, message, member, embed, muteRole, reason);
         }
     }
 }
 
 async function tempmute(bot, message, member, embed, muteRole, time, reason) {
-    let getVal = new RegExp('[smhd]');
-    let getTime = new RegExp('[0-9]*');
     let expiration = new Date();
-
-    let timeVal = getVal.exec(time)[0];
-    let $time = getTime.exec(time)[0];
-    let timeperiod;
-
-    switch (timeVal) {
-        case 's':
-            expiration.setSeconds(expiration.getSeconds() + parseInt($time));
-            timeperiod = 'seconds';
-            break;
-        case 'm':
-            expiration.setMinutes(expiration.getMinutes() + parseInt($time));
-            timeperiod = 'minutes';
-            break;
-        case 'h':
-            expiration.setHours(expiration.getHours() + parseInt($time));
-            timeperiod = 'hours';
-            break;
-        case 'd':
-            expiration.setDate(expiration.getDate() + parseInt($time));
-            timeperiod = 'days';
-            break;
-    }
+    await tools.calcExpiration(expiration, time);
+    let timeVal = await tools.getTimeval(time);
+    let $time = await tools.getTime(time);
 
     await addMuterole(member, muteRole);
 
     await member.createDM()
         .then(async dmChannel => {
-            await dmChannel.send(`You got muted in **${message.guild.name}** for **${$time} ${timeperiod}** with reason: **${reason}**!`);
+            await dmChannel.send(`You got muted in **${message.guild.name}** for **${$time} ${timeVal}** with reason: **${reason}**!`);
         });
 
     embed.setTitle('Mute')
-        .setDescription(`**${member.user.tag}** is muted for **${$time} ${timeperiod}** for reason: **${reason}**.`)
+        .setDescription(`**${member.user.tag}** is muted for **${$time} ${timeVal}** for reason: **${reason}**.`)
         .setColor(bot.embedColors.normal);
 
     await message.channel.send(embed);
@@ -131,7 +114,7 @@ async function tempmute(bot, message, member, embed, muteRole, time, reason) {
     const logEmbed = new MessageEmbed().setTitle('User muted')
         .setColor(bot.embedColors.mute)
         .setDescription(`**Member:** ${member.user.tag}\n` +
-            `**Duration:** ${$time} ${timeperiod}\n` +
+            `**Duration:** ${$time} ${timeVal}\n` +
             `**Reason:** ${reason}\n` +
             `**Responsible Moderator:** ${message.author.tag}`)
         .setFooter(`ID: ${member.user.id}`)

@@ -23,12 +23,14 @@ module.exports = {
             return message.channel.send(embed.setColor(bot.embedColors.error)
                 .setDescription('Please provide a valid user ID or mention!'));
 
-        let msg = await message.channel.send(embed);
-        await delay(1250);
+        await message.channel.send(embed).then(async msg => {
+            await delay(1250);
 
-        embed.setDescription(`**${member.user.tag}**'s pp:\n**${GetPP()}**`);
+            embed.setDescription(`**${member.user.tag}**'s pp:\n**${GetPP()}**`);
 
-        await msg.edit(embed);
+            await msg.edit(embed);
+        });
+
     }
 }
 

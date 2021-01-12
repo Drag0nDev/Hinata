@@ -1,8 +1,6 @@
 const logger = require("log4js").getLogger();
 const {MessageEmbed} = require('discord.js');
-const Sequelize = require('sequelize');
 const {Timers, Server} = require('../misc/dbObjects');
-const pm = require('parse-ms');
 const tools = require('../misc/tools');
 
 module.exports = async bot => {
@@ -30,7 +28,12 @@ module.exports = async bot => {
 
     await channel.send(embed);
 
-    setInterval(checkMutes, 1000, bot);
+    try {
+        setInterval(checkMutes, 1000, bot);
+        setInterval(checkBans, 1000, bot);
+    } catch (error) {
+        logger.error(error);
+    }
 };
 
 async function checkMutes(bot) {
@@ -47,6 +50,7 @@ async function checkMutes(bot) {
     }).then(timers => {
         timers.forEach(timer => {
             const diff = now.getTime() - parseInt(timer.expiration);
+
             if (diff >= 0) {
                 Timers.destroy({
                     where: {
@@ -61,25 +65,76 @@ async function checkMutes(bot) {
         });
     });
 
-    if (server) {
-        await Server.findOne({
-            where: {
-                serverId: server.id
+    if (!member) return;
+    if (!server) return;
+
+    await Server.findOne({
+        where: {
+            serverId: server.id
+        }
+    }).then(serverDb => {
+        muteRole = server.roles.cache.get(serverDb.muteRoleId);
+    });
+
+    await member.roles.remove(muteRole);
+
+    const logEmbed = new MessageEmbed().setTitle('User unmuted')
+        .setColor(bot.embedColors.unban)
+        .setDescription(`**Member:** ${member.user.tag}\n` +
+            `**Reason:** Automatic unmute from mute made by ${moderator.user.tag}\n` +
+            `**Responsible Moderator:** ${moderator.user.tag}`)
+        .setFooter(`ID: ${member.user.id}`)
+        .setTimestamp();
+
+    await tools.modlog(member, logEmbed);
+
+}
+
+async function checkBans(bot) {
+    const now = new Date();
+    let server;
+    let member;
+    let id;
+    let moderator;
+
+    await Timers.findAll({
+        where: {
+            type: 'Ban'
+        }
+    }).then(timers => {
+        timers.forEach(timer => {
+            const diff = now.getTime() - parseInt(timer.expiration);
+
+            if (diff >= 0) {
+                Timers.destroy({
+                    where: {
+                        id: timer.id
+                    }
+                });
+
+                server = bot.guilds.cache.get(timer.guildId);
+                id = timer.userId;
+                moderator = server.members.cache.get(timer.moderatorId);
             }
-        }).then(serverDb => {
-            muteRole = server.roles.cache.get(serverDb.muteRoleId);
+        });
+    });
+
+    if (!server) return;
+
+    await server.fetchBans()
+        .then(banList => {
+            member = banList.get(id);
         });
 
-        await member.roles.remove(muteRole);
+    await server.members.unban(id);
 
-        const logEmbed = new MessageEmbed().setTitle('User unmuted')
-            .setColor(bot.embedColors.unban)
-            .setDescription(`**Member:** ${member.user.tag}\n` +
-                `**Reason:** Automatic unmute from mute made by ${moderator.user.tag}\n` +
-                `**Responsible Moderator:** ${moderator.user.tag}`)
-            .setFooter(`ID: ${member.user.id}`)
-            .setTimestamp();
+    const logEmbed = new MessageEmbed().setTitle('User unbanned')
+        .setColor(bot.embedColors.unban)
+        .setDescription(`**Member:** ${member.user.tag}\n` +
+            `**Reason:** Automatic unmute from mute made by ${moderator.user.tag}\n` +
+            `**Responsible Moderator:** ${moderator.user.tag}`)
+        .setFooter(`ID: ${member.user.id}`)
+        .setTimestamp();
 
-        await tools.modlog(member, logEmbed);
-    }
+    await tools.modlog(moderator, logEmbed);
 }

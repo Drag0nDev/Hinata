@@ -1,12 +1,13 @@
 const {MessageEmbed} = require("discord.js");
 const tools = require('../../misc/tools');
+const neededPerm = ['KICK_MEMBERS'];
 
 module.exports = {
     name: 'kick',
     category: 'moderation',
     description: 'Kick a member from the server',
     usage: '[command | alias] [Member mention/id] <reason>',
-    neededPermissions: ['KICK_MEMBERS'],
+    neededPermissions: neededPerm,
     run: async (bot, message, args) => {
         const neededPerm = ['KICK_MEMBERS'];
         let reason;
