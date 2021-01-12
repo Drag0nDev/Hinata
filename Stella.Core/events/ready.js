@@ -37,7 +37,8 @@ async function checkMutes(bot) {
     const now = new Date();
     let server;
     let member;
-    let muteRole
+    let moderator;
+    let muteRole;
 
     await Timers.findAll({
         where: {
@@ -55,6 +56,7 @@ async function checkMutes(bot) {
 
                 server = bot.guilds.cache.get(timer.guildId);
                 member = server.members.cache.get(timer.userId);
+                moderator = server.members.cache.get(timer.moderatorId);
             }
         });
     });
@@ -68,8 +70,16 @@ async function checkMutes(bot) {
             muteRole = server.roles.cache.get(serverDb.muteRoleId);
         });
 
-        console.log(muteRole)
+        await member.roles.remove(muteRole);
 
-        member.roles.remove(muteRole);
+        const logEmbed = new MessageEmbed().setTitle('User unmuted')
+            .setColor(bot.embedColors.unban)
+            .setDescription(`**Member:** ${member.user.tag}\n` +
+                `**Reason:** Automatic unmute from mute made by ${moderator.user.tag}\n` +
+                `**Responsible Moderator:** ${moderator.user.tag}`)
+            .setFooter(`ID: ${member.user.id}`)
+            .setTimestamp();
+
+        await tools.modlog(member, logEmbed);
     }
 }

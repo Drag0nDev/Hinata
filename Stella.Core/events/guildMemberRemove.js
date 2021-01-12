@@ -50,7 +50,7 @@ module.exports = async (bot, member) => {
         logger.warn('Failed to load the audit log!');
     }
 
-    await modlogChannel.send(embed);
+    await tools.modlog(member, embed);
 };
 
 function isClose(logTime, programTime) {

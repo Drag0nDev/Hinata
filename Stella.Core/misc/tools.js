@@ -140,13 +140,23 @@ module.exports = {
             }
         });
     },
-    getModlogChannel: async function (serverId) {
-        return Server.findOne({
-            where: {
-                serverId: serverId
-            }
-        }).then(server => {
-            return server.modlogChannel;
-        });
+
+    //post logs
+    modlog: async function (member, embed) {
+        const modlogChannel = member.guild.channels.cache.get(await getModlogChannel(member.guild.id));
+
+        if (modlogChannel)
+            await modlogChannel.send(embed);
     }
+}
+
+//private functions
+async function getModlogChannel(serverId) {
+    return Server.findOne({
+        where: {
+            serverId: serverId
+        }
+    }).then(server => {
+        return server.modlogChannel;
+    });
 }

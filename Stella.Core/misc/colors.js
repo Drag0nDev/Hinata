@@ -5,5 +5,6 @@ module.exports = {
     warn: '#D69636',
     kick: '#E4E868',
     ban: '#DC143C',
-    unban: '#16F36D'
+    unban: '#16F36D',
+    mute: '#dbaf40'
 }
