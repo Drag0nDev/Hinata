@@ -43,7 +43,10 @@ module.exports = {
 
         //<editor-fold defaultstate="collapsed" desc="embed creation">
         embed.setTitle(guild.name)
-            .setThumbnail(guild.iconURL())
+            .setThumbnail(guild.iconURL({
+                dynamic: true,
+                size: 4096
+            }))
             .addFields(
                 {name: `Id`, value: `${guild.id}`, inline: true},
                 {name: `Owner`, value: `${owner.user.username}#${owner.user.discriminator}`, inline: true},

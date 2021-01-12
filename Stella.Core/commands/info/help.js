@@ -25,10 +25,32 @@ module.exports = {
             let cmd = bot.commands.get(args[0].toLowerCase());
             if (!cmd) cmd = bot.commands.get(bot.aliases.get(args[0].toLowerCase()));
 
-            if (cmd)
-                return await getCmd(bot, message, cmd);
-            if (cat)
-                return await getCat(bot, message, catVal);
+            if (cmd) {
+                if (cmd.category.includes('owner') && message.member.id !== config.owner){
+                    embed.setColor(bot.embedColors.error)
+                        .setTitle('Bot owner only command')
+                        .setDescription('This command is not available for your use.\n' +
+                            'This command can only be used by the bot owner.')
+                        .setTimestamp();
+
+                    return message.channel.send(embed);
+                }
+
+                return getCmd(bot, message, cmd);
+            }
+            if (cat){
+                if (catVal.includes('owner') && message.member.id !== config.owner){
+                    embed.setColor(bot.embedColors.error)
+                        .setTitle('Bot owner only category')
+                        .setDescription('This category is not available for your use.\n' +
+                            'The commands in this category can only be used by the bot owner.')
+                        .setTimestamp();
+
+                    return message.channel.send(embed);
+                }
+
+                return getCat(bot, message, catVal);
+            }
             else {
                 embed.setColor(bot.embedColors.error)
                     .setTitle('No command found')
@@ -39,7 +61,7 @@ module.exports = {
                 return message.channel.send(embed);
             }
         } else
-            return await getAll(bot, message);
+            return getAll(bot, message);
     }
 }
 

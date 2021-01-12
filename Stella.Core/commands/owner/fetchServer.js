@@ -62,26 +62,40 @@ module.exports = {
         //</editor-fold>
 
         //get an invite code and make the embed
-        guild.fetchInvites().then(invites => {
-            let invite = invites.first();
-            message.channel.send(embed.setTitle(guild.name)
-                .setThumbnail(guild.iconURL())
-                .addFields(
-                    {name: `Id`, value: `${guild.id}`, inline: true},
-                    {name: `Owner`, value: `${owner.user.username}#${owner.user.discriminator}`, inline: true},
-                    {name: `Users`, value: `${guild.memberCount}`, inline: true},
-                    {name: `Bots`, value: `${bots}`, inline: true},
-                    {name: `Creation date`, value: `${date}`, inline: true},
-                    {name: `Channels`, value: `${channelString}`, inline: true},
-                    {name: `System channel`, value: `${systemchannel}`, inline: true},
-                    {name: `AFK voice channel`, value: `${afkChannel}`, inline: true},
-                    {name: `Region`, value: `${guild.region}`, inline: true},
-                    {name: `Verification level`, value: `${guild.verificationLevel}`, inline: true},
-                    {name: `Boost tier`, value: `${guild.premiumTier}`, inline: true},
-                    {name: `Boosts`, value: `${guild.premiumSubscriptionCount}`, inline: true},
-                    {name: 'Invite link', value: `[Goto ${guild.name}](https://discord.gg/${invite.code})`, inline: false},
-                )
-                .setColor(bot.embedColors.normal))
+        guild.fetchInvites().then(async invites => {
+            try {
+                let invite = invites.first();
+                if (!invite)
+                    await createNew(guild).then(inv => {
+                        invite = inv;
+                    }).catch(error => {
+                        logger.error(error);
+                    });
+
+                await message.channel.send(embed.setTitle(guild.name)
+                    .setThumbnail(guild.iconURL({
+                        dynamic: true,
+                        size: 4096
+                    }))
+                    .addFields(
+                        {name: `Id`, value: `${guild.id}`, inline: true},
+                        {name: `Owner`, value: `${owner.user.username}#${owner.user.discriminator}`, inline: true},
+                        {name: `Users`, value: `${guild.memberCount}`, inline: true},
+                        {name: `Bots`, value: `${bots}`, inline: true},
+                        {name: `Creation date`, value: `${date}`, inline: true},
+                        {name: `Channels`, value: `${channelString}`, inline: true},
+                        {name: `System channel`, value: `${systemchannel}`, inline: true},
+                        {name: `AFK voice channel`, value: `${afkChannel}`, inline: true},
+                        {name: `Region`, value: `${guild.region}`, inline: true},
+                        {name: `Verification level`, value: `${guild.verificationLevel}`, inline: true},
+                        {name: `Boost tier`, value: `${guild.premiumTier}`, inline: true},
+                        {name: `Boosts`, value: `${guild.premiumSubscriptionCount}`, inline: true},
+                        {name: 'Invite link', value: `[Goto ${guild.name}](https://discord.gg/${invite.code})`, inline: false},
+                    )
+                    .setColor(bot.embedColors.normal))
+            } catch (error) {
+                logger.error(error)
+            }
         });
     }
 }
@@ -105,5 +119,11 @@ function getAfkChannel(guild) {
     let afkChannel = guild.channels.cache.get(guild.afkChannelID);
 
     return afkChannel.name;
+}
+
+async function createNew(guild) {
+    let channel = guild.channels.cache.find(channel => channel.type === 'text');
+
+    return await channel.createInvite();
 }
 //</editor-fold>
