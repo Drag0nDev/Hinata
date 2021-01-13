@@ -1,16 +1,27 @@
 const config = require("../../../config.json");
 const {MessageEmbed} = require('discord.js');
+const {Server} = require('../../misc/dbObjects');
 
 module.exports = {
-    name: 'perfix',
+    name: 'prefix',
     category: 'info',
     description: 'Get the prefix for the bot',
-    usage: 'esdeath prefix',
+    usage: '[command]',
     run: async (bot, message) => {
         const embed = new MessageEmbed().setTitle('prefix')
-            .setColor('#85C1E9')
-            .setDescription(`My prefix is **${config.prefix}**.`)
-            .setTimestamp();
+            .setColor(bot.embedColors.normal)
+            .setTimestamp()
+            .addField('Global prefixes', config.prefix.join('\n'), true);
+
+        await Server.findOne({
+            where: {
+                serverId: message.guild.id
+            }
+        }).then(server => {
+            if (!server.prefix) return;
+
+            embed.addField('Server prefix', server.prefix, true);
+        });
 
         await message.channel.send(embed).catch(console.error);
     }

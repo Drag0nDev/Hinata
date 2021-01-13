@@ -37,10 +37,10 @@ module.exports = {
         await message.guild.fetchBans()
             .then(banList => {
                 member = banList.get(id);
-
-                if (!member)
-                    return message.channel.send(`The member with id **${id}** member is not banned!`);
             });
+
+        if (!member)
+            return message.channel.send(`The member with id **${id}** member is not banned!`);
 
         if (!args[0]) {
             reason = 'No reason provided';

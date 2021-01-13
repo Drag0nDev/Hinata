@@ -1,6 +1,6 @@
 const config = require("../../config.json");
 const logger = require("log4js").getLogger();
-const {User, ServerUser} = require('../misc/dbObjects');
+const {User, ServerUser, Server} = require('../misc/dbObjects');
 const pm = require('parse-ms');
 const tools = require('../misc/tools');
 
@@ -18,7 +18,7 @@ module.exports = async (bot, message) => {
     await serverLevel(message);
 
     //check if the bot is in test mode
-    if (message.content.toLowerCase().indexOf(config.prefix) !== 0) return;
+    if (await checkPrefix(message)) return;
     if (bot.testing && message.author.id !== config.owner) {
         await tools.testing(bot, message);
         return;
@@ -26,7 +26,7 @@ module.exports = async (bot, message) => {
 
     try {
         //extractions of the command
-        const args = message.content.slice(config.prefix.length).trim().split(/ +/g);
+        const args = await trimPrefix(message);
         const command = args.shift().toLowerCase();
 
         //find the command
@@ -129,4 +129,53 @@ async function checkServerUser(message) {
             guildId: message.guild.id
         }
     });
+}
+
+async function checkPrefix(message) {
+    let prefix = [];
+
+    for (let i of config.prefix) {
+        prefix.push(i);
+    }
+
+    await Server.findOne({
+        where: {
+            serverId: message.guild.id
+        }
+    }).then(server => {
+        if (!server.prefix) return;
+
+        prefix.push(server.prefix);
+    })
+
+    for (let i of prefix){
+        if(message.content.toLowerCase().indexOf(i) === 0)
+            return false;
+
+    }
+    return true;
+}
+
+async function trimPrefix(message) {
+    let prefix = [];
+
+    for (let i of config.prefix) {
+        prefix.push(i);
+    }
+
+    await Server.findOne({
+        where: {
+            serverId: message.guild.id
+        }
+    }).then(server => {
+        if (!server.prefix) return;
+
+        prefix.push(server.prefix);
+    })
+
+    for (let i of prefix){
+        if(message.content.toLowerCase().indexOf(i) === 0){
+            return message.content.slice(i.length).trim().split(/ +/g);
+        }
+    }
 }
