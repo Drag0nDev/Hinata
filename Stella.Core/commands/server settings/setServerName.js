@@ -1,21 +1,30 @@
 const {MessageEmbed} = require('discord.js');
+let neededPerm = ['MANAGE_GUILD'];
 
 module.exports = {
     //<editor-fold defaultstate="collapsed" desc="serverinfo help">
     name: 'setservername',
     aliases: ['ssn', 'servername'],
-    category: 'manage server',
+    category: 'server settings',
     description: 'Set a new server name',
     usage: '[command | alias] [new name]',
-    neededPermissions: ['MANAGE_GUILD'],
+    neededPermissions: neededPerm,
     //</editor-fold>
     run: async (bot, message, args) => {
         let embed = new MessageEmbed().setColor(bot.embedColors.normal);
-        let neededPerm = ['MANAGE_GUILD'];
 
         //<editor-fold defaultstate="collapsed" desc="Used variable declarations">
         //simplify the guild
         let guild = message.guild;
+
+        //check member and bot permissions
+        let noUserPermission = tools.checkUserPermissions(bot, message, neededPerm, embed);
+        if (noUserPermission)
+            return await message.channel.send(embed);
+
+        let noBotPermission = tools.checkBotPermissions(bot, message, neededPerm, embed);
+        if (noBotPermission)
+            return message.channel.send(embed);
 
         //check if new name is given
         if(!args[0])
@@ -23,17 +32,6 @@ module.exports = {
                 embed.setDescription('Please give a new name for the server')
                     .setColor(bot.embedColors.error)
             );
-
-        //check if members has the right permission
-        if (!message.member.hasPermission(neededPerm))
-            return message.channel.send(embed.setColor(bot.embedColors.error)
-                .setDescription(`You don't have the required permission to run this command\n` +
-                    `**Missing requirements:** ${neededPerm}`));
-
-        if (!message.guild.me.hasPermission(neededPerm))
-            return message.channel.send(embed.setColor(bot.embedColors.error)
-                .setDescription(`I don't have the required permission to run this command\n` +
-                    `**Missing requirements:** ${neededPerm}`));
 
         //new server name
         let newName = args.join(' ');

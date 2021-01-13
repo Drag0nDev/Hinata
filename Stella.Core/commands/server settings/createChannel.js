@@ -1,36 +1,36 @@
 const {MessageEmbed} = require('discord.js');
+let neededPerm = ['MANAGE_GUILD'];
 
 module.exports = {
     //<editor-fold defaultstate="collapsed" desc="userinfo help">
     name: 'createchannel',
     aliases: ['nc', 'newchannel'],
-    category: 'manage server',
+    category: 'server settings',
     description: 'Create a new text channel',
     usage: '[command | alias] [text channel name]',
-    neededPermissions: ['MANAGE_CHANNELS'],
+    neededPermissions: neededPerm,
     //</editor-fold>
     run: async (bot, message, args) => {
         let embed = new MessageEmbed().setColor(bot.embedColors.normal);
-        let neededPerm = 'MANAGE_CHANNELS';
         let user = message.author;
 
         const name = args.join('-');
         const title = 'Create new channel!';
         const channel = message.channel;
 
+        //check member and bot permissions
+        let noUserPermission = tools.checkUserPermissions(bot, message, neededPerm, embed);
+        if (noUserPermission)
+            return await message.channel.send(embed);
+
+        let noBotPermission = tools.checkBotPermissions(bot, message, neededPerm, embed);
+        if (noBotPermission)
+            return message.channel.send(embed);
+
         if (!args[0])
             return message.channel.send(embed.setColor(bot.embedColors.error)
                 .setDescription('Please provide a name!'));
 
-        if (!message.member.hasPermission(neededPerm))
-            return message.channel.send(embed.setColor(bot.embedColors.error)
-                .setDescription(`You don't have the required permission to run this command\n` +
-                    `**Missing requirements:** ${neededPerm}`));
-
-        if (!message.guild.me.hasPermission(neededPerm))
-            return message.channel.send(embed.setColor(bot.embedColors.error)
-                .setDescription(`I don't have the required permission to run this command\n` +
-                    `**Missing requirements:** ${neededPerm}`));
 
         await message.guild.channels.create(name,
             {

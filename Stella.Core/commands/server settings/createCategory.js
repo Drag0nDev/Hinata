@@ -1,18 +1,18 @@
 const {MessageEmbed} = require('discord.js');
 const tools = require("../../misc/tools");
+let neededPerm = ['MANAGE_GUILD'];
 
 module.exports = {
     //<editor-fold defaultstate="collapsed" desc="userinfo help">
     name: 'createcategory',
     aliases: ['cc', 'newcategory'],
-    category: 'manage server',
+    category: 'server settings',
     description: 'Create a new category',
     usage: '[command | alias] [category name]',
-    neededPermissions: ['MANAGE_CHANNELS'],
+    neededPermissions: neededPerm,
     //</editor-fold>
     run: async (bot, message, args) => {
         let embed = new MessageEmbed().setColor(bot.embedColors.normal);
-        let neededPerm = ['MANAGE_CHANNELS'];
         let user = message.author;
 
         const catName = args.join(' ');

@@ -1,33 +1,32 @@
 const {MessageEmbed} = require('discord.js');
 const log4js = require("log4js");
+let neededPerm = ['MANAGE_GUILD'];
 
 module.exports = {
     //<editor-fold defaultstate="collapsed" desc="userinfo help">
     name: 'setservericon',
     aliases: ['ssi', 'seticon'],
-    category: 'manage server',
+    category: 'server settings',
     description: 'Set the server logo',
     usage: '[command | alias] [link]',
-    neededPermissions: ['MANAGE_GUILD'],
+    neededPermissions: neededPerm,
     //</editor-fold>
-    run: (bot, message, args) => {
+    run: async (bot, message, args) => {
         const logger = log4js.getLogger();
         let embed = new MessageEmbed().setColor(bot.embedColors.normal);
-        let neededPerm = ['MANAGE_GUILD'];
+
+        //check member and bot permissions
+        let noUserPermission = tools.checkUserPermissions(bot, message, neededPerm, embed);
+        if (noUserPermission)
+            return await message.channel.send(embed);
+
+        let noBotPermission = tools.checkBotPermissions(bot, message, neededPerm, embed);
+        if (noBotPermission)
+            return message.channel.send(embed);
 
         if (!args[0])
             return message.channel.send(embed.setColor(bot.embedColors.error)
                 .setDescription('Please provide a valid link'));
-
-        if (!message.member.hasPermission(neededPerm))
-            return message.channel.send(embed.setColor(bot.embedColors.error)
-                .setDescription(`You don't have the required permission to run this command\n` +
-                    `**Missing requirements:** ${neededPerm}`));
-
-        if (!message.guild.me.hasPermission(neededPerm))
-            return message.channel.send(embed.setColor(bot.embedColors.error)
-                .setDescription(`I don't have the required permission to run this command\n` +
-                    `**Missing requirements:** ${neededPerm}`));
 
         let guild = message.guild;
 

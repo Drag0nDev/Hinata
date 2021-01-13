@@ -1,27 +1,26 @@
 const {MessageEmbed} = require('discord.js');
+let neededPerm = ['MANAGE_GUILD'];
 
 module.exports = {
     //<editor-fold defaultstate="collapsed" desc="userinfo help">
     name: 'deletechannel',
     aliases: ['dc', 'delchan'],
-    category: 'manage server',
+    category: 'server settings',
     description: 'delete any channel in the server with a simple command',
     usage: '[command | alias] [channel id]',
-    neededPermissions: ['MANAGE_CHANNELS'],
+    neededPermissions: neededPerm,
     //</editor-fold>
     run: async (bot, message, args) => {
         let embed = new MessageEmbed().setColor(bot.embedColors.normal);
-        let neededPerm = 'MANAGE_CHANNELS';
 
-        if (!message.member.hasPermission(neededPerm))
-            return message.channel.send(embed.setColor(bot.embedColors.error)
-                .setDescription(`You don't have the required permission to run this command\n` +
-                    `**Missing requirements:** ${neededPerm}`));
+        //check member and bot permissions
+        let noUserPermission = tools.checkUserPermissions(bot, message, neededPerm, embed);
+        if (noUserPermission)
+            return await message.channel.send(embed);
 
-        if (!message.guild.me.hasPermission(neededPerm))
-            return message.channel.send(embed.setColor(bot.embedColors.error)
-                .setDescription(`I don't have the required permission to run this command\n` +
-                    `**Missing requirements:** ${neededPerm}`));
+        let noBotPermission = tools.checkBotPermissions(bot, message, neededPerm, embed);
+        if (noBotPermission)
+            return message.channel.send(embed);
 
         if (!args[0])
             return message.channel.send(embed.setColor(bot.embedColors.error)

@@ -33,7 +33,7 @@ module.exports = async (bot, member) => {
 
     const {executor, target, reason} = kickLog;
 
-    if (executor.id === bot.user.id)
+    if (executor.bot)
         return;
 
     if (target.id === member.id) {
