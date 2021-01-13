@@ -3,7 +3,7 @@ const {Client, Collection} = require('discord.js');
 const fs = require('fs');
 const config = require("./config.json");
 const colors = require("./Stella.Core/misc/colors.js");
-const reactions = require('./Stella.Core/misc/reactions.json')
+const reactions = require('./Stella.Core/misc/reactions.js')
 const log4js = require("log4js");
 const { Op } = require('sequelize');
 //</editor-fold>

@@ -58,15 +58,15 @@ module.exports = {
 
         if (checkTemp.exec(args[0])) {
             let time = checkTemp.exec(args[0])[0];
-            await args.shift;
+            await args.shift();
 
-            if (!args[0]) {
+            if (args[0]) {
                 reason = args.join(' ');
             }
 
             await tempBan(bot, message, member, embed, time, reason);
         } else {
-            if (!args[0]) {
+            if (args[0]) {
                 reason = args.join(' ');
             }
 
@@ -81,13 +81,15 @@ async function tempBan(bot, message, member, embed, time, reason) {
     let timeVal = await tools.getTimeval(time);
     let $time = await tools.getTime(time);
 
-    await member.createDM().then(async dmChannel => {
-        await dmChannel.send(`You got banned from **${message.guild.name}** for **${$time} ${timeVal}** with reason: **${reason}**!`);
-    });
-
     embed.setTitle('Ban')
         .setDescription(`**${member.user.tag}** is banned for **${$time} ${timeVal}** with reason: **${reason}**!`)
         .setColor(bot.embedColors.normal);
+
+    await member.createDM().then(async dmChannel => {
+        await dmChannel.send(`You got banned from **${message.guild.name}** for **${$time} ${timeVal}** with reason: **${reason}**!`);
+    }).catch(error => {
+        embed.addField('No DM sent', `${member.user.tag} was temporary banned but could not be DMed!`);
+    });
 
     await message.channel.send(embed);
 
@@ -113,17 +115,19 @@ async function tempBan(bot, message, member, embed, time, reason) {
         .setFooter(`ID: ${member.user.id}`)
         .setTimestamp();
 
-    await tools.modlog(member, logEmbed);
+    await tools.modlog(message.author, logEmbed);
 }
 
 async function ban(bot, message, member, embed, reason) {
-    await member.createDM().then(async dmChannel => {
-        await dmChannel.send(`You got banned from **${message.guild.name}** with reason: **${reason}**!`);
-    });
-
     embed.setTitle('Ban')
         .setDescription(`**${member.user.tag}** is banned for reason: **${reason}**.`)
         .setColor(bot.embedColors.normal);
+
+    await member.createDM().then(async dmChannel => {
+        await dmChannel.send(`You got banned from **${message.guild.name}** with reason: **${reason}**!`);
+    }).catch(error => {
+        embed.addField('No DM sent', `${member.user.tag} was banned but could not be DMed!`);
+    });
 
     await message.channel.send(embed);
 
@@ -140,7 +144,7 @@ async function ban(bot, message, member, embed, reason) {
         .setFooter(`ID: ${member.user.id}`)
         .setTimestamp();
 
-    await tools.modlog(member, logEmbed);
+    await tools.modlog(message.author, logEmbed);
 
     await ServerUser.destroy({
         where: {

@@ -42,7 +42,7 @@ module.exports = {
         }
 
         if (!tools.compareRoles(message.guild.members.cache.get(message.author.id), member)) {
-            return message.channel.send(embed = new MessageEmbed().setTitle('Currently out of order!')
+            return message.channel.send(embed = new MessageEmbed().setTitle('Action not allowed!')
                 .setColor(bot.embedColors.error)
                 .setDescription(`You can't mute **${member.user.tag}** due to role hierarchy!`));
         }
@@ -67,15 +67,15 @@ module.exports = {
 
         if (checkTemp.exec(args[0])) {
             let time = checkTemp.exec(args[0])[0];
-            await args.shift;
+            await args.shift();
 
-            if (!args[0]) {
+            if (args[0]) {
                 reason = args.join(' ');
             }
 
             await tempmute(bot, message, member, embed, muteRole, time, reason);
         } else {
-            if (!args[0]) {
+            if (args[0]) {
                 reason = args.join(' ');
             }
 
@@ -92,14 +92,18 @@ async function tempmute(bot, message, member, embed, muteRole, time, reason) {
 
     await addMuterole(member, muteRole);
 
-    await member.createDM()
-        .then(async dmChannel => {
-            await dmChannel.send(`You got muted in **${message.guild.name}** for **${$time} ${timeVal}** with reason: **${reason}**!`);
-        });
-
     embed.setTitle('Mute')
         .setDescription(`**${member.user.tag}** is muted for **${$time} ${timeVal}** for reason: **${reason}**.`)
         .setColor(bot.embedColors.normal);
+
+    await member.createDM()
+        .then(async dmChannel => {
+            await dmChannel.send(`You got muted in **${message.guild.name}** for **${$time} ${timeVal}** with reason: **${reason}**!`);
+        }).catch(error => {
+            embed.addField('No DM sent', `${member.user.tag} was muted but could not be DMed!`);
+        });
+
+
 
     await message.channel.send(embed);
 
