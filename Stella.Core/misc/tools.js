@@ -200,6 +200,31 @@ module.exports = {
 
         if (modlogChannel)
             await modlogChannel.send(embed);
+    },
+
+    //message reactions
+    addPageArrows: async function(message) {
+        await message.react('◀');
+        await message.react('▶');
+    },
+
+    //reaction commands
+    getMembers: async function(message, args, userMentions, regex) {
+        let checkId = new RegExp('[0-9]+');
+        let members = '';
+
+        args.forEach(arg => {
+            if (checkId.exec(arg) !== null){
+                if (message.guild.members.cache.get(checkId.exec(arg)[0])) {
+                    userMentions.push(checkId.exec(arg)[0]);
+                    members += `<@!${checkId.exec(arg)[0]}> `;
+                } else if (message.guild.roles.cache.get(checkId.exec(arg)[0])) {
+                    members += `<@&${checkId.exec(arg)[0]}> `;
+                }
+            }
+        });
+
+        return members;
     }
 }
 
