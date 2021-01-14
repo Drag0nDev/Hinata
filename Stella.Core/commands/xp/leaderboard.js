@@ -22,16 +22,16 @@ module.exports = {
                     `**Missing requirements:** ${neededPerm}`));
 
         if (message.content.includes('glb') || message.content.includes('globalleaderboard')) {
-            globalLb(bot, message);
+            globalLb(bot, message, 'Global');
         } else {
-            await serverLb(bot, message);
+            await serverLb(bot, message, 'Server');
         }
     }
 }
 
-async function serverLb(bot, message) {
+async function serverLb(bot, message, variation) {
     const embed = new MessageEmbed()
-        .setTitle('Server leaderboard')
+        .setTitle(`${variation} leaderboard`)
         .setColor(bot.embedColors.normal)
         .setFooter(`Page 1`);
 
@@ -53,13 +53,13 @@ async function serverLb(bot, message) {
             embed.addField(`${i + 1}. ${memberTag}`, `Level ${level}\n(${users[i].xp}xp)`, true);
         }
 
-        messageEditor(bot, message, embed, users);
+        messageEditor(bot, message, embed, users, variation);
     });
 }
 
-function globalLb(bot, message) {
+function globalLb(bot, message,variation) {
     const embed = new MessageEmbed()
-        .setTitle('Server leaderboard')
+        .setTitle(`${variation} leaderboard`)
         .setColor(bot.embedColors.normal)
         .setFooter(`Page 1`);
 
@@ -88,15 +88,14 @@ function globalLb(bot, message) {
             embed.addField(`${i + 1}. ${users[i].userTag}`, `Level ${users[i].level}\n(${xp}xp)`, true);
         }
 
-        messageEditor(bot, message, embed, users);
+        messageEditor(bot, message, embed, users, variation);
     });
 }
 
-function messageEditor(bot, message, embed, users) {
+function messageEditor(bot, message, embed, users, variation) {
     message.channel.send(embed)
         .then(async messageBot => {
-            await messageBot.react('◀');
-            await messageBot.react('▶');
+            await tools.addPageArrows(messageBot);
             let page = 0;
 
             const filter = (reaction, user) => {
@@ -107,17 +106,17 @@ function messageEditor(bot, message, embed, users) {
 
             collector.on('collect', async (reaction, user) => {
                 let editEmbed = new MessageEmbed()
-                    .setTitle('Server leaderboard')
+                    .setTitle(`${variation} leaderboard`)
                     .setColor(bot.embedColors.normal);
 
                 if (reaction.emoji.name === '▶') {
                     page++;
-                    await pageSwitch(message, page, users, editEmbed);
+                    await pageEmbed(message, page, users, editEmbed);
                 } else if (reaction.emoji.name === '◀') {
                     page--;
                     if (page < 0)
                         return;
-                    await pageSwitch(message, page, users, editEmbed);
+                    await pageEmbed(message, page, users, editEmbed);
                 }
 
                 if (Object.keys(editEmbed.fields).length !== 0) {
@@ -131,7 +130,7 @@ function messageEditor(bot, message, embed, users) {
         });
 }
 
-async function pageSwitch(message, page, users, editEmbed) {
+async function pageEmbed(message, page, users, editEmbed) {
     for (let i = 10 * page; (i < 10 + (10 * page)) && (i < Object.keys(users).length); i++) {
         let memberTag = await getUserTag(message, users[i].userId);
         let level = getLevel(users[i].xp);
@@ -144,7 +143,6 @@ async function pageSwitch(message, page, users, editEmbed) {
 
 async function getUserTag(message, id) {
     let member = message.guild.members.cache.get(id);
-    let memberTag;
 
     if (!member) {
         return await User.findOne({
