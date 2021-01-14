@@ -1,4 +1,5 @@
 const {MessageEmbed} = require('discord.js');
+const tools = require("../../misc/tools");
 
 module.exports = {
     //<editor-fold defaultstate="collapsed" desc="userinfo help">
@@ -14,31 +15,13 @@ module.exports = {
         let members = '';
 
         if (args[0]){
-            if (message.mentions.users.size > 0) {
-                message.mentions.users.forEach(user => {
-                    userMentions.push(user.id);
-                });
-            } else if(message.mentions.roles.size > 0) {
-                message.mentions.roles.forEach(role => {
-                    userMentions.push(role.id);
-                });
-            }
-
-            if (userMentions.includes('@everyone')){
-                for (let i = 0; i < userMentions.length; i++){
-                    if (userMentions[i] === '@everyone')
-                        userMentions.splice(i, 1);
-                }
-            }
-
-            if (userMentions[0])
-                members = getMentions(userMentions);
-            if (message.mentions.roles.size > 0)
-                members = getRoles(message.mentions.roles);
+            await tools.getMembers(message, args, userMentions).then(membersPromise => {
+                members = membersPromise;
+            });
         }
 
-        if (message.mentions.everyone || message.content.includes('@everyone'))
-            members += ' @everyone';
+        if (message.mentions.everyone > 0)
+            members += '@everyone ';
 
         let author = message.guild.members.cache.get(message.author.id);
 
@@ -49,7 +32,7 @@ module.exports = {
             userMentions.push(author.user.id)
             text = `*Gropes ${author}, lewd!*`;
         } else
-            text = `${members} you have been groped by **${author.nickname === null ? author.user.username : author.nickname}**!`;
+            text = `${members}you have been groped by **${author.nickname === null ? author.user.username : author.nickname}**!`;
 
         await message.channel.send(
             {
@@ -64,31 +47,9 @@ module.exports = {
 }
 
 function getGif(bot) {
-    let number = getRandom(Object.keys(bot.reactions.grope).length);
-
-    return bot.reactions.grope[number];
+    return bot.reactions.grope[getRandom(bot.reactions.grope.length)];
 }
 
 function getRandom(max) {
     return Math.floor(Math.random() * Math.floor(max));
-}
-
-function getMentions(usermentions) {
-    let members = [];
-
-    usermentions.forEach(id => {
-        members.push(`<@!${id}>`)
-    });
-
-    return members.join(' ');
-}
-
-function getRoles(roleMentions){
-    let members = [];
-
-    roleMentions.forEach(role => {
-        members.push(`<@&${role.id}>`)
-    });
-
-    return members.join(' ');
 }

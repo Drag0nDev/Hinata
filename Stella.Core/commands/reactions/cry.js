@@ -25,9 +25,7 @@ module.exports = {
 }
 
 function getGif(bot) {
-    let number = getRandom(Object.keys(bot.reactions.cry).length);
-
-    return bot.reactions.cry[number];
+    return bot.reactions.cry[getRandom(bot.reactions.cry.length)];
 }
 
 function getRandom(max) {
