@@ -14,6 +14,7 @@ module.exports = {
     //</editor-fold>
     run: async (bot, message, args) => {
         let embed = new MessageEmbed().setColor(bot.embedColors.normal);
+        const re = new RegExp('(remove)$');
 
         //check member and bot permissions
         let noUserPermission = tools.checkUserPermissions(bot, message, neededPerm, embed);
@@ -28,18 +29,30 @@ module.exports = {
             return message.channel.send(embed.setColor(bot.embedColors.error)
                 .setDescription('Please provide a prefix!'));
 
-        await Server.findOne({
-            where: {
-                serverId: message.guild.id
-            }
-        }).then(server => {
-            server.prefix = args[0];
-            server.save();
-        });
-
-        embed.setDescription(`**${args[0]}** set as a prefix in the server!`)
-            .setFooter('This prefix will be changed when you run the command again. Standard prefixes still work too!');
-
-        await message.channel.send(embed);
+        if (re.exec(args[0])) {
+            await removePrefix(message, args, embed);
+        } else {
+            await setPrefix(message, args, embed)
+        }
     }
+}
+
+async function setPrefix(message, args, embed) {
+
+}
+
+async function removePrefix(message, args, embed) {
+    await Server.findOne({
+        where: {
+            serverId: message.guild.id
+        }
+    }).then(server => {
+        server.prefix = null;
+        server.save();
+    });
+
+    embed.setDescription(`The prefix was removed in the server!`)
+        .setTimestamp();
+
+    await message.channel.send(embed);
 }
