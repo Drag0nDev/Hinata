@@ -225,6 +225,14 @@ module.exports = {
         });
 
         return members;
+    },
+
+    //member changes
+    giveRole: async function(member, role){
+        await member.roles.add(role);
+    },
+    removeRole: async function(member, role){
+        await member.roles.remove(role);
     }
 }
 

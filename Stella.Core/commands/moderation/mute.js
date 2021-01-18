@@ -90,7 +90,7 @@ async function tempmute(bot, message, member, embed, muteRole, time, reason) {
     let timeVal = await tools.getTimeval(time);
     let $time = await tools.getTime(time);
 
-    await addMuterole(member, muteRole);
+    await tools.giveRole(member, muteRole);
 
     embed.setTitle('Mute')
         .setDescription(`**${member.user.tag}** is muted for **${$time} ${timeVal}** for reason: **${reason}**.`)
@@ -102,8 +102,6 @@ async function tempmute(bot, message, member, embed, muteRole, time, reason) {
         }).catch(error => {
             embed.addField('No DM sent', `${member.user.tag} was muted but could not be DMed!`);
         });
-
-
 
     await message.channel.send(embed);
 
@@ -133,6 +131,8 @@ async function mute(bot, message, member, embed, muteRole, reason) {
             await dmChannel.send(`You got muted in **${message.guild.name}** with reason: **${reason}**!`);
         });
 
+    await tools.giveRole(member, muteRole);
+
     embed.setTitle('Mute')
         .setDescription(`**${member.user.tag}** is muted for reason: **${reason}**.`)
         .setColor(bot.embedColors.normal);
@@ -148,8 +148,4 @@ async function mute(bot, message, member, embed, muteRole, reason) {
         .setTimestamp();
 
     await tools.modlog(member, logEmbed);
-}
-
-async function addMuterole(member, muteRole) {
-    await member.roles.add(muteRole);
 }
