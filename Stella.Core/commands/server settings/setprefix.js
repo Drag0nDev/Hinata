@@ -38,7 +38,19 @@ module.exports = {
 }
 
 async function setPrefix(message, args, embed) {
+    await Server.findOne({
+        where: {
+            serverId: message.guild.id
+        }
+    }).then(server => {
+        server.prefix = args[0];
+        server.save();
+    });
 
+    embed.setDescription(`**${args[0]}** set as a prefix in the server!`)
+        .setFooter('This prefix will be changed when you run the command again. Standard prefixes still work too!');
+
+    await message.channel.send(embed);
 }
 
 async function removePrefix(message, args, embed) {
