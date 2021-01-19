@@ -19,6 +19,13 @@ module.exports = {
         }).then(user => {
             let embed = new MessageEmbed();
 
+            if (user.isBanned === 1)
+                return message.channel.send(embed.setColor(bot.embedColors.error)
+                    .setTitle('You have a botban')
+                    .setTimestamp()
+                    .setDescription('You can\'t claim dailies due to being banned from using the daily command.\n' +
+                        'You will also not earn any xp globaly with the botban.'));
+
             const diff = pm(now.getTime() - parseInt(user.dailyTaken));
 
             let hours = 23 - diff.hours;

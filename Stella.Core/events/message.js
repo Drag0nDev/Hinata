@@ -64,6 +64,8 @@ function globalLevel(message) {
             userId: message.author.id
         }
     }).then(user => {
+        if (user.isBanned === 1) return;
+
         let now = new Date();
 
         if (user.lastMessageDate !== '0') {

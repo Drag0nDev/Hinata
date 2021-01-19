@@ -76,7 +76,7 @@ async function checkMutes(bot) {
         muteRole = server.roles.cache.get(serverDb.muteRoleId);
     });
 
-    await member.roles.remove(muteRole);
+    await tools.removeRole(member, muteRole);
 
     const logEmbed = new MessageEmbed().setTitle('User unmuted')
         .setColor(bot.embedColors.unban)
@@ -87,7 +87,6 @@ async function checkMutes(bot) {
         .setTimestamp();
 
     await tools.modlog(member, logEmbed);
-
 }
 
 async function checkBans(bot) {

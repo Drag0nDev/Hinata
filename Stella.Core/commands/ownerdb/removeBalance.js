@@ -10,7 +10,7 @@ module.exports = {
     usage: '[command | alias] <id/mention>',
     run: async (bot, message, args) => {
         let embed = new MessageEmbed();
-        const id = new RegExp('^[0-9]{17,}');
+        const id = new RegExp('[0-9]{17,}');
         const bal = new RegExp('^[0-9]*');
 
         if (message.author.id !== config.owner) {
@@ -27,12 +27,12 @@ module.exports = {
 
         if (bal.exec(args[1])[0] === '')
             return message.channel.send(embed.setColor(bot.embedColors.error)
-                .setDescription('Please provide an amount to add!'))
+                .setDescription('Please provide an amount to remove!'))
 
         await User.findOne({
             where:
                 {
-                    userId: args[0]
+                    userId: id.exec(args[0])[0]
                 }
         }).then(user => {
             user.balance -= parseInt(args[1]);
