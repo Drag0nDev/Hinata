@@ -251,6 +251,6 @@ async function getModlogChannel(serverId) {
     }).then(server => {
         return server.modlogChannel;
     }).catch(err => {
-        logger.error(err.sql);
+        logger.error(err);
     });
 }

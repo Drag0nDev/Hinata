@@ -115,7 +115,7 @@ async function tempBan(bot, message, member, embed, time, reason) {
         .setFooter(`ID: ${member.user.id}`)
         .setTimestamp();
 
-    await tools.modlog(message.author, logEmbed);
+    await tools.modlog(message.guild.members.cache.get(message.author.id), logEmbed);
 }
 
 async function ban(bot, message, member, embed, reason) {

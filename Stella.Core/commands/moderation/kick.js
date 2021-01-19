@@ -64,18 +64,20 @@ module.exports = {
             reason = args.join(' ');
         }
 
-        const dmChannel = await member.createDM()
-        await dmChannel.send(`You got kicked from **${guild.name}** with reason: **${reason}**!`);
+        await member.createDM().then(async dmChannel => {
+            await dmChannel.send(`\`You got kicked from **${guild.name}** with reason: **${reason}**!`);
+        }).catch(error => {
+            embed.addField('No DM sent', `${member.user.tag} was kicked but could not be DMed!`);
+        });
 
         await member.kick(`${reason}`);
         message.channel.send(`**${member.user.tag}** got kicked for reason: **${reason}**`);
 
-        embed.setDescription(`**Member:** ${member.user.tag}\n` +
+        const logEmbed = new MessageEmbed().setDescription(`**Member:** ${member.user.tag}\n` +
             `**Reason:** ${reason}\n` +
             `**Responsible moderator:** ${message.author.tag}`)
             .setFooter(`ID: ${member.id}`);
 
-        const channel = bot.channels.cache.find(channel => channel.id === '763039768870649856');
-        await channel.send(embed);
+        await tools.modlog(message.guild.members.cache.get(message.author.id), logEmbed);
     }
 }

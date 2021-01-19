@@ -1,7 +1,7 @@
 const config = require('../../../config.json');
 
 module.exports = (sequelize, DataTypes) => {
-    return sequelize.define('server', {
+    return sequelize.define('serverSettings', {
             serverId: DataTypes.STRING,
             prefix: DataTypes.STRING,
             muteRoleId: DataTypes.STRING,

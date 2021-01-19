@@ -3,6 +3,7 @@ config.json
 test.js
 test_server.ps1
 StellaDb.sqlite
+ServerSplit.sql
 
 #ignored directories
 logs/

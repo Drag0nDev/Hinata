@@ -1,5 +1,5 @@
 const {MessageEmbed} = require("discord.js");
-const {Timers, Server} = require('../../misc/dbObjects');
+const {Timers, ServerSettings} = require('../../misc/dbObjects');
 const tools = require('../../misc/tools');
 const neededPerm = ['MANAGE_ROLES', "MUTE_MEMBERS"];
 
@@ -47,7 +47,7 @@ module.exports = {
                 .setDescription(`You can't mute **${member.user.tag}** due to role hierarchy!`));
         }
 
-        await Server.findOne({
+        await ServerSettings.findOne({
             where: {
                 serverId: message.guild.id
             }

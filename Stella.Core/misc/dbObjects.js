@@ -26,7 +26,7 @@ ServerUser.belongsTo(User, {
     as: 'user'
 });
 ServerSettings.belongsTo(Servers, {
-    foreignKey: 'guildId',
+    foreignKey: 'serverId',
     as: 'server'
 });
 

@@ -1,5 +1,6 @@
 const {MessageEmbed} = require('discord.js');
 const tools = require('../../misc/tools');
+const logger = require("log4js").getLogger();
 
 module.exports = {
     name: 'reloadserver',
@@ -26,8 +27,8 @@ module.exports = {
         } catch (err) {
             embed.setColor(bot.embedColors.error)
                 .setDescription(err);
+            logger.error(err);
             await message.channel.send(embed);
         }
-
     }
 }
