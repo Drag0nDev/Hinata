@@ -11,12 +11,23 @@ const sequelize = new Sequelize('database', config.username, config.password, {
 
 const User = require('../Database/dbObjects/User')(sequelize, Sequelize.DataTypes);
 const Servers = require('../Database/dbObjects/Server')(sequelize, Sequelize.DataTypes);
+const ServerSettings = require('../Database/dbObjects/ServerSettings')(sequelize, Sequelize.DataTypes);
 const ServerUser = require('../Database/dbObjects/ServerUser')(sequelize, Sequelize.DataTypes);
 const Timers = require('../Database/dbObjects/Timers')(sequelize, Sequelize.DataTypes);
 const Warnings = require('../Database/dbObjects/Warnings')(sequelize, Sequelize.DataTypes);
 
-ServerUser.belongsTo(Servers, { foreignKey: 'guildId', as: 'server' });
-ServerUser.belongsTo(User, { foreignKey: 'UserId', as: 'user' });
+ServerUser.belongsTo(Servers, {
+    foreignKey: 'guildId',
+    as: 'server'
+});
+ServerUser.belongsTo(User, {
+    foreignKey: 'UserId',
+    as: 'user'
+});
+ServerSettings.belongsTo(Servers, {
+    foreignKey: 'guildId',
+    as: 'server'
+})
 
 
-module.exports = { User, Server: Servers, ServerUser, Timers, Warnings };
+module.exports = { User, Server: Servers, ServerSettings, ServerUser, Timers, Warnings };
