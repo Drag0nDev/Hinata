@@ -6,7 +6,7 @@ const neededPerm = ['MANAGE_GUILD'];
 module.exports = {
     name: 'resetserverxp',
     aliases: ['rsx'],
-    category: 'xp',
+    category: 'experience',
     description: 'Reset a single member or all members xp',
     usage: '[command | alias] <Member mention/id>',
     neededPermissions: neededPerm,

@@ -5,8 +5,8 @@ const tools = require('../../misc/tools');
 
 module.exports = {
     name: 'level',
-    aliases: ['lvl'],
-    category: 'xp',
+    aliases: ['lvl', 'xp'],
+    category: 'experience',
     description: 'Show the level card of yourself or a server member',
     usage: '[command | alias] <mention/ID>',
     run: async (bot, message, args) => {

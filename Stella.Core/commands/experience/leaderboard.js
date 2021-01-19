@@ -8,7 +8,7 @@ const logger = require("log4js").getLogger();
 module.exports = {
     name: 'leaderboard',
     aliases: ['lb', 'glb', 'globalleaderboard'],
-    category: 'xp',
+    category: 'experience',
     description: 'Show the level leaderboard of the server or the overall leaderboard on the bot.\n' +
         'To see the global leaderboard use ``glb`` or ``globalleaderboard``',
     usage: '[command | alias]',
