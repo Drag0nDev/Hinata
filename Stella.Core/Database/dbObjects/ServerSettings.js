@@ -12,7 +12,8 @@ module.exports = (sequelize, DataTypes) => {
             messageLogChannel: DataTypes.STRING,
             voiceLogChannel: DataTypes.STRING,
             levelUpMessage: DataTypes.STRING,
-            levelUpRoleMessage: DataTypes.STRING
+            levelUpRoleMessage: DataTypes.STRING,
+            noXpRole: DataTypes.STRING
         },
         {
             timestamps: false,

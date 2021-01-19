@@ -16,6 +16,7 @@ const ServerUser = require('../Database/dbObjects/ServerUser')(sequelize, Sequel
 const Timers = require('../Database/dbObjects/Timers')(sequelize, Sequelize.DataTypes);
 const Warnings = require('../Database/dbObjects/Warnings')(sequelize, Sequelize.DataTypes);
 
+//server databases
 ServerUser.belongsTo(Servers, {
     foreignKey: 'guildId',
     as: 'server'
@@ -27,7 +28,6 @@ ServerUser.belongsTo(User, {
 ServerSettings.belongsTo(Servers, {
     foreignKey: 'guildId',
     as: 'server'
-})
-
+});
 
 module.exports = { User, Server: Servers, ServerSettings, ServerUser, Timers, Warnings };

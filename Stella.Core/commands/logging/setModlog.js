@@ -1,6 +1,6 @@
 const tools = require("../../misc/tools");
 const {MessageEmbed} = require('discord.js');
-const {Server} = require('../../misc/dbObjects');
+const {ServerSettings} = require('../../misc/dbObjects');
 
 module.exports = {
     name: 'setmodlog',
@@ -23,7 +23,7 @@ module.exports = {
         if (noBotPermission)
             return message.channel.send(embed);
 
-        await Server.findOne({
+        await ServerSettings.findOne({
             where: {
                 serverId: guild.id
             }

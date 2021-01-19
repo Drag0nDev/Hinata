@@ -1,5 +1,6 @@
-const {User, ServerUser, Server} = require('./dbObjects');
+const {User, ServerUser, Server, ServerSettings} = require('./dbObjects');
 const {MessageEmbed} = require('discord.js');
+const logger = require("log4js").getLogger();
 
 module.exports = {
     //guild checks
@@ -139,6 +140,11 @@ module.exports = {
                 serverName: server.name
             }
         });
+        await ServerSettings.findOrCreate({
+            where: {
+                serverId: server.id
+            }
+        });
     },
 
     //moderation
@@ -203,18 +209,18 @@ module.exports = {
     },
 
     //message reactions
-    addPageArrows: async function(message) {
+    addPageArrows: async function (message) {
         await message.react('◀');
         await message.react('▶');
     },
 
     //reaction commands
-    getMembers: async function(message, args, userMentions, regex) {
+    getMembers: async function (message, args, userMentions, regex) {
         let checkId = new RegExp('[0-9]+');
         let members = '';
 
         args.forEach(arg => {
-            if (checkId.exec(arg) !== null){
+            if (checkId.exec(arg) !== null) {
                 if (message.guild.members.cache.get(checkId.exec(arg)[0])) {
                     userMentions.push(checkId.exec(arg)[0]);
                     members += `<@!${checkId.exec(arg)[0]}> `;
@@ -228,21 +234,23 @@ module.exports = {
     },
 
     //member changes
-    giveRole: async function(member, role){
+    giveRole: async function (member, role) {
         await member.roles.add(role);
     },
-    removeRole: async function(member, role){
+    removeRole: async function (member, role) {
         await member.roles.remove(role);
     }
 }
 
 //private functions
 async function getModlogChannel(serverId) {
-    return Server.findOne({
+    return ServerSettings.findOne({
         where: {
             serverId: serverId
         }
     }).then(server => {
         return server.modlogChannel;
+    }).catch(err => {
+        logger.error(err.sql);
     });
 }

@@ -1,6 +1,6 @@
 const config = require("../../../config.json");
 const {MessageEmbed} = require('discord.js');
-const {Server} = require('../../misc/dbObjects');
+const {ServerSettings} = require('../../misc/dbObjects');
 
 module.exports = {
     name: 'prefix',
@@ -13,7 +13,7 @@ module.exports = {
             .setTimestamp()
             .addField('Global prefixes', config.prefix.join('\n'), true);
 
-        await Server.findOne({
+        await ServerSettings.findOne({
             where: {
                 serverId: message.guild.id
             }
