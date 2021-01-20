@@ -1,6 +1,7 @@
 const tools = require("../../misc/tools");
 const {MessageEmbed} = require('discord.js');
 const {ServerSettings} = require('../../misc/dbObjects');
+const neededPerm = ['MANAGE_CHANNELS'];
 
 module.exports = {
     name: 'setmodlog',
@@ -8,10 +9,9 @@ module.exports = {
     category: 'logging',
     description: 'Assign or create a modlog channel for Stella.',
     usage: '[command | alias] <channelID>',
-    neededPermissions: ['MANAGE_CHANNELS'],
+    neededPermissions: neededPerm,
     run: async (bot, message, args) => {
         let embed = new MessageEmbed().setColor(bot.embedColors.normal);
-        let neededPerm = 'MANAGE_CHANNELS';
         let user = message.author;
         let guild = message.guild;
 

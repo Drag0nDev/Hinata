@@ -1,6 +1,6 @@
 const config = require("../../config.json");
 const logger = require("log4js").getLogger();
-const {User, ServerUser, Server} = require('../misc/dbObjects');
+const {User, ServerUser, Server, ServerSettings} = require('../misc/dbObjects');
 const pm = require('parse-ms');
 const tools = require('../misc/tools');
 
@@ -140,7 +140,7 @@ async function checkPrefix(message) {
         prefix.push(i);
     }
 
-    await Server.findOne({
+    await ServerSettings.findOne({
         where: {
             serverId: message.guild.id
         }

@@ -1,5 +1,5 @@
 const {MessageEmbed} = require('discord.js');
-const {Server} = require('../../misc/dbObjects');
+const {ServerSettings} = require('../../misc/dbObjects');
 const tools = require('../../misc/tools');
 let neededPerm = ['MANAGE_GUILD'];
 
@@ -38,7 +38,7 @@ module.exports = {
 }
 
 async function setPrefix(message, args, embed) {
-    await Server.findOne({
+    await ServerSettings.findOne({
         where: {
             serverId: message.guild.id
         }
@@ -54,7 +54,7 @@ async function setPrefix(message, args, embed) {
 }
 
 async function removePrefix(message, args, embed) {
-    await Server.findOne({
+    await ServerSettings.findOne({
         where: {
             serverId: message.guild.id
         }

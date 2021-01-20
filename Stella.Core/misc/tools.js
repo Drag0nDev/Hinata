@@ -28,6 +28,9 @@ module.exports = {
 
         return amount;
     },
+    getRole: async function (message, args){
+        return !args[0] ? message.guild.roles.cache.get(message.author.id) : message.mentions.roles.first() || message.guild.roles.cache.get(args[0]);
+    },
 
     //conversions and comparisons
     compareRoles: function (author, member) {
@@ -46,7 +49,7 @@ module.exports = {
         roleArrayAuth.sort((a, b) => b.position - a.position);
         roleArrayMemb.sort((a, b) => b.position - a.position);
 
-        return roleArrayAuth[0].position > roleArrayMemb[0].position;
+        return roleArrayAuth[0].position >= roleArrayMemb[0].position;
     },
     getDate: function (timestamp) {
         let date = new Date(timestamp);

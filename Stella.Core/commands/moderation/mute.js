@@ -42,10 +42,16 @@ module.exports = {
         }
 
         if (!tools.compareRoles(message.guild.members.cache.get(message.author.id), member)) {
-            return message.channel.send(embed = new MessageEmbed().setTitle('Action not allowed!')
+            return message.channel.send(embed.setTitle('Action not allowed!')
                 .setColor(bot.embedColors.error)
                 .setDescription(`You can't mute **${member.user.tag}** due to role hierarchy!`));
         }
+
+        const canMute = tools.compareRoles(author, member);
+
+        //check if the author has a higher role then the member
+        if (!canMute)
+            return message.channel.send(`You can't ban **${member.user.tag}** due to role hierarchy!`);
 
         await ServerSettings.findOne({
             where: {

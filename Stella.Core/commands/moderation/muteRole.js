@@ -1,5 +1,5 @@
 const {MessageEmbed} = require("discord.js");
-const {Server} = require('../../misc/dbObjects');
+const {ServerSettings} = require('../../misc/dbObjects');
 const tools = require('../../misc/tools');
 const neededPerm = ['MANAGE_ROLES'];
 
@@ -34,7 +34,7 @@ module.exports = {
                 return message.channel.send(embed);
             }
 
-            await Server.findOne({
+            await ServerSettings.findOne({
                 where: {
                     serverId: server.id
                 }
@@ -43,7 +43,7 @@ module.exports = {
                 result.save();
             });
         } else {
-            await Server.findOne({
+            await ServerSettings.findOne({
                 where: {
                     serverId: server.id
                 }
@@ -66,7 +66,7 @@ module.exports = {
                     muteRole = role;
                 });
 
-                await Server.findOne({
+                await ServerSettings.findOne({
                     where: {
                         serverId: server.id
                     }
