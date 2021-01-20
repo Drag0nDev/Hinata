@@ -165,7 +165,7 @@ async function trimPrefix(message) {
         prefix.push(i);
     }
 
-    await Server.findOne({
+    await ServerSettings.findOne({
         where: {
             serverId: message.guild.id
         }

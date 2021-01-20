@@ -10,7 +10,7 @@ function usernameUpdate(oldMember, newMember) {
             userId: oldMember.id
         }
     }).then(dbMember => {
-        dbMember.userTag = `${newMember.tag}`;
+        dbMember.userTag = `${newMember.user.username}#${newMember.user.discriminator}`;
         dbMember.save();
     });
 }

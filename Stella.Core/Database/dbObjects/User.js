@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
             },
             lastMessageDate: {
                 type: DataTypes.STRING,
-                defaultValue: '0',
+                defaultValue: 0,
             },
             isBanned: {
                 type: DataTypes.INTEGER,
@@ -36,4 +36,4 @@ module.exports = (sequelize, DataTypes) => {
             timestamps: false,
         }
     );
-};
+}

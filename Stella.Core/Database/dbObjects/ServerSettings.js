@@ -1,5 +1,3 @@
-const config = require('../../../config.json');
-
 module.exports = (sequelize, DataTypes) => {
     return sequelize.define('serverSettings', {
             serverId: DataTypes.STRING,
@@ -13,10 +11,10 @@ module.exports = (sequelize, DataTypes) => {
             voiceLogChannel: DataTypes.STRING,
             levelUpMessage: DataTypes.STRING,
             levelUpRoleMessage: DataTypes.STRING,
-            noXpRole: DataTypes.STRING
+            noXpRole: DataTypes.STRING,
         },
         {
             timestamps: false,
         }
     );
-};
+}
