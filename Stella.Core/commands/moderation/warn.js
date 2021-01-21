@@ -12,6 +12,7 @@ module.exports = {
     run: async (bot, message, args) => {
         let embed = new MessageEmbed();
         const author = message.guild.members.cache.get(message.author.id);
+        let casenr;
 
         //check member and bot permissions
         let noUserPermission = tools.checkUserPermissions(bot, message, neededPerm, embed);
@@ -58,11 +59,12 @@ module.exports = {
                 userId: member.user.id,
                 moderatorId: author.user.id,
                 reason: reason
-            }).then(warning =>{
+            }).then(warning => {
                 embed.setColor(bot.embedColors.normal)
                     .setTitle('Warn')
                     .setDescription(`**${member.user.tag}** got warned with reason: **${warning.reason}**!`)
                     .setTimestamp();
+                casenr = warning.casenr;
             })
         });
 
@@ -78,7 +80,8 @@ module.exports = {
             .setColor(bot.embedColors.warn)
             .setDescription(`**Member:** ${member.user.tag}\n` +
                 `**Reason:** ${reason}\n` +
-                `**Responsible Moderator:** ${message.author.tag}`)
+                `**Responsible Moderator:** ${message.author.tag}\n` +
+                `**Case:** ${casenr}`)
             .setFooter(`ID: ${member.user.id}`)
             .setTimestamp();
 

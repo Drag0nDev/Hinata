@@ -52,7 +52,13 @@ module.exports = {
         roleArrayAuth.sort((a, b) => b.position - a.position);
         roleArrayMemb.sort((a, b) => b.position - a.position);
 
-        return roleArrayAuth[0].position >= roleArrayMemb[0].position;
+        if (!roleArrayMemb[0] && roleArrayAuth[0]){
+            return true;
+        } else if (!roleArrayAuth[0] && roleArrayMemb[0]){
+            return false;
+        } else {
+            return roleArrayAuth[0].position >= roleArrayMemb[0].position;
+        }
     },
     getDate: function (timestamp) {
         let date = new Date(timestamp);

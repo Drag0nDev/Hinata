@@ -5,7 +5,6 @@ module.exports = async (bot, oldMember, newMember) => {
 }
 
 function usernameUpdate(oldMember, newMember) {
-    console.log(newMember)
     User.findOne({
         where: {
             userId: oldMember.id
