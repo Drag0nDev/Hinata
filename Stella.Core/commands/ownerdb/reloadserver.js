@@ -20,7 +20,7 @@ module.exports = {
                     count++;
                 }
             }
-            embed.setDescription(`Reloaded database for server: **${server.name}**.\n
+            embed.setDescription(`Reloaded database for server: **${server.name}**.
         with **${count}** members.`);
 
             await message.channel.send(embed);

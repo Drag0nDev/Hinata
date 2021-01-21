@@ -5,12 +5,13 @@ module.exports = async (bot, oldMember, newMember) => {
 }
 
 function usernameUpdate(oldMember, newMember) {
+    console.log(newMember)
     User.findOne({
         where: {
             userId: oldMember.id
         }
     }).then(dbMember => {
-        dbMember.userTag = `${newMember.user.username}#${newMember.user.discriminator}`;
+        dbMember.userTag = `${newMember.username}#${newMember.discriminator}`;
         dbMember.save();
     });
 }

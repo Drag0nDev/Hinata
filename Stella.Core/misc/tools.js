@@ -7,6 +7,9 @@ module.exports = {
     getMember: async function (message, args) {
         return !args[0] ? message.guild.members.cache.get(message.author.id) : message.mentions.members.first() || message.guild.members.cache.get(args[0]);
     },
+    getUser: async function (bot, message, args){
+        return message.mentions.members.first() || bot.users.cache.get(args[0]);
+    },
     getGuild: async function (message) {
         return message.guild;
     },

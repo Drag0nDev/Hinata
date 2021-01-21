@@ -13,7 +13,11 @@ module.exports = {
 
         //<editor-fold defaultstate="collapsed" desc="Used variable declarations">
         //find the member if one is asked if not then use the author
-        let member = !args[0] ? message.guild.members.cache.get(message.author.id) : message.mentions.members.first() || message.guild.members.cache.get(args[0]);
+        let member;
+
+        await tools.getMember(message, args).then(memberPromise => {
+            member = memberPromise;
+        });
 
         if (!member)
             return message.channel.send(embed.setColor(bot.embedColors.error)

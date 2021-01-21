@@ -2,7 +2,7 @@ const {MessageEmbed} = require('discord.js');
 
 module.exports = {
     //<editor-fold defaultstate="collapsed" desc="serverinfo help">
-    name: 'serverIcon',
+    name: 'servericon',
     aliases: ['si', 'icon'],
     category: 'info',
     description: 'see the icon of the server',

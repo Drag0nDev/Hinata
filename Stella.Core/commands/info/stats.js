@@ -14,6 +14,7 @@ module.exports = {
     run: async (bot, message) => {
         const logger = log4js.getLogger();
         let embed = new MessageEmbed().setColor(bot.embedColors.normal);
+        let date = new Date();
 
         //get bot stats
         let botName = `${bot.user.username}#${bot.user.discriminator}`;
@@ -47,7 +48,7 @@ module.exports = {
             embed.setAuthor(botName, avatar)
                 .setColor(bot.embedColors.normal)
                 .setThumbnail(avatar)
-                .setFooter(`© 2020-2020 Copyright: ${devTag}`)
+                .setFooter(`© 2020-${date.getFullYear()} Copyright: ${devTag}`)
                 .addField(`Author`, devTag, true)
                 .addField(`Bot ID`, botId, true)
                 .addField(`Developer ID`, devId, true)

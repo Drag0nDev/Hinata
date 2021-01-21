@@ -3,7 +3,7 @@ const tools = require("../../misc/tools");
 const {MessageEmbed} = require('discord.js');
 
 module.exports = {
-    name: 'leaveGuild',
+    name: 'leaveguild',
     aliases: ['lg', 'ls', 'leaveserver'],
     category: 'owner',
     description: 'Make the bot leave a guild',

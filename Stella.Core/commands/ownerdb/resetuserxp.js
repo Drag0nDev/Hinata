@@ -3,6 +3,7 @@ const { User } = require('../../misc/dbObjects');
 const Sequelize = require('sequelize');
 const pm = require('parse-ms');
 const config = require("../../../config.json");
+const tools = require("../../misc/tools");
 
 module.exports = {
     name: 'resetuserxp',
@@ -20,6 +21,12 @@ module.exports = {
         if (!id.exec(args[0]))
             return message.channel.send(embed.setColor(bot.embedColors.error)
                 .setDescription('Please provide a valid memberid / mention'));
+
+        let member;
+
+        await tools.getUser(bot, message, args).then(memberPromise => {
+            member = memberPromise;
+        });
 
         User.findOne({
             where: {

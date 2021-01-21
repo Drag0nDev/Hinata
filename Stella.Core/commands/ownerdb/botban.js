@@ -12,9 +12,21 @@ module.exports = {
     run: async (bot, message, args) => {
         let embed = new MessageEmbed().setColor(bot.embedColors.normal);
         const id = new RegExp('[0-9]{17,}');
+        let member;
 
         if (message.author.id !== config.owner)
             return tools.ownerOnly(bot, message.channel);
+
+        if (!id.exec(args[0])) {
+            embed.setColor(bot.embedColors.error)
+                .setDescription('Please provide a valid memberid / mention');
+
+            return message.channel.send(embed);
+        }
+
+        await tools.getUser(bot, message, args).then(memberPromise => {
+            member = memberPromise;
+        });
 
         await User.findOne({
             where:
