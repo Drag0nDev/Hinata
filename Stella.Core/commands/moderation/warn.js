@@ -12,6 +12,7 @@ module.exports = {
     run: async (bot, message, args) => {
         let embed = new MessageEmbed();
         const author = message.guild.members.cache.get(message.author.id);
+        let reason = 'No reason provided';
         let casenr;
 
         //check member and bot permissions
@@ -46,7 +47,8 @@ module.exports = {
         }
 
         await args.shift();
-        const reason = args.join(' ');
+        if (args[0])
+         reason = args.join(' ');
 
         await Warnings.findAll({
             where: {

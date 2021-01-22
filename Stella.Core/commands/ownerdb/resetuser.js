@@ -4,10 +4,10 @@ const config = require("../../../config.json");
 const tools = require("../../misc/tools");
 
 module.exports = {
-    name: 'resetuserxp',
-    aliases: ['ruxp'],
+    name: 'resetuser',
+    aliases: ['ru'],
     category: 'ownerdb',
-    description: 'Reset a users global xp',
+    description: 'Resets all global xp/balance/level/streak of a user',
     usage: '[command | alias] <id>',
     run: async (bot, message, args) => {
         let embed = new MessageEmbed();
@@ -33,10 +33,12 @@ module.exports = {
         }).then(user => {
             user.xp = 0;
             user.level = 0;
+            user.dailyStreak = 0;
+            user.balance = 0;
             user.save();
 
             embed.setColor(bot.embedColors.normal)
-                .setDescription(`The xp of ${args[0]} has been reset successfully!`);
+                .setDescription(`The user ${user.userTag} has been reset successfully!`);
         }).catch(err => {
             embed.setColor(bot.embedColors.error)
                 .setDescription(`No user with id **${args[0]}** found in the database`)
