@@ -162,7 +162,7 @@ async function ban(bot, message, member, embed, reason) {
         .setFooter(`ID: ${member.user.id}`)
         .setTimestamp();
 
-    await tools.modlog(message.author, logEmbed);
+    await tools.modlog(message.guild.members.cache.get(message.author.id), logEmbed);
 
     await ServerUser.destroy({
         where: {

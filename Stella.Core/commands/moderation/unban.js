@@ -42,7 +42,7 @@ module.exports = {
         if (!member)
             return message.channel.send(`The member with id **${id}** member is not banned!`);
 
-        if (!args[0])
+        if (args[0])
             reason = args.join(' ');
 
         if (reason.length > 1000){
@@ -58,12 +58,14 @@ module.exports = {
 
         message.channel.send(`**${member.user.tag}** got unbanned for reason: **${reason}**`);
 
-        embed.setDescription(`**Member:** ${member.user.tag}\n` +
-            `**Reason:** ${reason}\n` +
-            `**Responsible moderator:** ${author.tag}`)
-            .setFooter(`ID: ${member.id}`);
+        const logEmbed = new MessageEmbed().setTitle('User unbanned')
+            .setColor(bot.embedColors.softban)
+            .setDescription(`**Member:** ${member.user.tag}\n` +
+                `**Reason:** ${reason}\n` +
+                `**Responsible Moderator:** ${message.author.tag}`)
+            .setFooter(`ID: ${member.user.id}`)
+            .setTimestamp();
 
-        const channel = bot.channels.cache.find(channel => channel.id === '763039768870649856');
-        await channel.send(embed);
+        await tools.modlog(message.guild.members.cache.get(message.author.id), logEmbed);
     }
 }
