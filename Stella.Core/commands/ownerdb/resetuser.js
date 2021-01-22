@@ -38,7 +38,7 @@ module.exports = {
             user.save();
 
             embed.setColor(bot.embedColors.normal)
-                .setDescription(`The user ${user.userTag} has been reset successfully!`);
+                .setDescription(`The user **${user.userTag}** has been reset successfully!`);
         }).catch(err => {
             embed.setColor(bot.embedColors.error)
                 .setDescription(`No user with id **${args[0]}** found in the database`)

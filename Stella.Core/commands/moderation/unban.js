@@ -9,7 +9,7 @@ module.exports = {
     usage: '[command | alias] [Member mention/id] <reason>',
     neededPermissions: neededPerm,
     run: async (bot, message, args) => {
-        let reason;
+        let reason = 'No reason provided';
         let embed = new MessageEmbed().setTimestamp().setColor(bot.embedColors.unban).setTitle('User unbanned');
         let guild = message.guild;
         let member;
@@ -42,10 +42,16 @@ module.exports = {
         if (!member)
             return message.channel.send(`The member with id **${id}** member is not banned!`);
 
-        if (!args[0]) {
-            reason = 'No reason provided';
-        } else {
+        if (!args[0])
             reason = args.join(' ');
+
+        if (reason.length > 1000){
+            embed.setColor(bot.embedColors.error)
+                .setDescription('The reason is too long.\n' +
+                    'Keep it under 1000 characters.')
+                .setTimestamp();
+
+            return await message.channel.send(embed);
         }
 
         await guild.members.unban(id, reason);

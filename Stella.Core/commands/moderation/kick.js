@@ -10,7 +10,7 @@ module.exports = {
     neededPermissions: neededPerm,
     run: async (bot, message, args) => {
         const neededPerm = ['KICK_MEMBERS'];
-        let reason;
+        let reason = 'No reason provided';
         let embed = new MessageEmbed().setTimestamp().setColor(bot.embedColors.kick).setTitle('User kicked');
         let guild = message.guild;
 
@@ -58,10 +58,16 @@ module.exports = {
         args.shift();
 
         //kick the member
-        if (!args[0]) {
-            reason = 'No reason provided';
-        } else {
+        if (args[0])
             reason = args.join(' ');
+
+        if (reason.length > 1000){
+            embed.setColor(bot.embedColors.error)
+                .setDescription('The reason is too long.\n' +
+                    'Keep it under 1000 characters.')
+                .setTimestamp();
+
+            return await message.channel.send(embed);
         }
 
         await member.createDM().then(async dmChannel => {

@@ -48,7 +48,16 @@ module.exports = {
 
         await args.shift();
         if (args[0])
-         reason = args.join(' ');
+            reason = args.join(' ');
+
+        if (reason.length > 1000){
+            embed.setColor(bot.embedColors.error)
+                .setDescription('The reason is too long.\n' +
+                    'Keep it under 1000 characters.')
+                .setTimestamp();
+
+            return await message.channel.send(embed);
+        }
 
         await Warnings.findAll({
             where: {

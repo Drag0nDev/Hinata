@@ -75,14 +75,30 @@ module.exports = {
             let time = checkTemp.exec(args[0])[0];
             await args.shift();
 
-            if (args[0]) {
+            if (args[0])
                 reason = args.join(' ');
+
+            if (reason.length > 1000){
+                embed.setColor(bot.embedColors.error)
+                    .setDescription('The reason is too long.\n' +
+                        'Keep it under 1000 characters.')
+                    .setTimestamp();
+
+                return await message.channel.send(embed);
             }
 
             await tempmute(bot, message, member, embed, muteRole, time, reason);
         } else {
-            if (args[0]) {
+            if (args[0])
                 reason = args.join(' ');
+
+            if (reason.length > 1000){
+                embed.setColor(bot.embedColors.error)
+                    .setDescription('The reason is too long.\n' +
+                        'Keep it under 1000 characters.')
+                    .setTimestamp();
+
+                return await message.channel.send(embed);
             }
 
             await mute(bot, message, member, embed, muteRole, reason);
