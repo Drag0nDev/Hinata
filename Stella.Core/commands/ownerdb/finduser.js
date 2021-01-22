@@ -1,5 +1,5 @@
 const {MessageEmbed} = require('discord.js');
-const {User} = require('../../misc/dbObjects');
+const {User, ServerUser} = require('../../misc/dbObjects');
 const Sequelize = require('sequelize');
 const pm = require('parse-ms');
 const config = require("../../../config.json");
@@ -13,6 +13,7 @@ module.exports = {
     usage: '[command | alias] <id/mention>',
     run: async (bot, message, args) => {
         let embed = new MessageEmbed()
+        let guild;
 
         if (message.author.id !== config.owner) {
             tools.ownerOnly(bot, message.channel)
@@ -29,21 +30,31 @@ module.exports = {
         embed.setColor(bot.embedColors.normal)
             .setDescription(`Getting the info of user with id **${args[0]}**`);
 
-        let member = message.mentions.members.first();
+        await ServerUser.findAll({
+            where: {
+                userId: args[0]
+            }
+        }).then(async servers => {
+            const serverId = servers[0].guildId;
+            guild = await bot.guilds.cache.get(serverId);
+        });
 
-        const userB = bot.users.cache.get(args[0]) || bot.users.cache.get(member.user.id);
+        const userB = await guild.members.fetch({user: args[0], force: true});
 
-        await message.channel.send(embed).then(message => {
+        await message.channel.send(embed).then(async message => {
             let edit = new MessageEmbed().setColor(bot.embedColors.normal);
+            let mutual = 0;
 
-            if (message.author.id !== config.owner)
-                return;
+            await bot.guilds.cache.forEach(guild => {
+                if (guild.members.cache.get(userB.user.id))
+                    mutual++
+            });
 
             if (userB) {
-                edit.addField(`Name`, `${userB.username}#${userB.discriminator}`, true)
-                    .addField(`Id`, userB.id, true)
-                    .addField('\u200B', '\u200B', true)
-                    .setImage(userB.avatarURL({
+                edit.addField(`Name`, `${userB.user.username}#${userB.user.discriminator}`, true)
+                    .addField(`Id`, userB.user.id, true)
+                    .addField('Mutual servers', mutual, true)
+                    .setImage(userB.user.avatarURL({
                         dynamic: true,
                         size: 4096
                     }));
@@ -51,17 +62,17 @@ module.exports = {
                 edit.setDescription(`I could not find the user with id: **${args[0]}** in my cache.`);
             }
 
-            User.findOne({
+            await User.findOne({
                 where: {
-                    userId: userB.id
+                    userId: userB.user.id
                 }
             }).then(user => {
                 edit.addField('Currency', `${user.balance} ${bot.currencyEmoji}`, true)
                     .addField('Global level', user.level, true)
                     .addField('Global xp', user.xp, true);
-
-                message.edit(edit);
             });
+
+            await message.edit(edit);
         });
     }
 }

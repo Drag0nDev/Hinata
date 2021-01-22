@@ -1,3 +1,4 @@
+const {MessageEmbed} = require('discord.js');
 const config = require("../../config.json");
 const logger = require("log4js").getLogger();
 const {User, ServerUser, Server, ServerSettings} = require('../misc/dbObjects');
@@ -5,6 +6,7 @@ const pm = require('parse-ms');
 const tools = require('../misc/tools');
 
 module.exports = async (bot, message) => {
+    const guild = bot.guilds.cache.get('645047329141030936');
 
     //check if the new message is from a bot
     if (message.author.bot) return;
@@ -24,36 +26,55 @@ module.exports = async (bot, message) => {
         return;
     }
 
-    try {
-        //extractions of the command
-        const args = await trimPrefix(message);
-        const command = args.shift().toLowerCase();
 
-        //find the command
-        let cmd = bot.commands.get(command);
-        if (!cmd) cmd = bot.commands.get(bot.aliases.get(command));
+    //extractions of the command
+    const args = await trimPrefix(message);
+    const command = args.shift().toLowerCase();
 
-        //enter in the logger
-        if (cmd) {
-            try {
-                let logging = `------------------------------\n` +
-                    `Command: '${cmd.name}'\n` +
-                    `Arguments: '${args.join(' ')}'\n` +
-                    `User: '${message.author.tag}'\n` +
-                    `Server: '${message.guild.name}'\n` +
-                    `Guild ID: '${message.guild.id}'\n` +
-                    `Channel: '${message.channel.name}'`;
+    //find the command
+    let cmd = bot.commands.get(command);
+    if (!cmd) cmd = bot.commands.get(bot.aliases.get(command));
 
-                logger.info(logging);
-                await cmd.run(bot, message, args);
-            } catch (err) {
-                logger.error(err);
-            }
+    //enter in the logger
+    if (cmd) {
+        try {
+            let logging = `------------------------------\n` +
+                `Command: '${cmd.name}'\n` +
+                `Arguments: '${args.join(' ')}'\n` +
+                `User: '${message.author.tag}'\n` +
+                `Server: '${message.guild.name}'\n` +
+                `Guild ID: '${message.guild.id}'\n` +
+                `Channel: '${message.channel.name}'`;
+
+            logger.info(logging);
+            await cmd.run(bot, message, args);
+        } catch (err) {
+            let invite;
+            await guild.fetchInvites().then(async invites => {
+                try {
+                    invite = invites.first();
+                    if (!invite)
+                        await createNew(guild).then(inv => {
+                            invite = inv;
+                        }).catch(error => {
+                            logger.error(error);
+                        });
+                } catch (error) {
+                    logger.error(error);
+                }
+            });
+            let embed = new MessageEmbed()
+                .setColor(bot.embedColors.error)
+                .setTitle('An error occurred')
+                .setDescription(`An error occurred and the command stopped executing.\n` +
+                    `Please report this to the bot developer in the **[support server](${invite})**`)
+                .setTimestamp();
+
+            await message.channel.send(embed);
+
+            logger.error(err);
         }
-    } catch (error) {
-        logger.error(error);
     }
-
 };
 
 function globalLevel(message) {
@@ -150,8 +171,8 @@ async function checkPrefix(message) {
         prefix.push(server.prefix);
     })
 
-    for (let i of prefix){
-        if(message.content.toLowerCase().indexOf(i) === 0)
+    for (let i of prefix) {
+        if (message.content.toLowerCase().indexOf(i) === 0)
             return false;
 
     }
@@ -175,9 +196,15 @@ async function trimPrefix(message) {
         prefix.push(server.prefix);
     })
 
-    for (let i of prefix){
-        if(message.content.toLowerCase().indexOf(i) === 0){
+    for (let i of prefix) {
+        if (message.content.toLowerCase().indexOf(i) === 0) {
             return message.content.slice(i.length).trim().split(/ +/g);
         }
     }
+}
+
+async function createNew(guild) {
+    let channel = guild.channels.cache.find(channel => channel.type === 'text');
+
+    return await channel.createInvite();
 }

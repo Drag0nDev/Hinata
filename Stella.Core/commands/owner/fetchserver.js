@@ -24,12 +24,12 @@ module.exports = {
         //check if serverid is given
         if (!args[0])
             return message.channel.send(embed.setDescription(`No server id given`)
-                .setColor(bot.embedColors.error.code));
+                .setColor(bot.embedColors.error));
 
         //see if bot is in the server
         if (!bot.guilds.cache.get(args[0]))
             return message.channel.send(embed.setDescription(`I am not in a server with id ${args[0]}`)
-                .setColor(bot.embedColors.error.code));
+                .setColor(bot.embedColors.error));
         //</editor-fold>
 
         //assign guild
