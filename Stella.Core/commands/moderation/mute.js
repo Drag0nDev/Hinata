@@ -13,7 +13,7 @@ module.exports = {
         let checkTemp = new RegExp('^[0-9]*[smhd]');
         let reason = 'No reason provided';
         let muteRole;
-        let embed = new MessageEmbed();
+        let embed = new MessageEmbed().setTitle('Mute');
         let guild = message.guild;
         let muteRoleId;
 
@@ -46,12 +46,6 @@ module.exports = {
                 .setColor(bot.embedColors.error)
                 .setDescription(`You can't mute **${member.user.tag}** due to role hierarchy!`));
         }
-
-        const canMute = tools.compareRoles(author, member);
-
-        //check if the author has a higher role then the member
-        if (!canMute)
-            return message.channel.send(`You can't ban **${member.user.tag}** due to role hierarchy!`);
 
         await ServerSettings.findOne({
             where: {
@@ -114,8 +108,7 @@ async function tempmute(bot, message, member, embed, muteRole, time, reason) {
 
     await tools.giveRole(member, muteRole);
 
-    embed.setTitle('Mute')
-        .setDescription(`**${member.user.tag}** is muted for **${$time} ${timeVal}** for reason: **${reason}**.`)
+    embed.setDescription(`**${member.user.tag}** is muted for **${$time} ${timeVal}** for reason: **${reason}**.`)
         .setColor(bot.embedColors.normal);
 
     await member.createDM()

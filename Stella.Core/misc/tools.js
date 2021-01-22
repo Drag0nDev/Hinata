@@ -211,7 +211,6 @@ module.exports = {
         return getTime.exec(time)[0];
     },
 
-
     //post logs
     modlog: async function (member, embed) {
         const modlogChannel = member.guild.channels.cache.get(await getModlogChannel(member.guild.id));
