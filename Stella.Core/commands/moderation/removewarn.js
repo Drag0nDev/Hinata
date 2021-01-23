@@ -11,7 +11,7 @@ module.exports = {
     description: 'This command removes the warnings depending on the input.\n' +
         'possible inputs and their usage:\n' +
         '- `stella rw all` removes all the warns logged for the server.\n' +
-        '- `stella rw [member mention/id] [case]`',
+        '- `stella rw [member mention/id] [case]` removes a specific warn of a user.',
     usage: '[command | alias] [Member mention/id] <reason>',
     neededPermissions: neededPerm,
     run: async (bot, message, args) => {

@@ -57,7 +57,7 @@ async function serverLb(bot, message, variation) {
     });
 }
 
-function globalLb(bot, message,variation) {
+function globalLb(bot, message, variation) {
     const embed = new MessageEmbed()
         .setTitle(`${variation} leaderboard`)
         .setColor(bot.embedColors.normal)
@@ -74,7 +74,7 @@ function globalLb(bot, message,variation) {
             ['xp', 'DESC']
         ]
     }).then(users => {
-        for (let i = 0; i < 10; i++) {
+        for (let i = 0; i < 10 && i < users.length; i++) {
             let xp = users[i].xp;
             let lvlXp = config.levelXp;
             let level = users[i].level;
