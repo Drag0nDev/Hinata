@@ -1,4 +1,4 @@
-const neededPerm = ['KICK_MEMBERS'];
+const neededPerm = ['MANAGE_GUILD'];
 const {MessageEmbed} = require("discord.js");
 const {Warnings, User} = require('../../misc/dbObjects');
 const tools = require('../../misc/tools');

@@ -5,6 +5,7 @@ module.exports = (sequelize, DataTypes) => {
             moderatorId: DataTypes.STRING,
             type: DataTypes.STRING,
             expiration: DataTypes.STRING,
+            reason: DataTypes.STRING,
         },
         {
             timestamps: false,

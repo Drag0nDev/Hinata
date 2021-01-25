@@ -125,7 +125,8 @@ async function tempmute(bot, message, member, embed, muteRole, time, reason) {
         userId: member.id,
         moderatorId: message.author.id,
         type: 'Mute',
-        expiration: expiration.getTime()
+        expiration: expiration.getTime(),
+        reason: reason
     });
 
     const logEmbed = new MessageEmbed().setTitle('User muted')

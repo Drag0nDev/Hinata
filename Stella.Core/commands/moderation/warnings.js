@@ -28,13 +28,7 @@ module.exports = {
         if (noBotPermission)
             return message.channel.send(embed);
 
-        if (!args[0]) {
-            embed.setColor(bot.embedColors.error)
-                .setDescription('Please provide a valid argument!')
-                .setTimestamp();
-
-            await message.channel.send(embed);
-        } else if (choice.exec(args[0])[0] === 'all') {
+        if (!args[0] || choice.exec(args[0])[0] === 'all') {
             await showAll(bot, message, embed, 'All');
         } else if (parseInt(choice.exec(args[0])[0])) {
             let memberId;
@@ -137,7 +131,7 @@ async function showUser(bot, message, memberId, embed, variation) {
         }
     ).then(async warnings => {
         if (!warnings[0])
-            return message.channel.send(embed.setDescription('No warns in this server!')
+            return message.channel.send(embed.setDescription('No warns for this user!')
                 .setColor(bot.embedColors.normal)
                 .setTimestamp());
 
