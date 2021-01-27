@@ -7,7 +7,7 @@ module.exports = {
     getMember: async function (message, args) {
         return !args[0] ? message.guild.members.cache.get(message.author.id) : message.mentions.members.first() || message.guild.members.cache.get(args[0]);
     },
-    getUser: async function (bot, message, args){
+    getUser: async function (bot, message, args) {
         return message.mentions.members.first() || bot.users.cache.get(args[0]);
     },
     getGuild: async function (message) {
@@ -31,7 +31,7 @@ module.exports = {
 
         return amount;
     },
-    getRole: async function (message, args){
+    getRole: async function (message, args) {
         return !args[0] ? message.guild.roles.cache.get(message.author.id) : message.mentions.roles.first() || message.guild.roles.cache.get(args[0]);
     },
 
@@ -52,9 +52,9 @@ module.exports = {
         roleArrayAuth.sort((a, b) => b.position - a.position);
         roleArrayMemb.sort((a, b) => b.position - a.position);
 
-        if (!roleArrayMemb[0] && roleArrayAuth[0]){
+        if (!roleArrayMemb[0] && roleArrayAuth[0]) {
             return true;
-        } else if (!roleArrayAuth[0] && roleArrayMemb[0]){
+        } else if (!roleArrayAuth[0] && roleArrayMemb[0]) {
             return false;
         } else {
             return roleArrayAuth[0].position >= roleArrayMemb[0].position;
@@ -250,6 +250,83 @@ module.exports = {
     },
     removeRole: async function (member, role) {
         await member.roles.remove(role);
+    },
+
+    //level calculations
+    getLevel: function (userXp) {
+        let lvlXp = config.levelXp;
+        let level = 0;
+        let nextLvlXp = 0;
+
+        do {
+            nextLvlXp = lvlXp + ((lvlXp / 2) * level);
+
+            if (userXp >= nextLvlXp) {
+                level++;
+                userXp -= nextLvlXp;
+            }
+        } while (userXp > nextLvlXp);
+
+        return level;
+    },
+    
+    //custom messages
+    levelUp: async function (message, customMessage, newLevel) {
+        await customReplace(message, customMessage, newLevel);
+        let embed = new MessageEmbed();
+
+        try {
+            const jsonEmbed = JSON.parse(message)
+
+            if (jsonEmbed.color) embed.setColor(jsonEmbed.color)
+            if (jsonEmbed.title) embed.setTitle(jsonEmbed.title)
+            if (jsonEmbed.description) embed.setDescription(jsonEmbed.description)
+            if (jsonEmbed.thumbnail) embed.setThumbnail(jsonEmbed.thumbnail)
+            if (jsonEmbed.fields) {
+                for (let field of jsonEmbed.fields) {
+                    let name = field.name
+                    let value = field.value
+                    let inline
+                    if (field.inline) inline = field.inline
+                    else inline = false;
+
+                    embed.addField(name, value, inline);
+                }
+            }
+
+            await message.channel.send({embed: embed})
+        } catch (err) {
+            message.channel.send(message)
+        }
+    },
+    levelUpRole: async function (message, customMessage, newLevel, newRoleId) {
+        let embed = new MessageEmbed();
+
+        await customReplace(message, customMessage, newLevel, newRoleId);
+
+        try {
+            const jsonEmbed = JSON.parse(message)
+
+            if (jsonEmbed.color) embed.setColor(jsonEmbed.color)
+            if (jsonEmbed.title) embed.setTitle(jsonEmbed.title)
+            if (jsonEmbed.description) embed.setDescription(jsonEmbed.description)
+            if (jsonEmbed.thumbnail) embed.setThumbnail(jsonEmbed.thumbnail)
+            if (jsonEmbed.fields) {
+                for (let field of jsonEmbed.fields) {
+                    let name = field.name
+                    let value = field.value
+                    let inline
+                    if (field.inline) inline = field.inline
+                    else inline = false;
+
+                    embed.addField(name, value, inline);
+                }
+            }
+
+            await message.channel.send({embed: embed})
+        } catch (err) {
+            message.channel.send(message)
+        }
     }
 }
 
@@ -263,5 +340,47 @@ async function getModlogChannel(serverId) {
         return server.modlogChannel;
     }).catch(err => {
         logger.error(err);
+    });
+}
+
+async function customReplace(message, customMessage, newLevel, newRoleId) {
+    const user = new RegExp('%user%', 'g');
+    const server = new RegExp('%server%', 'g');
+    const membercount = new RegExp('%members%', 'g');
+    const usermention = new RegExp('%mention%', 'g');
+    const avatar = new RegExp('%avatar%', 'g');
+    const level = new RegExp('%level%', 'g');
+    const role = new RegExp('%role%', 'g');
+
+    const reglist = [user, server, membercount, usermention, avatar, level, role];
+
+    reglist.forEach(reg => {
+        if (customMessage.match(reg)) {
+            switch (reg.exec(message)[0]) {
+                case '%user%':
+                    customMessage = customMessage.replace(reg, message.author.username);
+                    break;
+                case '%server%':
+                    customMessage = customMessage.replace(reg, message.guild.name);
+                    break;
+                case '%members%':
+                    customMessage = customMessage.replace(reg, message.guild.memberCount);
+                    break;
+                case '%mention%':
+                    customMessage = customMessage.replace(reg, `<@!${message.author.id}>`);
+                    break;
+                case '%avatar%':
+                    customMessage = customMessage.replace(reg, message.author.avatarURL({
+                        dynamic: true
+                    }));
+                    break;
+                case '%role%':
+                    customMessage = customMessage.replace(reg, `<@&${newRoleId}>`);
+                    break;
+                case '%level%':
+                    customMessage = customMessage.replace(reg, newLevel);
+                    break;
+            }
+        }
     });
 }

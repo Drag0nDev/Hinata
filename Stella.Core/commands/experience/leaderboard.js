@@ -3,7 +3,7 @@ const {MessageEmbed} = require('discord.js');
 const {User, ServerUser} = require('../../misc/dbObjects');
 const config = require("../../../config.json");
 const tools = require('../../misc/tools');
-const logger = require("log4js").getLogger();
+const neededPerm = ['ADD_REACTIONS'];
 
 module.exports = {
     name: 'leaderboard',
@@ -12,14 +12,11 @@ module.exports = {
     description: 'Show the level leaderboard of the server or the overall leaderboard on the bot.\n' +
         'To see the global leaderboard use ``glb`` or ``globalleaderboard``',
     usage: '[command | alias]',
-    neededPermissions: ['ADD_REACTIONS'],
+    neededPermissions: neededPerm,
     run: async (bot, message) => {
-        let neededPerm = 'ADD_REACTIONS';
-
-        if (!message.guild.me.hasPermission(neededPerm))
-            return message.channel.send(embed.setColor(bot.embedColors.error)
-                .setDescription(`I don't have the required permission to execute this command\n` +
-                    `**Missing requirements:** ${neededPerm}`));
+        let noBotPermission = tools.checkBotPermissions(bot, message, neededPerm, embed);
+        if (noBotPermission)
+            return message.channel.send(embed);
 
         if (message.content.includes('glb') || message.content.includes('globalleaderboard')) {
             globalLb(bot, message, 'Global');
@@ -48,7 +45,7 @@ async function serverLb(bot, message, variation) {
     }).then(async users => {
         for (let i = 0; i < 10 && i < users.length; i++) {
             let memberTag = await getUserTag(message, users[i].userId);
-            let level = getLevel(users[i].xp);
+            let level = tools.getLevel(users[i].xp);
 
             embed.addField(`${i + 1}. ${memberTag}`, `Level ${level}\n(${users[i].xp}xp)`, true);
         }

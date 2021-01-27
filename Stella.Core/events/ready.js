@@ -1,6 +1,6 @@
 const logger = require("log4js").getLogger();
 const {MessageEmbed} = require('discord.js');
-const {Timers, Server} = require('../misc/dbObjects');
+const {Timers, ServerSettings} = require('../misc/dbObjects');
 const tools = require('../misc/tools');
 
 module.exports = async bot => {
@@ -68,7 +68,7 @@ async function checkMutes(bot) {
     if (!member) return;
     if (!server) return;
 
-    await Server.findOne({
+    await ServerSettings.findOne({
         where: {
             serverId: server.id
         }

@@ -15,6 +15,7 @@ const ServerSettings = require('../Database/dbObjects/ServerSettings')(sequelize
 const ServerUser = require('../Database/dbObjects/ServerUser')(sequelize, Sequelize.DataTypes);
 const Timers = require('../Database/dbObjects/Timers')(sequelize, Sequelize.DataTypes);
 const Warnings = require('../Database/dbObjects/Warnings')(sequelize, Sequelize.DataTypes);
+const Rewards = require('../Database/dbObjects/Rewards')(sequelize, Sequelize.DataTypes);
 
 //server databases
 ServerUser.belongsTo(Servers, {
@@ -30,4 +31,4 @@ ServerSettings.belongsTo(Servers, {
     as: 'server'
 });
 
-module.exports = { User, Server: Servers, ServerSettings, ServerUser, Timers, Warnings };
+module.exports = { User, Server: Servers, ServerSettings, ServerUser, Timers, Warnings, Rewards };

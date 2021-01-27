@@ -5,7 +5,7 @@ const neededPerm = ['MANAGE_ROLES'];
 
 module.exports = {
     name: 'muterole',
-    category: 'moderation',
+    category: 'server settings',
     description: 'Assign a mute role or create one if no role is given',
     usage: '[command | alias] <muteroleId / muterole mention>',
     neededPermissions: neededPerm,

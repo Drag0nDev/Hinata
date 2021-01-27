@@ -15,9 +15,10 @@ require('../Database/dbObjects/ServerUser')(sequelize, Sequelize.DataTypes);
 require('../Database/dbObjects/ServerSettings')(sequelize, Sequelize.DataTypes);
 require('../Database/dbObjects/Timers')(sequelize, Sequelize.DataTypes);
 require('../Database/dbObjects/Warnings')(sequelize, Sequelize.DataTypes);
+require('../Database/dbObjects/Rewards')(sequelize, Sequelize.DataTypes);
 
 const force = process.argv.includes('--force') || process.argv.includes('-f');
 sequelize.sync({ force }).then(async () => {
     console.log('Database synced');
-    sequelize.close();
+    await sequelize.close();
 }).catch(console.error);

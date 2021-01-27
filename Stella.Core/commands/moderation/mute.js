@@ -56,7 +56,13 @@ module.exports = {
         });
 
         if (muteRoleId === null) {
-            embed.setDescription('Please provide a mute role for this command to work')
+            embed.setDescription('Please provide a valid muterole for this command to work')
+                .setColor(bot.embedColors.error);
+            return message.channel.send(embed);
+        }
+
+        if(!muteRole) {
+            embed.setDescription('Please provide a valid muterole for this command to work')
                 .setColor(bot.embedColors.error);
             return message.channel.send(embed);
         }
