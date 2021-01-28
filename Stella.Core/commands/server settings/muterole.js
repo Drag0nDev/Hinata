@@ -14,6 +14,7 @@ module.exports = {
         let server;
         let muteRole;
         let dbServer;
+        let roleArray = [];
         await tools.getGuild(message).then(guildProm => server = guildProm);
 
         //check member and bot permissions
@@ -33,7 +34,14 @@ module.exports = {
                     .setDescription('Please provide a valid role or a valid RoleId');
                 return message.channel.send(embed);
             }
+            
+            //check if assigned role is higher then bots highest role
+            let roleCheck = tools.checkRolePosition(bot, message, muteRole);
+            if (roleCheck)
+                return await message.channel.send(embed);
 
+
+            //put muterole ID in the db
             await ServerSettings.findOne({
                 where: {
                     serverId: server.id

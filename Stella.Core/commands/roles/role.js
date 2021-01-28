@@ -69,6 +69,11 @@ async function addRole(bot, message, args, embed) {
         return;
     }
 
+    //check if assigned role is higher then bots highest role
+    let roleCheck = tools.checkRolePosition(bot, message, role);
+    if (roleCheck)
+        return message.channel.send(embed);
+
     await tools.giveRole(member, role);
 
     embed.setColor(bot.embedColors.normal)
@@ -102,6 +107,11 @@ async function remRole(bot, message, args, embed) {
             .setTimestamp();
         return;
     }
+
+    //check if assigned role is higher then bots highest role
+    let roleCheck = tools.checkRolePosition(bot, message, role);
+    if (roleCheck)
+        return message.channel.send(embed);
 
     await tools.removeRole(member, role);
 

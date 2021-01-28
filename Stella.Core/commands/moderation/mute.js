@@ -28,7 +28,8 @@ module.exports = {
 
         //check if there is an argument
         if (!args[0])
-            return message.channel.send('Please provide a user to mute!');
+            return message.channel.send(embed.setDescription('No user found with this id/name')
+                .setColor(bot.embedColors.error));
 
         let member;
 
@@ -68,6 +69,11 @@ module.exports = {
         }
 
         muteRole = guild.roles.cache.get(muteRoleId);
+
+        //check if assigned role is higher then bots highest role
+        let roleCheck = tools.checkRolePosition(bot, message, muteRole);
+        if (roleCheck)
+            return await message.channel.send(embed);
 
         await args.shift();
 
