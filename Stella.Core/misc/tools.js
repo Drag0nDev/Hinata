@@ -1,6 +1,7 @@
 const {User, ServerUser, Server, ServerSettings} = require('./dbObjects');
 const {MessageEmbed} = require('discord.js');
 const logger = require("log4js").getLogger();
+const config = require("../../config.json");
 
 module.exports = {
     //guild checks
@@ -125,6 +126,21 @@ module.exports = {
                     .setDescription(`I don't have the required permission to run this command\n` +
                         `**Missing requirements:** ${neededPerm}`);
             }
+        }
+    },
+    checkRolePosition: function (bot, message, role) {
+        const botUser = message.guild.members.cache.get(bot.user.id);
+        let roleArray = [];
+
+        botUser._roles.forEach(roleId => {
+            roleArray.push(message.guild.roles.cache.get(roleId));
+        });
+
+        roleArray.sort((a, b) => b.position - a.position);
+
+        if (roleArray[0].position > role.position) {
+            return embed.setColor(bot.embedColors.error)
+                .setDescription('I can\'t assign this role due to role hierarchy!');
         }
     },
 
@@ -272,60 +288,107 @@ module.exports = {
     
     //custom messages
     levelUp: async function (message, customMessage, newLevel) {
-        await customReplace(message, customMessage, newLevel);
+        customMessage = await customReplace(message, customMessage, newLevel);
         let embed = new MessageEmbed();
 
         try {
-            const jsonEmbed = JSON.parse(message)
+            const jsonEmbed = JSON.parse(customMessage);
 
-            if (jsonEmbed.color) embed.setColor(jsonEmbed.color)
-            if (jsonEmbed.title) embed.setTitle(jsonEmbed.title)
-            if (jsonEmbed.description) embed.setDescription(jsonEmbed.description)
-            if (jsonEmbed.thumbnail) embed.setThumbnail(jsonEmbed.thumbnail)
+            if (jsonEmbed.color) embed.setColor(jsonEmbed.color);
+            if (jsonEmbed.title) embed.setTitle(jsonEmbed.title);
+            if (jsonEmbed.description) embed.setDescription(jsonEmbed.description);
+            if (jsonEmbed.thumbnail) embed.setThumbnail(jsonEmbed.thumbnail);
             if (jsonEmbed.fields) {
                 for (let field of jsonEmbed.fields) {
-                    let name = field.name
-                    let value = field.value
-                    let inline
-                    if (field.inline) inline = field.inline
+                    let name = field.name;
+                    let value = field.value;
+                    let inline;
+                    if (field.inline) inline = field.inline;
                     else inline = false;
 
                     embed.addField(name, value, inline);
                 }
             }
 
-            await message.channel.send({embed: embed})
+            await message.channel.send({embed: embed});
         } catch (err) {
-            message.channel.send(message)
+            message.channel.send(customMessage);
         }
     },
     levelUpRole: async function (message, customMessage, newLevel, newRoleId) {
         let embed = new MessageEmbed();
 
-        await customReplace(message, customMessage, newLevel, newRoleId);
+        customMessage = await customReplace(message, customMessage, newLevel, newRoleId);
 
         try {
-            const jsonEmbed = JSON.parse(message)
+            const jsonEmbed = JSON.parse(customMessage);
 
-            if (jsonEmbed.color) embed.setColor(jsonEmbed.color)
-            if (jsonEmbed.title) embed.setTitle(jsonEmbed.title)
-            if (jsonEmbed.description) embed.setDescription(jsonEmbed.description)
-            if (jsonEmbed.thumbnail) embed.setThumbnail(jsonEmbed.thumbnail)
+            if (jsonEmbed.color) embed.setColor(jsonEmbed.color);
+            if (jsonEmbed.title) embed.setTitle(jsonEmbed.title);
+            if (jsonEmbed.description) embed.setDescription(jsonEmbed.description);
+            if (jsonEmbed.thumbnail) embed.setThumbnail(jsonEmbed.thumbnail);
             if (jsonEmbed.fields) {
                 for (let field of jsonEmbed.fields) {
-                    let name = field.name
-                    let value = field.value
-                    let inline
-                    if (field.inline) inline = field.inline
+                    let name = field.name;
+                    let value = field.value;
+                    let inline;
+                    if (field.inline) inline = field.inline;
                     else inline = false;
 
                     embed.addField(name, value, inline);
                 }
             }
 
-            await message.channel.send({embed: embed})
+            await message.channel.send({embed: embed});
         } catch (err) {
-            message.channel.send(message)
+            message.channel.send(customMessage);
+        }
+    },
+    customReplace: async function (message, customMessage, newLevel, newRoleId) {
+        try {
+            const user = new RegExp('%user%', 'g');
+            const server = new RegExp('%server%', 'g');
+            const membercount = new RegExp('%members%', 'g');
+            const usermention = new RegExp('%mention%', 'g');
+            const avatar = new RegExp('%avatar%', 'g');
+            const level = new RegExp('%level%', 'g');
+            const role = new RegExp('%role%', 'g');
+
+            const reglist = [user, server, membercount, usermention, avatar, level, role];
+
+            reglist.forEach(reg => {
+                if (customMessage.match(reg)) {
+                    switch (reg.exec(customMessage)[0]) {
+                        case '%user%':
+                            customMessage = customMessage.replace(reg, message.author.username);
+                            break;
+                        case '%server%':
+                            customMessage = customMessage.replace(reg, message.guild.name);
+                            break;
+                        case '%members%':
+                            customMessage = customMessage.replace(reg, message.guild.memberCount);
+                            break;
+                        case '%mention%':
+                            customMessage = customMessage.replace(reg, `<@!${message.author.id}>`);
+                            break;
+                        case '%avatar%':
+                            customMessage = customMessage.replace(reg, message.author.avatarURL({
+                                dynamic: true
+                            }));
+                            break;
+                        case '%role%':
+                            customMessage = customMessage.replace(reg, `<@&${newRoleId}>`);
+                            break;
+                        case '%level%':
+                            customMessage = customMessage.replace(reg, newLevel);
+                            break;
+                    }
+                }
+            });
+
+            return customMessage;
+        } catch (err) {
+            logger.error(err);
         }
     }
 }
@@ -344,43 +407,49 @@ async function getModlogChannel(serverId) {
 }
 
 async function customReplace(message, customMessage, newLevel, newRoleId) {
-    const user = new RegExp('%user%', 'g');
-    const server = new RegExp('%server%', 'g');
-    const membercount = new RegExp('%members%', 'g');
-    const usermention = new RegExp('%mention%', 'g');
-    const avatar = new RegExp('%avatar%', 'g');
-    const level = new RegExp('%level%', 'g');
-    const role = new RegExp('%role%', 'g');
+    try {
+        const user = new RegExp('%user%', 'g');
+        const server = new RegExp('%server%', 'g');
+        const membercount = new RegExp('%members%', 'g');
+        const usermention = new RegExp('%mention%', 'g');
+        const avatar = new RegExp('%avatar%', 'g');
+        const level = new RegExp('%level%', 'g');
+        const role = new RegExp('%role%', 'g');
 
-    const reglist = [user, server, membercount, usermention, avatar, level, role];
+        const reglist = [user, server, membercount, usermention, avatar, level, role];
 
-    reglist.forEach(reg => {
-        if (customMessage.match(reg)) {
-            switch (reg.exec(message)[0]) {
-                case '%user%':
-                    customMessage = customMessage.replace(reg, message.author.username);
-                    break;
-                case '%server%':
-                    customMessage = customMessage.replace(reg, message.guild.name);
-                    break;
-                case '%members%':
-                    customMessage = customMessage.replace(reg, message.guild.memberCount);
-                    break;
-                case '%mention%':
-                    customMessage = customMessage.replace(reg, `<@!${message.author.id}>`);
-                    break;
-                case '%avatar%':
-                    customMessage = customMessage.replace(reg, message.author.avatarURL({
-                        dynamic: true
-                    }));
-                    break;
-                case '%role%':
-                    customMessage = customMessage.replace(reg, `<@&${newRoleId}>`);
-                    break;
-                case '%level%':
-                    customMessage = customMessage.replace(reg, newLevel);
-                    break;
+        reglist.forEach(reg => {
+            if (customMessage.match(reg)) {
+                switch (reg.exec(customMessage)[0]) {
+                    case '%user%':
+                        customMessage = customMessage.replace(reg, message.author.username);
+                        break;
+                    case '%server%':
+                        customMessage = customMessage.replace(reg, message.guild.name);
+                        break;
+                    case '%members%':
+                        customMessage = customMessage.replace(reg, message.guild.memberCount);
+                        break;
+                    case '%mention%':
+                        customMessage = customMessage.replace(reg, `<@!${message.author.id}>`);
+                        break;
+                    case '%avatar%':
+                        customMessage = customMessage.replace(reg, message.author.avatarURL({
+                            dynamic: true
+                        }));
+                        break;
+                    case '%role%':
+                        customMessage = customMessage.replace(reg, `<@&${newRoleId}>`);
+                        break;
+                    case '%level%':
+                        customMessage = customMessage.replace(reg, newLevel);
+                        break;
+                }
             }
-        }
-    });
+        });
+
+        return customMessage;
+    } catch (err) {
+        logger.error(err);
+    }
 }

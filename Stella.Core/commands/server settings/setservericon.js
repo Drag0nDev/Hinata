@@ -1,6 +1,7 @@
 const {MessageEmbed} = require('discord.js');
 const log4js = require("log4js");
 let neededPerm = ['MANAGE_GUILD'];
+const tools = require("../../misc/tools");
 
 module.exports = {
     //<editor-fold defaultstate="collapsed" desc="userinfo help">

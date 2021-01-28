@@ -1,7 +1,7 @@
 const {MessageEmbed} = require('discord.js');
 const config = require("../../config.json");
 const logger = require("log4js").getLogger();
-const {User, ServerUser, Server, ServerSettings} = require('../misc/dbObjects');
+const {User, ServerUser, Rewards, ServerSettings} = require('../misc/dbObjects');
 const pm = require('parse-ms');
 const tools = require('../misc/tools');
 
@@ -11,13 +11,18 @@ module.exports = async (bot, message) => {
     //check if the new message is from a bot
     if (message.author.bot) return;
 
-    //check the global level of the user and if it already exists
-    await checkUser(message);
-    await globalLevel(message);
+    try {
+        //check the global level of the user and if it already exists
+        await checkUser(message);
+        await globalLevel(message);
 
-    //check the server level of the user
-    await checkServerUser(message);
-    await serverLevel(message);
+        //check the server level of the user
+        await checkServerUser(message);
+        await serverLevel(bot, message);
+    } catch (err) {
+        logger.error(err);
+    }
+
 
     //check if the bot is in test mode
     if (await checkPrefix(message)) return;
@@ -122,13 +127,13 @@ async function checkUser(message) {
     });
 }
 
-function serverLevel(message) {
+function serverLevel(bot, message) {
     ServerUser.findOne({
         where: {
             userId: message.author.id,
             guildId: message.guild.id
         }
-    }).then(serverUser => {
+    }).then(async serverUser => {
         let now = new Date();
 
         if (serverUser.lastMessageDate !== '0') {
@@ -142,6 +147,8 @@ function serverLevel(message) {
         serverUser.lastMessageDate = message.createdTimestamp;
 
         serverUser.save();
+
+        await checkLevelUp(bot, message, serverUser);
     });
 }
 
@@ -174,7 +181,6 @@ async function checkPrefix(message) {
     for (let i of prefix) {
         if (message.content.toLowerCase().indexOf(i) === 0)
             return false;
-
     }
     return true;
 }
@@ -207,4 +213,59 @@ async function createNew(guild) {
     let channel = guild.channels.cache.find(channel => channel.type === 'text');
 
     return await channel.createInvite();
+}
+
+async function checkLevelUp(bot, message, serverUser) {
+    try {
+        Rewards.findOne({
+            where: {
+                serverId: message.guild.id,
+                xp: serverUser.xp
+            }
+        }).then(async reward => {
+                await ServerSettings.findOne({
+                    where: {
+                        serverid: message.guild.id
+                    }
+                }).then(async serverSetting => {
+                    let user = message.guild.members.cache.get(message.author.id);
+                    let xp = serverUser.xp
+                    let lvlXp = config.levelXp;
+                    let level = 0;
+                    let nextLvlXp = 0;
+
+                    do {
+                        nextLvlXp = lvlXp + ((lvlXp / 2) * level);
+
+                        if (xp >= nextLvlXp) {
+                            level++;
+                            xp -= nextLvlXp;
+                        }
+                    } while (xp > nextLvlXp);
+
+                    if ((!reward || user._roles.includes(reward.roleId) || !serverSetting.levelUpRoleMessage)) {
+                        if (xp === 0) {
+                            if (serverSetting.levelUpMessage)
+                                await tools.levelUp(message, serverSetting.levelUpMessage, level);
+                        }
+                        return;
+                    }
+
+                    let role = message.guild.roles.cache.get(reward.roleId);
+
+                    if (!role) {
+                        reward.destroy();
+                        return;
+                    }
+
+                    await tools.levelUpRole(message, serverSetting.levelUpRoleMessage, level, reward.roleId);
+
+                    await tools.giveRole(user, role);
+                });
+            }
+        );
+    } catch
+        (err) {
+        logger.error(err)
+    }
 }

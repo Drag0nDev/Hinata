@@ -14,6 +14,7 @@ module.exports = {
     usage: '[command | alias]',
     neededPermissions: neededPerm,
     run: async (bot, message) => {
+        let embed = new MessageEmbed();
         let noBotPermission = tools.checkBotPermissions(bot, message, neededPerm, embed);
         if (noBotPermission)
             return message.channel.send(embed);

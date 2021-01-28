@@ -22,7 +22,6 @@ module.exports = {
             order: [['level', 'DESC'], ['xp', 'DESC']]
         }).then(userList => {
             let userListId = [];
-            console.log()
 
             userList.forEach(user => {
                 userListId.push(user.userId);
