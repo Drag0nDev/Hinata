@@ -15,6 +15,7 @@ module.exports = {
         '`%user%` shows the members name and tag like (Drag0n#6666).\n' +
         '`%mention%` mentions the member who leveled up.\n' +
         '`%server%` shows the server name.' +
+        '`%icon%` shows the server icon.\n' +
         '`%level% shows the new level they reached.`\n\n' +
         'Examples:\n' +
         'Normal message:\n' +
@@ -28,6 +29,7 @@ module.exports = {
         let customMessage = args.join(' ');
         let embed = new MessageEmbed();
         let newLevel = 5;
+        let user = message.guild.members.cache.get(message.author.id);
 
         await ServerSettings.findOne({
             where: {
@@ -37,7 +39,7 @@ module.exports = {
             settings.levelUpMessage = customMessage;
             settings.save();
 
-            customMessage = await tools.customReplace(message, customMessage, newLevel);
+            customMessage = await tools.customReplace(message, customMessage, user, newLevel);
 
             try {
                 const jsonEmbed = JSON.parse(customMessage);

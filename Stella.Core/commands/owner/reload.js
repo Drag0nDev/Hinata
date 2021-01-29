@@ -68,13 +68,14 @@ async function reload(bot, message, args, embed) {
 }
 
 async function reloadCat(bot, message, args, embed) {
+    let cat = args.join(' ');
     if (!args.length) return message.reply(`you didn't pass any category to reload!`);
-    if (!bot.categories.includes(args[0])) return message.reply(`there is no category with name **${args[0]}**`);
+    if (!bot.categories.includes(cat)) return message.reply(`there is no category with name **${cat}**`);
 
     for (let command of bot.commands){
         const category = command[1].category;
 
-        if (category === args[0]) {
+        if (category === cat) {
             delete require.cache[require.resolve(`../${category}/${command[1].name}.js`)];
 
             try {
@@ -94,7 +95,7 @@ async function reloadCat(bot, message, args, embed) {
         }
     }
     await message.channel.send(embed.setTitle('Reload command')
-        .setDescription(`All commands in category **${args[0]}** successfully reloaded`)
+        .setDescription(`All commands in category **${cat}** successfully reloaded`)
         .setTimestamp());
 }
 

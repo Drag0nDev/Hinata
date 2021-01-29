@@ -3,6 +3,17 @@ const {MessageEmbed} = require('discord.js');
 const logger = require("log4js").getLogger();
 const config = require("../../config.json");
 
+const user = new RegExp('%user%', 'g');
+const server = new RegExp('%server%', 'g');
+const membercount = new RegExp('%members%', 'g');
+const usermention = new RegExp('%mention%', 'g');
+const avatar = new RegExp('%avatar%', 'g');
+const level = new RegExp('%level%', 'g');
+const role = new RegExp('%role%', 'g');
+const icon = new RegExp('%icon%', 'g');
+
+const reglist = [user, server, membercount, usermention, avatar, level, role, icon];
+
 module.exports = {
     //guild checks
     getMember: async function (message, args) {
@@ -344,23 +355,13 @@ module.exports = {
             message.channel.send(customMessage);
         }
     },
-    customReplace: async function (message, customMessage, newLevel, newRoleId) {
+    customReplace: async function (message, customMessage, user, newLevel, newRoleId) {
         try {
-            const user = new RegExp('%user%', 'g');
-            const server = new RegExp('%server%', 'g');
-            const membercount = new RegExp('%members%', 'g');
-            const usermention = new RegExp('%mention%', 'g');
-            const avatar = new RegExp('%avatar%', 'g');
-            const level = new RegExp('%level%', 'g');
-            const role = new RegExp('%role%', 'g');
-
-            const reglist = [user, server, membercount, usermention, avatar, level, role];
-
             reglist.forEach(reg => {
                 if (customMessage.match(reg)) {
                     switch (reg.exec(customMessage)[0]) {
                         case '%user%':
-                            customMessage = customMessage.replace(reg, message.author.username);
+                            customMessage = customMessage.replace(reg, `${user.user.username}#${user.user.discriminator}`);
                             break;
                         case '%server%':
                             customMessage = customMessage.replace(reg, message.guild.name);
@@ -369,10 +370,10 @@ module.exports = {
                             customMessage = customMessage.replace(reg, message.guild.memberCount);
                             break;
                         case '%mention%':
-                            customMessage = customMessage.replace(reg, `<@!${message.author.id}>`);
+                            customMessage = customMessage.replace(reg, `<@!${user.user.id}>`);
                             break;
                         case '%avatar%':
-                            customMessage = customMessage.replace(reg, message.author.avatarURL({
+                            customMessage = customMessage.replace(reg, user.user.avatarURL({
                                 dynamic: true
                             }));
                             break;
@@ -381,6 +382,9 @@ module.exports = {
                             break;
                         case '%level%':
                             customMessage = customMessage.replace(reg, newLevel);
+                            break;
+                        case '%icon%':
+                            customMessage = customMessage.replace(reg, message.guild.iconURL({dynamic: true}));
                             break;
                     }
                 }
@@ -408,16 +412,6 @@ async function getModlogChannel(serverId) {
 
 async function customReplace(message, customMessage, newLevel, newRoleId) {
     try {
-        const user = new RegExp('%user%', 'g');
-        const server = new RegExp('%server%', 'g');
-        const membercount = new RegExp('%members%', 'g');
-        const usermention = new RegExp('%mention%', 'g');
-        const avatar = new RegExp('%avatar%', 'g');
-        const level = new RegExp('%level%', 'g');
-        const role = new RegExp('%role%', 'g');
-
-        const reglist = [user, server, membercount, usermention, avatar, level, role];
-
         reglist.forEach(reg => {
             if (customMessage.match(reg)) {
                 switch (reg.exec(customMessage)[0]) {
