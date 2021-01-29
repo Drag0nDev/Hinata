@@ -229,6 +229,7 @@ async function checkLevelUp(bot, message, serverUser) {
                     }
                 }).then(async serverSetting => {
                     let user = message.guild.members.cache.get(message.author.id);
+                    let guild = message.guild;
                     let xp = serverUser.xp
                     let lvlXp = config.levelXp;
                     let level = 0;
@@ -246,7 +247,7 @@ async function checkLevelUp(bot, message, serverUser) {
                     if ((!reward || user._roles.includes(reward.roleId) || !serverSetting.levelUpRoleMessage)) {
                         if (xp === 0) {
                             if (serverSetting.levelUpMessage)
-                                await tools.levelUp(message, serverSetting.levelUpMessage, user, level);
+                                await tools.levelUp(guild, serverSetting.levelUpMessage, user, level);
                         }
                         return;
                     }
@@ -258,7 +259,7 @@ async function checkLevelUp(bot, message, serverUser) {
                         return;
                     }
 
-                    await tools.levelUpRole(message, serverSetting.levelUpRoleMessage, user, level, reward.roleId);
+                    await tools.levelUpRole(guild, serverSetting.levelUpRoleMessage, user, level, reward.roleId);
 
                     await tools.giveRole(user, role);
                 });

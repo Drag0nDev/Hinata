@@ -5,32 +5,29 @@ let neededPerm = ['MANAGE_GUILD'];
 
 module.exports = {
     //<editor-fold defaultstate="collapsed" desc="userinfo help">
-    name: 'setleveluprolemessage',
-    aliases: ['slurm'],
+    name: 'setjoinmessage',
+    aliases: ['sjm'],
     category: 'server settings',
-    description: 'Set a custom level up message for the server when the level up also grants a role.\n' +
+    description: 'Set a custom level up message for the server.\n' +
         'This also supports JSON format for creating embeds.\n' +
         'The different placeholders are:\n' +
         '`%avatar%` shows the avatar of the person leveling up.\n' +
         '`%user%` shows the members name and tag like (Drag0n#6666).\n' +
         '`%mention%` mentions the member who leveled up.\n' +
         '`%server%` shows the server name.' +
-        '`%role%` shows the gained role' +
         '`%icon%` shows the server icon.\n' +
-        '`%level% shows the new level they reached.`\n\n' +
+        '`%members% shows the membercount of the server.`\n\n' +
         'Examples:\n' +
         'Normal message:\n' +
-        '`s!slum Congratulations %mention% you just advanced to **%level%**!`\n' +
+        '`s!sjm Welcome %mention% to **%server%**! You are the **%member%th** member.`\n' +
         'Embed message:\n' +
-        '`s!slum {"color": "BE4F70","title": "Level up","description": "Congratulations %mention% you just leveled up","fields": [{"name": "New level","value": "%level%", "inline": true},{"name": "New role","value": "%role%"}],"thumbnail": "%avatar%"}`',
+        '`s!sjm {"color": "#00ff00","title": "New member join","description": "Welcome %mention% to **%server%**!","fields": [{"name": "membercount","value": "%members%"}],"thumbnail": "%avatar%"}`',
     usage: '[command | alias] [new prefix]',
     neededPermissions: neededPerm,
     //</editor-fold>
     run: async (bot, message, args) => {
         let customMessage = args.join(' ');
         let embed = new MessageEmbed();
-        let newLevel = 5;
-        let newRoleId = message.guild.roles.cache.firstKey();
         let user = message.guild.members.cache.get(message.author.id);
         let guild = message.guild;
 
@@ -39,10 +36,10 @@ module.exports = {
                 serverId: message.guild.id
             }
         }).then(async settings => {
-            settings.levelUpRoleMessage = customMessage;
+            settings.joinMessage = customMessage;
             settings.save();
 
-            customMessage = await tools.customReplace(guild, customMessage, user, newLevel, newRoleId);
+            customMessage = await tools.customReplace(guild, customMessage, user);
 
             try {
                 const jsonEmbed = JSON.parse(customMessage);
@@ -64,11 +61,11 @@ module.exports = {
                 }
 
                 await message.channel.send({
-                    content: 'New server level up message set to:',
+                    content: 'New server join message set to:',
                     embed: embed
                 });
             } catch (err) {
-                message.channel.send(`New server level up role message set to:\n${customMessage}`);
+                message.channel.send(`New server join message set to:\n${customMessage}`);
             }
         });
     }

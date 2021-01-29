@@ -1,10 +1,15 @@
 const logger = require("log4js").getLogger();
-const {Server} = require('../misc/dbObjects');
+const {ServerSettings} = require('../misc/dbObjects');
 const {MessageEmbed} = require('discord.js');
 const tools = require('../misc/tools');
 const pm = require('pretty-ms');
 
 module.exports = async (bot, member) => {
+    await sendLeaveMessage(member);
+    await checkKick(bot, member);
+};
+
+async function checkKick(bot, member) {
     let embed = new MessageEmbed().setTimestamp();
     let date = new Date();
 
@@ -48,7 +53,49 @@ module.exports = async (bot, member) => {
     }
 
     await tools.modlog(member, embed);
-};
+}
+
+async function sendLeaveMessage(member) {
+    const guild = member.guild;
+
+    await ServerSettings.findOne({
+        where: {
+            serverId: guild.id
+        }
+    }).then(async settings => {
+        if (!settings.leaveMessageChannel || !settings.leaveMessage) return;
+
+        let leaveMessage = settings.leaveMessage;
+        let LeaveChannel = guild.channels.cache.get(settings.leaveMessageChannel);
+
+        leaveMessage = await tools.customReplace(guild, leaveMessage, member);
+
+        try {
+            let embed = new MessageEmbed();
+            const jsonEmbed = JSON.parse(leaveMessage);
+
+            if (jsonEmbed.color) embed.setColor(jsonEmbed.color);
+            if (jsonEmbed.title) embed.setTitle(jsonEmbed.title);
+            if (jsonEmbed.description) embed.setDescription(jsonEmbed.description);
+            if (jsonEmbed.thumbnail) embed.setThumbnail(jsonEmbed.thumbnail);
+            if (jsonEmbed.fields) {
+                for (let field of jsonEmbed.fields) {
+                    let name = field.name;
+                    let value = field.value;
+                    let inline;
+                    if (field.inline) inline = field.inline;
+                    else inline = false;
+
+                    embed.addField(name, value, inline);
+                }
+            }
+
+            await LeaveChannel.send({embed: embed});
+        } catch (err) {
+            LeaveChannel.send(leaveMessage);
+        }
+    });
+}
 
 function isClose(logTime, programTime) {
     let logDate = new Date(logTime);

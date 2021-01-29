@@ -355,7 +355,7 @@ module.exports = {
             message.channel.send(customMessage);
         }
     },
-    customReplace: async function (message, customMessage, user, newLevel, newRoleId) {
+    customReplace: async function (guild, customMessage, user, newLevel, newRoleId) {
         try {
             reglist.forEach(reg => {
                 if (customMessage.match(reg)) {
@@ -364,10 +364,10 @@ module.exports = {
                             customMessage = customMessage.replace(reg, `${user.user.username}#${user.user.discriminator}`);
                             break;
                         case '%server%':
-                            customMessage = customMessage.replace(reg, message.guild.name);
+                            customMessage = customMessage.replace(reg, guild.name);
                             break;
                         case '%members%':
-                            customMessage = customMessage.replace(reg, message.guild.memberCount);
+                            customMessage = customMessage.replace(reg, guild.memberCount);
                             break;
                         case '%mention%':
                             customMessage = customMessage.replace(reg, `<@!${user.user.id}>`);
@@ -384,7 +384,7 @@ module.exports = {
                             customMessage = customMessage.replace(reg, newLevel);
                             break;
                         case '%icon%':
-                            customMessage = customMessage.replace(reg, message.guild.iconURL({dynamic: true}));
+                            customMessage = customMessage.replace(reg, guild.iconURL({dynamic: true}));
                             break;
                     }
                 }

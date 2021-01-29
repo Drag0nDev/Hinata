@@ -30,6 +30,7 @@ module.exports = {
         let embed = new MessageEmbed();
         let newLevel = 5;
         let user = message.guild.members.cache.get(message.author.id);
+        let guild = message.guild;
 
         await ServerSettings.findOne({
             where: {
@@ -39,7 +40,7 @@ module.exports = {
             settings.levelUpMessage = customMessage;
             settings.save();
 
-            customMessage = await tools.customReplace(message, customMessage, user, newLevel);
+            customMessage = await tools.customReplace(guild, customMessage, user, newLevel);
 
             try {
                 const jsonEmbed = JSON.parse(customMessage);
