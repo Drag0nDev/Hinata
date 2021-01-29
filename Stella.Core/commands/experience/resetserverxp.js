@@ -24,14 +24,19 @@ module.exports = {
         if (noBotPermission)
             return message.channel.send(embed);
 
-        if (mode.exec(args[0])) {
-            await resetAll(bot, message, embed);
-        } else {
-            if (!id.exec(args[0]))
-                embed.setColor(bot.embedColors.error)
-                    .setDescription('Please provide a valid memberid / mention');
+        try {
+            if (mode.exec(args[0])) {
+                await resetAll(bot, message, embed);
+            } else {
+                if (!id.exec(args[0]))
+                    return await message.channel.send(embed.setColor(bot.embedColors.error)
+                        .setDescription('Please provide a valid memberid / mention'));
 
-            await resetServerUser(bot, message, id.exec(args[0])[0], embed);
+                await resetServerUser(bot, message, id.exec(args[0])[0], embed);
+            }
+        } catch (err) {
+            await message.channel.send(embed.setColor(bot.embedColors.error)
+                .setDescription('No valid arguments given.'));
         }
     }
 }
