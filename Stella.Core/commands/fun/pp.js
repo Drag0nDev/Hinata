@@ -8,6 +8,7 @@ module.exports = {
     category: 'fun',
     description: 'Shows how long someones pp is',
     usage: '[command | alias] <user mention>',
+    examples: ['s!pp', 's!pp 418037700751261708', 's!pp @Drag0n#6666'],
     run: async (bot, message, args) => {
         let embed = new MessageEmbed().setTitle('howgay')
             .setColor(bot.embedColors.normal)

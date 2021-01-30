@@ -139,7 +139,7 @@ module.exports = {
             }
         }
     },
-    checkRolePosition: function (bot, message, role) {
+    checkRolePosition: function (bot, message, role, embed) {
         const botUser = message.guild.members.cache.get(bot.user.id);
         let roleArray = [];
 
@@ -149,7 +149,8 @@ module.exports = {
 
         roleArray.sort((a, b) => b.position - a.position);
 
-        if (roleArray[0].position > role.position) {
+        if (roleArray[0].position < role.position) {3
+            console.log(roleArray[0].position, role.position)
             return embed.setColor(bot.embedColors.error)
                 .setDescription('I can\'t assign this role due to role hierarchy!');
         }

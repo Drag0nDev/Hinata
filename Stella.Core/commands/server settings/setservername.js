@@ -8,6 +8,7 @@ module.exports = {
     category: 'server settings',
     description: 'Set a new server name',
     usage: '[command | alias] [new name]',
+    examples: ['s!ssn Totally awesome server'],
     neededPermissions: neededPerm,
     //</editor-fold>
     run: async (bot, message, args) => {

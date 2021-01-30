@@ -16,13 +16,12 @@ module.exports = {
         '`%mention%` mentions the member who leveled up.\n' +
         '`%server%` shows the server name.' +
         '`%icon%` shows the server icon.\n' +
-        '`%members% shows the membercount of the server.`\n\n' +
-        'Examples:\n' +
-        'Normal message:\n' +
-        '`s!slm **%user% left the server!`\n' +
-        'Embed message:\n' +
-        '`s!slm {"color": "#ff0000","title": "Member left","description": "**%user%** left the server!","fields": [{"name": "membercount","value": "%members%"}],"thumbnail": "%icon%"}`',
-    usage: '[command | alias] [new prefix]',
+        '`%members%` shows the membercount of the server.',
+    usage: '[command | alias] [leave message]',
+    examples: [
+        's!slm **%user% left the server!',
+        's!slm {"color": "#ff0000","title": "Member left","description": "**%user%** left the server!","fields": [{"name": "membercount","value": "%members%"}],"thumbnail": "%icon%"}'
+    ],
     neededPermissions: neededPerm,
     //</editor-fold>
     run: async (bot, message, args) => {

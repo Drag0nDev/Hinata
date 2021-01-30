@@ -9,6 +9,7 @@ module.exports = {
     category: 'logging',
     description: 'Assign or create a modlog channel for Stella.',
     usage: '[command | alias] <channelID>',
+    examples: ['s!sm', 's!sm 763039768870649856', 's!sm #modlog'],
     neededPermissions: neededPerm,
     run: async (bot, message, args) => {
         let embed = new MessageEmbed().setColor(bot.embedColors.normal);

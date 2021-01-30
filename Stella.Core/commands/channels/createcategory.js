@@ -6,9 +6,10 @@ module.exports = {
     //<editor-fold defaultstate="collapsed" desc="userinfo help">
     name: 'createcategory',
     aliases: ['cc', 'newcategory'],
-    category: 'server settings',
+    category: 'channels',
     description: 'Create a new category',
     usage: '[command | alias] [category name]',
+    examples: ['s!cc info'],
     neededPermissions: neededPerm,
     //</editor-fold>
     run: async (bot, message, args) => {

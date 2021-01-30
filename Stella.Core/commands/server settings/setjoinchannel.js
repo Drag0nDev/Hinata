@@ -11,6 +11,7 @@ module.exports = {
     description: 'Set the channel where join messages are sent.\n' +
         'If this is not set and join messages is set then they won\'t be sent!\n\n' +
         'use `s!sjm remove` to disable the join messages.',
+    examples: ['s!sjc', 's!sjc #general', 's!sjc remove'],
     neededPermissions: neededPerm,
     //</editor-fold>
     run: async (bot, message, args) => {

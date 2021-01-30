@@ -8,6 +8,7 @@ module.exports = {
     category: 'info',
     description: 'see info about the server',
     usage: '[command | alias]',
+    examples: ['s!sinfo', 's!sinfo 418037700751261708', 's!sinfo @Drag0n#6666'],
     //</editor-fold>
     run: async (bot, message) => {
         let embed = new MessageEmbed().setColor(bot.embedColors.normal);

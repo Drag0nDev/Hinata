@@ -12,6 +12,7 @@ module.exports = {
         '- A category with all its commands and explanation of the command.\n' +
         '- A command and all the info of the command',
     usage: '[command | alias] <categoryname/commandname>',
+    examples: ['s!help', 's!help info', 's!help slum'],
     run: async (bot, message, args) => {
         const embed = new MessageEmbed();
 
@@ -21,10 +22,13 @@ module.exports = {
             //look for category
             let cat = bot.categories.includes(args.join(' ').toLowerCase());
             let catVal = args.join(' ').toLowerCase();
+            let cmd;
 
-            //look for command
-            let cmd = bot.commands.get(args[0].toLowerCase());
-            if (!cmd) cmd = bot.commands.get(bot.aliases.get(args[0].toLowerCase()));
+            if (!cat) {
+                //look for command
+                cmd = bot.commands.get(args[0].toLowerCase());
+                if (!cmd) cmd = bot.commands.get(bot.aliases.get(args[0].toLowerCase()));
+            }
 
             if (cmd) {
                 if (cmd.category.includes('owner') && message.member.id !== config.owner){
@@ -113,15 +117,17 @@ function getCmd(bot, message, cmd) {
         embed.addField(`Command name:`, cmd.name, false);
     }
     if (cmd.category)
-        embed.addField('Category', cmd.category, false);
+        embed.addField('Category', cmd.category, true);
     if (cmd.aliases)
-        embed.addField('Aliases:', cmd.aliases.map(a => `\`${a}\``).join(", "), false);
+        embed.addField('Aliases:', cmd.aliases.map(a => `\`${a}\``).join(", "), true);
     if (cmd.description)
         embed.addField('Description:', cmd.description, false);
     if (cmd.usage) {
-        embed.addField('Usage:', cmd.usage, false);
+        embed.addField('Usage:', cmd.usage, true);
         embed.setFooter(`Syntax: [] = required, <> = optional`);
     }
+    if (cmd.examples)
+        embed.addField('Examples:', cmd.examples.map(a => `\`${a}\``).join("\n"), true);
     if (cmd.neededPermissions) {
         let table = new AsciiTable('Permissions')
             .setHeading('Permission', 'Bot', 'You');

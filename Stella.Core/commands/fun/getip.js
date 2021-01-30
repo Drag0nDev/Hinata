@@ -8,6 +8,7 @@ module.exports = {
     category: 'fun',
     description: 'Get a users ip (not really)',
     usage: '[command | alias] [mention user]',
+    examples: ['s!gi', 's!gi 418037700751261708', 's!gi @Drag0n#6666'],
     run: async (bot, message, args) => {
         let embed = new MessageEmbed()
             .setTitle('getip')
@@ -29,7 +30,7 @@ module.exports = {
         let msg = await message.channel.send(embed);
         await delay(1250);
 
-        embed.setDescription(`${member.user.tag}'s IP: **${getRandomInt(255)}.${getRandomInt(255)}.${getRandomInt(255)}.${getRandomInt(255)}**`)
+        embed.setDescription(`**${member.user.tag}**'s IP: **${getRandomInt(255)}.${getRandomInt(255)}.${getRandomInt(255)}.${getRandomInt(255)}**`)
             .setImage('');
 
         await msg.edit(embed);

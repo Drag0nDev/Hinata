@@ -7,6 +7,7 @@ module.exports = {
     category: 'moderation',
     description: 'Kick a member from the server',
     usage: '[command | alias] [Member mention/id] <reason>',
+    examples: ['s!kick @Drag0n#6666', 's!kick @Drag0n#6666 being a bad boy'],
     neededPermissions: neededPerm,
     run: async (bot, message, args) => {
         const neededPerm = ['KICK_MEMBERS'];

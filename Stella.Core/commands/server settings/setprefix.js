@@ -10,6 +10,7 @@ module.exports = {
     category: 'server settings',
     description: 'delete any channel in the server with a simple command',
     usage: '[command | alias] [new prefix]',
+    examples: ['s!sp !'],
     neededPermissions: neededPerm,
     //</editor-fold>
     run: async (bot, message, args) => {

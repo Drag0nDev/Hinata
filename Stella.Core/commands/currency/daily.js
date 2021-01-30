@@ -8,6 +8,7 @@ module.exports = {
     category: 'currency',
     description: 'Do your daily claim',
     usage: '[command | alias]',
+    examples: ['s!daily'],
     run: async (bot, message) => {
         const dailyReward = 100;
         const now = new Date();

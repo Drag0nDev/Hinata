@@ -7,6 +7,8 @@ module.exports = {
     aliases: ['lurl'],
     category: 'info',
     description: 'View all the level roles and their corresponding level.',
+    usage: '[command / alias]',
+    examples: ['s!lurl'],
     run: async (bot, message) => {
         let embed = new MessageEmbed().setColor(bot.embedColors.normal)
             .setThumbnail(message.guild.iconURL({dynamic: true}))

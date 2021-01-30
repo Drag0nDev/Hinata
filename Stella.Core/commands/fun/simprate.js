@@ -8,6 +8,7 @@ module.exports = {
     category: 'fun',
     description: 'Get the simprate of a person',
     usage: '[command | alias] <user mention>',
+    examples: ['s!simprate', 's!simprate 418037700751261708', 's!simprate @Drag0n#6666'],
     run: async (bot, message, args) => {
         let embed = new MessageEmbed()
             .setTitle('simprate')
@@ -33,7 +34,7 @@ module.exports = {
         let editEmbed = new MessageEmbed()
             .setTitle('simprate')
             .setColor(bot.embedColors.normal)
-            .setDescription(`**${member.user.tag}** is ${simprate}% simp!`);
+            .setDescription(`**simprate{member.user.tag}** is simprate{simprate}% simp!`);
 
         if (simprate > 50)
             editEmbed.setImage('https://media1.tenor.com/images/b5cfc5d13e8640543a528c5da6412e8e/tenor.gif');

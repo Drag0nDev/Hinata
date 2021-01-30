@@ -16,13 +16,12 @@ module.exports = {
         '`%mention%` mentions the member who leveled up.\n' +
         '`%server%` shows the server name.' +
         '`%icon%` shows the server icon.\n' +
-        '`%members% shows the membercount of the server.`\n\n' +
-        'Examples:\n' +
-        'Normal message:\n' +
-        '`s!sjm Welcome %mention% to **%server%**! You are the **%member%th** member.`\n' +
-        'Embed message:\n' +
-        '`s!sjm {"color": "#00ff00","title": "New member join","description": "Welcome %mention% to **%server%**!","fields": [{"name": "membercount","value": "%members%"}],"thumbnail": "%avatar%"}`',
+        '`%members%` shows the membercount of the server.',
     usage: '[command | alias] [new prefix]',
+    examples: [
+        's!sjm Welcome %mention% to **%server%**! You are the **%member%th** member.',
+        's!sjm {"color": "#00ff00","title": "New member join","description": "Welcome %mention% to **%server%**!","fields": [{"name": "membercount","value": "%members%"}],"thumbnail": "%avatar%"}'
+    ],
     neededPermissions: neededPerm,
     //</editor-fold>
     run: async (bot, message, args) => {

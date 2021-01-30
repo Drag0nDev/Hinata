@@ -9,6 +9,7 @@ module.exports = {
     category: 'experience',
     description: 'Reset a single member or all members xp',
     usage: '[command | alias] <Member mention/id>',
+    examples: ['s!rsx all', 's!rsx 418037700751261708', 's!rsx @Drag0n#6666'],
     neededPermissions: neededPerm,
     run: async (bot, message, args) => {
         let embed = new MessageEmbed();

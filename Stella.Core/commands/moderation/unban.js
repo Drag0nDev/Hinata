@@ -7,6 +7,7 @@ module.exports = {
     category: 'moderation',
     description: 'Unban a member from the server',
     usage: '[command | alias] [Member mention/id] <reason>',
+    examples: ['s!unban @Drag0n#6666', 's!unban 418037700751261708'],
     neededPermissions: neededPerm,
     run: async (bot, message, args) => {
         let reason = 'No reason provided';

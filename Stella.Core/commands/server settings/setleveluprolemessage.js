@@ -17,13 +17,12 @@ module.exports = {
         '`%server%` shows the server name.' +
         '`%role%` shows the gained role' +
         '`%icon%` shows the server icon.\n' +
-        '`%level% shows the new level they reached.`\n\n' +
-        'Examples:\n' +
-        'Normal message:\n' +
-        '`s!slum Congratulations %mention% you just advanced to **%level%**!`\n' +
-        'Embed message:\n' +
-        '`s!slum {"color": "BE4F70","title": "Level up","description": "Congratulations %mention% you just leveled up","fields": [{"name": "New level","value": "%level%", "inline": true},{"name": "New role","value": "%role%"}],"thumbnail": "%avatar%"}`',
+        '`%level%` shows the new level they reached.',
     usage: '[command | alias] [new prefix]',
+    examples: [
+        's!slum Congratulations %mention% you just advanced to **%level%**!',
+        's!slum {"color": "BE4F70","title": "Level up","description": "Congratulations %mention% you just leveled up","fields": [{"name": "New level","value": "%level%", "inline": true},{"name": "New role","value": "%role%"}],"thumbnail": "%avatar%"}'
+    ],
     neededPermissions: neededPerm,
     //</editor-fold>
     run: async (bot, message, args) => {

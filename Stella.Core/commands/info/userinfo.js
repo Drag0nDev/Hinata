@@ -8,6 +8,7 @@ module.exports = {
     category: 'info',
     description: 'Get the info of yourself/another person',
     usage: '[command | alias] <mention/id>',
+    examples: ['s!uinfo', 's!uinfo 418037700751261708', 's!uinfo @Drag0n#6666'],
     //</editor-fold>
     run: async (bot, message, args) => {
         let embed = new MessageEmbed().setColor(bot.embedColors.normal);

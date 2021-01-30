@@ -13,6 +13,7 @@ module.exports = {
         '`stella lur add 5 @Member`' +
         '`stella lur remove 5`',
     usage: '[command | alias] [add/remove] [level] [role mention/id]',
+    examples: ['s!lur add 5 @Member', 's!lur remove 5'],
     neededPermissions: neededPerm,
     run: async (bot, message, args) => {
         let embed = new MessageEmbed().setTitle('levelupreward');

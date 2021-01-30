@@ -8,6 +8,7 @@ module.exports = {
     category: 'info',
     description: 'Get someones account age',
     usage: '[command | alias] <mention / id>',
+    examples: ['s!age', 's!age 418037700751261708', 's!age @Drag0n#6666'],
     run: async (bot, message, args) => {
         let embed = new MessageEmbed().setColor(bot.embedColors.normal);
         let date = new Date();

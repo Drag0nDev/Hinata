@@ -7,6 +7,7 @@ module.exports = {
     category: 'info',
     description: 'see the icon of the server',
     usage: '[command | alias]',
+    examples: ['s!si'],
     //</editor-fold>
     run: async (bot, message) => {
         let embed = new MessageEmbed().setColor(bot.embedColors.normal);

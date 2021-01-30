@@ -10,6 +10,7 @@ module.exports = {
     category: 'info',
     description: 'Get the bot statistics',
     usage: '[command | alias]',
+    examples: ['s!stats'],
     //</editor-fold>
     run: async (bot, message) => {
         const logger = log4js.getLogger();

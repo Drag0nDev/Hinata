@@ -12,6 +12,7 @@ module.exports = {
     description: 'Show the level leaderboard of the server or the overall leaderboard on the bot.\n' +
         'To see the global leaderboard use ``glb`` or ``globalleaderboard``',
     usage: '[command | alias]',
+    examples: ['s!lb', 's!glb'],
     neededPermissions: neededPerm,
     run: async (bot, message) => {
         let embed = new MessageEmbed();

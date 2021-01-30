@@ -8,6 +8,7 @@ module.exports = {
     category: 'currency',
     description: 'Show your balance',
     usage: '[command | alias]',
+    examples: ['s!$', 's!$ 418037700751261708', 's!$ @Drag0n#6666'],
     run: async (bot, message, args) => {
         let embed = new MessageEmbed().setColor(bot.embedColors.normal);
         let member;

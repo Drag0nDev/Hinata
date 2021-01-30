@@ -8,6 +8,7 @@ module.exports = {
     category: 'moderation',
     description: 'Warn a member',
     usage: '[command | alias] [Member mention/id] <reason>',
+    examples: ['s!warn @Drag0n#6666', 's!warn 418037700751261708', 's!warn @Drag0n#6666 Made a mistake'],
     neededPermissions: neededPerm,
     run: async (bot, message, args) => {
         let embed = new MessageEmbed();

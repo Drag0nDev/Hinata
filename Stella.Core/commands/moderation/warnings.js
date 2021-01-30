@@ -13,6 +13,7 @@ module.exports = {
         '- `stella warns all` shows all the warns logged for the server.\n' +
         '- `stella warns [member mention/id]` shows all the warns of a user.',
     usage: '[command | alias] [Member mention/id]',
+    examples: ['s!warns @Drag0n#6666', 's!warns 418037700751261708', 's!warns all'],
     neededPermissions: neededPerm,
     run: async (bot, message, args) => {
         let embed = new MessageEmbed().setFooter('Page 1');

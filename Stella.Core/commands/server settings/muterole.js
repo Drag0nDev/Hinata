@@ -8,6 +8,7 @@ module.exports = {
     category: 'server settings',
     description: 'Assign a mute role or create one if no role is given',
     usage: '[command | alias] <muteroleId / muterole mention>',
+    examples: ['s!muterole @Muted', 's!muterole 786901348863967242'],
     neededPermissions: neededPerm,
     run: async (bot, message, args) => {
         let embed = new MessageEmbed();
@@ -36,7 +37,8 @@ module.exports = {
             }
             
             //check if assigned role is higher then bots highest role
-            let roleCheck = tools.checkRolePosition(bot, message, muteRole);
+            let roleCheck = tools.checkRolePosition(bot, message, muteRole, embed);
+            console.log(roleCheck)
             if (roleCheck)
                 return await message.channel.send(embed);
 

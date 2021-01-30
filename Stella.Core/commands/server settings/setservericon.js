@@ -10,6 +10,7 @@ module.exports = {
     category: 'server settings',
     description: 'Set the server logo',
     usage: '[command | alias] [link]',
+    examples: ['s!ssi https://cdn.discordapp.com/icons/645047329141030936/d7954367430664e570ba8f43d5e2d072.webp?size=4096'],
     neededPermissions: neededPerm,
     //</editor-fold>
     run: async (bot, message, args) => {

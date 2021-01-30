@@ -11,6 +11,7 @@ module.exports = {
     description: 'Set the channel where leave messages are sent.\n' +
         'If this is not set and leave messages is set then they won\'t be sent!\n\n' +
         'use `s!slm remove` to disable the elave messages.',
+    examples: ['s!slc', 's!slc #general', 's!slc remove'],
     neededPermissions: neededPerm,
     //</editor-fold>
     run: async (bot, message, args) => {

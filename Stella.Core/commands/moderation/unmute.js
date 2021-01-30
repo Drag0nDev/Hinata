@@ -8,6 +8,7 @@ module.exports = {
     category: 'moderation',
     description: 'Unmute a member from the server',
     usage: '[command | alias] [Member mention/id] <reason>',
+    examples: ['s!unmute @Drag0n#6666', 's!unmute 418037700751261708', 's!unmute @Drag0n#6666 Made a mistake'],
     neededPermissions: neededPerm,
     run: async (bot, message, args) => {
         let reason = 'No reason provided';

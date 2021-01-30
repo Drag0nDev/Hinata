@@ -9,6 +9,7 @@ module.exports = {
     category: 'moderation',
     description: 'Band and quickly unban a member from the server to clear all their messages from the last 7 days',
     usage: '[command | alias] [Member mention/id] <reason>',
+    examples: ['s!softban @Drag0n#6666', 's!sofban @Drag0n#6666 being a bad boy'],
     neededPermissions: neededPerm,
     run: async (bot, message, args) => {
         let reason = 'No reason provided';

@@ -9,6 +9,7 @@ module.exports = {
     category: 'experience',
     description: 'Show the level card of yourself or a server member',
     usage: '[command | alias] <mention/ID>',
+    examples: ['s!xp', 's!xp 418037700751261708', 's!xp @Drag0n#6666'],
     run: async (bot, message, args) => {
         const levelXp = config.levelXp;
         let embed = new MessageEmbed().setColor(bot.embedColors.normal);

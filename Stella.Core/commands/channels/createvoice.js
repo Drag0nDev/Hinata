@@ -5,9 +5,10 @@ module.exports = {
     //<editor-fold defaultstate="collapsed" desc="userinfo help">
     name: 'createvoice',
     aliases: ['cv', 'newvoice'],
-    category: 'server settings',
+    category: 'channels',
     description: 'Create a new voice channel',
     usage: '[command | alias] [voice channel name]',
+    examples: ['s!cv general'],
     neededPermissions: neededPerm,
     //</editor-fold>
     run: async (bot, message, args) => {

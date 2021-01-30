@@ -8,6 +8,7 @@ module.exports = {
     category: 'moderation',
     description: 'Mute a member from the server for a set time',
     usage: '[command | alias] [Member mention/id] <time (d, h, m, s)> <reason>',
+    examples: ['s!mute @Drag0n#6666', 's!mute @Drag0n#6666 1h', 's!mute @Drag0n#6666 1h being a bad boy'],
     neededPermissions: neededPerm,
     run: async (bot, message, args) => {
         let checkTemp = new RegExp('^[0-9]*[smhd]');
@@ -56,19 +57,19 @@ module.exports = {
             muteRoleId = server.muteRoleId;
         });
 
-        if (muteRoleId === null) {
-            embed.setDescription('Please provide a valid muterole for this command to work')
-                .setColor(bot.embedColors.error);
-            return message.channel.send(embed);
-        }
-
-        if(!muteRole) {
+        if (!muteRoleId) {
             embed.setDescription('Please provide a valid muterole for this command to work')
                 .setColor(bot.embedColors.error);
             return message.channel.send(embed);
         }
 
         muteRole = guild.roles.cache.get(muteRoleId);
+
+        if(!muteRole) {
+            embed.setDescription('Please provide a valid muterole for this command to work')
+                .setColor(bot.embedColors.error);
+            return message.channel.send(embed);
+        }
 
         //check if assigned role is higher then bots highest role
         let roleCheck = tools.checkRolePosition(bot, message, muteRole);

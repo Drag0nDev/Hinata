@@ -8,6 +8,7 @@ module.exports = {
     category: 'fun',
     description: 'Calculates how gay someone is',
     usage: '[command | alias] <mention user>',
+    examples: ['s!howgay', 's!howgay 418037700751261708', 's!howgay @Drag0n#6666'],
     run: async (bot, message, args) => {
         let embed = new MessageEmbed().setTitle('howgay')
             .setColor(bot.embedColors.normal)

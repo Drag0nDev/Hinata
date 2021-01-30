@@ -9,7 +9,8 @@ module.exports = {
     name: 'moderations',
     category: 'moderation',
     description: 'This command shows the timed moderations that are currently active in the server',
-    usage: '[command | alias] [Member mention/id]',
+    usage: '[command | alias]',
+    examples: ['s!moderations'],
     neededPermissions: neededPerm,
     run: async (bot, message, args) => {
         let embed = new MessageEmbed().setFooter('Page 1');

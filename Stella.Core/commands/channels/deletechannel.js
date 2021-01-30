@@ -5,9 +5,10 @@ module.exports = {
     //<editor-fold defaultstate="collapsed" desc="userinfo help">
     name: 'deletechannel',
     aliases: ['dc', 'delchan'],
-    category: 'server settings',
+    category: 'channels',
     description: 'delete any channel in the server with a simple command',
     usage: '[command | alias] [channel id]',
+    examples: ['s!cc 762241328599269396'],
     neededPermissions: neededPerm,
     //</editor-fold>
     run: async (bot, message, args) => {

@@ -5,9 +5,10 @@ module.exports = {
     //<editor-fold defaultstate="collapsed" desc="userinfo help">
     name: 'createchannel',
     aliases: ['nc', 'newchannel'],
-    category: 'server settings',
+    category: 'channels',
     description: 'Create a new text channel',
     usage: '[command | alias] [text channel name]',
+    examples: ['s!nc rules'],
     neededPermissions: neededPerm,
     //</editor-fold>
     run: async (bot, message, args) => {

@@ -9,6 +9,7 @@ module.exports = {
     category: 'roles',
     description: 'Add/remove a role on a member',
     usage: '[command | alias] [add/remove] [member mention/id] [role mention/id]',
+    examples: ['s!role add @Drag0n#6666 @Member', 's!role add 418037700751261708 762241241605210113', 's!role remove @Drag0n#6666 762241241605210113', "s!role @Drag0n#6666 @Member"],
     neededPermissions: neededPerm,
     //</editor-fold>
     run: async (bot, message, args) => {

@@ -8,6 +8,7 @@ module.exports = {
     category: 'moderation',
     description: 'ban a member from the server',
     usage: '[command | alias] [Member mention/id] <reason>',
+    examples: ['s!ban @Drag0n#6666', 's!ban @Drag0n#6666 1h', 's!ban @Drag0n#6666 1h being a bad boy', "s!ban @Drag0n#6666 Bad boys are not welcome"],
     neededPermissions: neededPerm,
     run: async (bot, message, args) => {
         let checkTemp = new RegExp('^[0-9]*[smhd]');
