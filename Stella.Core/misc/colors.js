@@ -9,5 +9,8 @@ module.exports = {
     softban: '#d05f33',
     mute: '#dbaf40',
     join: '#83c14d',
-    leave: '#ac4c4c'
+    leave: '#ac4c4c',
+    logChange: '#0096d0',
+    logAdd: '#0e860b',
+    logRemove: '#c65339'
 }
