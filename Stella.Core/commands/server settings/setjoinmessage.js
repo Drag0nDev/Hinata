@@ -30,6 +30,10 @@ module.exports = {
         let user = message.guild.members.cache.get(message.author.id);
         let guild = message.guild;
 
+        let noUserPermission = tools.checkUserPermissions(bot, message, neededPerm, embed);
+        if (noUserPermission)
+            return await message.channel.send(embed);
+
         await ServerSettings.findOne({
             where: {
                 serverId: message.guild.id
