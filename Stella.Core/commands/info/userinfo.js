@@ -35,7 +35,7 @@ module.exports = {
         let creation = tools.getDate(member.user.createdTimestamp);
 
         //get roles
-        let roles = getRoles(member);
+        let roles = tools.getRoles(member);
 
         //get the permissions
         let permissions = getPermissions(member);
@@ -63,37 +63,6 @@ module.exports = {
 }
 
 // <editor-fold defaultstate="collapsed" desc="functions of userinfo">
-
-function getRoles(member) {
-    let roleList = ``;
-    let roleArray = [];
-    let amount = 0;
-
-    //get all the roles and their objects in an array
-    if (member._roles.length === 0){
-        roleList = '\u200B';
-    }
-    else {
-        member._roles.forEach(roleId => {
-            roleArray.push(member.guild.roles.cache.get(roleId));
-        });
-
-        roleArray.sort((a, b) => b.position - a.position);
-
-        for (let role of roleArray) {
-
-            if (amount === 10) {
-                roleList += '``...``';
-                break;
-            }
-            roleList += `<@&${role.id}>\n`;
-            amount++;
-        }
-    }
-
-    return roleList;
-}
-
 function getPermissions(member) {
     let permissions = {
         managePerms: "",

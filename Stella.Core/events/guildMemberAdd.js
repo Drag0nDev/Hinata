@@ -1,10 +1,17 @@
 const {User, ServerUser, ServerSettings} = require('../misc/dbObjects');
 const {MessageEmbed} = require('discord.js');
 const tools = require('../misc/tools');
+const logger = require("log4js").getLogger();
+const pm = require('pretty-ms');
 
 module.exports = async (bot, member) => {
-    await addDb(member);
-    await sendWelcomeMessage(member)
+    try {
+        await addDb(member);
+        await sendWelcomeMessage(member);
+        await joinleaveLog(bot, member);
+    } catch (err) {
+        logger.error(err);
+    }
 }
 
 async function addDb(member) {
@@ -66,4 +73,25 @@ async function sendWelcomeMessage(member) {
             joinChannel.send(joinMessage);
         }
     })
+}
+
+async function joinleaveLog(bot, member) {
+    const date = new Date();
+    const creation = member.user.createdTimestamp;
+    let age = date.getTime() - creation;
+
+    let agestr = pm(age, {
+        verbose: true,
+    });
+
+    let embed = new MessageEmbed().setTitle('Member joined')
+        .setTimestamp()
+        .setColor(bot.embedColors.join)
+        .setAuthor(`${member.user.username}#${member.user.discriminator}`, member.user.avatarURL({dynamic: true}), member.user.avatarURL({dynamic: true, size: 4096}))
+        .setDescription(`<@!${member.user.id}> joined the server`)
+        .addField(`Membercount`, member.guild.memberCount, true)
+        .addField('Account age', agestr, true)
+        .setFooter(`ID: ${member.user.id}`);
+
+    await tools.joinLeaveLog(member, embed);
 }

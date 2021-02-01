@@ -6,6 +6,7 @@ const pm = require('pretty-ms');
 
 module.exports = async (bot, member) => {
     await sendLeaveMessage(member);
+    await joinleaveLog(bot, member);
     await checkKick(bot, member);
 };
 
@@ -95,6 +96,30 @@ async function sendLeaveMessage(member) {
             LeaveChannel.send(leaveMessage);
         }
     });
+}
+
+async function joinleaveLog(bot, member) {
+    const date = new Date();
+    const joinTime = member.joinedTimestamp;
+    let age = date.getTime() - joinTime;
+
+    let agestr = pm(age, {
+        verbose: true,
+    });
+
+    let roleStr = tools.getRoles(member);
+
+    let embed = new MessageEmbed().setTitle('Member left')
+        .setTimestamp()
+        .setColor(bot.embedColors.leave)
+        .setAuthor(`${member.user.username}#${member.user.discriminator}`, member.user.avatarURL({dynamic: true}), member.user.avatarURL({dynamic: true, size: 4096}))
+        .setDescription(`<@!${member.user.id}> left the server`)
+        .addField(`Membercount`, member.guild.memberCount, true)
+        .addField('Time in server', agestr, true)
+        .addField('Roles', roleStr, true)
+        .setFooter(`ID: ${member.user.id}`);
+
+    await tools.joinLeaveLog(member, embed);
 }
 
 function isClose(logTime, programTime) {

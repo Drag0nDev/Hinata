@@ -7,5 +7,7 @@ module.exports = {
     ban: '#DC143C',
     unban: '#16F36D',
     softban: '#d05f33',
-    mute: '#dbaf40'
+    mute: '#dbaf40',
+    join: '#83c14d',
+    leave: '#ac4c4c'
 }

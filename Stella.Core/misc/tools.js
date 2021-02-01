@@ -149,7 +149,8 @@ module.exports = {
 
         roleArray.sort((a, b) => b.position - a.position);
 
-        if (roleArray[0].position < role.position) {3
+        if (roleArray[0].position < role.position) {
+            3
             console.log(roleArray[0].position, role.position)
             return embed.setColor(bot.embedColors.error)
                 .setDescription('I can\'t assign this role due to role hierarchy!');
@@ -246,6 +247,12 @@ module.exports = {
         if (modlogChannel)
             await modlogChannel.send(embed);
     },
+    joinLeaveLog: async function (member, embed) {
+        const joinLeavelogChannel = member.guild.channels.cache.get(await getJoinLeavelogChannel(member.guild.id));
+
+        if (joinLeavelogChannel)
+            await joinLeavelogChannel.send(embed);
+    },
 
     //message reactions
     addPageArrows: async function (message) {
@@ -272,12 +279,40 @@ module.exports = {
         return members;
     },
 
-    //member changes
+    //member functions
     giveRole: async function (member, role) {
         await member.roles.add(role);
     },
     removeRole: async function (member, role) {
         await member.roles.remove(role);
+    },
+    getRoles: function (member) {
+        let roleList = ``;
+        let roleArray = [];
+        let amount = 0;
+
+        //get all the roles and their objects in an array
+        if (member._roles.length === 0) {
+            roleList = '\u200B';
+        } else {
+            member._roles.forEach(roleId => {
+                roleArray.push(member.guild.roles.cache.get(roleId));
+            });
+
+            roleArray.sort((a, b) => b.position - a.position);
+
+            for (let role of roleArray) {
+
+                if (amount === 10) {
+                    roleList += '``...``';
+                    break;
+                }
+                roleList += `<@&${role.id}>\n`;
+                amount++;
+            }
+        }
+
+        return roleList;
     },
 
     //level calculations
@@ -297,7 +332,7 @@ module.exports = {
 
         return level;
     },
-    
+
     //custom messages
     levelUp: async function (message, customMessage, newLevel) {
         customMessage = await customReplace(message, customMessage, newLevel);
@@ -406,6 +441,18 @@ async function getModlogChannel(serverId) {
         }
     }).then(server => {
         return server.modlogChannel;
+    }).catch(err => {
+        logger.error(err);
+    });
+}
+
+async function getJoinLeavelogChannel(serverId) {
+    return ServerSettings.findOne({
+        where: {
+            serverId: serverId
+        }
+    }).then(server => {
+        return server.joinLeaveLogChannel;
     }).catch(err => {
         logger.error(err);
     });
