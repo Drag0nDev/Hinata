@@ -5,7 +5,7 @@ const neededPerm = ['MANAGE_CHANNELS'];
 
 module.exports = {
     name: 'setmodlog',
-    aliases: ['sm', 'modlogchannel'],
+    aliases: ['sm', 'modlog'],
     category: 'logging',
     description: 'Assign or create a modlog channel for Stella.',
     usage: '[command | alias] <channelID>',
@@ -13,6 +13,7 @@ module.exports = {
     neededPermissions: neededPerm,
     run: async (bot, message, args) => {
         let embed = new MessageEmbed().setColor(bot.embedColors.normal);
+        const chan = new RegExp('[0-9]{17,}');
         let user = message.author;
         let guild = message.guild;
 
@@ -54,13 +55,13 @@ module.exports = {
                         .setDescription(`New modlog created with name <#${channel.id}>`);
                 });
             } else {
-                if (isNaN(parseInt(args[0]))) {
+                if (!chan.test(args[0])) {
                     return embed.setTitle('Set modlog')
                         .setColor(bot.embedColors.error)
                         .setDescription('Please provide a valid id');
                 }
 
-                let channel = guild.channels.cache.get(args[0])
+                let channel = guild.channels.cache.get(chan.exec(args[0])[0]);
 
                 if (!channel){
                     return embed.setTitle('Set modlog')
