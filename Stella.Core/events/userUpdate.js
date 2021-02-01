@@ -25,17 +25,33 @@ async function usernameUpdate(bot, oldMember, newMember) {
 
         await bot.guilds.cache.forEach(guild => {
             if (guild.members.cache.get(newMember.id)) {
-                let embed = new MessageEmbed().setTimestamp()
-                    .setColor(bot.embedColors.logChange)
-                    .setAuthor(`${newMember.username}#${newMember.discriminator}`,
-                        newMember.avatarURL({dynamic: true}),
-                        newMember.avatarURL({dynamic: true, size: 4096}))
-                    .setTitle('Username changed')
-                    .addField('Old username', oldMember.username)
-                    .addField('New username', newMember.username)
-                    .setFooter(`ID: ${newMember.id}`);
+                if (oldMember.username !== newMember.username) {
+                    let embed = new MessageEmbed().setTimestamp()
+                        .setColor(bot.embedColors.logChange)
+                        .setAuthor(`${newMember.username}#${newMember.discriminator}`,
+                            newMember.avatarURL({dynamic: true}),
+                            newMember.avatarURL({dynamic: true, size: 4096}))
+                        .setTitle('Username changed')
+                        .addField('Old username', oldMember.username)
+                        .addField('New username', newMember.username)
+                        .setFooter(`ID: ${newMember.id}`);
 
-                tools.memberLogGuild(newMember, guild, embed);
+                    tools.memberLogGuild(newMember, guild, embed);
+                }
+                if (oldMember.discriminator !== newMember.discriminator) {
+                    let embed = new MessageEmbed().setTimestamp()
+                        .setColor(bot.embedColors.logChange)
+                        .setAuthor(`${newMember.username}#${newMember.discriminator}`,
+                            newMember.avatarURL({dynamic: true}),
+                            newMember.avatarURL({dynamic: true, size: 4096}))
+                        .setTitle('Discriminator changed')
+                        .addField('Old discriminator', oldMember.discriminator)
+                        .addField('New discriminator', newMember.discriminator)
+                        .setFooter(`ID: ${newMember.id}`);
+
+                    tools.memberLogGuild(newMember, guild, embed);
+                }
+
             }
         });
     } catch (err) {
