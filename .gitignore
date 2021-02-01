@@ -11,7 +11,7 @@ logs/
 
 #ignored files in the core
 Stella.Core/commands/testing/
-Stella.Core/examples/
+Stella.Core/examples
 
 #ignored node_modules
 node_modules/*
