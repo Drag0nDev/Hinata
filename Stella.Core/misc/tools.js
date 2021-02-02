@@ -259,11 +259,17 @@ module.exports = {
         if (memberLogChannel)
             await memberLogChannel.send(embed);
     },
-    memberLogGuild: async function (member, guild, embed) {
+    memberLogGuild: async function (guild, embed) {
         const memberLogChannel = guild.channels.cache.get(await getMemberLogChannel(guild.id));
 
         if (memberLogChannel)
             await memberLogChannel.send(embed);
+    },
+    messageLog: async function (guild, embed) {
+        const messageLogChannel = guild.channels.cache.get(await getMessageLogChannel(guild.id));
+
+        if (messageLogChannel)
+            await messageLogChannel.send(embed);
     },
 
     //message reactions
@@ -477,6 +483,18 @@ async function getMemberLogChannel(serverId) {
         }
     }).then(server => {
         return server.memberLogChannel;
+    }).catch(err => {
+        logger.error(err);
+    });
+}
+
+async function getMessageLogChannel(serverId) {
+    return ServerSettings.findOne({
+        where: {
+            serverId: serverId
+        }
+    }).then(server => {
+        return server.messageLogChannel;
     }).catch(err => {
         logger.error(err);
     });
