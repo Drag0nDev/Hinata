@@ -9,7 +9,7 @@ module.exports = {
     category: 'logging',
     description: 'Assign or create a message log channel for Stella.',
     usage: '[command | alias] <channelID>',
-    examples: ['s!sm', 's!sm 763039768870649856', 's!sm #join-leave-log'],
+    examples: ['s!smsgl', 's!smsgl 763039768870649856', 's!smsgl #message-log'],
     neededPermissions: neededPerm,
     run: async (bot, message, args) => {
         let embed = new MessageEmbed().setColor(bot.embedColors.normal);

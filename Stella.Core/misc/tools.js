@@ -271,6 +271,12 @@ module.exports = {
         if (messageLogChannel)
             await messageLogChannel.send(embed);
     },
+    serverLog: async function (guild, embed) {
+        const serverLogChannel = guild.channels.cache.get(await getServerLogChannel(guild.id));
+
+        if (serverLogChannel)
+            await serverLogChannel.send(embed);
+    },
 
     //message reactions
     addPageArrows: async function (message) {
@@ -495,6 +501,18 @@ async function getMessageLogChannel(serverId) {
         }
     }).then(server => {
         return server.messageLogChannel;
+    }).catch(err => {
+        logger.error(err);
+    });
+}
+
+async function getServerLogChannel(serverId) {
+    return ServerSettings.findOne({
+        where: {
+            serverId: serverId
+        }
+    }).then(server => {
+        return server.serverLogChannel;
     }).catch(err => {
         logger.error(err);
     });

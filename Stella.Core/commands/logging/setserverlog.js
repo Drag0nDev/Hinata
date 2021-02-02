@@ -4,12 +4,12 @@ const {ServerSettings} = require('../../misc/dbObjects');
 const neededPerm = ['MANAGE_CHANNELS'];
 
 module.exports = {
-    name: 'setmemberlog',
-    aliases: ['sml', 'memberlog'],
+    name: 'setserverlog',
+    aliases: ['ssl', 'serverlog'],
     category: 'logging',
-    description: 'Assign or create a member log channel for Stella.',
+    description: 'Assign or create a server log channel for Stella.',
     usage: '[command | alias] <channelID>',
-    examples: ['s!sml', 's!sml 763039768870649856', 's!sml #member-log'],
+    examples: ['s!ssl', 's!ssl 763039768870649856', 's!ssl #server-log'],
     neededPermissions: neededPerm,
     run: async (bot, message, args) => {
         let embed = new MessageEmbed().setColor(bot.embedColors.normal);
@@ -31,7 +31,7 @@ module.exports = {
             }
         }).then(async server => {
             if (!args[0]) {
-                await guild.channels.create('member-log', {
+                await guild.channels.create('server-log', {
                     type: "text",
                     permissionOverwrites: [
                         {
@@ -48,15 +48,15 @@ module.exports = {
                         }
                     ]
                 }).then(channel => {
-                    server.memberLogChannel = channel.id;
+                    server.serverLogChannel = channel.id;
 
-                    embed.setTitle('Set member log')
+                    embed.setTitle('Set server log')
                         .setColor(bot.embedColors.normal)
-                        .setDescription(`New member log created with name <#${channel.id}>`);
+                        .setDescription(`New server log created with name <#${channel.id}>`);
                 });
             } else {
                 if (!chan.test(args[0])) {
-                    return embed.setTitle('Set member log')
+                    return embed.setTitle('Set server log')
                         .setColor(bot.embedColors.error)
                         .setDescription('Please provide a valid id');
                 }
@@ -64,16 +64,16 @@ module.exports = {
                 let channel = guild.channels.cache.get(chan.exec(args[0])[0]);
 
                 if (!channel){
-                    return embed.setTitle('Set member log')
+                    return embed.setTitle('Set server log')
                         .setColor(bot.embedColors.error)
                         .setDescription('Please provide a valid id');
                 }
 
-                server.memberLogChannel = channel.id;
+                server.serverLogChannel = channel.id;
 
-                embed.setTitle('Set member log')
+                embed.setTitle('Set server log')
                     .setColor(bot.embedColors.normal)
-                    .setDescription(`member log channel set to <#${channel.id}>`);
+                    .setDescription(`server log channel set to <#${channel.id}>`);
             }
 
             server.save();

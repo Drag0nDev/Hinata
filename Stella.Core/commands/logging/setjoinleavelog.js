@@ -9,7 +9,7 @@ module.exports = {
     category: 'logging',
     description: 'Assign or create a join/leave log channel for Stella.',
     usage: '[command | alias] <channelID>',
-    examples: ['s!sm', 's!sm 763039768870649856', 's!sm #join-leave-log'],
+    examples: ['s!sjll', 's!sjll 763039768870649856', 's!sjll #join-leave-log'],
     neededPermissions: neededPerm,
     run: async (bot, message, args) => {
         let embed = new MessageEmbed().setColor(bot.embedColors.normal);

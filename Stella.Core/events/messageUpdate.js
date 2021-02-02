@@ -5,7 +5,7 @@ const tools = require("../misc/tools");
 module.exports = async (bot, oldMessage, newMessage) => {
     try {
         let embed = new MessageEmbed().setTimestamp()
-            .setColor(bot.embedColors.logRemove)
+            .setColor(bot.embedColors.logChange)
             .setAuthor(`${newMessage.author.username}#${newMessage.author.discriminator}`,
                 newMessage.author.avatarURL({dynamic: true}),
                 newMessage.author.avatarURL({dynamic: true, size: 4096}))
