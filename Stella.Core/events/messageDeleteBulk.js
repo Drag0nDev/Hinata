@@ -10,7 +10,7 @@ module.exports = async (bot, messages) => {
             .setFooter(`latest ${messages.size} shown`);
         let description = '';
 
-        for (let i = 0; i < messages.size && i < 50; i++) {
+        for (let i = 0; i < messages.size; i++) {
             const message = messages.values().next().value;
 
             if (message.author.bot) return;
@@ -18,6 +18,12 @@ module.exports = async (bot, messages) => {
 
             if (message.content !== '')
                 description += `**[${author.username}#${author.discriminator}]**: ${message.content}\n`;
+
+            if (i%50 === 0) {
+                embed.setDescription(description);
+                await tools.messageLog(messages.first().guild, embed);
+                description = '';
+            }
         }
 
         embed.setDescription(description);
