@@ -12,7 +12,7 @@ module.exports = async (bot, oldMember, newMember) => {
 
 async function updateCheck(bot, oldMember, newMember) {
     //changes to the member in the server
-    if (!arrayEquals(newMember._roles, oldMember._roles)) await roleChange(bot, oldMember, newMember);
+    if (!tools.arrayEquals(newMember._roles, oldMember._roles)) await roleChange(bot, oldMember, newMember);
     if (oldMember.nickname !== newMember.nickname) await nicknameChange(bot, oldMember, newMember);
 }
 
@@ -91,12 +91,4 @@ async function nicknameChange(bot, oldMember, newMember) {
 
 async function nameChange(bot, oldMember, newMember) {
 
-}
-
-//minor functions
-function arrayEquals(a, b) {
-    return Array.isArray(a) &&
-        Array.isArray(b) &&
-        a.length === b.length &&
-        a.every((val) => b.includes(val));
 }
