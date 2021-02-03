@@ -5,9 +5,10 @@ const tools = require('../misc/tools');
 module.exports = async (bot, oldChannel, newChannel) => {
     const repl = new RegExp('_', 'g');
     try {
+        const type = newChannel.type.charAt(0).toUpperCase() + newChannel.type.slice(1);
         let embed = new MessageEmbed().setTimestamp()
             .setColor(bot.embedColors.logChange)
-            .setTitle(`${newChannel.name} updated`)
+            .setTitle(`${type} channel updated`)
             .setFooter(`Channel ID: ${newChannel.id}`);
 
         //check for a change in permissions
@@ -24,24 +25,56 @@ async function checkPermissions(oldChannel, newChannel, embed) {
     let newKeys = Array.from(newChannel.permissionOverwrites.keys());
     let oldKeys = Array.from(oldChannel.permissionOverwrites.keys());
 
-    for (let i = 0; i < newChannel.permissionOverwrites.size; i++) {
-        const newPermissions = newChannel.permissionOverwrites.get(newKeys[i]);
-        const oldPermissions = oldChannel.permissionOverwrites.get(oldKeys[i]);
-        const newAllowed = newPermissions.allow.toArray();
-        const oldAllowed = oldPermissions.allow.toArray();
-        const newDenied = newPermissions.deny.toArray();
-        const oldDenied = oldPermissions.deny.toArray();
-        const role = newChannel.guild.roles.cache.get(newPermissions.id);
-        const member = newChannel.guild.members.cache.get(newPermissions.id);
-        let changedPerms = '';
+    if (!tools.arrayEquals(newKeys, oldKeys)) {
+        if (newKeys.length > oldKeys.length) {
+            newKeys.forEach(key => {
+                if (!oldKeys.includes(key)) {
+                    const newPermissions = newChannel.permissionOverwrites.get(key);
+                    const role = newChannel.guild.roles.cache.get(newPermissions.id);
+                    const member = newChannel.guild.members.cache.get(newPermissions.id);
 
-        //allowed permissions
-        if (!tools.arrayEquals(newAllowed, oldAllowed) || !tools.arrayEquals(newDenied, oldDenied)) {
-            changedPerms = findChangedPerms(newAllowed, oldAllowed, newDenied, oldDenied);
-            if (newPermissions.type === 'role')
-                embed.addField(`Role override for ${role.name} updated in ${newChannel.name}`, changedPerms);
-            else
-                embed.addField(`Role override for ${member.user.username}#${member.user.discriminator} updated in ${newChannel.name}`, changedPerms);
+                    if (!role) {
+                        embed.setDescription(`**New permission overwrites set for <@!${member.user.id}> in <#${newChannel.id}>**`);
+                    } else {
+                        embed.setDescription(`**New permission overwrites set for <@&${role.id}> in <#${newChannel.id}>**`);
+                    }
+                }
+            });
+        } else {
+            oldKeys.forEach(key => {
+                if (!newKeys.includes(key)) {
+                    const oldPermissions = oldChannel.permissionOverwrites.get(key);
+                    const role = newChannel.guild.roles.cache.get(oldPermissions.id);
+                    const member = newChannel.guild.members.cache.get(oldPermissions.id);
+
+                    if (!role) {
+                        embed.setDescription(`**Permission overwrites removed for <@!${member.user.id}> in <#${newChannel.id}>**`);
+                    } else {
+                        embed.setDescription(`**Permission overwrites removed for <@&${role.id}> in <#${newChannel.id}>**`);
+                    }
+                }
+            })
+        }
+    } else {
+        for (let i = 0; i < newChannel.permissionOverwrites.size; i++) {
+            const newPermissions = newChannel.permissionOverwrites.get(newKeys[i]);
+            const oldPermissions = oldChannel.permissionOverwrites.get(oldKeys[i]);
+            const newAllowed = newPermissions.allow.toArray();
+            const oldAllowed = oldPermissions.allow.toArray();
+            const newDenied = newPermissions.deny.toArray();
+            const oldDenied = oldPermissions.deny.toArray();
+            const role = newChannel.guild.roles.cache.get(newPermissions.id);
+            const member = newChannel.guild.members.cache.get(newPermissions.id);
+            let changedPerms = '';
+
+            //allowed permissions
+            if (!tools.arrayEquals(newAllowed, oldAllowed) || !tools.arrayEquals(newDenied, oldDenied)) {
+                changedPerms = findChangedPerms(newAllowed, oldAllowed, newDenied, oldDenied);
+                if (newPermissions.type === 'role')
+                    embed.addField(`Role override for ${role.name} updated in ${newChannel.name}`, changedPerms);
+                else
+                    embed.addField(`Role override for ${member.user.username}#${member.user.discriminator} updated in ${newChannel.name}`, changedPerms);
+            }
         }
     }
 
