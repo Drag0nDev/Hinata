@@ -99,7 +99,7 @@ async function createChannel(bot, message, guild, user, channelName, parent) {
         channel = newChannel;
     });
 
-    return channel.createWebhook('Stella-Dev', {
+    return channel.createWebhook('Stella', {
         avatar: bot.user.avatarURL({
             dynamic: true,
             size: 4096
