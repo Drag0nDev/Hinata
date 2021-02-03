@@ -79,7 +79,7 @@ module.exports = {
                         .setDescription('Please provide a valid id');
                 }
 
-                channel.createWebhook('Stella-Dev', {
+                await channel.createWebhook('Stella-Dev', {
                     avatar: bot.user.avatarURL({
                         dynamic: true,
                         size: 4096

@@ -244,7 +244,8 @@ module.exports = {
     modlog: async function (member, embed) {
         await member.guild.fetchWebhooks()
             .then(async webhooks => {
-                const webhook = webhooks.get(await getModlogChannel(member.guild.id))
+                let webhook = webhooks.get(await getModlogChannel(member.guild.id));
+
                 if (webhook)
                     await webhook.send(embed);
             });
@@ -252,7 +253,8 @@ module.exports = {
     joinLeaveLog: async function (member, embed) {
         await member.guild.fetchWebhooks()
             .then(async webhooks => {
-                const webhook = webhooks.get(await getJoinLeavelogChannel(member.guild.id))
+                const webhook = webhooks.get(await getJoinLeavelogChannel(member.guild.id));
+
                 if (webhook)
                     await webhook.send(embed);
             });
@@ -260,7 +262,8 @@ module.exports = {
     memberLog: async function (member, embed) {
         await member.guild.fetchWebhooks()
             .then(async webhooks => {
-                const webhook = webhooks.get(await getMemberLogChannel(member.guild.id))
+                const webhook = webhooks.get(await getMemberLogChannel(member.guild.id));
+
                 if (webhook)
                     await webhook.send(embed);
             });
@@ -268,7 +271,8 @@ module.exports = {
     memberLogGuild: async function (guild, embed) {
         await guild.fetchWebhooks()
             .then(async webhooks => {
-                const webhook = webhooks.get(await getMemberLogChannel(guild.id))
+                const webhook = webhooks.get(await getMemberLogChannel(guild.id));
+
                 if (webhook)
                     await webhook.send(embed);
             });
@@ -276,7 +280,8 @@ module.exports = {
     messageLog: async function (guild, embed) {
         await guild.fetchWebhooks()
             .then(async webhooks => {
-                const webhook = webhooks.get(await getMessageLogChannel(guild.id))
+                const webhook = webhooks.get(await getMessageLogChannel(guild.id));
+
                 if (webhook)
                     await webhook.send(embed);
             });
@@ -284,7 +289,8 @@ module.exports = {
     serverLog: async function (guild, embed) {
         await guild.fetchWebhooks()
             .then(async webhooks => {
-                const webhook = webhooks.get(await getServerLogChannel(guild.id))
+                const webhook = webhooks.get(await getServerLogChannel(guild.id));
+
                 if (webhook)
                     await webhook.send(embed);
             });
@@ -479,7 +485,7 @@ module.exports = {
 
 //private functions
 async function getModlogChannel(serverId) {
-    return ServerSettings.findOne({
+    return await ServerSettings.findOne({
         where: {
             serverId: serverId
         }
@@ -491,7 +497,7 @@ async function getModlogChannel(serverId) {
 }
 
 async function getJoinLeavelogChannel(serverId) {
-    return ServerSettings.findOne({
+    return await ServerSettings.findOne({
         where: {
             serverId: serverId
         }
@@ -503,7 +509,7 @@ async function getJoinLeavelogChannel(serverId) {
 }
 
 async function getMemberLogChannel(serverId) {
-    return ServerSettings.findOne({
+    return await ServerSettings.findOne({
         where: {
             serverId: serverId
         }
@@ -515,7 +521,7 @@ async function getMemberLogChannel(serverId) {
 }
 
 async function getMessageLogChannel(serverId) {
-    return ServerSettings.findOne({
+    return await ServerSettings.findOne({
         where: {
             serverId: serverId
         }
@@ -527,7 +533,7 @@ async function getMessageLogChannel(serverId) {
 }
 
 async function getServerLogChannel(serverId) {
-    return ServerSettings.findOne({
+    return await ServerSettings.findOne({
         where: {
             serverId: serverId
         }
