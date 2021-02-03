@@ -11,11 +11,16 @@ module.exports = async (bot, oldChannel, newChannel) => {
             .setTitle(`${type} channel updated`)
             .setFooter(`Channel ID: ${newChannel.id}`);
 
+        if (newChannel.rawPosition !== oldChannel.rawPosition) return;
+
         //check for a change in permissions
         await checkPermissions(oldChannel, newChannel, embed);
-
         //check for name change
         await checkNamechange(oldChannel, newChannel, embed);
+        //check for category change
+        await checkCategorychange(oldChannel, newChannel, embed);
+
+        await tools.serverLog(newChannel.guild, embed);
     } catch (err) {
         logger.error(err);
     }
@@ -77,16 +82,23 @@ async function checkPermissions(oldChannel, newChannel, embed) {
             }
         }
     }
-
-    await tools.serverLog(newChannel.guild, embed);
 }
 
 async function checkNamechange(oldChannel, newChannel, embed) {
     if (oldChannel.name !== newChannel.name) {
         embed.addField('Before', oldChannel.name, true)
             .addField('After', newChannel.name, true);
+    }
+}
 
-        await tools.serverLog(newChannel.guild, embed);
+async function checkCategorychange(oldChannel, newChannel, embed) {
+    if (newChannel.parentID !== oldChannel.parentID) {
+        let oldCat = oldChannel.guild.channels.cache.get(oldChannel.parentID);
+        let newCat = newChannel.guild.channels.cache.get(newChannel.parentID);
+
+        embed.setDescription(`<#${newChannel.id}> changed category**`)
+            .addField('Old', oldCat.name, true)
+            .addField('New', newCat.name, true);
     }
 }
 
