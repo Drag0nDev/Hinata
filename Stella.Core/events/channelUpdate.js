@@ -97,7 +97,7 @@ async function checkCategorychange(oldChannel, newChannel, embed) {
         let newCat = newChannel.guild.channels.cache.get(newChannel.parentID);
 
         embed.setDescription(`**<#${newChannel.id}> changed category**`)
-            .addField('Old', oldCat.name, true)
+            .addField('Old', !oldCat ? 'No category' : oldCat.name, true)
             .addField('New', !newCat ? 'No category' : newCat.name, true);
     }
 }
@@ -110,7 +110,7 @@ function findChangedPerms(newAllowed, oldAllowed, newDenied, oldDenied) {
     for (let newAllow of newAllowed) {
         if (!oldAllowed.includes(newAllow)) {
             if (oldDenied.includes(newAllow)) {
-                let perm = newAllow.charAt(0) + newAllow.slice(1).toLowerCase()
+                let perm = newAllow.charAt(0) + newAllow.slice(1).toLowerCase();
                 perm = perm.replace(repl, ' ');
                 changedPerms += `**${perm}:** ❌ ➜ ✅\n`;
             }
