@@ -16,6 +16,7 @@ module.exports = {
         const chan = new RegExp('[0-9]{17,}');
         let user = message.author;
         let guild = message.guild;
+        let $channel;
 
         let noUserPermission = tools.checkUserPermissions(bot, message, neededPerm, embed);
         if (noUserPermission)
@@ -48,11 +49,20 @@ module.exports = {
                         }
                     ]
                 }).then(channel => {
-                    server.serverLogChannel = channel.id;
+                    $channel = channel;
 
                     embed.setTitle('Set server log')
                         .setColor(bot.embedColors.normal)
                         .setDescription(`New server log created with name <#${channel.id}>`);
+                });
+
+                $channel.createWebhook('Stella-Dev', {
+                    avatar: bot.user.avatarURL({
+                        dynamic: true,
+                        size: 4096
+                    })
+                }).then(hook => {
+                    server.serverLogChannel = hook.id;
                 });
             } else {
                 if (!chan.test(args[0])) {
@@ -69,7 +79,14 @@ module.exports = {
                         .setDescription('Please provide a valid id');
                 }
 
-                server.serverLogChannel = channel.id;
+                channel.createWebhook('Stella-Dev', {
+                    avatar: bot.user.avatarURL({
+                        dynamic: true,
+                        size: 4096
+                    })
+                }).then(hook => {
+                    server.serverLogChannel = hook.id;
+                });
 
                 embed.setTitle('Set server log')
                     .setColor(bot.embedColors.normal)

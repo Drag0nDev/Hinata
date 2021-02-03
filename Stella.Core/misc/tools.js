@@ -242,40 +242,52 @@ module.exports = {
 
     //post logs
     modlog: async function (member, embed) {
-        const modlogChannel = member.guild.channels.cache.get(await getModlogChannel(member.guild.id));
-
-        if (modlogChannel)
-            await modlogChannel.send(embed);
+        await member.guild.fetchWebhooks()
+            .then(async webhooks => {
+                const webhook = webhooks.get(await getModlogChannel(member.guild.id))
+                if (webhook)
+                    await webhook.send(embed);
+            });
     },
     joinLeaveLog: async function (member, embed) {
-        const joinLeavelogChannel = member.guild.channels.cache.get(await getJoinLeavelogChannel(member.guild.id));
-
-        if (joinLeavelogChannel)
-            await joinLeavelogChannel.send(embed);
+        await member.guild.fetchWebhooks()
+            .then(async webhooks => {
+                const webhook = webhooks.get(await getJoinLeavelogChannel(member.guild.id))
+                if (webhook)
+                    await webhook.send(embed);
+            });
     },
     memberLog: async function (member, embed) {
-        const memberLogChannel = member.guild.channels.cache.get(await getMemberLogChannel(member.guild.id));
-
-        if (memberLogChannel)
-            await memberLogChannel.send(embed);
+        await member.guild.fetchWebhooks()
+            .then(async webhooks => {
+                const webhook = webhooks.get(await getMemberLogChannel(member.guild.id))
+                if (webhook)
+                    await webhook.send(embed);
+            });
     },
     memberLogGuild: async function (guild, embed) {
-        const memberLogChannel = guild.channels.cache.get(await getMemberLogChannel(guild.id));
-
-        if (memberLogChannel)
-            await memberLogChannel.send(embed);
+        await guild.fetchWebhooks()
+            .then(async webhooks => {
+                const webhook = webhooks.get(await getMemberLogChannel(guild.id))
+                if (webhook)
+                    await webhook.send(embed);
+            });
     },
     messageLog: async function (guild, embed) {
-        const messageLogChannel = guild.channels.cache.get(await getMessageLogChannel(guild.id));
-
-        if (messageLogChannel)
-            await messageLogChannel.send(embed);
+        await guild.fetchWebhooks()
+            .then(async webhooks => {
+                const webhook = webhooks.get(await getMessageLogChannel(guild.id))
+                if (webhook)
+                    await webhook.send(embed);
+            });
     },
     serverLog: async function (guild, embed) {
-        const serverLogChannel = guild.channels.cache.get(await getServerLogChannel(guild.id));
-
-        if (serverLogChannel)
-            await serverLogChannel.send(embed);
+        await guild.fetchWebhooks()
+            .then(async webhooks => {
+                const webhook = webhooks.get(await getServerLogChannel(guild.id))
+                if (webhook)
+                    await webhook.send(embed);
+            });
     },
 
     //message reactions
@@ -458,11 +470,11 @@ module.exports = {
 
     //minor functions
     arrayEquals: function (a, b) {
-    return Array.isArray(a) &&
-        Array.isArray(b) &&
-        a.length === b.length &&
-        a.every((val) => b.includes(val));
-}
+        return Array.isArray(a) &&
+            Array.isArray(b) &&
+            a.length === b.length &&
+            a.every((val) => b.includes(val));
+    }
 }
 
 //private functions

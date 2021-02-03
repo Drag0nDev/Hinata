@@ -96,9 +96,9 @@ async function checkCategorychange(oldChannel, newChannel, embed) {
         let oldCat = oldChannel.guild.channels.cache.get(oldChannel.parentID);
         let newCat = newChannel.guild.channels.cache.get(newChannel.parentID);
 
-        embed.setDescription(`<#${newChannel.id}> changed category**`)
+        embed.setDescription(`**<#${newChannel.id}> changed category**`)
             .addField('Old', oldCat.name, true)
-            .addField('New', newCat.name, true);
+            .addField('New', !newCat ? 'No category' : newCat.name, true);
     }
 }
 

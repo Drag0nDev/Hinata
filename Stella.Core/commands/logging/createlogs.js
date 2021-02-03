@@ -48,21 +48,27 @@ module.exports = {
                     }
                 ]
             }).then(async category => {
-                server.joinLeaveLogChannel = await createChannel(bot, message, guild, user, 'join-leave-log', category);
-                server.memberLogChannel = await createChannel(bot, message, guild, user, 'member-log', category);
-                server.serverLogChannel = await createChannel(bot, message, guild, user, 'server-log', category);
-                server.messageLogChannel = await createChannel(bot, message, guild, user, 'message-log', category);
-                server.voiceLogChannel = await createChannel(bot, message, guild, user, 'voice-log', category);
+                let joinleave = await createChannel(bot, message, guild, user, 'join-leave-log', category);
+                let member = await createChannel(bot, message, guild, user, 'member-log', category);
+                let $server = await createChannel(bot, message, guild, user, 'server-log', category);
+                let $message = await createChannel(bot, message, guild, user, 'message-log', category);
+                let voice = await createChannel(bot, message, guild, user, 'voice-log', category);
+
+                server.joinLeaveLogChannel = joinleave.hookId;
+                server.memberLogChannel = member.hookId;
+                server.serverLogChannel = $server.hookId;
+                server.messageLogChannel = $message.hookId;
+                server.voiceLogChannel = voice.hookId;
+
+                embed.setDescription('All logging channels created.')
+                    .addField('join/leave log', `<#${joinleave.channelId}>`, true)
+                    .addField('member log', `<#${member.channelId}>`, true)
+                    .addField('server log', `<#${$server.channelId}>`, true)
+                    .addField('message log', `<#${$message.channelId}>`, true)
+                    .addField('voice log', `<#${voice.channelId}>`, true);
             });
 
             server.save();
-
-            embed.setDescription('All logging channels created.')
-                .addField('join/leave log', `<#${server.joinLeaveLogChannel}>`, true)
-                .addField('member log', `<#${server.memberLogChannel}>`, true)
-                .addField('server log', `<#${server.serverLogChannel}>`, true)
-                .addField('message log', `<#${server.messageLogChannel}>`, true)
-                .addField('voice log', `<#${server.voiceLogChannel}>`, true);
         });
 
         await message.channel.send(embed);
@@ -70,7 +76,9 @@ module.exports = {
 }
 
 async function createChannel(bot, message, guild, user, channelName, parent) {
-    return await guild.channels.create(channelName, {
+    let channel;
+
+    await guild.channels.create(channelName, {
         type: "text",
         parent: parent,
         permissionOverwrites: [
@@ -87,7 +95,17 @@ async function createChannel(bot, message, guild, user, channelName, parent) {
                 deny: ['VIEW_CHANNEL'],
             }
         ]
-    }).then(channel => {
-        return channel.id;
+    }).then(newChannel => {
+        channel = newChannel;
+    });
+
+    return channel.createWebhook('Stella-Dev', {
+        avatar: bot.user.avatarURL({
+            dynamic: true,
+            size: 4096
+        })
+    }).then(hook => {
+        return {hookId: hook.id,
+            channelId: channel.id};
     });
 }

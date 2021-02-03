@@ -8,8 +8,9 @@ const tools = require('../misc/tools');
 module.exports = async (bot, message) => {
     const guild = bot.guilds.cache.get('645047329141030936');
 
-    //check if the new message is from a bot
+    //check if the new message is from a bot or webhook
     if (message.author.bot) return;
+    if (message.webhookID) return;
 
     try {
         //check the global level of the user and if it already exists
