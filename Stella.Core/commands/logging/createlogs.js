@@ -13,7 +13,8 @@ module.exports = {
     examples: ['s!cl'],
     neededPermissions: neededPerm,
     run: async (bot, message) => {
-        let embed = new MessageEmbed().setColor(bot.embedColors.normal);
+        let embed = new MessageEmbed().setColor(bot.embedColors.normal)
+            .setTitle('Create logs');
         let user = message.author;
         let guild = message.guild;
 
@@ -55,6 +56,13 @@ module.exports = {
             });
 
             server.save();
+
+            embed.setDescription('All logging channels created.')
+                .addField('join/leave log', `<#${server.joinLeaveLogChannel}>`, true)
+                .addField('member log', `<#${server.memberLogChannel}>`, true)
+                .addField('server log', `<#${server.serverLogChannel}>`, true)
+                .addField('message log', `<#${server.messageLogChannel}>`, true)
+                .addField('voice log', `<#${server.voiceLogChannel}>`, true);
         });
 
         await message.channel.send(embed);
