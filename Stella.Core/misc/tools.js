@@ -275,6 +275,8 @@ module.exports = {
 
                 if (webhook)
                     await webhook.send(embed);
+            }).catch(err => {
+                logger.error(err);
             });
     },
     messageLog: async function (guild, embed) {
@@ -480,7 +482,18 @@ module.exports = {
             Array.isArray(b) &&
             a.length === b.length &&
             a.every((val) => b.includes(val));
-    }
+    },
+    getHex: function (role) {
+        let result = Number(role.color).toString(16);
+
+        for (let i = result.length; i < 6; i++) {
+            result = '0' + result;
+        }
+
+        result = '#' + result;
+
+        return result;
+    },
 }
 
 //private functions

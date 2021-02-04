@@ -88,7 +88,3 @@ async function nicknameChange(bot, oldMember, newMember) {
 
     await tools.memberLog(newMember, embed);
 }
-
-async function nameChange(bot, oldMember, newMember) {
-
-}

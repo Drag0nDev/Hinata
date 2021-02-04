@@ -48,11 +48,11 @@ module.exports = {
                     }
                 ]
             }).then(async category => {
-                let joinleave = await createChannel(bot, message, guild, user, 'join-leave-log', category);
-                let member = await createChannel(bot, message, guild, user, 'member-log', category);
-                let $server = await createChannel(bot, message, guild, user, 'server-log', category);
-                let $message = await createChannel(bot, message, guild, user, 'message-log', category);
-                let voice = await createChannel(bot, message, guild, user, 'voice-log', category);
+                const joinleave = await createChannel(bot, message, guild, user, 'join-leave-log', category);
+                const member = await createChannel(bot, message, guild, user, 'member-log', category);
+                const $server = await createChannel(bot, message, guild, user, 'server-log', category);
+                const $message = await createChannel(bot, message, guild, user, 'message-log', category);
+                const voice = await createChannel(bot, message, guild, user, 'voice-log', category);
 
                 server.joinLeaveLogChannel = joinleave.hookId;
                 server.memberLogChannel = member.hookId;
