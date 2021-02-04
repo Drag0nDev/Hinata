@@ -297,6 +297,15 @@ module.exports = {
                     await webhook.send(embed);
             });
     },
+    voiceLogChannel: async function (guild, embed) {
+        await guild.fetchWebhooks()
+            .then(async webhooks => {
+                const webhook = webhooks.get(await getVoiceLogChannel(guild.id));
+
+                if (webhook)
+                    await webhook.send(embed);
+            });
+    },
 
     //message reactions
     addPageArrows: async function (message) {
@@ -540,6 +549,18 @@ async function getMessageLogChannel(serverId) {
         }
     }).then(server => {
         return server.messageLogChannel;
+    }).catch(err => {
+        logger.error(err);
+    });
+}
+
+async function getVoiceLogChannel(serverId) {
+    return await ServerSettings.findOne({
+        where: {
+            serverId: serverId
+        }
+    }).then(server => {
+        return server.voiceLogChannel;
     }).catch(err => {
         logger.error(err);
     });
