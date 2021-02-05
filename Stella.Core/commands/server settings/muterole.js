@@ -53,12 +53,10 @@ module.exports = {
                 result.save();
             });
         } else {
-            await ServerSettings.findOne({
+            dbServer = await ServerSettings.findOne({
                 where: {
                     serverId: server.id
                 }
-            }).then(server => {
-                dbServer = server;
             });
 
             if (dbServer.muteRoleId !== null)

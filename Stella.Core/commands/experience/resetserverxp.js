@@ -43,6 +43,7 @@ module.exports = {
 }
 
 async function resetAll(bot, message, embed) {
+    let amount;
     await ServerUser.findAll({
         where: {
             guildId: message.guild.id
@@ -53,13 +54,15 @@ async function resetAll(bot, message, embed) {
             user.save();
         });
 
-        embed.setColor(bot.embedColors.normal)
-            .setTitle(`Reset server xp`)
-            .setDescription(`All **${users.length}** members xp have been reset to 0xp!`)
-            .setTimestamp();
-
-        message.channel.send(embed);
+        amount = users.length;
     });
+
+    embed.setColor(bot.embedColors.normal)
+        .setTitle(`Reset server xp`)
+        .setDescription(`All **${users.length}** members xp have been reset to 0xp!`)
+        .setTimestamp();
+
+    await message.channel.send(embed);
 }
 
 async function resetServerUser(bot, message, id, embed) {

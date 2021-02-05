@@ -33,8 +33,7 @@ async function serverLb(bot, message, variation) {
         .setTitle(`${variation} leaderboard`)
         .setColor(bot.embedColors.normal)
         .setFooter(`Page 1`);
-
-    ServerUser.findAll({
+    let dbUsers = await ServerUser.findAll({
         where: {
             guildId: message.guild.id,
             xp: {
@@ -44,25 +43,24 @@ async function serverLb(bot, message, variation) {
         order: [
             ['xp', 'DESC']
         ]
-    }).then(async users => {
-        for (let i = 0; i < 10 && i < users.length; i++) {
-            let memberTag = await getUserTag(message, users[i].userId);
-            let level = tools.getLevel(users[i].xp);
-
-            embed.addField(`${i + 1}. ${memberTag}`, `Level ${level}\n(${users[i].xp}xp)`, true);
-        }
-
-        messageEditor(bot, message, embed, users, variation);
     });
+
+    for (let i = 0; i < 10 && i < dbUsers.length; i++) {
+        let memberTag = await getUserTag(message, dbUsers[i].userId);
+        let level = tools.getLevel(dbUsers[i].xp);
+
+        embed.addField(`${i + 1}. ${memberTag}`, `Level ${level}\n(${dbUsers[i].xp}xp)`, true);
+    }
+
+    messageEditor(bot, message, embed, dbUsers, variation);
 }
 
-function globalLb(bot, message, variation) {
+async function globalLb(bot, message, variation) {
     const embed = new MessageEmbed()
         .setTitle(`${variation} leaderboard`)
         .setColor(bot.embedColors.normal)
         .setFooter(`Page 1`);
-
-    User.findAll({
+    let dbUsers = await User.findAll({
         where: {
             xp: {
                 [Op.gt]: 0
@@ -73,22 +71,24 @@ function globalLb(bot, message, variation) {
             ['xp', 'DESC']
         ]
     }).then(users => {
-        for (let i = 0; i < 10 && i < users.length; i++) {
-            let xp = users[i].xp;
-            let lvlXp = config.levelXp;
-            let level = users[i].level;
-            let previousLvlXp = 0;
+        dbUsers = users
+    });
 
-            for (; level > 0; level--) {
-                previousLvlXp = lvlXp + ((lvlXp / 2) * (level - 1));
-                xp += previousLvlXp;
-            }
+    for (let i = 0; i < 10 && i < dbUsers.length; i++) {
+        let xp = dbUsers[i].xp;
+        let lvlXp = config.levelXp;
+        let level = dbUsers[i].level;
+        let previousLvlXp = 0;
 
-            embed.addField(`${i + 1}. ${users[i].userTag}`, `Level ${users[i].level}\n(${xp}xp)`, true);
+        for (; level > 0; level--) {
+            previousLvlXp = lvlXp + ((lvlXp / 2) * (level - 1));
+            xp += previousLvlXp;
         }
 
-        messageEditor(bot, message, embed, users, variation);
-    });
+        embed.addField(`${i + 1}. ${dbUsers[i].userTag}`, `Level ${dbUsers[i].level}\n(${xp}xp)`, true);
+    }
+
+    messageEditor(bot, message, embed, dbUsers, variation);
 }
 
 function messageEditor(bot, message, embed, users, variation) {
@@ -132,7 +132,7 @@ function messageEditor(bot, message, embed, users, variation) {
 async function pageEmbed(message, page, users, editEmbed) {
     for (let i = 10 * page; (i < 10 + (10 * page)) && (i < Object.keys(users).length); i++) {
         let memberTag = await getUserTag(message, users[i].userId);
-        let level = getLevel(users[i].xp);
+        let level = tools.getLevel(users[i].xp);
 
         editEmbed.addField(`${i + 1}. ${memberTag}`, `Level ${level}\n (${users[i].xp}xp)`, true);
     }
@@ -154,21 +154,4 @@ async function getUserTag(message, id) {
     } else {
         return member.user.tag;
     }
-}
-
-function getLevel(userXp) {
-    let lvlXp = config.levelXp;
-    let level = 0;
-    let nextLvlXp = 0;
-
-    do {
-        nextLvlXp = lvlXp + ((lvlXp / 2) * level);
-
-        if (userXp >= nextLvlXp) {
-            level++;
-            userXp -= nextLvlXp;
-        }
-    } while (userXp > nextLvlXp);
-
-    return level;
 }

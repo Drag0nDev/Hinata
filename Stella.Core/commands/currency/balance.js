@@ -1,5 +1,5 @@
 const {MessageEmbed} = require('discord.js');
-const { User } = require('../../misc/dbObjects');
+const {User} = require('../../misc/dbObjects');
 const tools = require('../../misc/tools');
 
 module.exports = {
@@ -12,6 +12,7 @@ module.exports = {
     run: async (bot, message, args) => {
         let embed = new MessageEmbed().setColor(bot.embedColors.normal);
         let member;
+        let dbUser;
 
         await tools.getMember(message, args).then(memberPromise => {
             member = memberPromise;
@@ -26,14 +27,15 @@ module.exports = {
                 userId: member.user.id
             }
         }).then(user => {
-
-
-            if (member.user.id !== message.author.id)
-                embed.setDescription(`**${member.user.username}#${member.user.discriminator}** has **${user.balance} ${bot.currencyEmoji}**`);
-            else
-                embed.setDescription(`You have **${user.balance} ${bot.currencyEmoji}**`);
-
-            message.channel.send(embed);
+            dbUser = user;
         });
+
+        if (member.user.id !== message.author.id)
+            embed.setDescription(`**${member.user.username}#${member.user.discriminator}** has **${dbUser.balance} ${bot.currencyEmoji}**`);
+        else
+            embed.setDescription(`You have **${dbUser.balance} ${bot.currencyEmoji}**`);
+
+        await message.channel.send(embed);
+
     }
 }

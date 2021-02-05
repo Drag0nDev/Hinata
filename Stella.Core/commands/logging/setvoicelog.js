@@ -17,6 +17,7 @@ module.exports = {
         let user = message.author;
         let guild = message.guild;
         let $channel;
+        let voiceLogChannel;
 
         let noUserPermission = tools.checkUserPermissions(bot, message, neededPerm, embed);
         if (noUserPermission)
@@ -26,72 +27,74 @@ module.exports = {
         if (noBotPermission)
             return message.channel.send(embed);
 
+        if (!args[0]) {
+            await guild.channels.create('voice-log', {
+                type: "text",
+                permissionOverwrites: [
+                    {
+                        id: user.id,
+                        allow: ['VIEW_CHANNEL', "MANAGE_CHANNELS"],
+                    },
+                    {
+                        id: bot.user.id,
+                        allow: ['VIEW_CHANNEL', "MANAGE_CHANNELS"],
+                    },
+                    {
+                        id: message.guild.roles.everyone,
+                        deny: ['VIEW_CHANNEL'],
+                    }
+                ]
+            }).then(channel => {
+                $channel = channel;
+
+                embed.setTitle('Set voice log')
+                    .setColor(bot.embedColors.normal)
+                    .setDescription(`New voice log created with name <#${channel.id}>`);
+            });
+
+            $channel.createWebhook('Stella', {
+                avatar: bot.user.avatarURL({
+                    dynamic: true,
+                    size: 4096
+                })
+            }).then(hook => {
+                voiceLogChannel = hook.id;
+            });
+        } else {
+            if (!chan.test(args[0])) {
+                return embed.setTitle('Set voice log')
+                    .setColor(bot.embedColors.error)
+                    .setDescription('Please provide a valid id');
+            }
+
+            let channel = guild.channels.cache.get(chan.exec(args[0])[0]);
+
+            if (!channel) {
+                return embed.setTitle('Set voice log')
+                    .setColor(bot.embedColors.error)
+                    .setDescription('Please provide a valid id');
+            }
+
+            await channel.createWebhook('Stella', {
+                avatar: bot.user.avatarURL({
+                    dynamic: true,
+                    size: 4096
+                })
+            }).then(hook => {
+                voiceLogChannel = hook.id;
+            });
+
+            embed.setTitle('Set voice log')
+                .setColor(bot.embedColors.normal)
+                .setDescription(`Voice log channel set to <#${channel.id}>`);
+        }
+
         await ServerSettings.findOne({
             where: {
                 serverId: guild.id
             }
         }).then(async server => {
-            if (!args[0]) {
-                await guild.channels.create('voice-log', {
-                    type: "text",
-                    permissionOverwrites: [
-                        {
-                            id: user.id,
-                            allow: ['VIEW_CHANNEL', "MANAGE_CHANNELS"],
-                        },
-                        {
-                            id: bot.user.id,
-                            allow: ['VIEW_CHANNEL', "MANAGE_CHANNELS"],
-                        },
-                        {
-                            id: message.guild.roles.everyone,
-                            deny: ['VIEW_CHANNEL'],
-                        }
-                    ]
-                }).then(channel => {
-                    $channel = channel;
-
-                    embed.setTitle('Set voice log')
-                        .setColor(bot.embedColors.normal)
-                        .setDescription(`New member log created with name <#${channel.id}>`);
-                });
-
-                $channel.createWebhook('Stella', {
-                    avatar: bot.user.avatarURL({
-                        dynamic: true,
-                        size: 4096
-                    })
-                }).then(hook => {
-                    server.voiceLogChannel = hook.id;
-                });
-            } else {
-                if (!chan.test(args[0])) {
-                    return embed.setTitle('Set voice log')
-                        .setColor(bot.embedColors.error)
-                        .setDescription('Please provide a valid id');
-                }
-
-                let channel = guild.channels.cache.get(chan.exec(args[0])[0]);
-
-                if (!channel){
-                    return embed.setTitle('Set voice log')
-                        .setColor(bot.embedColors.error)
-                        .setDescription('Please provide a valid id');
-                }
-
-                await channel.createWebhook('Stella', {
-                    avatar: bot.user.avatarURL({
-                        dynamic: true,
-                        size: 4096
-                    })
-                }).then(hook => {
-                    server.voiceLogChannel = hook.id;
-                });
-
-                embed.setTitle('Set voice log')
-                    .setColor(bot.embedColors.normal)
-                    .setDescription(`voice log channel set to <#${channel.id}>`);
-            }
+            server.voiceLogChannel = voiceLogChannel;
 
             server.save();
         });

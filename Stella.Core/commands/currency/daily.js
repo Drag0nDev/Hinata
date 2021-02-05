@@ -10,22 +10,23 @@ module.exports = {
     usage: '[command | alias]',
     examples: ['s!daily'],
     run: async (bot, message) => {
+        let embed = new MessageEmbed();
         const dailyReward = 100;
         const now = new Date();
+        let dbUser;
+        let daily;
 
-        User.findOne({
+        await User.findOne({
             where: {
                 userId: message.author.id
             }
         }).then(user => {
-            let embed = new MessageEmbed();
-
             if (user.isBanned === 1)
-                return message.channel.send(embed.setColor(bot.embedColors.error)
+                return embed.setColor(bot.embedColors.error)
                     .setTitle('You have a botban')
                     .setTimestamp()
                     .setDescription('You can\'t claim dailies due to being banned from using the daily command.\n' +
-                        'You will also not earn any xp globaly with the botban.'));
+                        'You will also not earn any xp globaly with the botban.');
 
             const diff = pm(now.getTime() - parseInt(user.dailyTaken));
 
@@ -56,11 +57,10 @@ module.exports = {
                 }
             }
 
-            const daily = dailyReward + ((dailyReward / 10) * user.dailyStreak);
+            daily = dailyReward + ((dailyReward / 10) * user.dailyStreak);
 
             user.dailyTaken = message.createdTimestamp;
             User.add(user, daily);
-            user.save();
 
             embed.setColor(bot.embedColors.normal)
                 .setDescription(`You have claimed your daily of **${daily} ${bot.currencyEmoji}**\n` +

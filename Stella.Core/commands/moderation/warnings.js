@@ -52,8 +52,10 @@ async function showAll(bot, message, embed, variation) {
             size: 4096
         }));
     let description;
+    let warnings;
+    let server;
 
-    return await Warnings.findAll({
+    warnings = await Warnings.findAll({
             where: {
                 guildId: message.guild.id
             },
@@ -61,48 +63,7 @@ async function showAll(bot, message, embed, variation) {
                 ['casenr', 'DESC'],
             ]
         }
-    ).then(async warnings => {
-        if (!warnings[0])
-            return message.channel.send(embed.setDescription('No warns in this server!')
-                .setColor(bot.embedColors.normal)
-                .setTimestamp());
-
-        for (let i = 0; i < 5 &&  i < warnings.length; i++) {
-            const warning = warnings[i];
-
-            await User.findOne({
-                where: {
-                    userId: warning.userId
-                }
-            }).then(async user => {
-                await User.findOne({
-                    where: {
-                        userId: warning.moderatorId
-                    }
-                }).then(moderator => {
-                    embed.addField(
-                        `case ${warning.casenr}. ${user.userTag}`,
-                        `**Reason**: ${warning.reason}\n` +
-                        `**Moderator**: ${moderator.userTag}`,
-                        false
-                    );
-                });
-            });
-        }
-
-        await Server.findOne({
-            where: {
-                serverId: message.guild.id
-            }
-        }).then(server => {
-            description = `All warnings for server **${server.serverName}**.`;
-            embed.setColor(bot.embedColors.normal)
-                .setDescription(description)
-                .setTimestamp();
-        });
-
-        messageEditor(bot, message, embed, warnings, variation, description);
-    }).catch(async err => {
+    ).catch(async err => {
         logger.error(err);
         embed.setColor(bot.embedColors.error)
             .setDescription(`Please contact the bot developer to resolve the error that occured!\n` +
@@ -111,6 +72,47 @@ async function showAll(bot, message, embed, variation) {
 
         await message.channel.send(embed);
     });
+
+    if (!warnings[0])
+        return message.channel.send(embed.setDescription('No warns in this server!')
+            .setColor(bot.embedColors.normal)
+            .setTimestamp());
+
+    for (let i = 0; i < 5 && i < warnings.length; i++) {
+        const warning = warnings[i];
+
+        await User.findOne({
+            where: {
+                userId: warning.userId
+            }
+        }).then(async user => {
+            await User.findOne({
+                where: {
+                    userId: warning.moderatorId
+                }
+            }).then(moderator => {
+                embed.addField(
+                    `case ${warning.casenr}. ${user.userTag}`,
+                    `**Reason**: ${warning.reason}\n` +
+                    `**Moderator**: ${moderator.userTag}`,
+                    false
+                );
+            });
+        });
+
+        server = await Server.findOne({
+            where: {
+                serverId: message.guild.id
+            }
+        });
+
+        description = `All warnings for server **${server.serverName}**.`;
+        embed.setColor(bot.embedColors.normal)
+            .setDescription(description)
+            .setTimestamp();
+
+        messageEditor(bot, message, embed, warnings, variation, description);
+    }
 }
 
 async function showUser(bot, message, memberId, embed, variation) {
@@ -120,8 +122,10 @@ async function showUser(bot, message, memberId, embed, variation) {
             size: 4096
         }));
     let description;
+    let warnings;
+    let server;
 
-    return await Warnings.findAll({
+    warnings = await Warnings.findAll({
             where: {
                 guildId: message.guild.id,
                 userId: memberId
@@ -130,48 +134,7 @@ async function showUser(bot, message, memberId, embed, variation) {
                 ['casenr', 'DESC'],
             ]
         }
-    ).then(async warnings => {
-        if (!warnings[0])
-            return message.channel.send(embed.setDescription('No warns for this user!')
-                .setColor(bot.embedColors.normal)
-                .setTimestamp());
-
-        for (let i = 0; i < 5 &&  i < warnings.length; i++) {
-            const warning = warnings[i];
-
-            await User.findOne({
-                where: {
-                    userId: warning.userId
-                }
-            }).then(async user => {
-                await User.findOne({
-                    where: {
-                        userId: warning.moderatorId
-                    }
-                }).then(moderator => {
-                    embed.addField(
-                        `case ${warning.casenr}. ${user.userTag}`,
-                        `**Reason**: ${warning.reason}\n` +
-                        `**Moderator**: ${moderator.userTag}`,
-                        false
-                    );
-                });
-            });
-        }
-
-        await Server.findOne({
-            where: {
-                serverId: message.guild.id
-            }
-        }).then(server => {
-            description = `All warnings for server **${server.serverName}**.`;
-            embed.setColor(bot.embedColors.normal)
-                .setDescription(description)
-                .setTimestamp();
-        });
-
-        messageEditor(bot, message, embed, warnings, variation, description);
-    }).catch(async err => {
+    ).catch(async err => {
         logger.error(err);
         embed.setColor(bot.embedColors.error)
             .setDescription(`Please contact the bot developer to resolve the error that occured!\n` +
@@ -180,6 +143,49 @@ async function showUser(bot, message, memberId, embed, variation) {
 
         await message.channel.send(embed);
     });
+
+    if (!warnings[0])
+        return message.channel.send(embed.setDescription('No warns for this user!')
+            .setColor(bot.embedColors.normal)
+            .setTimestamp());
+
+    for (let i = 0; i < 5 && i < warnings.length; i++) {
+        const warning = warnings[i];
+        let user;
+        let moderator;
+
+        user = await User.findOne({
+            where: {
+                userId: warning.userId
+            }
+        });
+
+        moderator = await User.findOne({
+            where: {
+                userId: warning.moderatorId
+            }
+        });
+
+        embed.addField(
+            `case ${warning.casenr}. ${user.userTag}`,
+            `**Reason**: ${warning.reason}\n` +
+            `**Moderator**: ${moderator.userTag}`,
+            false
+        );
+    }
+
+    server = await Server.findOne({
+        where: {
+            serverId: message.guild.id
+        }
+    });
+
+    description = `All warnings for server **${server.serverName}**.`;
+    embed.setColor(bot.embedColors.normal)
+        .setDescription(description)
+        .setTimestamp();
+
+    messageEditor(bot, message, embed, warnings, variation, description);
 }
 
 function messageEditor(bot, message, embed, warnings, variation, description) {
@@ -229,25 +235,27 @@ function messageEditor(bot, message, embed, warnings, variation, description) {
 async function pageEmbed(message, page, warnings, editEmbed) {
     for (let i = 5 * page; (i < 5 + (5 * page)) && (i < warnings.length); i++) {
         const warning = warnings[i];
+        let user;
+        let moderator;
 
-        await User.findOne({
+        user = await User.findOne({
             where: {
                 userId: warning.userId
             }
-        }).then(async user => {
-            await User.findOne({
-                where: {
-                    userId: warning.moderatorId
-                }
-            }).then(moderator => {
-                editEmbed.addField(
-                    `case ${warning.casenr}. ${user.userTag}`,
-                    `**Reason**: ${warning.reason}\n` +
-                    `**Moderator**: ${moderator.userTag}`,
-                    false
-                );
-            });
         });
+
+        moderator = await User.findOne({
+            where: {
+                userId: warning.moderatorId
+            }
+        });
+
+        editEmbed.addField(
+            `case ${warning.casenr}. ${user.userTag}`,
+            `**Reason**: ${warning.reason}\n` +
+            `**Moderator**: ${moderator.userTag}`,
+            false
+        );
     }
 
     editEmbed.setFooter(`Page ${page + 1}`);

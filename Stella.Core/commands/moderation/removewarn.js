@@ -69,10 +69,6 @@ async function removeAll(bot, message, embed) {
         warnings.forEach(warning => {
             warning.destroy();
         });
-
-        embed.setColor(bot.embedColors.normal)
-            .setDescription(`All warnings for server **${message.guild.name}** successfully removed!`)
-            .setTimestamp();
     }).catch(err => {
         logger.error(err);
         embed.setColor(bot.embedColors.error)
@@ -80,6 +76,10 @@ async function removeAll(bot, message, embed) {
                 `error: **${err}**`)
             .setTimestamp();
     });
+
+    embed.setColor(bot.embedColors.normal)
+        .setDescription(`All warnings for server **${message.guild.name}** successfully removed!`)
+        .setTimestamp();
 }
 
 async function removeMemberAll(bot, message, memberId, embed) {

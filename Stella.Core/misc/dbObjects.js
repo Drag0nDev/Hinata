@@ -1,4 +1,4 @@
-const Sequelize = require('sequelize');
+const {Sequelize} = require('sequelize');
 const config = require('../../config.json');
 const logger = require("log4js").getLogger();
 

@@ -14,21 +14,22 @@ module.exports = {
             .setThumbnail(message.guild.iconURL({dynamic: true}))
             .setTitle('Level up role list')
 
-        await Rewards.findAll({
+        let rewards = await Rewards.findAll({
             where: {
                 serverId: message.guild.id
             },
             order: [
                 ['xp', 'DESC']
             ]
-        }).then(rewards => {
-            let rewardsStr = '';
-            rewards.forEach(reward => {
-                let level = tools.getLevel(reward.xp);
-                rewardsStr += `**Level ${level}**: <@&${reward.roleId}>\n`
-            });
-            embed.setDescription(rewardsStr);
         });
+
+        let rewardsStr = '';
+        rewards.forEach(reward => {
+            let level = tools.getLevel(reward.xp);
+            rewardsStr += `**Level ${level}**: <@&${reward.roleId}>\n`
+        });
+
+        embed.setDescription(rewardsStr);
 
         await message.channel.send(embed);
     }

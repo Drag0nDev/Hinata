@@ -14,6 +14,8 @@ module.exports = {
     neededPermissions: neededPerm,
     run: async (bot, message, args) => {
         let embed = new MessageEmbed().setFooter('Page 1');
+        let timers;
+        let server;
 
         //check member and bot permissions
         let noUserPermission = tools.checkUserPermissions(bot, message, neededPerm, embed);
@@ -32,7 +34,7 @@ module.exports = {
         let description;
         const now = new Date();
 
-        return await Timers.findAll({
+        timers = await Timers.findAll({
                 where: {
                     guildId: message.guild.id
                 },
@@ -40,52 +42,7 @@ module.exports = {
                     ['expiration', 'ASC'],
                 ]
             }
-        ).then(async timers => {
-            if (!timers[0])
-                return message.channel.send(embed.setDescription('No moderations in this server!')
-                    .setColor(bot.embedColors.normal)
-                    .setTimestamp());
-
-            for (let i = 0; i < 5 && i < timers.length; i++) {
-                const timer = timers[i];
-
-                await User.findOne({
-                    where: {
-                        userId: timer.userId
-                    }
-                }).then(async user => {
-                    await User.findOne({
-                        where: {
-                            userId: timer.moderatorId
-                        }
-                    }).then(async moderator => {
-                        let timeLeft;
-                        await timediff(now, timer.expiration).then(left => timeLeft = left);
-
-                        embed.addField(
-                            `${timer.type}: ${user.userTag}`,
-                            `**Reason**: ${timer.reason}\n` +
-                            `**Moderator**: ${moderator.userTag}\n` +
-                            `**Time left**: ${timeLeft}`,
-                            false
-                        );
-                    });
-                });
-            }
-
-            await Server.findOne({
-                where: {
-                    serverId: message.guild.id
-                }
-            }).then(server => {
-                description = `All warnings for server **${server.serverName}**.`;
-                embed.setColor(bot.embedColors.normal)
-                    .setDescription(description)
-                    .setTimestamp();
-            });
-
-            messageEditor(bot, message, embed, timers, description, now);
-        }).catch(async err => {
+        ).catch(async err => {
             logger.error(err);
             embed.setColor(bot.embedColors.error)
                 .setDescription(`Please contact the bot developer to resolve the error that occured!\n` +
@@ -94,6 +51,53 @@ module.exports = {
 
             await message.channel.send(embed);
         });
+
+        if (!timers[0])
+            return message.channel.send(embed.setDescription('No moderations in this server!')
+                .setColor(bot.embedColors.normal)
+                .setTimestamp());
+
+        for (let i = 0; i < 5 && i < timers.length; i++) {
+            const timer = timers[i];
+            let user;
+            let moderator;
+
+            user = await User.findOne({
+                where: {
+                    userId: timer.userId
+                }
+            });
+
+            moderator = await User.findOne({
+                where: {
+                    userId: timer.moderatorId
+                }
+            });
+
+            let timeLeft;
+            await timediff(now, timer.expiration).then(left => timeLeft = left);
+
+            embed.addField(
+                `${timer.type}: ${user.userTag}`,
+                `**Reason**: ${timer.reason}\n` +
+                `**Moderator**: ${moderator.userTag}\n` +
+                `**Time left**: ${timeLeft}`,
+                false
+            );
+        }
+
+        server = await Server.findOne({
+            where: {
+                serverId: message.guild.id
+            }
+        });
+
+        description = `All warnings for server **${server.serverName}**.`;
+        embed.setColor(bot.embedColors.normal)
+            .setDescription(description)
+            .setTimestamp();
+
+        messageEditor(bot, message, embed, timers, description, now);
     }
 }
 
@@ -144,29 +148,31 @@ function messageEditor(bot, message, embed, timers, description, now) {
 async function pageEmbed(message, page, timers, editEmbed, now) {
     for (let i = 5 * page; (i < 5 + (5 * page)) && (i < timers.length); i++) {
         const timer = timers[i];
+        let user;
+        let moderator;
 
-        await User.findOne({
+        user = await User.findOne({
             where: {
                 userId: timer.userId
             }
-        }).then(async user => {
-            await User.findOne({
-                where: {
-                    userId: timer.moderatorId
-                }
-            }).then(async moderator => {
-                let timeLeft;
-                await timediff(now, timer.expiration).then(left => timeLeft = left);
-
-                embed.addField(
-                    `${timer.type}: ${user.userTag}`,
-                    `**Reason**: ${timer.reason}\n` +
-                    `**Moderator**: ${moderator.userTag}\n` +
-                    `**Time left**: ${timeLeft}`,
-                    false
-                );
-            });
         });
+
+        moderator = await User.findOne({
+            where: {
+                userId: timer.moderatorId
+            }
+        });
+
+        let timeLeft;
+        await timediff(now, timer.expiration).then(left => timeLeft = left);
+
+        embed.addField(
+            `${timer.type}: ${user.userTag}`,
+            `**Reason**: ${timer.reason}\n` +
+            `**Moderator**: ${moderator.userTag}\n` +
+            `**Time left**: ${timeLeft}`,
+            false
+        );
     }
 
     editEmbed.setFooter(`Page ${page + 1}`);

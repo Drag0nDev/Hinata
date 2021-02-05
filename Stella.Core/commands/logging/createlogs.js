@@ -17,6 +17,11 @@ module.exports = {
             .setTitle('Create logs');
         let user = message.author;
         let guild = message.guild;
+        let joinleave;
+        let member;
+        let $server;
+        let $message;
+        let voice;
 
         let noUserPermission = tools.checkUserPermissions(bot, message, neededPerm, embed);
         if (noUserPermission)
@@ -26,47 +31,47 @@ module.exports = {
         if (noBotPermission)
             return message.channel.send(embed);
 
+        await guild.channels.create('logs', {
+            type: "category",
+            permissionOverwrites: [
+                {
+                    id: user.id,
+                    allow: ['VIEW_CHANNEL', "MANAGE_CHANNELS"],
+                },
+                {
+                    id: bot.user.id,
+                    allow: ['VIEW_CHANNEL', "MANAGE_CHANNELS"],
+                },
+                {
+                    id: message.guild.roles.everyone,
+                    deny: ['VIEW_CHANNEL'],
+                }
+            ]
+        }).then(async category => {
+            joinleave = await createChannel(bot, message, guild, user, 'join-leave-log', category);
+            member = await createChannel(bot, message, guild, user, 'member-log', category);
+            $server = await createChannel(bot, message, guild, user, 'server-log', category);
+            $message = await createChannel(bot, message, guild, user, 'message-log', category);
+            voice = await createChannel(bot, message, guild, user, 'voice-log', category);
+
+            embed.setDescription('All logging channels created.')
+                .addField('join/leave log', `<#${joinleave.channelId}>`, true)
+                .addField('member log', `<#${member.channelId}>`, true)
+                .addField('server log', `<#${$server.channelId}>`, true)
+                .addField('message log', `<#${$message.channelId}>`, true)
+                .addField('voice log', `<#${voice.channelId}>`, true);
+        });
+        
         await ServerSettings.findOne({
             where: {
                 serverId: guild.id
             }
         }).then(async server => {
-            await guild.channels.create('logs', {
-                type: "category",
-                permissionOverwrites: [
-                    {
-                        id: user.id,
-                        allow: ['VIEW_CHANNEL', "MANAGE_CHANNELS"],
-                    },
-                    {
-                        id: bot.user.id,
-                        allow: ['VIEW_CHANNEL', "MANAGE_CHANNELS"],
-                    },
-                    {
-                        id: message.guild.roles.everyone,
-                        deny: ['VIEW_CHANNEL'],
-                    }
-                ]
-            }).then(async category => {
-                const joinleave = await createChannel(bot, message, guild, user, 'join-leave-log', category);
-                const member = await createChannel(bot, message, guild, user, 'member-log', category);
-                const $server = await createChannel(bot, message, guild, user, 'server-log', category);
-                const $message = await createChannel(bot, message, guild, user, 'message-log', category);
-                const voice = await createChannel(bot, message, guild, user, 'voice-log', category);
-
-                server.joinLeaveLogChannel = joinleave.hookId;
-                server.memberLogChannel = member.hookId;
-                server.serverLogChannel = $server.hookId;
-                server.messageLogChannel = $message.hookId;
-                server.voiceLogChannel = voice.hookId;
-
-                embed.setDescription('All logging channels created.')
-                    .addField('join/leave log', `<#${joinleave.channelId}>`, true)
-                    .addField('member log', `<#${member.channelId}>`, true)
-                    .addField('server log', `<#${$server.channelId}>`, true)
-                    .addField('message log', `<#${$message.channelId}>`, true)
-                    .addField('voice log', `<#${voice.channelId}>`, true);
-            });
+            server.joinLeaveLogChannel = joinleave.hookId;
+            server.memberLogChannel = member.hookId;
+            server.serverLogChannel = $server.hookId;
+            server.messageLogChannel = $message.hookId;
+            server.voiceLogChannel = voice.hookId;
 
             server.save();
         });
