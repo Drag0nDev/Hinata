@@ -1,7 +1,7 @@
 const {MessageEmbed} = require('discord.js');
 const { User } = require('../../misc/dbObjects');
 const config = require("../../../config.json");
-const tools = require("../../misc/tools");
+const {Permissions, Servers} = require('../../misc/tools');
 
 module.exports = {
     name: 'resetuserxp',
@@ -13,8 +13,10 @@ module.exports = {
         let embed = new MessageEmbed();
         const id = new RegExp('[0-9]{17,}');
 
-        if (message.author.id !== config.owner)
+        if (message.author.id !== config.owner) {
+            Permissions.ownerOnly(bot, message.channel)
             return;
+        }
 
         if (!id.exec(args[0]))
             return message.channel.send(embed.setColor(bot.embedColors.error)
@@ -22,7 +24,7 @@ module.exports = {
 
         let member;
 
-        await tools.getUser(bot, message, args).then(memberPromise => {
+        await Servers.getUser(bot, message, args).then(memberPromise => {
             member = memberPromise;
         });
 

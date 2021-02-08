@@ -1,6 +1,5 @@
 const {MessageEmbed} = require('discord.js');
-const tools = require("../../misc/tools");
-
+const {Servers} = require('../../misc/tools');
 module.exports = {
     //<editor-fold defaultstate="collapsed" desc="userinfo help">
     name: 'slap',
@@ -15,7 +14,7 @@ module.exports = {
         let members = '';
 
         if (args[0]){
-            await tools.getMembers(message, args, userMentions).then(membersPromise => {
+            await Servers.getMembers(message, args, userMentions).then(membersPromise => {
                 members = membersPromise;
             });
         }

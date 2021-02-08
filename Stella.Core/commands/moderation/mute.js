@@ -1,6 +1,6 @@
 const {MessageEmbed} = require("discord.js");
 const {Timers, ServerSettings} = require('../../misc/dbObjects');
-const tools = require('../../misc/tools');
+const {Permissions, Compare, Servers, Dates, Roles, Logs} = require('../../misc/tools');
 const neededPerm = ['MANAGE_ROLES', "MUTE_MEMBERS"];
 
 module.exports = {
@@ -19,11 +19,11 @@ module.exports = {
         let muteRoleId;
 
         //check member and bot permissions
-        let noUserPermission = tools.checkUserPermissions(bot, message, neededPerm, embed);
+        let noUserPermission = Permissions.checkUserPermissions(bot, message, neededPerm, embed);
         if (noUserPermission)
             return await message.channel.send(embed);
 
-        let noBotPermission = tools.checkBotPermissions(bot, message, neededPerm, embed);
+        let noBotPermission = Permissions.checkBotPermissions(bot, message, neededPerm, embed);
         if (noBotPermission)
             return message.channel.send(embed);
 
@@ -34,7 +34,7 @@ module.exports = {
 
         let member;
 
-        await tools.getMember(message, args).then(memberPromise => {
+        await Servers.getMember(message, args).then(memberPromise => {
             member = memberPromise;
         });
 
@@ -43,7 +43,7 @@ module.exports = {
             return message.channel.send("No member found with this id/name!");
         }
 
-        if (!tools.compareRoles(message.guild.members.cache.get(message.author.id), member)) {
+        if (!Compare.compareRoles(message.guild.members.cache.get(message.author.id), member)) {
             return message.channel.send(embed.setTitle('Action not allowed!')
                 .setColor(bot.embedColors.error)
                 .setDescription(`You can't mute **${member.user.tag}** due to role hierarchy!`));
@@ -72,7 +72,7 @@ module.exports = {
         }
 
         //check if assigned role is higher then bots highest role
-        let roleCheck = tools.checkRolePosition(bot, message, muteRole);
+        let roleCheck = Permissions.checkRolePosition(bot, message, muteRole);
         if (roleCheck)
             return await message.channel.send(embed);
 
@@ -115,11 +115,11 @@ module.exports = {
 
 async function tempmute(bot, message, member, embed, muteRole, time, reason) {
     let expiration = new Date();
-    await tools.calcExpiration(expiration, time);
-    let timeVal = await tools.getTimeval(time);
-    let $time = await tools.getTime(time);
+    await Dates.calcExpiration(expiration, time);
+    let timeVal = await Dates.getTimeval(time);
+    let $time = await Dates.getTime(time);
 
-    await tools.giveRole(member, muteRole);
+    await Roles.giveRole(member, muteRole);
 
     embed.setDescription(`**${member.user.tag}** is muted for **${$time} ${timeVal}** for reason: **${reason}**.`)
         .setColor(bot.embedColors.normal);
@@ -151,7 +151,7 @@ async function tempmute(bot, message, member, embed, muteRole, time, reason) {
         .setFooter(`ID: ${member.user.id}`)
         .setTimestamp();
 
-    await tools.modlog(member, logEmbed);
+    await Logs.modlog(member, logEmbed);
 }
 
 async function mute(bot, message, member, embed, muteRole, reason) {
@@ -160,7 +160,7 @@ async function mute(bot, message, member, embed, muteRole, reason) {
             await dmChannel.send(`You got muted in **${message.guild.name}** with reason: **${reason}**!`);
         });
 
-    await tools.giveRole(member, muteRole);
+    await Roles.giveRole(member, muteRole);
 
     embed.setTitle('Mute')
         .setDescription(`**${member.user.tag}** is muted for reason: **${reason}**.`)
@@ -176,5 +176,5 @@ async function mute(bot, message, member, embed, muteRole, reason) {
         .setFooter(`ID: ${member.user.id}`)
         .setTimestamp();
 
-    await tools.modlog(member, logEmbed);
+    await Logs.modlog(member, logEmbed);
 }

@@ -4,7 +4,7 @@ const {ServerSettings} = require('../../misc/dbObjects');
 const neededPerm = ['MANAGE_CHANNELS'];
 
 module.exports = {
-    name: 'setmod log',
+    name: 'setmodlog',
     aliases: ['sm', 'modlog'],
     category: 'logging',
     description: 'Assign or create a mod log channel for Stella.',
@@ -52,7 +52,7 @@ module.exports = {
                     .setDescription(`New mod log created with name <#${channel.id}>`);
             });
 
-            $channel.createWebhook('Stella', {
+            await $channel.createWebhook('Stella', {
                 avatar: bot.user.avatarURL({
                     dynamic: true,
                     size: 4096
@@ -89,15 +89,21 @@ module.exports = {
                 .setDescription(`mod log channel set to <#${channel.id}>`);
         }
 
-        await ServerSettings.findOne({
-            where: {
-                serverId: guild.id
-            }
-        }).then(async server => {
-            server.modlogChannel = modlogChannel;
+        try {
+            await ServerSettings.findOne({
+                where: {
+                    serverId: guild.id
+                }
+            }).then(async server => {
+                console.log(modlogChannel)
+                server.modlogChannel = modlogChannel;
 
-            server.save();
-        });
+                server.save();
+            });
+        } catch (err) {
+            logger.error(err);
+        }
+
 
         await message.channel.send(embed);
     }

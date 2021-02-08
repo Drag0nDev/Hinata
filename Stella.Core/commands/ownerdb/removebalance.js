@@ -1,7 +1,7 @@
 const {MessageEmbed} = require('discord.js');
 const {User} = require('../../misc/dbObjects');
 const config = require("../../../config.json");
-const tools = require("../../misc/tools");
+const {Permissions, Servers} = require('../../misc/tools');
 
 module.exports = {
     name: 'removebalance',
@@ -15,7 +15,7 @@ module.exports = {
         const bal = new RegExp('^[0-9]*');
 
         if (message.author.id !== config.owner) {
-            tools.ownerOnly(bot, message.channel)
+            Permissions.ownerOnly(bot, message.channel)
             return;
         }
 
@@ -28,7 +28,7 @@ module.exports = {
 
         let member;
 
-        await tools.getUser(bot, message, args).then(memberPromise => {
+        await Servers.getUser(bot, message, args).then(memberPromise => {
             member = memberPromise;
         });
 

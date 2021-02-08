@@ -1,6 +1,6 @@
 const {MessageEmbed} = require('discord.js');
 const {User} = require('../../misc/dbObjects');
-const tools = require('../../misc/tools');
+const {Servers} = require('../../misc/tools');
 
 module.exports = {
     name: 'balance',
@@ -14,7 +14,7 @@ module.exports = {
         let member;
         let dbUser;
 
-        await tools.getMember(message, args).then(memberPromise => {
+        await Servers.getMember(message, args).then(memberPromise => {
             member = memberPromise;
         });
 

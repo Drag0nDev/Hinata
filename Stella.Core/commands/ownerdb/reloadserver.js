@@ -1,5 +1,5 @@
 const {MessageEmbed} = require('discord.js');
-const tools = require('../../misc/tools');
+const {Permissions, Minor} = require('../../misc/tools');
 const logger = require("log4js").getLogger();
 
 module.exports = {
@@ -13,15 +13,20 @@ module.exports = {
         let embed = new MessageEmbed().setColor(bot.embedColors.ready);
         let count = 0;
 
+        if (message.author.id !== config.owner) {
+            Permissions.ownerOnly(bot, message.channel)
+            return;
+        }
+
         try {
             for (const member of server.members.cache) {
                 if (!member[1].user.bot) {
-                    await tools.dbAdd(member, server);
+                    await Minor.dbAdd(member, server);
                     count++;
                 }
             }
-            embed.setDescription(`Reloaded database for server: **${server.name}**.
-        with **${count}** members.`);
+            embed.setDescription(`Reloaded database for server: **${server.name}**.\n` +
+                `with **${count}** members.`);
 
             await message.channel.send(embed);
         } catch (err) {

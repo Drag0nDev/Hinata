@@ -1,6 +1,6 @@
 const {MessageEmbed} = require('discord.js');
 const logger = require("log4js").getLogger();
-const tools = require('../misc/tools');
+const {Logs, Compare} = require('../misc/tools');
 
 module.exports = async (bot, oldChannel, newChannel) => {
     const repl = new RegExp('_', 'g');
@@ -20,7 +20,7 @@ module.exports = async (bot, oldChannel, newChannel) => {
         //check for category change
         await checkCategorychange(oldChannel, newChannel, embed);
 
-        await tools.serverLog(newChannel.guild, embed);
+        await Logs.serverLog(newChannel.guild, embed);
     } catch (err) {
         logger.error(err);
     }
@@ -30,7 +30,7 @@ async function checkPermissions(oldChannel, newChannel, embed) {
     let newKeys = Array.from(newChannel.permissionOverwrites.keys());
     let oldKeys = Array.from(oldChannel.permissionOverwrites.keys());
 
-    if (!tools.arrayEquals(newKeys, oldKeys)) {
+    if (!Compare.arrayEquals(newKeys, oldKeys)) {
         if (newKeys.length > oldKeys.length) {
             newKeys.forEach(key => {
                 if (!oldKeys.includes(key)) {
@@ -73,7 +73,7 @@ async function checkPermissions(oldChannel, newChannel, embed) {
             let changedPerms = '';
 
             //allowed permissions
-            if (!tools.arrayEquals(newAllowed, oldAllowed) || !tools.arrayEquals(newDenied, oldDenied)) {
+            if (!Compare.arrayEquals(newAllowed, oldAllowed) || !Compare.arrayEquals(newDenied, oldDenied)) {
                 changedPerms = findChangedPerms(newAllowed, oldAllowed, newDenied, oldDenied);
                 if (newPermissions.type === 'role')
                     embed.addField(`Role override for ${role.name} updated in ${newChannel.name}`, changedPerms);

@@ -2,7 +2,7 @@ const {Op} = require('sequelize')
 const {MessageEmbed} = require('discord.js');
 const {User, ServerUser} = require('../../misc/dbObjects');
 const config = require("../../../config.json");
-const tools = require('../../misc/tools');
+const {Permissions, Levels, Minor} = require('../../misc/tools');
 const neededPerm = ['ADD_REACTIONS'];
 
 module.exports = {
@@ -16,12 +16,12 @@ module.exports = {
     neededPermissions: neededPerm,
     run: async (bot, message) => {
         let embed = new MessageEmbed();
-        let noBotPermission = tools.checkBotPermissions(bot, message, neededPerm, embed);
+        let noBotPermission = Permissions.checkBotPermissions(bot, message, neededPerm, embed);
         if (noBotPermission)
             return message.channel.send(embed);
 
         if (message.content.includes('glb') || message.content.includes('globalleaderboard')) {
-            globalLb(bot, message, 'Global');
+            await globalLb(bot, message, 'Global');
         } else {
             await serverLb(bot, message, 'Server');
         }
@@ -47,7 +47,7 @@ async function serverLb(bot, message, variation) {
 
     for (let i = 0; i < 10 && i < dbUsers.length; i++) {
         let memberTag = await getUserTag(message, dbUsers[i].userId);
-        let level = tools.getLevel(dbUsers[i].xp);
+        let level = Levels.getLevel(dbUsers[i].xp);
 
         embed.addField(`${i + 1}. ${memberTag}`, `Level ${level}\n(${dbUsers[i].xp}xp)`, true);
     }
@@ -94,7 +94,7 @@ async function globalLb(bot, message, variation) {
 function messageEditor(bot, message, embed, users, variation) {
     message.channel.send(embed)
         .then(async messageBot => {
-            await tools.addPageArrows(messageBot);
+            await Minor.addPageArrows(messageBot);
             let page = 0;
 
             const filter = (reaction, user) => {
@@ -132,7 +132,7 @@ function messageEditor(bot, message, embed, users, variation) {
 async function pageEmbed(message, page, users, editEmbed) {
     for (let i = 10 * page; (i < 10 + (10 * page)) && (i < Object.keys(users).length); i++) {
         let memberTag = await getUserTag(message, users[i].userId);
-        let level = tools.getLevel(users[i].xp);
+        let level = Levels.getLevel(users[i].xp);
 
         editEmbed.addField(`${i + 1}. ${memberTag}`, `Level ${level}\n (${users[i].xp}xp)`, true);
     }

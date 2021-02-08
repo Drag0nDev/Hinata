@@ -1,5 +1,3 @@
-const {Util} = require('discord.js');
-
 module.exports = {
     name: 'say',
     category: 'fun',

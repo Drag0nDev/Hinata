@@ -1,6 +1,6 @@
 const {MessageEmbed} = require('discord.js');
 const pm = require('pretty-ms');
-const tools = require('../../misc/tools');
+const {Servers} = require('../../misc/tools');
 
 module.exports = {
     name: 'accountage',
@@ -14,7 +14,7 @@ module.exports = {
         let date = new Date();
         let member;
 
-        await tools.getMember(message, args).then(memberPromise => {
+        await Servers.getMember(message, args).then(memberPromise => {
             member = memberPromise;
         });
 

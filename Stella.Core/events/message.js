@@ -3,7 +3,7 @@ const config = require("../../config.json");
 const logger = require("log4js").getLogger();
 const {User, ServerUser, Rewards, ServerSettings} = require('../misc/dbObjects');
 const pm = require('parse-ms');
-const tools = require('../misc/tools');
+const {Minor, Levels, Roles} = require('../misc/tools');
 
 module.exports = async (bot, message) => {
     const guild = bot.guilds.cache.get('645047329141030936');
@@ -28,7 +28,7 @@ module.exports = async (bot, message) => {
     //check if the bot is in test mode
     if (await checkPrefix(message)) return;
     if (bot.testing && message.author.id !== config.owner) {
-        await tools.testing(bot, message);
+        await Minor.testing(bot, message);
         return;
     }
 
@@ -248,7 +248,7 @@ async function checkLevelUp(bot, message, serverUser) {
                     if ((!reward || user._roles.includes(reward.roleId) || !serverSetting.levelUpRoleMessage)) {
                         if (xp === 0) {
                             if (serverSetting.levelUpMessage)
-                                await tools.levelUp(message, serverSetting.levelUpMessage, level);
+                                await Levels.levelUp(message, serverSetting.levelUpMessage, level);
                         }
                         return;
                     }
@@ -260,9 +260,9 @@ async function checkLevelUp(bot, message, serverUser) {
                         return;
                     }
 
-                    await tools.levelUpRole(message, serverSetting.levelUpRoleMessage, level, reward.roleId);
+                    await Levels.levelUpRole(message, serverSetting.levelUpRoleMessage, level, reward.roleId);
 
-                    await tools.giveRole(user, role);
+                    await Roles.giveRole(user, role);
                 });
             }
         );

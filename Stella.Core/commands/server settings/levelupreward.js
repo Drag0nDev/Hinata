@@ -1,7 +1,7 @@
 const {MessageEmbed} = require("discord.js");
 const config = require("../../../config.json");
 const {Rewards} = require('../../misc/dbObjects');
-const tools = require('../../misc/tools');
+const {Permissions} = require('../../misc/tools');
 const neededPerm = ['MANAGE_ROLES'];
 
 module.exports = {
@@ -20,7 +20,7 @@ module.exports = {
         const choice = new RegExp('add|remove');
 
         //check member and bot permissions
-        let noUserPermission = tools.checkUserPermissions(bot, message, neededPerm, embed);
+        let noUserPermission = Permissions.checkUserPermissions(bot, message, neededPerm, embed);
         if (noUserPermission)
             return await message.channel.send(embed);
 
@@ -42,7 +42,6 @@ module.exports = {
                     .setTimestamp();
             }
         } catch (err) {
-            console.log(err)
             embed.setColor(bot.embedColors.error)
                 .setDescription('Please provide valid arguments')
                 .setTimestamp();
@@ -156,7 +155,6 @@ async function remove(bot, message, args, embed) {
                 .setTimestamp();
         }
     } catch (err) {
-        console.log(err)
         embed.setColor(bot.embedColors.error)
             .setDescription('Please provide valid arguments')
             .setTimestamp();

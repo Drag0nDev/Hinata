@@ -52,7 +52,7 @@ module.exports = {
                     .setDescription(`New voice log created with name <#${channel.id}>`);
             });
 
-            $channel.createWebhook('Stella', {
+            await $channel.createWebhook('Stella', {
                 avatar: bot.user.avatarURL({
                     dynamic: true,
                     size: 4096

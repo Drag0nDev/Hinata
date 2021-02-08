@@ -1,4 +1,5 @@
 const {MessageEmbed} = require('discord.js');
+const {Permissions} = require('../../misc/tools');
 let neededPerm = ['MANAGE_GUILD'];
 
 module.exports = {

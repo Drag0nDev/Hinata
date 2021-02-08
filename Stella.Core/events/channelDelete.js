@@ -1,6 +1,6 @@
 const {MessageEmbed} = require('discord.js');
 const logger = require("log4js").getLogger();
-const tools = require('../misc/tools');
+const {Logs} = require('../misc/tools');
 
 module.exports = async (bot, channel) => {
     try {
@@ -14,7 +14,7 @@ module.exports = async (bot, channel) => {
             .addField('Name', channel.name, true)
             .addField('Category', !category ? 'No category' : category.name, true);
 
-        await tools.serverLog(channel.guild, embed);
+        await Logs.serverLog(channel.guild, embed);
     } catch (err) {
         logger.error(err);
     }

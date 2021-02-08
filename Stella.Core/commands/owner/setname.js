@@ -1,7 +1,7 @@
 const config = require("../../../config.json");
 const {MessageEmbed} = require('discord.js');
 const log4js = require("log4js");
-const tools = require("../../misc/tools");
+const {Permissions} = require('../../misc/tools');
 
 module.exports = {
     name: 'setname',
@@ -14,7 +14,7 @@ module.exports = {
         let embed = new MessageEmbed();
 
         if (message.author.id !== config.owner) {
-            tools.ownerOnly(bot, message.channel)
+            Permissions.ownerOnly(bot, message.channel)
             return;
         }
 

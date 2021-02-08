@@ -1,6 +1,6 @@
 const logger = require("log4js").getLogger();
 const {MessageEmbed} = require('discord.js');
-const tools = require("../misc/tools");
+const {Logs} = require("../misc/tools");
 
 module.exports = async (bot, messages) => {
     try {
@@ -21,14 +21,14 @@ module.exports = async (bot, messages) => {
 
             if (i%50 === 0) {
                 embed.setDescription(description);
-                await tools.messageLog(messages.first().guild, embed);
+                await Logs.messageLog(messages.first().guild, embed);
                 description = '';
             }
         }
 
         embed.setDescription(description);
 
-        await tools.messageLog(messages.first().guild, embed);
+        await Logs.messageLog(messages.first().guild, embed);
     } catch (err) {
         logger.error(err);
     }

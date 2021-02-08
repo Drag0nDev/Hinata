@@ -1,6 +1,6 @@
 const logger = require("log4js").getLogger();
 const {MessageEmbed} = require('discord.js');
-const tools = require("../misc/tools");
+const {Compare, Logs} = require('../misc/tools');
 
 module.exports = async (bot, oldMember, newMember) => {
     try {
@@ -12,7 +12,7 @@ module.exports = async (bot, oldMember, newMember) => {
 
 async function updateCheck(bot, oldMember, newMember) {
     //changes to the member in the server
-    if (!tools.arrayEquals(newMember._roles, oldMember._roles)) await roleChange(bot, oldMember, newMember);
+    if (!Compare.arrayEquals(newMember._roles, oldMember._roles)) await roleChange(bot, oldMember, newMember);
     if (oldMember.nickname !== newMember.nickname) await nicknameChange(bot, oldMember, newMember);
 }
 
@@ -61,7 +61,7 @@ async function roleChange(bot, oldMember, newMember) {
             .setColor(bot.embedColors.logRemove);
     }
 
-    await tools.memberLog(newMember, embed);
+    await Logs.memberLog(newMember, embed);
 }
 
 async function nicknameChange(bot, oldMember, newMember) {
@@ -86,5 +86,5 @@ async function nicknameChange(bot, oldMember, newMember) {
             .setColor(bot.embedColors.logChange);
     }
 
-    await tools.memberLog(newMember, embed);
+    await Logs.memberLog(newMember, embed);
 }

@@ -1,6 +1,6 @@
 const {MessageEmbed} = require("discord.js");
 const {Timers, ServerSettings} = require('../../misc/dbObjects');
-const tools = require('../../misc/tools');
+const {Permissions, Compare, Servers, Roles, Logs} = require('../../misc/tools');
 const neededPerm = ['MANAGE_ROLES', "MUTE_MEMBERS"];
 
 module.exports = {
@@ -19,11 +19,11 @@ module.exports = {
         let muteRoleId;
 
         //check member and bot permissions
-        let noUserPermission = tools.checkUserPermissions(bot, message, neededPerm, embed);
+        let noUserPermission = Permissions.checkUserPermissions(bot, message, neededPerm, embed);
         if (noUserPermission)
             return await message.channel.send(embed);
 
-        let noBotPermission = tools.checkBotPermissions(bot, message, neededPerm, embed);
+        let noBotPermission = Permissions.checkBotPermissions(bot, message, neededPerm, embed);
         if (noBotPermission)
             return message.channel.send(embed);
 
@@ -33,7 +33,7 @@ module.exports = {
 
         let member;
 
-        await tools.getMember(message, args).then(memberPromise => {
+        await Servers.getMember(message, args).then(memberPromise => {
             member = memberPromise;
         });
 
@@ -42,7 +42,7 @@ module.exports = {
             return message.channel.send("No member found with this id/name!");
         }
 
-        if (!tools.compareRoles(message.guild.members.cache.get(message.author.id), member)) {
+        if (!Compare.compareRoles(message.guild.members.cache.get(message.author.id), member)) {
             return message.channel.send(embed.setTitle('Action not allowed!')
                 .setColor(bot.embedColors.error)
                 .setDescription(`You can't unmute **${member.user.tag}** due to role hierarchy!`));
@@ -84,7 +84,7 @@ module.exports = {
             return await message.channel.send(embed);
         }
 
-        await tools.removeRole(member, muteRole);
+        await Roles.removeRole(member, muteRole);
 
         await Timers.findOne({
             where: {
@@ -109,6 +109,6 @@ module.exports = {
             .setFooter(`ID: ${member.user.id}`)
             .setTimestamp();
 
-        await tools.modlog(member, logEmbed);
+        await Logs.modlog(member, logEmbed);
     }
 }

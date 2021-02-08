@@ -1,6 +1,6 @@
 const {MessageEmbed} = require('discord.js');
 const logger = require("log4js").getLogger();
-const tools = require('../misc/tools');
+const {Logs} = require('../misc/tools');
 
 module.exports = async (bot, oldGuild, newGuild) => {
     try {
@@ -54,7 +54,7 @@ module.exports = async (bot, oldGuild, newGuild) => {
 
         if (embed.fields.length === 0 && embed.image === null) return;
 
-        await tools.serverLog(newGuild, embed);
+        await Logs.serverLog(newGuild, embed);
     } catch (err) {
         logger.error(err);
     }

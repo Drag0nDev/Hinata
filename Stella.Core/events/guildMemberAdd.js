@@ -1,6 +1,6 @@
 const {User, ServerUser, ServerSettings} = require('../misc/dbObjects');
 const {MessageEmbed} = require('discord.js');
-const tools = require('../misc/tools');
+const {Logs, Levels} = require('../misc/tools');
 const logger = require("log4js").getLogger();
 const pm = require('pretty-ms');
 
@@ -35,44 +35,45 @@ async function addDb(member) {
 
 async function sendWelcomeMessage(member) {
     const guild = member.guild;
+    let settings;
 
-    await ServerSettings.findOne({
+    settings = await ServerSettings.findOne({
         where: {
             serverId: guild.id
         }
-    }).then(async settings => {
-        if (!settings.joinMessageChannel || !settings.joinMessage) return;
+    });
 
-        let joinMessage = settings.joinMessage;
-        let joinChannel = guild.channels.cache.get(settings.joinMessageChannel);
+    if (!settings.joinMessageChannel || !settings.joinMessage) return;
 
-        joinMessage = await tools.customReplace(guild, joinMessage, member);
+    let joinMessage = settings.joinMessage;
+    let joinChannel = guild.channels.cache.get(settings.joinMessageChannel);
 
-        try {
-            let embed = new MessageEmbed();
-            const jsonEmbed = JSON.parse(joinMessage);
+    joinMessage = await Levels.customReplace(guild, joinMessage, member);
 
-            if (jsonEmbed.color) embed.setColor(jsonEmbed.color);
-            if (jsonEmbed.title) embed.setTitle(jsonEmbed.title);
-            if (jsonEmbed.description) embed.setDescription(jsonEmbed.description);
-            if (jsonEmbed.thumbnail) embed.setThumbnail(jsonEmbed.thumbnail);
-            if (jsonEmbed.fields) {
-                for (let field of jsonEmbed.fields) {
-                    let name = field.name;
-                    let value = field.value;
-                    let inline;
-                    if (field.inline) inline = field.inline;
-                    else inline = false;
+    try {
+        let embed = new MessageEmbed();
+        const jsonEmbed = JSON.parse(joinMessage);
 
-                    embed.addField(name, value, inline);
-                }
+        if (jsonEmbed.color) embed.setColor(jsonEmbed.color);
+        if (jsonEmbed.title) embed.setTitle(jsonEmbed.title);
+        if (jsonEmbed.description) embed.setDescription(jsonEmbed.description);
+        if (jsonEmbed.thumbnail) embed.setThumbnail(jsonEmbed.thumbnail);
+        if (jsonEmbed.fields) {
+            for (let field of jsonEmbed.fields) {
+                let name = field.name;
+                let value = field.value;
+                let inline;
+                if (field.inline) inline = field.inline;
+                else inline = false;
+
+                embed.addField(name, value, inline);
             }
-
-            await joinChannel.send({embed: embed});
-        } catch (err) {
-            joinChannel.send(joinMessage);
         }
-    })
+
+        await joinChannel.send({embed: embed});
+    } catch (err) {
+        await joinChannel.send(joinMessage);
+    }
 }
 
 async function joinleaveLog(bot, member) {
@@ -93,5 +94,5 @@ async function joinleaveLog(bot, member) {
         .addField('Account age', agestr, true)
         .setFooter(`ID: ${member.user.id}`);
 
-    await tools.joinLeaveLog(member, embed);
+    await Logs.joinLeaveLog(member, embed);
 }

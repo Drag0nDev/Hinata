@@ -1,6 +1,6 @@
 const logger = require("log4js").getLogger();
 const {MessageEmbed} = require('discord.js');
-const tools = require("../misc/tools");
+const {Logs, Compare} = require("../misc/tools");
 
 module.exports = async (bot, oldRole, newRole) => {
     try {
@@ -16,7 +16,7 @@ module.exports = async (bot, oldRole, newRole) => {
 
         if (embed.fields.length === 0) return;
 
-        await tools.serverLog(newRole.guild, embed);
+        await Logs.serverLog(newRole.guild, embed);
     } catch (err) {
         logger.error(err);
     }
@@ -36,7 +36,7 @@ async function checkPermissions(oldRole, newRole, embed) {
     let newPermissions = Array.from(oldRole.permissions);
 
     //check difference
-    if (!tools.arrayEquals(oldPermissions, newPermissions)) {
+    if (!Compare.arrayEquals(oldPermissions, newPermissions)) {
         const changedPerms = await findChangedPerms(oldPermissions, newPermissions);
 
         if (changedPerms.addedPermissions.length === 0)

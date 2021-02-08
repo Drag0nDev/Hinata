@@ -1,6 +1,6 @@
 const delay = require("delay");
 const {MessageEmbed} = require('discord.js');
-const tools = require('../../misc/tools');
+const {Servers} = require('../../misc/tools');
 
 module.exports = {
     name: 'pp',
@@ -16,7 +16,7 @@ module.exports = {
 
         let member;
 
-        await tools.getMember(message, args).then(memberPromise => {
+        await Servers.getMember(message, args).then(memberPromise => {
             member = memberPromise;
         });
 

@@ -1,5 +1,5 @@
 const {MessageEmbed} = require('discord.js');
-const tools = require('../../misc/tools');
+const {Servers, Permissions, Roles} = require('../../misc/tools');
 let neededPerm = ['MANAGE_ROLES'];
 
 module.exports = {
@@ -18,11 +18,11 @@ module.exports = {
         const id = new RegExp('[0-9]{17,}');
 
         //check permissions
-        let noUserPermission = tools.checkUserPermissions(bot, message, neededPerm, embed);
+        let noUserPermission = Permissions.checkUserPermissions(bot, message, neededPerm, embed);
         if (noUserPermission)
             return await message.channel.send(embed);
 
-        let noBotPermission = tools.checkBotPermissions(bot, message, neededPerm, embed);
+        let noBotPermission = Permissions.checkBotPermissions(bot, message, neededPerm, embed);
         if (noBotPermission)
             return message.channel.send(embed);
 
@@ -46,7 +46,7 @@ async function addRole(bot, message, args, embed) {
     let member;
     let role;
 
-    await tools.getMember(message, args).then(memberPromise => {
+    await Servers.getMember(message, args).then(memberPromise => {
         member = memberPromise;
     });
 
@@ -59,7 +59,7 @@ async function addRole(bot, message, args, embed) {
 
     await args.shift();
 
-    await tools.getRole(message, args).then(rolePromise => {
+    await Roles.getRole(message, args).then(rolePromise => {
         role = rolePromise;
     });
 
@@ -71,11 +71,11 @@ async function addRole(bot, message, args, embed) {
     }
 
     //check if assigned role is higher then bots highest role
-    let roleCheck = tools.checkRolePosition(bot, message, role);
+    let roleCheck = Permissions.checkRolePosition(bot, message, role);
     if (roleCheck)
         return message.channel.send(embed);
 
-    await tools.giveRole(member, role);
+    await Roles.giveRole(member, role);
 
     embed.setColor(bot.embedColors.normal)
         .setDescription(`Role <@&${role.id}> added to <@!${member.user.id}>!`);
@@ -85,7 +85,7 @@ async function remRole(bot, message, args, embed) {
     let member;
     let role;
 
-    await tools.getMember(message, args).then(memberPromise => {
+    await Servers.getMember(message, args).then(memberPromise => {
         member = memberPromise;
     });
 
@@ -98,7 +98,7 @@ async function remRole(bot, message, args, embed) {
 
     await args.shift();
 
-    await tools.getRole(message, args).then(rolePromise => {
+    await Roles.getRole(message, args).then(rolePromise => {
         role = rolePromise;
     });
 
@@ -110,11 +110,11 @@ async function remRole(bot, message, args, embed) {
     }
 
     //check if assigned role is higher then bots highest role
-    let roleCheck = tools.checkRolePosition(bot, message, role);
+    let roleCheck = Permissions.checkRolePosition(bot, message, role);
     if (roleCheck)
         return message.channel.send(embed);
 
-    await tools.removeRole(member, role);
+    await Roles.removeRole(member, role);
 
     embed.setColor(bot.embedColors.normal)
         .setDescription(`Role <@&${role.id}> removed from <@!${member.user.id}>!`);
@@ -125,7 +125,7 @@ async function addRemove(bot, message, args, embed) {
     let role;
     let roleArray = [];
 
-    await tools.getMember(message, args).then(memberPromise => {
+    await Servers.getMember(message, args).then(memberPromise => {
         member = memberPromise;
     });
 
@@ -138,7 +138,7 @@ async function addRemove(bot, message, args, embed) {
 
     await args.shift();
 
-    await tools.getRole(message, args).then(rolePromise => {
+    await Roles.getRole(message, args).then(rolePromise => {
         role = rolePromise;
     });
 
@@ -165,12 +165,12 @@ async function addRemove(bot, message, args, embed) {
     });
 
     if (roleArray.includes(role.id)){
-        await tools.removeRole(member, role);
+        await Roles.removeRole(member, role);
 
         embed.setColor(bot.embedColors.normal)
             .setDescription(`Role <@&${role.id}> removed from <@!${member.user.id}>!`);
     } else {
-        await tools.giveRole(member, role);
+        await Roles.giveRole(member, role);
 
         embed.setColor(bot.embedColors.normal)
             .setDescription(`Role <@&${role.id}> added to <@!${member.user.id}>!`);

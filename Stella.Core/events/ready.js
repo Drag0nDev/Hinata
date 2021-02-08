@@ -1,7 +1,7 @@
 const logger = require("log4js").getLogger();
 const {MessageEmbed} = require('discord.js');
 const {Timers, ServerSettings} = require('../misc/dbObjects');
-const tools = require('../misc/tools');
+const {Logs, Roles} = require('../misc/tools');
 
 module.exports = async bot => {
     let embed = new MessageEmbed()
@@ -76,7 +76,7 @@ async function checkMutes(bot) {
         muteRole = server.roles.cache.get(serverDb.muteRoleId);
     });
 
-    await tools.removeRole(member, muteRole);
+    await Roles.removeRole(member, muteRole);
 
     const logEmbed = new MessageEmbed().setTitle('User unmuted')
         .setColor(bot.embedColors.unban)
@@ -86,7 +86,7 @@ async function checkMutes(bot) {
         .setFooter(`ID: ${member.user.id}`)
         .setTimestamp();
 
-    await tools.modlog(member, logEmbed);
+    await Logs.modlog(member, logEmbed);
 }
 
 async function checkBans(bot) {
@@ -135,5 +135,5 @@ async function checkBans(bot) {
         .setFooter(`ID: ${member.user.id}`)
         .setTimestamp();
 
-    await tools.modlog(moderator, logEmbed);
+    await Logs.modlog(moderator, logEmbed);
 }

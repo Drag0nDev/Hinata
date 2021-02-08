@@ -1,5 +1,5 @@
 const config = require("../../../config.json");
-const tools = require("../../misc/tools");
+const {Permissions} = require('../../misc/tools');
 const {MessageEmbed} = require('discord.js');
 
 module.exports = {
@@ -12,12 +12,11 @@ module.exports = {
         let embed = new MessageEmbed();
 
         if (message.author.id !== config.owner) {
-            tools.ownerOnly(bot, message.channel)
+            Permissions.ownerOnly(bot, message.channel)
             return;
         }
 
         bot.user.setAvatar(args.toString()).then(updated => {
-                console.log(updated)
                 embed.setTitle(`setavatar`)
                     .setColor(bot.embedColors.normal)
                     .setDescription('Avatar changed successfully to:')

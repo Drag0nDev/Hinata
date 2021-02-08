@@ -1,5 +1,5 @@
 const config = require("../../../config.json")
-const tools = require("../../misc/tools");
+const {Permissions} = require('../../misc/tools');
 const {MessageEmbed} = require('discord.js');
 
 module.exports = {
@@ -12,7 +12,7 @@ module.exports = {
         let embed = new MessageEmbed().setTitle('Leave Guild');
 
         if (message.author.id !== config.owner) {
-            tools.ownerOnly(bot, message.channel)
+            Permissions.ownerOnly(bot, message.channel)
             return;
         }
 

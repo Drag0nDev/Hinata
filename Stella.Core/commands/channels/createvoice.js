@@ -1,4 +1,5 @@
 const {MessageEmbed} = require('discord.js');
+const {Permissions} = require('../../misc/tools');
 let neededPerm = ['MANAGE_GUILD'];
 
 module.exports = {
@@ -21,11 +22,11 @@ module.exports = {
         const channel = message.channel;
 
         //check member and bot permissions
-        let noUserPermission = tools.checkUserPermissions(bot, message, neededPerm, embed);
+        let noUserPermission = Permissions.checkUserPermissions(bot, message, neededPerm, embed);
         if (noUserPermission)
             return await message.channel.send(embed);
 
-        let noBotPermission = tools.checkBotPermissions(bot, message, neededPerm, embed);
+        let noBotPermission = Permissions.checkBotPermissions(bot, message, neededPerm, embed);
         if (noBotPermission)
             return message.channel.send(embed);
 

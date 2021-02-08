@@ -1,7 +1,7 @@
 const neededPerm = ['KICK_MEMBERS'];
 const {MessageEmbed} = require("discord.js");
 const {Timers, User, Server} = require('../../misc/dbObjects');
-const tools = require('../../misc/tools');
+const {Permissions, Minor} = require('../../misc/tools');
 const pm = require('pretty-ms');
 const logger = require("log4js").getLogger();
 
@@ -18,11 +18,11 @@ module.exports = {
         let server;
 
         //check member and bot permissions
-        let noUserPermission = tools.checkUserPermissions(bot, message, neededPerm, embed);
+        let noUserPermission = Permissions.checkUserPermissions(bot, message, neededPerm, embed);
         if (noUserPermission)
             return await message.channel.send(embed);
 
-        let noBotPermission = tools.checkBotPermissions(bot, message, neededPerm, embed);
+        let noBotPermission = Permissions.checkBotPermissions(bot, message, neededPerm, embed);
         if (noBotPermission)
             return message.channel.send(embed);
 
@@ -104,7 +104,7 @@ module.exports = {
 function messageEditor(bot, message, embed, timers, description, now) {
     message.channel.send(embed)
         .then(async messageBot => {
-            await tools.addPageArrows(messageBot);
+            await Minor.addPageArrows(messageBot);
             let page = 0;
 
             const filter = (reaction, user) => {

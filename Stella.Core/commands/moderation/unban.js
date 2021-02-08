@@ -1,6 +1,6 @@
 const {MessageEmbed} = require("discord.js");
 const neededPerm = ['BAN_MEMBERS'];
-const tools = require('../../misc/tools');
+const {Permissions, Logs} = require('../../misc/tools');
 
 module.exports = {
     name: 'unban',
@@ -25,11 +25,11 @@ module.exports = {
         const id = args.shift();
 
         //check member and bot permissions
-        let noUserPermission = tools.checkUserPermissions(bot, message, neededPerm, embed);
+        let noUserPermission = Permissions.checkUserPermissions(bot, message, neededPerm, embed);
         if (noUserPermission)
             return await message.channel.send(embed);
 
-        let noBotPermission = tools.checkBotPermissions(bot, message, neededPerm, embed);
+        let noBotPermission = Permissions.checkBotPermissions(bot, message, neededPerm, embed);
         if (noBotPermission)
             return message.channel.send(embed);
 
@@ -67,6 +67,6 @@ module.exports = {
             .setFooter(`ID: ${member.user.id}`)
             .setTimestamp();
 
-        await tools.modlog(message.guild.members.cache.get(message.author.id), logEmbed);
+        await Logs.modlog(message.guild.members.cache.get(message.author.id), logEmbed);
     }
 }

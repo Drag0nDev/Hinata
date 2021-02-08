@@ -1,6 +1,6 @@
 const {MessageEmbed} = require('discord.js');
 const logger = require("log4js").getLogger();
-const tools = require('../misc/tools');
+const {Logs} = require('../misc/tools');
 
 module.exports = async (bot, channel) => {
     try {
@@ -38,7 +38,7 @@ module.exports = async (bot, channel) => {
 
         }
 
-        await tools.serverLog(channel.guild, embed);
+        await Logs.serverLog(channel.guild, embed);
     } catch (err) {
         logger.error(err);
     }

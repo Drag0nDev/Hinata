@@ -1,7 +1,7 @@
 const neededPerm = ['MANAGE_GUILD'];
 const {MessageEmbed} = require("discord.js");
 const {Warnings, User} = require('../../misc/dbObjects');
-const tools = require('../../misc/tools');
+const {Permissions} = require('../../misc/tools');
 const logger = require("log4js").getLogger();
 
 module.exports = {
@@ -19,11 +19,11 @@ module.exports = {
         const id = new RegExp('[0-9]{17,}');
 
         //check member and bot permissions
-        let noUserPermission = tools.checkUserPermissions(bot, message, neededPerm, embed);
+        let noUserPermission = Permissions.checkUserPermissions(bot, message, neededPerm, embed);
         if (noUserPermission)
             return await message.channel.send(embed);
 
-        let noBotPermission = tools.checkBotPermissions(bot, message, neededPerm, embed);
+        let noBotPermission = Permissions.checkBotPermissions(bot, message, neededPerm, embed);
         if (noBotPermission)
             return message.channel.send(embed);
 
@@ -32,10 +32,8 @@ module.exports = {
         } else if (parseInt(choice.exec(args[0])[0])) {
             let member;
 
-            await tools.getMember(message, args).then(memberPromise => {
+            await Servers.getMember(message, args).then(memberPromise => {
                 member = memberPromise.user.id;
-            }).catch(err => {
-                member = id.exec(args[0])[0];
             });
 
             await args.shift()

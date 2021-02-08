@@ -1,7 +1,7 @@
 const {MessageEmbed} = require('discord.js');
 const config = require("../../../config.json");
 const AsciiTable = require('ascii-table');
-const tools = require('../../misc/tools');
+const {Minor} = require('../../misc/tools');
 
 module.exports = {
     name: 'help',
@@ -172,7 +172,7 @@ function getCat(bot, message, input) {
 function messageEditor(bot, message, embed, categories, commands) {
     message.channel.send(embed)
         .then(async messageBot => {
-            await tools.addPageArrows(messageBot);
+            await Minor.addPageArrows(messageBot);
             let page = 0;
 
             const filter = (reaction, user) => {

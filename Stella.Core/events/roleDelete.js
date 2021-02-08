@@ -1,6 +1,6 @@
 const logger = require("log4js").getLogger();
 const {MessageEmbed} = require('discord.js');
-const tools = require("../misc/tools");
+const {Logs} = require("../misc/tools");
 
 module.exports = async (bot, role) => {
     try {
@@ -14,7 +14,7 @@ module.exports = async (bot, role) => {
             .addField('Displayed separetly', role.hoist ? 'Yes' : 'No', true)
             .addField('Position', role.rawPosition, true);
 
-        await tools.serverLog(role.guild, embed);
+        await Logs.serverLog(role.guild, embed);
     } catch (err) {
         logger.error(err);
     }

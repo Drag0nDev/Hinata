@@ -1,6 +1,6 @@
 const logger = require("log4js").getLogger();
 const {MessageEmbed} = require('discord.js');
-const tools = require("../misc/tools");
+const {Logs} = require("../misc/tools");
 
 module.exports = async (bot, oldState, newState) => {
     try {
@@ -19,7 +19,7 @@ module.exports = async (bot, oldState, newState) => {
         else 
             await switchChannel(bot, oldState, newState, member, embed);
 
-        await tools.voiceLogChannel(newState.guild, embed);
+        await Logs.voiceLogChannel(newState.guild, embed);
     } catch (err) {
         logger.error(err);
     }

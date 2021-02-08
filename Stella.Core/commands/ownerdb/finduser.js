@@ -1,9 +1,7 @@
 const {MessageEmbed} = require('discord.js');
 const {User, ServerUser} = require('../../misc/dbObjects');
-const Sequelize = require('sequelize');
-const pm = require('parse-ms');
 const config = require("../../../config.json");
-const tools = require("../../misc/tools");
+const {Permissions} = require('../../misc/tools');
 
 module.exports = {
     name: 'finduser',
@@ -16,7 +14,7 @@ module.exports = {
         let guild;
 
         if (message.author.id !== config.owner) {
-            tools.ownerOnly(bot, message.channel)
+            Permissions.ownerOnly(bot, message.channel)
             return;
         }
 

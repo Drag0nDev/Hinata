@@ -1,7 +1,7 @@
 const {MessageEmbed} = require('discord.js');
 const log4js = require("log4js");
 let neededPerm = ['MANAGE_GUILD'];
-const tools = require("../../misc/tools");
+const {Permissions, Roles, Servers, Levels, Compare, Logs, Minor, Dates} = require('../../misc/tools');
 
 module.exports = {
     //<editor-fold defaultstate="collapsed" desc="userinfo help">
@@ -18,11 +18,11 @@ module.exports = {
         let embed = new MessageEmbed().setColor(bot.embedColors.normal);
 
         //check member and bot permissions
-        let noUserPermission = tools.checkUserPermissions(bot, message, neededPerm, embed);
+        let noUserPermission = Permissions.checkUserPermissions(bot, message, neededPerm, embed);
         if (noUserPermission)
             return await message.channel.send(embed);
 
-        let noBotPermission = tools.checkBotPermissions(bot, message, neededPerm, embed);
+        let noBotPermission = Permissions.checkBotPermissions(bot, message, neededPerm, embed);
         if (noBotPermission)
             return message.channel.send(embed);
 

@@ -1,4 +1,4 @@
-const tools = require("../../misc/tools");
+const {Permissions, } = require("../../misc/tools");
 const {MessageEmbed} = require('discord.js');
 const {ServerSettings} = require('../../misc/dbObjects');
 const neededPerm = ['MANAGE_CHANNELS'];
@@ -19,11 +19,11 @@ module.exports = {
         let $channel;
         let messageLogChannel;
 
-        let noUserPermission = tools.checkUserPermissions(bot, message, neededPerm, embed);
+        let noUserPermission = Permissions.checkUserPermissions(bot, message, neededPerm, embed);
         if (noUserPermission)
             return await message.channel.send(embed);
 
-        let noBotPermission = tools.checkBotPermissions(bot, message, neededPerm, embed);
+        let noBotPermission = Permissions.checkBotPermissions(bot, message, neededPerm, embed);
         if (noBotPermission)
             return message.channel.send(embed);
 
@@ -52,7 +52,7 @@ module.exports = {
                     .setDescription(`New message log created with name <#${channel.id}>`);
             });
 
-            $channel.createWebhook('Stella', {
+            await $channel.createWebhook('Stella', {
                 avatar: bot.user.avatarURL({
                     dynamic: true,
                     size: 4096

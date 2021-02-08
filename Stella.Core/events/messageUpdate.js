@@ -1,6 +1,6 @@
 const logger = require("log4js").getLogger();
 const {MessageEmbed} = require('discord.js');
-const tools = require("../misc/tools");
+const {Logs} = require("../misc/tools");
 
 module.exports = async (bot, oldMessage, newMessage) => {
     try {
@@ -17,7 +17,7 @@ module.exports = async (bot, oldMessage, newMessage) => {
         embed.addField('Old message', oldMessage.content)
             .addField('New message', newMessage.content);
 
-        await tools.messageLog(newMessage.guild, embed);
+        await Logs.messageLog(newMessage.guild, embed);
     } catch (err) {
         logger.error(err);
     }

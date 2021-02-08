@@ -1,6 +1,6 @@
 const delay = require("delay");
 const {MessageEmbed} = require('discord.js');
-const tools = require('../../misc/tools');
+const {Servers} = require('../../misc/tools');
 
 module.exports = {
     name: 'getip',
@@ -15,7 +15,7 @@ module.exports = {
 
         let member;
 
-        await tools.getMember(message, args).then(memberPromise => {
+        await Servers.getMember(message, args).then(memberPromise => {
             member = memberPromise;
         });
 
@@ -27,13 +27,14 @@ module.exports = {
             .setDescription('Getting ip ...')
             .setColor(bot.embedColors.normal);
 
-        let msg = await message.channel.send(embed);
-        await delay(1250);
+        await message.channel.send(embed).then(async msg => {
+            await delay(1250);
 
-        embed.setDescription(`**${member.user.tag}**'s IP: **${getRandomInt(255)}.${getRandomInt(255)}.${getRandomInt(255)}.${getRandomInt(255)}**`)
-            .setImage('');
+            embed.setDescription(`**${member.user.tag}**'s IP: **${getRandomInt(255)}.${getRandomInt(255)}.${getRandomInt(255)}.${getRandomInt(255)}**`)
+                .setImage('');
 
-        await msg.edit(embed);
+            await msg.edit(embed);
+        });
     }
 }
 

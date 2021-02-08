@@ -1,5 +1,5 @@
 const {MessageEmbed} = require("discord.js");
-const tools = require('../../misc/tools');
+const {Permissions, Servers, Logs, Compare} = require('../../misc/tools');
 const neededPerm = ['KICK_MEMBERS'];
 
 module.exports = {
@@ -20,17 +20,17 @@ module.exports = {
             return message.channel.send('Please provide a user to kick!');
 
         //check member and bot permissions
-        let noUserPermission = tools.checkUserPermissions(bot, message, neededPerm, embed);
+        let noUserPermission = Permissions.checkUserPermissions(bot, message, neededPerm, embed);
         if (noUserPermission)
             return await message.channel.send(embed);
 
-        let noBotPermission = tools.checkBotPermissions(bot, message, neededPerm, embed);
+        let noBotPermission = Permissions.checkBotPermissions(bot, message, neededPerm, embed);
         if (noBotPermission)
             return message.channel.send(embed);
 
         let member;
 
-        await tools.getMember(message, args).then(memberPromise => {
+        await Servers.getMember(message, args).then(memberPromise => {
             member = memberPromise;
         });
         const author = message.guild.members.cache.get(message.author.id);
@@ -40,7 +40,7 @@ module.exports = {
             return message.channel.send("No member found with this id/name!");
         }
 
-        const canKick = tools.compareRoles(author, member);
+        const canKick = Compare.compareRoles(author, member);
 
         //check if member is kickable
         if (!member.kickable) {
@@ -85,6 +85,6 @@ module.exports = {
             `**Responsible moderator:** ${message.author.tag}`)
             .setFooter(`ID: ${member.id}`);
 
-        await tools.modlog(message.guild.members.cache.get(message.author.id), logEmbed);
+        await Logs.modlog(message.guild.members.cache.get(message.author.id), logEmbed);
     }
 }

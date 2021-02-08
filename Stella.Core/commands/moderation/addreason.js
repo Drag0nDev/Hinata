@@ -1,6 +1,6 @@
 const {MessageEmbed} = require('discord.js');
 const { Warnings } = require('../../misc/dbObjects');
-const tools = require("../../misc/tools");
+const {Permissions} = require("../../misc/tools");
 const neededPerm = ['KICK_MEMBERS'];
 
 module.exports = {
@@ -15,7 +15,7 @@ module.exports = {
         const $case = new RegExp('^[0-9]');
 
         //check member and bot permissions
-        let noUserPermission = tools.checkUserPermissions(bot, message, neededPerm, embed);
+        let noUserPermission = Permissions.checkUserPermissions(bot, message, neededPerm, embed);
         if (noUserPermission)
             return await message.channel.send(embed);
 

@@ -1,5 +1,5 @@
 const {MessageEmbed} = require('discord.js');
-const tools = require('../../misc/tools');
+const {Servers, Dates, Roles} = require('../../misc/tools');
 
 module.exports = {
     //<editor-fold defaultstate="collapsed" desc="userinfo help">
@@ -13,11 +13,10 @@ module.exports = {
     run: async (bot, message, args) => {
         let embed = new MessageEmbed().setColor(bot.embedColors.normal);
 
-        //<editor-fold defaultstate="collapsed" desc="Used variable declarations">
         //find the member if one is asked if not then use the author
         let member;
 
-        await tools.getMember(message, args).then(memberPromise => {
+        await Servers.getMember(message, args).then(memberPromise => {
             member = memberPromise;
         });
 
@@ -29,17 +28,16 @@ module.exports = {
         let nickname = member.nickname === null ? '-' : member.nickname;
 
         //get Join date
-        let date = tools.getDate(member.joinedTimestamp);
+        let date = Dates.getDate(member.joinedTimestamp);
 
         //get account creation date
-        let creation = tools.getDate(member.user.createdTimestamp);
+        let creation = Dates.getDate(member.user.createdTimestamp);
 
         //get roles
-        let roles = tools.getRoles(member);
+        let roles = Roles.getRoles(member);
 
         //get the permissions
         let permissions = getPermissions(member);
-        //</editor-fold>
 
         //<editor-fold defaultstate="collapsed" desc="embed creation">
         embed.setTitle(`Userinfo of: ${member.user.username}#${member.user.discriminator}`)

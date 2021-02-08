@@ -1,6 +1,6 @@
 const {MessageEmbed} = require('discord.js');
 const delay = require("delay");
-const tools = require('../../misc/tools');
+const {Servers} = require('../../misc/tools');
 
 module.exports = {
     name: 'howgay',
@@ -16,7 +16,7 @@ module.exports = {
 
         let member;
 
-        await tools.getMember(message, args).then(memberPromise => {
+        await Servers.getMember(message, args).then(memberPromise => {
             member = memberPromise;
         });
 
@@ -26,15 +26,16 @@ module.exports = {
 
         let gayrate = getRandomInt(100);
 
-        let msg = await message.channel.send(embed);
-        await delay(1250);
+        await message.channel.send(embed).then(async msg => {
+            await delay(1250);
 
-        embed.setDescription(`**${member.user.tag}** is ${gayrate}% gay!`);
+            embed.setDescription(`**${member.user.tag}** is ${gayrate}% gay!`);
 
-        if (gayrate > 50)
-            embed.setImage('https://media1.tenor.com/images/07ca40330ec6b96b50de2f7539ca718d/tenor.gif');
+            if (gayrate > 50)
+                embed.setImage('https://media1.tenor.com/images/07ca40330ec6b96b50de2f7539ca718d/tenor.gif');
 
-        await msg.edit(embed);
+            await msg.edit(embed);
+        });
     }
 }
 

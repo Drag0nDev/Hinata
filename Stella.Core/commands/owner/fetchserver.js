@@ -1,7 +1,7 @@
 const config = require("../../../config.json")
 const {MessageEmbed} = require('discord.js');
 const log4js = require("log4js");
-const tools = require('../../misc/tools');
+const {Permissions, Dates} = require('../../misc/tools');
 
 const logger = log4js.getLogger();
 
@@ -14,10 +14,9 @@ module.exports = {
     run: async (bot, message, args) => {
         let embed = new MessageEmbed().setTitle('Fetch server');
 
-        //<editor-fold defaultstate="collapsed" desc="Preparations">
         //check if the user is the bot owner
         if (message.author.id !== config.owner) {
-            tools.ownerOnly(bot, message.channel)
+            Permissions.ownerOnly(bot, message.channel)
             return;
         }
 
@@ -30,12 +29,10 @@ module.exports = {
         if (!bot.guilds.cache.get(args[0]))
             return message.channel.send(embed.setDescription(`I am not in a server with id ${args[0]}`)
                 .setColor(bot.embedColors.error));
-        //</editor-fold>
 
         //assign guild
         const guild = bot.guilds.cache.get(args[0]);
 
-        //<editor-fold defaultstate="collapsed" desc="all guild stats variables">
         //find the owner and all his/her info
         let owner = guild.members.cache.get(guild.ownerID);
 
@@ -58,8 +55,7 @@ module.exports = {
         let afkChannel = getAfkChannel(guild);
 
         //get the date
-        let date = tools.getDate(guild.createdTimestamp);
-        //</editor-fold>
+        let date = Dates.getDate(guild.createdTimestamp);
 
         //get an invite code and make the embed
         guild.fetchInvites().then(async invites => {
@@ -100,7 +96,6 @@ module.exports = {
     }
 }
 
-// <editor-fold defaultstate="collapsed" desc="used functions">
 function getSystemChannel(guild) {
 
     //check for null on guld.systemChannel
@@ -126,4 +121,3 @@ async function createNew(guild) {
 
     return await channel.createInvite();
 }
-//</editor-fold>

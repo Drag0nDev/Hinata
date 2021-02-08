@@ -1,6 +1,5 @@
 const config = require("../../../config.json");
-const tools = require("../../misc/tools");
-
+const {Permissions} = require('../../misc/tools');
 module.exports = {
     name: 'aakash',
     category: 'owner',
@@ -8,7 +7,7 @@ module.exports = {
     usage: '[command | alias]',
     run: async (bot, message) => {
         if (message.author.id !== config.owner) {
-            tools.ownerOnly(bot, message.channel)
+            Permissions.ownerOnly(bot, message.channel)
             return;
         }
 

@@ -1,5 +1,5 @@
 const config = require("../../../config.json")
-const tools = require("../../misc/tools");
+const {Permissions} = require('../../misc/tools');
 const {MessageEmbed} = require('discord.js');
 
 module.exports = {
@@ -12,7 +12,7 @@ module.exports = {
         let servers = [];
 
         if (message.author.id !== config.owner) {
-            tools.ownerOnly(bot, message.channel)
+            Permissions.ownerOnly(bot, message.channel)
             return;
         }
 
@@ -59,7 +59,7 @@ function messageEditor(bot, message, embed, servers) {
                     await pageSwitch(message, page, servers, editEmbed);
                 }
 
-                if (Object.keys(editEmbed.fields).length !== 0) {
+                if (editEmbed.fields.length !== 0) {
                     await messageBot.edit(editEmbed);
                 }
             });

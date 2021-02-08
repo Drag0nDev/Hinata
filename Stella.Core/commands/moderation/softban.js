@@ -1,6 +1,5 @@
 const {MessageEmbed} = require("discord.js");
-const {ServerUser, Timers} = require('../../misc/dbObjects');
-const tools = require('../../misc/tools');
+const {Permissions, Compare, Servers, Logs} = require('../../misc/tools');
 const neededPerm = ['BAN_MEMBERS'];
 
 module.exports = {
@@ -16,11 +15,11 @@ module.exports = {
         let embed = new MessageEmbed().setTimestamp().setColor(bot.embedColors.ban).setTitle('Softban');
 
         //check member and bot permissions
-        let noUserPermission = tools.checkUserPermissions(bot, message, neededPerm, embed);
+        let noUserPermission = Permissions.checkUserPermissions(bot, message, neededPerm, embed);
         if (noUserPermission)
             return await message.channel.send(embed);
 
-        let noBotPermission = tools.checkBotPermissions(bot, message, neededPerm, embed);
+        let noBotPermission = Permissions.checkBotPermissions(bot, message, neededPerm, embed);
         if (noBotPermission)
             return message.channel.send(embed);
 
@@ -30,7 +29,7 @@ module.exports = {
 
         let member;
 
-        await tools.getMember(message, args).then(memberPromise => {
+        await Servers.getMember(message, args).then(memberPromise => {
             member = memberPromise;
         });
         const author = message.guild.members.cache.get(message.author.id);
@@ -40,7 +39,7 @@ module.exports = {
             return message.channel.send("No member found with this id/name!");
         }
 
-        const canBan = tools.compareRoles(author, member);
+        const canBan = Compare.compareRoles(author, member);
 
         //check if the author has a higher role then the member
         if (!canBan)
@@ -101,7 +100,7 @@ module.exports = {
             .setFooter(`ID: ${member.user.id}`)
             .setTimestamp();
 
-        await tools.modlog(message.guild.members.cache.get(message.author.id), logEmbed);
+        await Logs.modlog(message.guild.members.cache.get(message.author.id), logEmbed);
 
     }
 }

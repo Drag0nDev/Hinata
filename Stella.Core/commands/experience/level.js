@@ -1,7 +1,7 @@
 const {MessageEmbed} = require('discord.js');
 const {User, ServerUser} = require('../../misc/dbObjects');
 const config = require("../../../config.json");
-const tools = require('../../misc/tools');
+const {Servers} = require('../../misc/tools');
 
 module.exports = {
     name: 'level',
@@ -21,7 +21,7 @@ module.exports = {
         let userListId = [];
         let userServerListId = [];
 
-        await tools.getMember(message, args).then(memberPromise => {
+        await Servers.getMember(message, args).then(memberPromise => {
             member = memberPromise;
         });
 

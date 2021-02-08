@@ -1,6 +1,6 @@
 const {MessageEmbed} = require('discord.js');
 const {Rewards} = require('../../misc/dbObjects');
-const tools = require('../../misc/tools');
+const {Levels} = require('../../misc/tools');
 
 module.exports = {
     name: 'leveluprolelist',
@@ -13,8 +13,9 @@ module.exports = {
         let embed = new MessageEmbed().setColor(bot.embedColors.normal)
             .setThumbnail(message.guild.iconURL({dynamic: true}))
             .setTitle('Level up role list')
+        let rewards;
 
-        let rewards = await Rewards.findAll({
+        rewards = await Rewards.findAll({
             where: {
                 serverId: message.guild.id
             },
@@ -25,7 +26,7 @@ module.exports = {
 
         let rewardsStr = '';
         rewards.forEach(reward => {
-            let level = tools.getLevel(reward.xp);
+            let level = Levels.getLevel(reward.xp);
             rewardsStr += `**Level ${level}**: <@&${reward.roleId}>\n`
         });
 

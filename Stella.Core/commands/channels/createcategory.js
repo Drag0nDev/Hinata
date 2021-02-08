@@ -1,5 +1,5 @@
 const {MessageEmbed} = require('discord.js');
-const tools = require("../../misc/tools");
+const {Permissions} = require("../../misc/tools");
 let neededPerm = ['MANAGE_GUILD'];
 
 module.exports = {
@@ -20,11 +20,11 @@ module.exports = {
         const title = 'Create new category!';
         const channel = message.channel;
 
-        let noUserPermission = tools.checkUserPermissions(bot, message, neededPerm, embed);
+        let noUserPermission = Permissions.checkUserPermissions(bot, message, neededPerm, embed);
         if (noUserPermission)
             return await message.channel.send(embed);
 
-        let noBotPermission = tools.checkBotPermissions(bot, message, neededPerm, embed);
+        let noBotPermission = Permissions.checkBotPermissions(bot, message, neededPerm, embed);
         if (noBotPermission)
             return message.channel.send(embed);
 

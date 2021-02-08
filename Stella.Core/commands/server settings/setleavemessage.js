@@ -1,6 +1,6 @@
 const {MessageEmbed} = require('discord.js');
 const {ServerSettings} = require('../../misc/dbObjects');
-const tools = require('../../misc/tools');
+const {Permissions, Levels} = require('../../misc/tools');
 let neededPerm = ['MANAGE_GUILD'];
 
 module.exports = {
@@ -30,7 +30,7 @@ module.exports = {
         let user = message.guild.members.cache.get(message.author.id);
         let guild = message.guild;
 
-        let noUserPermission = tools.checkUserPermissions(bot, message, neededPerm, embed);
+        let noUserPermission = Permissions.checkUserPermissions(bot, message, neededPerm, embed);
         if (noUserPermission)
             return await message.channel.send(embed);
 
@@ -42,7 +42,7 @@ module.exports = {
             settings.leaveMessage = customMessage;
             settings.save();
 
-            customMessage = await tools.customReplace(guild, customMessage, user);
+            customMessage = await Levels.customReplace(guild, customMessage, user);
 
             try {
                 const jsonEmbed = JSON.parse(customMessage);

@@ -1,7 +1,7 @@
 const neededPerm = ['KICK_MEMBERS'];
 const {MessageEmbed} = require("discord.js");
 const {Warnings, User, Server} = require('../../misc/dbObjects');
-const tools = require('../../misc/tools');
+const {Permissions, Minor, Compare, Servers, Dates, Roles, Levels, Logs} = require('../../misc/tools');
 const logger = require("log4js").getLogger();
 
 module.exports = {
@@ -21,11 +21,11 @@ module.exports = {
         const id = new RegExp('[0-9]{17,}');
 
         //check member and bot permissions
-        let noUserPermission = tools.checkUserPermissions(bot, message, neededPerm, embed);
+        let noUserPermission = Permissions.checkUserPermissions(bot, message, neededPerm, embed);
         if (noUserPermission)
             return await message.channel.send(embed);
 
-        let noBotPermission = tools.checkBotPermissions(bot, message, neededPerm, embed);
+        let noBotPermission = Permissions.checkBotPermissions(bot, message, neededPerm, embed);
         if (noBotPermission)
             return message.channel.send(embed);
 
@@ -34,7 +34,7 @@ module.exports = {
         } else if (parseInt(choice.exec(args[0])[0])) {
             let memberId;
 
-            await tools.getMember(message, args).then(memberPromise => {
+            await Servers.getMember(message, args).then(memberPromise => {
                 memberId = memberPromise.user.id;
             }).catch(err => {
                 memberId = id.exec(args[0])[0];
@@ -191,7 +191,7 @@ async function showUser(bot, message, memberId, embed, variation) {
 function messageEditor(bot, message, embed, warnings, variation, description) {
     message.channel.send(embed)
         .then(async messageBot => {
-            await tools.addPageArrows(messageBot);
+            await Minor.addPageArrows(messageBot);
             let page = 0;
 
             const filter = (reaction, user) => {

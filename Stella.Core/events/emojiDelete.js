@@ -1,6 +1,6 @@
 const logger = require("log4js").getLogger();
 const {MessageEmbed} = require('discord.js');
-const tools = require("../misc/tools");
+const {Logs} = require('../misc/tools');
 
 module.exports = async (bot, emoji) => {
     try {
@@ -10,7 +10,7 @@ module.exports = async (bot, emoji) => {
             .setFooter(`Emoji ID: ${emoji.id}`)
             .setDescription(`${emoji.name}`);
 
-        await tools.serverLog(emoji.guild, embed);
+        await Logs.serverLog(emoji.guild, embed);
     } catch (err) {
         logger.error(err);
     }

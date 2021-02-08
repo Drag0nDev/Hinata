@@ -1,6 +1,6 @@
 const {MessageEmbed} = require("discord.js");
 const {ServerSettings} = require('../../misc/dbObjects');
-const tools = require('../../misc/tools');
+const {Permissions, Servers} = require('../../misc/tools');
 const neededPerm = ['MANAGE_ROLES'];
 
 module.exports = {
@@ -16,10 +16,10 @@ module.exports = {
         let muteRole;
         let dbServer;
         let roleArray = [];
-        await tools.getGuild(message).then(guildProm => server = guildProm);
+        await Servers.getGuild(message).then(guildProm => server = guildProm);
 
         //check member and bot permissions
-        let noUserPermission = tools.checkUserPermissions(bot, message, neededPerm, embed);
+        let noUserPermission = Permissions.checkUserPermissions(bot, message, neededPerm, embed);
         if (noUserPermission)
             return await message.channel.send(embed);
 
@@ -37,8 +37,7 @@ module.exports = {
             }
             
             //check if assigned role is higher then bots highest role
-            let roleCheck = tools.checkRolePosition(bot, message, muteRole, embed);
-            console.log(roleCheck)
+            let roleCheck = Permissions.checkRolePosition(bot, message, muteRole, embed);
             if (roleCheck)
                 return await message.channel.send(embed);
 

@@ -1,5 +1,5 @@
 const {MessageEmbed} = require('discord.js');
-const tools = require('../../misc/tools');
+const {Servers, Dates} = require('../../misc/tools');
 
 module.exports = {
     //<editor-fold defaultstate="collapsed" desc="serverinfo help">
@@ -13,7 +13,6 @@ module.exports = {
     run: async (bot, message) => {
         let embed = new MessageEmbed().setColor(bot.embedColors.normal);
 
-        //<editor-fold defaultstate="collapsed" desc="Used variable declarations">
         //simplify the guild
         let guild = message.guild;
 
@@ -21,12 +20,12 @@ module.exports = {
         let owner = guild.members.cache.get(guild.ownerID);
 
         //find the amount of bots in the server
-        let bots = tools.getBots(guild);
+        let bots = Servers.getBots(guild);
 
         //check the amount of each channel sort
-        let textCh = tools.getChannelAmount(guild.channels.cache, 'text');
-        let voiceCh = tools.getChannelAmount(guild.channels.cache, 'voice');
-        let categoryCh = tools.getChannelAmount(guild.channels.cache, 'category');
+        let textCh = Servers.getChannelAmount(guild.channels.cache, 'text');
+        let voiceCh = Servers.getChannelAmount(guild.channels.cache, 'voice');
+        let categoryCh = Servers.getChannelAmount(guild.channels.cache, 'category');
 
         let channelString = `**Categories:** ${categoryCh}\n` +
             `**Text channels:** ${textCh}\n` +
@@ -39,10 +38,8 @@ module.exports = {
         let afkChannel = getAfkChannel(guild);
 
         //get the date
-        let date = tools.getDate(guild.createdTimestamp);
-        //</editor-fold>
+        let date = Dates.getDate(guild.createdTimestamp);
 
-        //<editor-fold defaultstate="collapsed" desc="embed creation">
         embed.setTitle(guild.name)
             .setThumbnail(guild.iconURL({
                 dynamic: true,
@@ -62,7 +59,6 @@ module.exports = {
                 {name: `Boost tier`, value: `${guild.premiumTier}`, inline: true},
                 {name: `Boosts`, value: `${guild.premiumSubscriptionCount}`, inline: true},
             );
-        //</editor-fold>
 
         await message.channel.send(embed);
     }

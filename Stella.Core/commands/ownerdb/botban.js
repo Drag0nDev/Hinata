@@ -1,6 +1,6 @@
 const config = require("../../../config.json");
 const {MessageEmbed} = require('discord.js');
-const tools = require("../../misc/tools");
+const {Permissions, Servers} = require('../../misc/tools');
 const {User} = require("../../misc/dbObjects");
 
 module.exports = {
@@ -15,7 +15,7 @@ module.exports = {
         let member;
 
         if (message.author.id !== config.owner)
-            return tools.ownerOnly(bot, message.channel);
+            return Permissions.ownerOnly(bot, message.channel);
 
         if (!id.exec(args[0])) {
             embed.setColor(bot.embedColors.error)
@@ -24,7 +24,7 @@ module.exports = {
             return message.channel.send(embed);
         }
 
-        await tools.getUser(bot, message, args).then(memberPromise => {
+        await Servers.getUser(bot, message, args).then(memberPromise => {
             member = memberPromise;
         });
 

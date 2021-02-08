@@ -1,5 +1,5 @@
 const {MessageEmbed} = require('discord.js');
-const tools = require("../../misc/tools");
+const {Servers} = require("../../misc/tools");
 
 module.exports = {
     //<editor-fold defaultstate="collapsed" desc="userinfo help">
@@ -17,7 +17,7 @@ module.exports = {
         //find the member if one is asked if not then use the author
         let member;
 
-        await tools.getMember(message, args).then(memberPromise => {
+        await Servers.getMember(message, args).then(memberPromise => {
             member = memberPromise;
         });
 

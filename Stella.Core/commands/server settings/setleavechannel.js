@@ -1,6 +1,6 @@
 const {MessageEmbed} = require('discord.js');
 const {ServerSettings} = require('../../misc/dbObjects');
-const tools = require('../../misc/tools');
+const {Permissions} = require('../../misc/tools');
 let neededPerm = ['MANAGE_GUILD'];
 
 module.exports = {
@@ -20,7 +20,7 @@ module.exports = {
             .setColor(bot.embedColors.normal);
         const choice = new RegExp('remove|[0-9]{17,}');
 
-        let noUserPermission = tools.checkUserPermissions(bot, message, neededPerm, embed);
+        let noUserPermission = Permissions.checkUserPermissions(bot, message, neededPerm, embed);
         if (noUserPermission)
             return await message.channel.send(embed);
 

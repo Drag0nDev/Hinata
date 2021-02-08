@@ -1,6 +1,6 @@
 const logger = require("log4js").getLogger();
 const {MessageEmbed} = require('discord.js');
-const tools = require("../misc/tools");
+const {Logs} = require("../misc/tools");
 
 module.exports = async (bot, message) => {
     try {
@@ -21,7 +21,7 @@ module.exports = async (bot, message) => {
             embed.setImage(message.attachments.first().proxyURL);
         }
 
-        await tools.messageLog(message.guild, embed);
+        await Logs.messageLog(message.guild, embed);
     } catch (err) {
         logger.error(err);
     }
