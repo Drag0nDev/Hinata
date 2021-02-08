@@ -14,8 +14,6 @@ const icon = new RegExp('%icon%', 'g');
 
 const reglist = [user, server, membercount, usermention, avatar, level, role, icon];
 
-module.exports = {Minor, Compare, Roles, Servers, Levels, Logs, Dates, Permissions}
-
 const Minor = {
     testing: async function (bot, message) {
         let embed = new MessageEmbed().setTitle('Currently out of order!')
@@ -613,3 +611,5 @@ async function customReplace(message, customMessage, newLevel, newRoleId) {
         logger.error(err);
     }
 }
+
+module.exports = {Minor, Compare, Roles, Servers, Levels, Logs, Dates, Permissions}

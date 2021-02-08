@@ -15,7 +15,6 @@ module.exports = {
         let server;
         let muteRole;
         let dbServer;
-        let roleArray = [];
         await Servers.getGuild(message).then(guildProm => server = guildProm);
 
         //check member and bot permissions

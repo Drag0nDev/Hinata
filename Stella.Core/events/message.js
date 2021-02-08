@@ -3,7 +3,7 @@ const config = require("../../config.json");
 const logger = require("log4js").getLogger();
 const {User, ServerUser, Rewards, ServerSettings} = require('../misc/dbObjects');
 const pm = require('parse-ms');
-const {Minor, Levels, Roles} = require('../misc/tools');
+const {Minor, Levels, Roles, Servers} = require('../misc/tools');
 
 module.exports = async (bot, message) => {
     const guild = bot.guilds.cache.get('645047329141030936');
@@ -128,13 +128,28 @@ async function checkUser(message) {
     });
 }
 
-function serverLevel(bot, message) {
-    ServerUser.findOne({
+async function serverLevel(bot, message) {
+    let member
+    await Servers.getMember(message, []).then(memberPromise => {
+        member = memberPromise;
+    });
+    let settings;
+
+    settings = await ServerSettings.findOne({
+        where: {
+            serverId: message.guild.id
+        }
+    });
+
+    await ServerUser.findOne({
         where: {
             userId: message.author.id,
             guildId: message.guild.id
         }
     }).then(async serverUser => {
+        if (member._roles.includes(settings.noXpRole))
+            return;
+
         let now = new Date();
 
         if (serverUser.lastMessageDate !== '0') {

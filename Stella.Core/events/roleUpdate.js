@@ -41,17 +41,14 @@ async function checkPermissions(oldRole, newRole, embed) {
 
         if (changedPerms.addedPermissions.length === 0)
             embed.addField(`Changed permissions`,
-                `**Removed:** ${changedPerms.removedPermissions.join(', ')}`
-                , true);
+                `**Removed:** ${changedPerms.removedPermissions.join(', ')}`);
         else if (changedPerms.removedPermissions.length === 0)
             embed.addField(`Changed permissions`,
-                `**Added:** ${changedPerms.addedPermissions.join(', ')}`
-                , true);
+                `**Added:** ${changedPerms.addedPermissions.join(', ')}`);
         else
             embed.addField(`Changed permissions`,
                 `**added:** ${changedPerms.addedPermissions.join(', ')}\n` +
-                `**Removed:** ${changedPerms.removedPermissions.join(', ')}`
-                , true);
+                `**Removed:** ${changedPerms.removedPermissions.join(', ')}`);
     }
 }
 
