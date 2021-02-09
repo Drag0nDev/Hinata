@@ -22,12 +22,10 @@ module.exports = {
             return message.channel.send(embed.setColor(bot.embedColors.error)
                 .setDescription('Please provide a valid user ID or mention!'));
 
-        User.findOne({
+        dbUser = await User.findOne({
             where: {
                 userId: member.user.id
             }
-        }).then(user => {
-            dbUser = user;
         });
 
         if (member.user.id !== message.author.id)
@@ -36,6 +34,5 @@ module.exports = {
             embed.setDescription(`You have **${dbUser.balance} ${bot.currencyEmoji}**`);
 
         await message.channel.send(embed);
-
     }
 }

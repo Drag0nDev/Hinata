@@ -1,4 +1,5 @@
-const {MessageEmbed} = require('discord.js');
+const Discord = require('discord.js');
+const Canvas = require('canvas');
 const {User, ServerUser} = require('../../misc/dbObjects');
 const config = require("../../../config.json");
 const {Servers} = require('../../misc/tools');
@@ -11,8 +12,6 @@ module.exports = {
     usage: '[command | alias] <mention/ID>',
     examples: ['s!xp', 's!xp 418037700751261708', 's!xp @Drag0n#6666'],
     run: async (bot, message, args) => {
-        const levelXp = config.levelXp;
-        let embed = new MessageEmbed().setColor(bot.embedColors.normal);
         let member;
         let users;
         let user;
@@ -44,37 +43,152 @@ module.exports = {
             userServerListId.push(userServer.userId);
         });
 
-        user = users[userListId.indexOf(member.user.id)];
-        serverUser = serverUsers[userServerListId.indexOf(member.user.id)];
+        user = getGlobal(users[userListId.indexOf(member.user.id)]);
+        serverUser = getServer(serverUsers[userServerListId.indexOf(member.user.id)]);
 
         let globalRank = userListId.indexOf(member.user.id) + 1;
         let serverRank = userServerListId.indexOf(member.user.id) + 1;
 
-        embed.setTitle(`${member.user.username}#${member.user.discriminator}`)
-            .setThumbnail(member.user.avatarURL({dynamic: true}))
-            .addField(`Global level`, user.level, true)
-            .addField(`Global xp`, `${user.xp}/${levelXp + ((levelXp / 2) * user.level)}`, true)
-            .addField('Global rank', globalRank, true)
-            .setFooter('This embed is but a placeholder. There will be a picture format level card later');
+        const canvas = Canvas.createCanvas(2048, 1024);
 
-        let xp = serverUser.xp;
-        let lvlXp = levelXp;
-        let level = 0;
-        let nextLvlXp = 0;
+        const ctx = canvas.getContext('2d');
+        ctx.font = '50px sans-serif';
 
-        do {
-            nextLvlXp = lvlXp + ((lvlXp / 2) * level);
+        const background = await Canvas.loadImage('https://img.freepik.com/free-vector/black-dark-3d-low-poly-geometric-background_79145-393.jpg?size=626&ext=jpg');
+        ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
 
-            if (xp >= nextLvlXp) {
-                level++;
-                xp -= nextLvlXp;
-            }
-        } while (xp > nextLvlXp)
+        ctx.strokeStyle = bot.embedColors.normal;
+        ctx.strokeRect(0, 0, canvas.width, canvas.height);
 
-        embed.addField('Server level', level, true)
-            .addField('Server xp', `${xp}/${levelXp + ((levelXp / 2) * level)}`, true)
-            .addField('Server rank', serverRank, true);
+        //draw global xp bar
+        //draw bar
+        ctx.beginPath();
+        ctx.lineWidth = 10;
+        ctx.strokeStyle = bot.embedColors.normal;
+        ctx.fillStyle = '#fff';
+        ctx.strokeRect(100, 500, canvas.width - 200, 50);
+        ctx.fillRect(100, 500, canvas.width - 200, 50);
 
-        await message.channel.send(embed);
+        //fill the bar according to the xp
+        ctx.beginPath();
+        ctx.fillStyle = bot.embedColors.normal;
+        const globalWidth = (canvas.width - 200) - ((canvas.width - 200) * (1 - user.percentage));
+        ctx.fillRect(100, 500, globalWidth, 50);
+
+        //draw word "Global"
+        ctx.fillStyle = '#fff';
+        ctx.fillText('Global', 100, 475);
+
+        //draw the level
+        ctx.fillText(`Level ${user.level}`, (canvas.width / 2) - (ctx.measureText(`Level ${user.level}`).width / 2), 475);
+
+        //draw the global position
+        ctx.fillText(`#${globalRank}`, canvas.width - (100 + ctx.measureText(`#${globalRank}`).width), 475);
+
+        //draw current xp
+        ctx.fillText(user.xp, 100, 600);
+
+        //draw needed xp
+        ctx.fillText(user.neededXp.toString(), canvas.width - (100 + ctx.measureText(user.neededXp.toString()).width), 600);
+
+        //draw the server xp bar
+        //draw bar
+        ctx.beginPath();
+        ctx.lineWidth = 10;
+        ctx.strokeStyle = bot.embedColors.normal;
+        ctx.fillStyle = '#fff';
+        ctx.strokeRect(100, 800, canvas.width - 200, 50);
+        ctx.fillRect(100, 800, canvas.width - 200, 50);
+
+        //fill the bar according to the xp
+        ctx.beginPath();
+        ctx.fillStyle = bot.embedColors.normal;
+        const serverWidth = (canvas.width - 200) - ((canvas.width - 200) * (1 - serverUser.percentage));
+        ctx.fillRect(100, 800, serverWidth, 50);
+
+        //draw word "Server"
+        ctx.fillStyle = '#fff';
+        ctx.fillText('Server', 100, 775);
+
+        //draw the level
+        ctx.fillText(`Level ${serverUser.level}`, (canvas.width / 2) - (ctx.measureText(`Level ${serverUser.level}`).width / 2), 775);
+
+        //draw the global position
+        ctx.fillText(`#${serverRank}`, canvas.width - (100 + ctx.measureText(`#${serverRank}`).width), 775);
+
+        //draw current xp
+        ctx.fillText(serverUser.currentxp, 100, 900);
+
+        //draw needed xp
+        ctx.fillText(serverUser.neededxp.toString(), canvas.width - (100 + ctx.measureText(serverUser.neededxp.toString()).width), 900);
+
+        //draw user tag
+        ctx.font = applyText(canvas, member.user.tag);
+        ctx.fillText(member.user.tag, 360, 260);
+
+        //draw user avatar
+        ctx.beginPath();
+        ctx.arc(225, 225, 125, 0, Math.PI * 2, true);
+        ctx.closePath();
+        ctx.clip();
+
+        const avatar = await Canvas.loadImage(member.user.displayAvatarURL({format: 'png', size: 4096}));
+        ctx.drawImage(avatar, 100, 100, 250, 250);
+
+        const attachment = new Discord.MessageAttachment(canvas.toBuffer(), 'test.png');
+
+        await message.channel.send(attachment);
     }
 }
+
+const getGlobal = (user) => {
+    let levelXp = config.levelXp;
+
+    let num = user.xp / (levelXp + ((levelXp / 2) * user.level))
+
+    return {
+        percentage: Math.round((num + Number.EPSILON) * 100) / 100,
+        neededXp: levelXp + ((levelXp / 2) * user.level),
+        level: user.level,
+        xp: user.xp
+    };
+}
+
+const getServer = (user) => {
+    let userXp = user.xp
+    let lvlXp = config.levelXp;
+    let level = 0;
+    let nextLvlXp = 100;
+
+    do {
+
+
+        if (userXp >= nextLvlXp) {
+            level++;
+            userXp -= nextLvlXp;
+        }
+
+        nextLvlXp = lvlXp + ((lvlXp / 2) * level);
+    } while (userXp > nextLvlXp);
+
+    let num = userXp / nextLvlXp;
+
+    return {
+        level: level,
+        currentxp: userXp,
+        neededxp: nextLvlXp,
+        percentage: Math.round((num + Number.EPSILON) * 100) / 100,
+    };
+}
+
+const applyText = (canvas, text) => {
+    const ctx = canvas.getContext('2d');
+
+    let fontSize = 100;
+
+    do {
+        ctx.font = `${fontSize -= 10}px sans-serif`;
+    } while (ctx.measureText(text).width > canvas.width - 300);
+
+    return ctx.font;
+};
