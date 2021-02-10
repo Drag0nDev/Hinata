@@ -1,5 +1,6 @@
 const Discord = require('discord.js');
 const Canvas = require('canvas');
+Canvas.registerFont('./Stella.Core/misc/Dosis/static/Dosis-Bold.ttf', {family: 'Dosis'});
 const {User, ServerUser} = require('../../misc/dbObjects');
 const config = require("../../../config.json");
 const {Servers} = require('../../misc/tools');
@@ -52,7 +53,7 @@ module.exports = {
         const canvas = Canvas.createCanvas(2048, 1024);
 
         const ctx = canvas.getContext('2d');
-        ctx.font = '50px sans-serif';
+        ctx.font = '50px "Dosis"';
 
         const background = await Canvas.loadImage('https://img.freepik.com/free-vector/black-dark-3d-low-poly-geometric-background_79145-393.jpg?size=626&ext=jpg');
         ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
@@ -187,7 +188,7 @@ const applyText = (canvas, text) => {
     let fontSize = 100;
 
     do {
-        ctx.font = `${fontSize -= 10}px sans-serif`;
+        ctx.font = `${fontSize -= 10}px "Dosis"`;
     } while (ctx.measureText(text).width > canvas.width - 300);
 
     return ctx.font;

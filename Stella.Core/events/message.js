@@ -147,8 +147,9 @@ async function serverLevel(bot, message) {
             guildId: message.guild.id
         }
     }).then(async serverUser => {
-        if (member._roles.includes(settings.noXpRole))
-            return;
+        if (settings.noXpRole !== null)
+            if (member._roles.includes(settings.noXpRole))
+                return;
 
         let now = new Date();
 

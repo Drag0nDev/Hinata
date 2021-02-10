@@ -1,7 +1,7 @@
 {
-  "name": "esdeath",
+  "name": "stella",
   "version": "1.0.0",
-  "description": "",
+  "description": "<h1>Stella - Discord bot</h1>\r <div>\r   <p>\r     <a href=\"https://discord.gg/ReBJ4AB\"><img src=\"https://i.imgur.com/Pih2tZP.png\" alt=\"Discord server\" /></a>\r </div>",
   "main": "stella.js",
   "scripts": {
     "start": "node stella.js",
@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "ascii-table": "0.0.9",
+    "better-sqlite3": "^7.1.2",
     "canvas": "^2.6.1",
     "common-tags": "^1.8.0",
     "delay": "^4.4.0",
@@ -26,5 +27,14 @@
     "request": "^2.88.2",
     "sequelize": "^6.3.5",
     "sqlite3": "^5.0.0"
-  }
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Drag0nDev/Stella.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Drag0nDev/Stella/issues"
+  },
+  "homepage": "https://github.com/Drag0nDev/Stella#readme"
 }

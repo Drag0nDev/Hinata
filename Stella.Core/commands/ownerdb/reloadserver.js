@@ -1,6 +1,7 @@
 const {MessageEmbed} = require('discord.js');
 const {Permissions, Minor} = require('../../misc/tools');
 const logger = require("log4js").getLogger();
+const config = require('../../../config.json');
 
 module.exports = {
     name: 'reloadserver',

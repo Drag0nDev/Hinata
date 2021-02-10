@@ -110,9 +110,8 @@ async function showAll(bot, message, embed, variation) {
         embed.setColor(bot.embedColors.normal)
             .setDescription(description)
             .setTimestamp();
-
-        messageEditor(bot, message, embed, warnings, variation, description);
     }
+    messageEditor(bot, message, embed, warnings, variation, description);
 }
 
 async function showUser(bot, message, memberId, embed, variation) {
