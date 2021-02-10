@@ -13,6 +13,7 @@ logs/
 Stella.Core/commands/testing/
 Stella.Core/examples
 Stella.Core/misc/Dosis
+Stella.Core/Database/Backups
 
 #ignored node_modules
 node_modules/*
