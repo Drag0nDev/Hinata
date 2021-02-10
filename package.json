@@ -23,9 +23,11 @@
     "log4js": "^6.3.0",
     "nodemon": "^2.0.7",
     "parse-ms": "^2.1.0",
+    "pm2": "^4.5.4",
     "pretty-ms": "^7.0.1",
     "request": "^2.88.2",
     "sequelize": "^6.3.5",
+    "shelljs": "^0.8.4",
     "sqlite3": "^5.0.0"
   },
   "devDependencies": {},

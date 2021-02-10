@@ -15,7 +15,6 @@ module.exports = {
     examples: ['s!lb', 's!glb'],
     neededPermissions: neededPerm,
     run: async (bot, message) => {
-        let embed = new MessageEmbed();
         let noBotPermission = Permissions.checkBotPermissions(bot, message, neededPerm, embed);
         if (noBotPermission)
             return message.channel.send(embed);
@@ -60,7 +59,9 @@ async function globalLb(bot, message, variation) {
         .setTitle(`${variation} leaderboard`)
         .setColor(bot.embedColors.normal)
         .setFooter(`Page 1`);
-    let dbUsers = await User.findAll({
+    let dbUsers;
+
+    dbUsers = await User.findAll({
         where: {
             xp: {
                 [Op.gt]: 0
@@ -70,8 +71,6 @@ async function globalLb(bot, message, variation) {
             ['level', 'DESC'],
             ['xp', 'DESC']
         ]
-    }).then(users => {
-        dbUsers = users
     });
 
     for (let i = 0; i < 10 && i < dbUsers.length; i++) {
