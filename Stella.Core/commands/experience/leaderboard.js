@@ -15,6 +15,7 @@ module.exports = {
     examples: ['s!lb', 's!glb'],
     neededPermissions: neededPerm,
     run: async (bot, message) => {
+        let embed = new MessageEmbed();
         let noBotPermission = Permissions.checkBotPermissions(bot, message, neededPerm, embed);
         if (noBotPermission)
             return message.channel.send(embed);
@@ -32,7 +33,9 @@ async function serverLb(bot, message, variation) {
         .setTitle(`${variation} leaderboard`)
         .setColor(bot.embedColors.normal)
         .setFooter(`Page 1`);
-    let dbUsers = await ServerUser.findAll({
+    let dbUsers;
+
+    dbUsers = await ServerUser.findAll({
         where: {
             guildId: message.guild.id,
             xp: {
