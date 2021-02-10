@@ -1,0 +1,18 @@
+#ignored files
+config.json
+test.js
+test_server.ps1
+StellaDb.sqlite
+ServerSplit.sql
+
+#ignored directories
+logs/
+.idea/
+
+#ignored files in the core
+Stella.Core/commands/testing/
+Stella.Core/examples
+Stella.Core/misc/Dosis
+
+#ignored node_modules
+node_modules/*
