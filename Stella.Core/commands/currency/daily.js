@@ -61,7 +61,7 @@ module.exports = {
             daily = dailyReward + ((dailyReward / 10) * user.dailyStreak);
 
             user.dailyTaken = message.createdTimestamp;
-            User.add(user, daily);
+            User.addDaily(user, daily);
 
             embed.setColor(bot.embedColors.normal)
                 .setDescription(`You have claimed your daily of **${daily} ${bot.currencyEmoji}**\n` +

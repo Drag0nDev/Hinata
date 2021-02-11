@@ -31,10 +31,11 @@ ServerSettings.belongsTo(Servers, {
     as: 'server'
 });
 
+
+//database functions
 Reflect.defineProperty(User, 'remove', {
     value: async function add(user, amount) {
         user.balance -= amount;
-        user.dailyStreak++;
         user.save();
     }
 });
@@ -42,7 +43,21 @@ Reflect.defineProperty(User, 'remove', {
 Reflect.defineProperty(User, 'add', {
     value: async function add(user, amount) {
         user.balance += amount;
+        user.save();
+    }
+});
+
+Reflect.defineProperty(User, 'addDaily', {
+    value: async function add(user, amount) {
+        user.balance += amount;
         user.dailyStreak++;
+        user.save();
+    }
+});
+
+Reflect.defineProperty(User, 'changeColor', {
+    value: async function changeColor(user, colorCode) {
+        user.color = colorCode;
         user.save();
     }
 });

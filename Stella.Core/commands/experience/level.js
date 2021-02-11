@@ -25,6 +25,7 @@ module.exports = {
         let serverUsers;
         let userListId = [];
         let userServerListId = [];
+        let color;
 
         await Servers.getMember(message, args).then(memberPromise => {
             member = memberPromise;
@@ -55,6 +56,11 @@ module.exports = {
         let globalRank = userListId.indexOf(member.user.id) + 1;
         let serverRank = userServerListId.indexOf(member.user.id) + 1;
 
+        if (user.color === null)
+            color = bot.embedColors.normal;
+        else
+            color = user.color;
+
         const canvas = Canvas.createCanvas(2048, 1024);
 
         const ctx = canvas.getContext('2d');
@@ -79,14 +85,14 @@ module.exports = {
         //draw bar
         ctx.beginPath();
         ctx.lineWidth = 10;
-        ctx.strokeStyle = bot.embedColors.normal;
+        ctx.strokeStyle = color;
         ctx.fillStyle = '#fff';
         ctx.strokeRect(100, 500, canvas.width - 200, 50);
         ctx.fillRect(100, 500, canvas.width - 200, 50);
 
         //fill the bar according to the xp
         ctx.beginPath();
-        ctx.fillStyle = bot.embedColors.normal;
+        ctx.fillStyle = color;
         const globalWidth = (canvas.width - 200) - ((canvas.width - 200) * (1 - user.percentage));
         ctx.fillRect(100, 500, globalWidth, 50);
 
@@ -110,14 +116,14 @@ module.exports = {
         //draw bar
         ctx.beginPath();
         ctx.lineWidth = 10;
-        ctx.strokeStyle = bot.embedColors.normal;
+        ctx.strokeStyle = color;
         ctx.fillStyle = '#fff';
         ctx.strokeRect(100, 800, canvas.width - 200, 50);
         ctx.fillRect(100, 800, canvas.width - 200, 50);
 
         //fill the bar according to the xp
         ctx.beginPath();
-        ctx.fillStyle = bot.embedColors.normal;
+        ctx.fillStyle = color;
         const serverWidth = (canvas.width - 200) - ((canvas.width - 200) * (1 - serverUser.percentage));
         ctx.fillRect(100, 800, serverWidth, 50);
 
@@ -150,7 +156,7 @@ module.exports = {
         const avatar = await Canvas.loadImage(member.user.displayAvatarURL({format: 'png', size: 4096}));
         ctx.drawImage(avatar, 100, 100, 250, 250);
 
-        const attachment = new Discord.MessageAttachment(canvas.toBuffer(), 'test.png');
+        const attachment = new Discord.MessageAttachment(canvas.toBuffer(), `${member.user.id}-xp.png`);
 
         await message.channel.send(attachment);
     }
@@ -165,7 +171,8 @@ const getGlobal = (user) => {
         percentage: Math.round((num + Number.EPSILON) * 100) / 100,
         neededXp: levelXp + ((levelXp / 2) * user.level),
         level: user.level,
-        xp: user.xp
+        xp: user.xp,
+        color: user.color
     };
 }
 
