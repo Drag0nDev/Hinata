@@ -13,7 +13,7 @@ module.exports = {
         let user;
         let embed = new Discord.MessageEmbed().setTitle('Sec custom color')
             .setTimestamp();
-        const hex = new RegExp('^#[[0-9|a-f]{6}');
+        const hex = new RegExp('^#[[0-9|a-f]{6}', 'i');
         let color;
 
         user = await User.findOne({
