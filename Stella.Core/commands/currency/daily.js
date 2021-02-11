@@ -1,5 +1,6 @@
 const {MessageEmbed} = require('discord.js');
 const { User } = require('../../misc/dbObjects');
+const tools = require('../../misc/tools');
 const Sequelize = require('sequelize');
 const pm = require('parse-ms');
 
@@ -71,11 +72,3 @@ module.exports = {
         });
     }
 }
-
-Reflect.defineProperty(User, 'add', {
-    value: async function add(user, amount) {
-        user.balance += amount;
-        user.dailyStreak++;
-        user.save();
-    }
-});

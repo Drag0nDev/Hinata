@@ -13,6 +13,7 @@ module.exports = async (bot, oldMessage, newMessage) => {
             .setFooter(`ID: ${newMessage.author.id}`);
 
         if (newMessage.author.bot) return;
+        if (oldMessage.content === newMessage.content) return;
 
         embed.addField('Old message', oldMessage.content)
             .addField('New message', newMessage.content);

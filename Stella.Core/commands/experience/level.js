@@ -1,8 +1,12 @@
 const Discord = require('discord.js');
+const {promisify} = require('util');
 const Canvas = require('canvas');
 const {User, ServerUser} = require('../../misc/dbObjects');
 const config = require("../../../config.json");
 const {Servers} = require('../../misc/tools');
+const fs = require('fs');
+
+const readdir = promisify(fs.readdir);
 
 module.exports = {
     name: 'level',
@@ -14,7 +18,9 @@ module.exports = {
     run: async (bot, message, args) => {
         let member;
         let users;
+        let userbg;
         let user;
+        let background;
         let serverUser;
         let serverUsers;
         let userListId = [];
@@ -54,7 +60,16 @@ module.exports = {
         const ctx = canvas.getContext('2d');
         ctx.font = '50px Dosis';
 
-        const background = await Canvas.loadImage('https://img.freepik.com/free-vector/black-dark-3d-low-poly-geometric-background_79145-393.jpg?size=626&ext=jpg');
+        //look for custom background
+        let files = await readdir('./Stella.Core/misc/images');
+
+        userbg = files[files.indexOf(`${member.user.id}.png`)];
+
+        if (!userbg)
+            background = await Canvas.loadImage('./Stella.Core/misc/images/default_xp.jpg');
+        else
+            background = await Canvas.loadImage(`./Stella.Core/misc/images/${userbg}`);
+
         ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
 
         ctx.strokeStyle = bot.embedColors.normal;

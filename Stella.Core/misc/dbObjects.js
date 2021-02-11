@@ -31,4 +31,20 @@ ServerSettings.belongsTo(Servers, {
     as: 'server'
 });
 
+Reflect.defineProperty(User, 'remove', {
+    value: async function add(user, amount) {
+        user.balance -= amount;
+        user.dailyStreak++;
+        user.save();
+    }
+});
+
+Reflect.defineProperty(User, 'add', {
+    value: async function add(user, amount) {
+        user.balance += amount;
+        user.dailyStreak++;
+        user.save();
+    }
+});
+
 module.exports = { User, Server: Servers, ServerSettings, ServerUser, Timers, Warnings, Rewards };

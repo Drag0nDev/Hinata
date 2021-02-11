@@ -319,6 +319,8 @@ const Logs = {
 
                 if (webhook)
                     await webhook.send(embed);
+            }).catch(err => {
+                logger.error(`error in: ${guild.name}\n`,err);
             });
     },
     joinLeaveLog: async function (member, embed) {
@@ -328,6 +330,8 @@ const Logs = {
 
                 if (webhook)
                     await webhook.send(embed);
+            }).catch(err => {
+                logger.error(`error in: ${guild.name}\n`,err);
             });
     },
     memberLog: async function (member, embed) {
@@ -337,6 +341,8 @@ const Logs = {
 
                 if (webhook)
                     await webhook.send(embed);
+            }).catch(err => {
+                logger.error(`error in: ${guild.name}\n`,err);
             });
     },
     memberLogGuild: async function (guild, embed) {
@@ -347,7 +353,7 @@ const Logs = {
                 if (webhook)
                     await webhook.send(embed);
             }).catch(err => {
-                logger.error(err);
+                logger.error(`error in: ${guild.name}\n`,err);
             });
     },
     messageLog: async function (guild, embed) {
@@ -357,6 +363,8 @@ const Logs = {
 
                 if (webhook)
                     await webhook.send(embed);
+            }).catch(err => {
+                logger.error(`error in: ${guild.name}\n`,err);
             });
     },
     serverLog: async function (guild, embed) {
@@ -366,6 +374,8 @@ const Logs = {
 
                 if (webhook)
                     await webhook.send(embed);
+            }).catch(err => {
+                logger.error(`error in: ${guild.name}\n`,err);
             });
     },
     voiceLogChannel: async function (guild, embed) {
@@ -375,6 +385,8 @@ const Logs = {
 
                 if (webhook)
                     await webhook.send(embed);
+            }).catch(err => {
+                logger.error(`error in: ${guild.name}\n`,err);
             });
     }
 }

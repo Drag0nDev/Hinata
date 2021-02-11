@@ -13,6 +13,7 @@ module.exports = {
         let embed = new MessageEmbed();
         const id = new RegExp('[0-9]{17,}');
         const bal = new RegExp('^[0-9]*');
+        let user;
 
         if (message.author.id !== config.owner) {
             Permissions.ownerOnly(bot, message.channel)
@@ -36,25 +37,25 @@ module.exports = {
             return message.channel.send(embed.setColor(bot.embedColors.error)
                 .setDescription('Please provide an amount to add!'))
 
-        await User.findOne({
+        user = await User.findOne({
             where:
                 {
                     userId: id.exec(args[0])[0]
                 }
-        }).then(user => {
-            user.balance += parseInt(args[1]);
-            user.save();
-
-            embed.setTitle(`Add balance`)
-                .setColor(bot.embedColors.normal)
-                .setDescription(`Balance successfully added!\n` +
-                    `The balance of **${user.userTag}** is now **${user.balance}${bot.currencyEmoji}**.`)
-                .setTimestamp();
-        }).catch(err => {
+        })
+        .catch(err => {
             embed.setColor(bot.embedColors.error)
                 .setDescription(`No user with id **${args[0]}** found in the database`)
                 .setTimestamp();
         });
+
+        User.add(user, parseInt(args[1]));
+
+        embed.setTitle(`Add balance`)
+            .setColor(bot.embedColors.normal)
+            .setDescription(`Balance successfully added!\n` +
+                `The balance of **${user.userTag}** is now **${user.balance}${bot.currencyEmoji}**.`)
+            .setTimestamp();
 
         await message.channel.send(embed);
     }

@@ -120,6 +120,8 @@ function getCmd(bot, message, cmd) {
         embed.addField('Category', cmd.category, true);
     if (cmd.aliases)
         embed.addField('Aliases:', cmd.aliases.map(a => `\`${a}\``).join(", "), true);
+    if (cmd.cost)
+        embed.addField('Cost:', cmd.cost, true);
     if (cmd.description)
         embed.addField('Description:', cmd.description, false);
     if (cmd.usage) {
