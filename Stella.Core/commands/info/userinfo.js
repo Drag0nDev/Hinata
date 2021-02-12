@@ -2,14 +2,12 @@ const {MessageEmbed} = require('discord.js');
 const {Servers, Dates, Roles} = require('../../misc/tools');
 
 module.exports = {
-    //<editor-fold defaultstate="collapsed" desc="userinfo help">
     name: 'userinfo',
     aliases: ['uinfo'],
     category: 'info',
     description: 'Get the info of yourself/another person',
     usage: '[command | alias] <mention/id>',
     examples: ['s!uinfo', 's!uinfo 418037700751261708', 's!uinfo @Drag0n#6666'],
-    //</editor-fold>
     run: async (bot, message, args) => {
         let embed = new MessageEmbed().setColor(bot.embedColors.normal);
 
@@ -39,7 +37,6 @@ module.exports = {
         //get the permissions
         let permissions = getPermissions(member);
 
-        //<editor-fold defaultstate="collapsed" desc="embed creation">
         embed.setTitle(`Userinfo of: ${member.user.username}#${member.user.discriminator}`)
             .setThumbnail(member.user.avatarURL({dynamic: true}))
             .addFields(
@@ -54,13 +51,11 @@ module.exports = {
                 {name: `Voice permissions`, value: `${permissions.voicePerms}`, inline: true},
             )
             .setFooter('Max amount of shown roles is 10!');
-        // </editor-fold>
 
         await message.channel.send(embed);
     }
 }
 
-// <editor-fold defaultstate="collapsed" desc="functions of userinfo">
 function getPermissions(member) {
     let permissions = {
         managePerms: "",
@@ -68,7 +63,7 @@ function getPermissions(member) {
         voicePerms: ""
     };
 
-//check for the managing permissions
+    //check for the managing permissions
     if (member.hasPermission(`ADMINISTRATOR`)) permissions.managePerms += `Administrator\n`;
     if (member.hasPermission(`MANAGE_GUILD`)) permissions.managePerms += `Manage server\n`;
     if (member.hasPermission(`MANAGE_ROLES`)) permissions.managePerms += `Manage roles\n`;
@@ -88,4 +83,3 @@ function getPermissions(member) {
 
     return permissions;
 }
-// </editor-fold>

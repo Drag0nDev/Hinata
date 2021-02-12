@@ -2,6 +2,7 @@ const {MessageEmbed} = require('discord.js');
 const config = require('../../../config.json');
 const {User} = require('../../misc/dbObjects');
 const download = require('image-downloader');
+const logger = require("log4js").getLogger();
 
 module.exports = {
     name: 'setbackground',
@@ -16,7 +17,7 @@ module.exports = {
         let embed = new MessageEmbed().setTimestamp()
             .setColor(bot.embedColors.normal)
             .setTitle('Set background');
-        const urlReg = new RegExp('.(jpeg|jpg|png)');
+        const urlReg = new RegExp('.(jpeg|jpg|png)$');
         let url;
         let user;
         user = await User.findOne({
@@ -57,7 +58,7 @@ module.exports = {
                         .setImage(`attachment://${message.author.id}.png`)
                 );
             })
-            .catch((err) => console.error(err));
+            .catch((err) => logger.error(err));
 
         User.remove(user, 5000);
     }
