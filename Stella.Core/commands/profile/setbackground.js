@@ -8,7 +8,8 @@ module.exports = {
     aliases: ['sbg'],
     category: 'profile',
     description: 'Change the background of your xp card to a custom image.\n' +
-        'Everything will be converted to a `.PNG` format.',
+        'Everything will be converted to a `.PNG` format.\n' +
+        '**TOS breaking images will be removed without refund!**',
     cost: `5000 ${config.currencyEmoji}`,
     usage: '[command | alias] <image link/image attachment>',
     run: async (bot, message, args) => {

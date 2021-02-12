@@ -21,9 +21,12 @@ require('../Database/dbObjects/ServerSettings')(sequelize, Sequelize.DataTypes);
 require('../Database/dbObjects/Timers')(sequelize, Sequelize.DataTypes);
 require('../Database/dbObjects/Warnings')(sequelize, Sequelize.DataTypes);
 require('../Database/dbObjects/Rewards')(sequelize, Sequelize.DataTypes);
+require('../Database/dbObjects/Shop')(sequelize, Sequelize.DataTypes);
+require('../Database/dbObjects/Category')(sequelize, Sequelize.DataTypes);
+require('../Database/dbObjects/Inventory')(sequelize, Sequelize.DataTypes);
 
 const force = process.argv.includes('--force') || process.argv.includes('-f');
 sequelize.sync({ force }).then(async () => {
-    console.log('Database synced');
+    logger.info('Database synced');
     await sequelize.close();
 }).catch(console.error);

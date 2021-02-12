@@ -21,8 +21,11 @@ const ServerUser = require('../Database/dbObjects/ServerUser')(sequelize, Sequel
 const Timers = require('../Database/dbObjects/Timers')(sequelize, Sequelize.DataTypes);
 const Warnings = require('../Database/dbObjects/Warnings')(sequelize, Sequelize.DataTypes);
 const Rewards = require('../Database/dbObjects/Rewards')(sequelize, Sequelize.DataTypes);
+const Shop = require('../Database/dbObjects/Shop')(sequelize, Sequelize.DataTypes);
+const Category = require('../Database/dbObjects/Category')(sequelize, Sequelize.DataTypes);
+const Inventory = require('../Database/dbObjects/Inventory')(sequelize, Sequelize.DataTypes);
 
-//server databases
+//assign foreign keys
 ServerUser.belongsTo(Servers, {
     foreignKey: 'guildId',
     as: 'server'
@@ -35,6 +38,22 @@ ServerSettings.belongsTo(Servers, {
     foreignKey: 'serverId',
     as: 'server'
 });
+Shop.belongsTo(Category, {
+    foreignKey: 'category',
+    as: 'categoryId'
+});
+Inventory.belongsTo(User, {
+    foreignKey: 'userId',
+    as: 'UserId'
+});
+Inventory.belongsTo(Shop, {
+    foreignKey: 'shopId',
+    as: 'ShopId'
+});
+Inventory.belongsTo(Category, {
+    foreignKey: 'cateogryId',
+    as: 'CategoryId'
+});
 
 
 //database functions
@@ -44,14 +63,12 @@ Reflect.defineProperty(User, 'remove', {
         user.save();
     }
 });
-
 Reflect.defineProperty(User, 'add', {
     value: async function add(user, amount) {
         user.balance += amount;
         user.save();
     }
 });
-
 Reflect.defineProperty(User, 'addDaily', {
     value: async function add(user, amount) {
         user.balance += amount;
@@ -59,7 +76,6 @@ Reflect.defineProperty(User, 'addDaily', {
         user.save();
     }
 });
-
 Reflect.defineProperty(User, 'changeColor', {
     value: async function changeColor(user, colorCode) {
         user.color = colorCode;
@@ -67,4 +83,4 @@ Reflect.defineProperty(User, 'changeColor', {
     }
 });
 
-module.exports = { User, Server: Servers, ServerSettings, ServerUser, Timers, Warnings, Rewards };
+module.exports = { User, Server: Servers, ServerSettings, ServerUser, Timers, Warnings, Rewards, Shop, Category, Inventory };
