@@ -1,6 +1,6 @@
 const logger = require("log4js").getLogger();
 const {MessageEmbed} = require('discord.js');
-const {Logs} = require("../misc/tools");
+const {Logs, Minor} = require("../misc/tools");
 
 module.exports = async (bot, role) => {
     try {
@@ -9,7 +9,7 @@ module.exports = async (bot, role) => {
             .setTitle(`Role deleted`)
             .setFooter(`Role ID: ${role.id}`)
             .addField('Name', role.name, true)
-            .addField('Color', tools.getHex(role), true)
+            .addField('Color', Minor.getHex(role), true)
             .addField('Mentionable', role.mentionable ? 'Yes' : 'No', true)
             .addField('Displayed separetly', role.hoist ? 'Yes' : 'No', true)
             .addField('Position', role.rawPosition, true);
