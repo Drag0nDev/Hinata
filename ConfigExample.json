@@ -1,0 +1,11 @@
+{
+  "token": "<token>",
+  "owner": "<your id>",
+  "prefix": ["<@!<bot id>>", "<prefix 1>", "<prefix 2>"],
+  "currencyEmoji": "<:emojiname:emojiId>",
+  "levelXp": 100,
+  "username": "<username>",
+  "password": "<password>",
+  "debug": false,
+  "testing": false
+}
