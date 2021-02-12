@@ -67,14 +67,14 @@ module.exports = {
         ctx.font = '50px Dosis';
 
         //look for custom background
-        let files = await readdir('./Stella.Core/misc/images');
+        let files = await readdir('./Stella.Core/misc/images/custom');
 
         userbg = files[files.indexOf(`${member.user.id}.png`)];
 
         if (!userbg)
-            background = await Canvas.loadImage('./Stella.Core/misc/images/default_xp.jpg');
+            background = await Canvas.loadImage('./Stella.Core/misc/images/inventory/default_xp.jpg');
         else
-            background = await Canvas.loadImage(`./Stella.Core/misc/images/${userbg}`);
+            background = await Canvas.loadImage(`./Stella.Core/misc/images/custom/${userbg}`);
 
         ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
 

@@ -15,8 +15,8 @@ Stella.Core/examples
 Stella.Core/misc/Dosis
 Stella.Core/Database/Backups
 snap
-Stella.Core/misc/images/*
+Stella.Core/misc/images/custom/*
 node_modules/*
 
 #unignored images
-!Stella.Core/misc/images/default_xp.jpg
+!Stella.Core/misc/images/custom/.gitkeep

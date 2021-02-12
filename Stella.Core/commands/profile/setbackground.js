@@ -42,7 +42,7 @@ module.exports = {
             return await message.channel.send(embed.setDescription('Please provide only an image link/attachment!').setColor(bot.embedColors.error));
         }
 
-        const path = `./Stella.Core/misc/images/${message.author.id}.png`;
+        const path = `./Stella.Core/misc/images/custom/${message.author.id}.png`;
         const options = {
             url: url,
             dest: path
