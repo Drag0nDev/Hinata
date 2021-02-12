@@ -7,6 +7,11 @@ const sequelize = new Sequelize('database', config.username, config.password, {
     dialect: 'sqlite',
     logging: false,
     storage: 'StellaDb.sqlite',
+    pool: {
+        idle: 60000,
+        max: 100,
+        acquire: 120000,
+    },
 });
 
 require('../Database/dbObjects/User')(sequelize, Sequelize.DataTypes);
