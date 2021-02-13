@@ -123,6 +123,7 @@ module.exports = {
         db.shop = await Shop.findOne({
             where: {
                 name: item.name,
+                category: db.category.id
             }
         });
 
@@ -158,12 +159,12 @@ module.exports = {
 
             await Shop.create({
                 name: item.name,
-                image: `${item.name}.png`,
+                image: `${item.name}_${db.category.name}.png`,
                 price: parseInt(item.price),
                 category: db.category.id
             });
 
-            const path = `./Stella.Core/misc/images/inventory/${item.name}.png`;
+            const path = `./Stella.Core/misc/images/inventory/${item.name}_${db.category.name}.png`;
             const options = {
                 url: item.image,
                 dest: path
@@ -186,8 +187,8 @@ module.exports = {
             .addField('Category:', item.category, true)
             .addField('Price:', `${item.price} ${bot.currencyEmoji}`, true)
             .addField('Image:', '\u200B')
-            .attachFiles([`./Stella.Core/misc/images/inventory/${item.name}.png`])
-            .setImage(`attachment://${item.name}.png`)
+            .attachFiles([`./Stella.Core/misc/images/inventory/${item.name}_${db.category.name}.png`])
+            .setImage(`attachment://${item.name}_${db.category.name}.png`)
 
         await message.channel.send(embed);
     }

@@ -27,32 +27,26 @@ const Inventory = require('../Database/dbObjects/Inventory')(sequelize, Sequeliz
 
 //assign foreign keys
 ServerUser.belongsTo(Servers, {
-    foreignKey: 'guildId',
-    as: 'server'
+    foreignKey: 'guildId'
 });
 ServerUser.belongsTo(User, {
-    foreignKey: 'UserId',
-    as: 'user'
+    foreignKey: 'UserId'
 });
 ServerSettings.belongsTo(Servers, {
     foreignKey: 'serverId',
     as: 'server'
 });
 Shop.belongsTo(Category, {
-    foreignKey: 'category',
-    as: 'categoryId'
+    foreignKey: 'category'
 });
 Inventory.belongsTo(User, {
-    foreignKey: 'userId',
-    as: 'UserId'
+    foreignKey: 'userId'
 });
 Inventory.belongsTo(Shop, {
-    foreignKey: 'shopId',
-    as: 'ShopId'
+    foreignKey: 'shopId'
 });
 Inventory.belongsTo(Category, {
-    foreignKey: 'cateogryId',
-    as: 'CategoryId'
+    foreignKey: 'cateogryId'
 });
 
 
