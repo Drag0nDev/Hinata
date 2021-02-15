@@ -42,6 +42,13 @@ module.exports = {
             }
         });
 
+        if (shop.item === null) {
+            shop.embed.setColor(bot.embedColors.error)
+                .setDescription('Please provide a valid id!');
+
+            return message.channel.send(shop.embed);
+        }
+
         shop.item.category = shop.categoryDb.id;
         shop.item.save();
 
