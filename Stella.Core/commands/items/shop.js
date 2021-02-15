@@ -1,6 +1,5 @@
 const {MessageEmbed} = require('discord.js');
 const {Shop, Category} = require('../../misc/dbObjects');
-const config = require("../../../config.json");
 const {Minor} = require('../../misc/tools');
 const {Op} = require('sequelize');
 
@@ -20,8 +19,13 @@ module.exports = {
             nameReg: new RegExp('-n', 'i'),
             catReg: new RegExp('-c', 'i'),
             str: args.join(' '),
+            array: []
         };
-        shop.array = [shop.nameReg.exec(shop.str), shop.catReg.exec(shop.str)];
+
+        if (shop.nameReg.test(shop.str))
+            shop.array.push(shop.nameReg.exec(shop.str));
+        if (shop.catReg.test(shop.str))
+            shop.array.push(shop.catReg.exec(shop.str));
 
         for (let i = 0; i < shop.array.length; i++) {
             let input = shop.array[i];
@@ -54,7 +58,8 @@ async function shopMenu(bot, message, shop) {
     shop.str = '';
 
     for (let cat of shop.categoryDb) {
-        shop.str += '- ' + cat.name + '\n';
+        if (cat.name !== 'hidden')
+            shop.str += '- ' + cat.name + '\n';
     }
 
     shop.embed.setDescription('**Select a category to view its content.\n' +
@@ -84,7 +89,7 @@ async function shopByName(bot, message, shop) {
     if (shop.db.length === 0) {
         shop.embed.setDescription(`No items found with name **${shop.item.name}**!`);
 
-        return;
+        return message.channel.send(shop.embed);
     }
 
     for (let i = 0; i < 10 && i < shop.db.length; i++) {
@@ -120,6 +125,13 @@ async function shopByCategory(bot, message, shop) {
         }
     });
 
+    if (shop.categoryDb === null || shop.categoryDb.name === 'hidden') {
+        shop.embed.setDescription(`Category **${shop.item.category}** does not exist!`)
+            .setColor(bot.embedColors.error);
+
+        return message.channel.send(shop.embed);
+    }
+
     shop.db = await Shop.findAll({
         where: {
             category: shop.categoryDb.id
@@ -134,10 +146,10 @@ async function shopByCategory(bot, message, shop) {
     shop.embed.setColor(bot.embedColors.normal)
         .setTimestamp();
 
-    if (shop.db.length === 0) {
-        shop.embed.setDescription(`No items found with name **${shop.item.name}**!`);
+    if (shop.db.length === 0 || shop.categoryDb.name === 'hidden') {
+        shop.embed.setDescription(`No items found with category **${shop.item.category}**!`);
 
-        return;
+        return message.channel.send(shop.embed);
     }
 
     for (let i = 0; i < 10 && i < shop.db.length; i++) {
@@ -156,7 +168,8 @@ async function shopByCategory(bot, message, shop) {
                 `**Shop ID:** ${item.id}\n` +
                 `**Category:** ${item.Category.name}\n` +
                 `**Price:** ${item.price} ${bot.currencyEmoji}\n` +
-                `**Is image:** No`)
+                `**Is image:** No`,
+                true)
                 .setFooter('Page 0');
         }
     }
@@ -172,6 +185,12 @@ async function shopByNameAndCat(bot, message, shop) {
             }
         }
     });
+
+    if (shop.categoryDb === null || shop.categoryDb.name === 'hidden') {
+        shop.embed.setDescription(`Category **${shop.item.category}** does not exist!`);
+
+        return message.channel.send(shop.embed);
+    }
 
     shop.db = await Shop.findAll({
         where: {
@@ -191,9 +210,9 @@ async function shopByNameAndCat(bot, message, shop) {
         .setTimestamp();
 
     if (shop.db.length === 0) {
-        shop.embed.setDescription(`No items found with name **${shop.item.name}**!`);
+        shop.embed.setDescription(`No items found with name **${shop.item.name}** and category **${shop.categoryDb.name}**!`);
 
-        return;
+        return message.channel.send(shop.embed);
     }
 
     for (let i = 0; i < 10 && i < shop.db.length; i++) {

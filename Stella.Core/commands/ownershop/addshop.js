@@ -172,23 +172,30 @@ module.exports = {
 
             await download.image(options)
                 .catch((err) => logger.error(err));
+
+            await embed.setColor(bot.embedColors.logAdd)
+                .setDescription('New item added!\n' +
+                    '**Values:**')
+                .addField('Name:', item.name, true)
+                .addField('Category:', item.category, true)
+                .addField('Price:', `${item.price} ${bot.currencyEmoji}`, true)
+                .addField('Image:', '\u200B')
+                .attachFiles([`./Stella.Core/misc/images/inventory/${item.name}_${db.category.name}.png`])
+                .setImage(`attachment://${item.name}_${db.category.name}.png`);
         } else {
             await Shop.create({
                 name: item.name,
                 price: parseInt(item.price),
                 category: db.category.id
             });
-        }
 
-        await embed.setColor(bot.embedColors.logAdd)
-            .setDescription('New item added!\n' +
-                '**Values:**')
-            .addField('Name:', item.name, true)
-            .addField('Category:', item.category, true)
-            .addField('Price:', `${item.price} ${bot.currencyEmoji}`, true)
-            .addField('Image:', '\u200B')
-            .attachFiles([`./Stella.Core/misc/images/inventory/${item.name}_${db.category.name}.png`])
-            .setImage(`attachment://${item.name}_${db.category.name}.png`)
+            await embed.setColor(bot.embedColors.logAdd)
+                .setDescription('New item added!\n' +
+                    '**Values:**')
+                .addField('Name:', item.name, true)
+                .addField('Category:', item.category, true)
+                .addField('Price:', `${item.price} ${bot.currencyEmoji}`, true);
+        }
 
         await message.channel.send(embed);
     }

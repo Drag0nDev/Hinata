@@ -7,6 +7,13 @@ const sequelize = new Sequelize('database', config.username, config.password, {
     dialect: 'sqlite',
     logging: false,
     storage: 'StellaDb.sqlite',
+    retry: {
+        match: [
+            /SQLITE_BUSY/,
+        ],
+        name: 'query',
+        max: 100
+    },
     pool: {
         idle: 60000,
         max: 100,
