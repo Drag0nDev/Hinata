@@ -2,7 +2,7 @@
 config.json
 test.js
 test_server.ps1
-StellaDb.sqlite
+HinataDb.sqlite
 ServerSplit.sql
 
 #ignored directories
@@ -10,15 +10,15 @@ logs/
 .idea/
 
 #ignored files in the core
-Stella.Core/commands/testing/
-Stella.Core/examples
-Stella.Core/misc/Dosis
-Stella.Core/Database/Backups
+Hinata.Core/commands/testing/
+Hinata.Core/examples
+Hinata.Core/misc/Dosis
+Hinata.Core/Database/Backups
 snap
-Stella.Core/misc/images/custom/*
-Stella.Core/misc/images/inventory/*
+Hinata.Core/misc/images/custom/*
+Hinata.Core/misc/images/inventory/*
 node_modules/*
 
 #unignored images
-!Stella.Core/misc/images/custom/.gitkeep
-!Stella.Core/misc/images/inventory/default_xp.jpg
+!Hinata.Core/misc/images/custom/.gitkeep
+!Hinata.Core/misc/images/inventory/default_xp.jpg

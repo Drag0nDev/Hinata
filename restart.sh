@@ -1,4 +1,4 @@
 #!/bin/bash
 
-git pull -f https://github.com/Drag0nDev/Stella.git
-pm2 start stella
+git pull -f https://github.com/Drag0nDev/Hinata.git
+pm2 start Hinata
