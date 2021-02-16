@@ -83,5 +83,11 @@ Reflect.defineProperty(User, 'changeColor', {
         user.save();
     }
 });
+Reflect.defineProperty(User, 'addxp', {
+    value: async function addxp(user, amount) {
+        user.xp += amount;
+        user.save();
+    }
+})
 
 module.exports = { User, Server: Servers, ServerSettings, ServerUser, Timers, Warnings, Rewards, Shop, Category, Inventory };
