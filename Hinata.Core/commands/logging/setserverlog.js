@@ -52,7 +52,7 @@ module.exports = {
                     .setDescription(`New server log created with name <#${channel.id}>`);
             });
 
-            await $channel.createWebhook('bot.user.username', {
+            await $channel.createWebhook('`${bot.user.username}`', {
                 avatar: bot.user.avatarURL({
                     dynamic: true,
                     size: 4096
@@ -75,7 +75,7 @@ module.exports = {
                     .setDescription('Please provide a valid id');
             }
 
-            await channel.createWebhook('bot.user.username', {
+            await channel.createWebhook('`${bot.user.username}`', {
                 avatar: bot.user.avatarURL({
                     dynamic: true,
                     size: 4096

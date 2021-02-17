@@ -20,8 +20,7 @@ module.exports = async (bot, oldChannel, newChannel) => {
         //check for category change
         await checkCategorychange(oldChannel, newChannel, embed);
 
-        console.log(embed)
-        if (embed.fields.length > 0 || embed.description.length)
+        if (embed.fields.length > 0 || embed.description)
             await Logs.serverLog(newChannel.guild, embed);
     } catch (err) {
         logger.error(err);
@@ -39,12 +38,16 @@ async function checkPermissions(oldChannel, newChannel, embed) {
                     const newPermissions = newChannel.permissionOverwrites.get(key);
                     const role = newChannel.guild.roles.cache.get(newPermissions.id);
                     const member = newChannel.guild.members.cache.get(newPermissions.id);
+                    const newAllowed = newPermissions.allow.toArray();
+                    const newDenied = newPermissions.deny.toArray();
 
                     if (!role) {
-                        embed.setDescription(`**New permission overwrites set for <@!${member.user.id}> in <#${newChannel.id}>**`);
+                        embed.setDescription(`**New permission overwrites set for <@!${member.user.id}> in <#${newChannel.id}>**\n` + checkNewPerms(newAllowed, newDenied));
                     } else {
-                        embed.setDescription(`**New permission overwrites set for <@&${role.id}> in <#${newChannel.id}>**`);
+                        embed.setDescription(`**New permission overwrites set for <@&${role.id}> in <#${newChannel.id}>**\n` + checkNewPerms(newAllowed, newDenied));
                     }
+
+
                 }
             });
         } else {
@@ -62,6 +65,8 @@ async function checkPermissions(oldChannel, newChannel, embed) {
                 }
             })
         }
+
+
     } else {
         for (let i = 0; i < newChannel.permissionOverwrites.size; i++) {
             const newPermissions = newChannel.permissionOverwrites.get(newKeys[i]);
@@ -155,6 +160,25 @@ function findChangedPerms(newAllowed, oldAllowed, newDenied, oldDenied) {
                 changedPerms += `**${perm}:** ❌ ➜ ⬜\n`;
             }
         }
+    }
+
+    return changedPerms;
+}
+
+function checkNewPerms(newAllowed, newDenied) {
+    const repl = new RegExp('_', 'g');
+    let changedPerms = '';
+
+    for (let newAllow of newAllowed) {
+        let perm = newAllow.charAt(0) + newAllow.slice(1).toLowerCase()
+        perm = perm.replace(repl, ' ');
+        changedPerms += `**${perm}:** ⬜ ➜ ✅\n`;
+    }
+
+    for (let newDeny of newDenied) {
+        let perm = newDeny.charAt(0) + newDeny.slice(1).toLowerCase()
+        perm = perm.replace(repl, ' ');
+        changedPerms += `**${perm}:** ⬜ ➜ ❌\n`;
     }
 
     return changedPerms;
