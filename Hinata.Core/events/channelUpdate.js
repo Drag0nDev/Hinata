@@ -20,7 +20,8 @@ module.exports = async (bot, oldChannel, newChannel) => {
         //check for category change
         await checkCategorychange(oldChannel, newChannel, embed);
 
-        await Logs.serverLog(newChannel.guild, embed);
+        if (embed.fields.length > 0 || embed.description.length > 0)
+            await Logs.serverLog(newChannel.guild, embed);
     } catch (err) {
         logger.error(err);
     }
@@ -113,8 +114,7 @@ function findChangedPerms(newAllowed, oldAllowed, newDenied, oldDenied) {
                 let perm = newAllow.charAt(0) + newAllow.slice(1).toLowerCase();
                 perm = perm.replace(repl, ' ');
                 changedPerms += `**${perm}:** ❌ ➜ ✅\n`;
-            }
-            else {
+            } else {
                 let perm = newAllow.charAt(0) + newAllow.slice(1).toLowerCase()
                 perm = perm.replace(repl, ' ');
                 changedPerms += `**${perm}:** ⬜ ➜ ✅\n`;
@@ -128,8 +128,7 @@ function findChangedPerms(newAllowed, oldAllowed, newDenied, oldDenied) {
                 let perm = oldAllow.charAt(0) + oldAllow.slice(1).toLowerCase()
                 perm = perm.replace(repl, ' ');
                 changedPerms += `**${perm}:** ✅ ➜ ❌\n`;
-            }
-            else {
+            } else {
                 let perm = oldAllow.charAt(0) + oldAllow.slice(1).toLowerCase()
                 perm = perm.replace(repl, ' ');
                 changedPerms += `**${perm}:** ✅ ➜ ⬜\n`;
