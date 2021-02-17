@@ -104,7 +104,7 @@ async function createChannel(bot, message, guild, user, channelName, parent) {
         channel = newChannel;
     });
 
-    return await channel.createWebhook('Hinata', {
+    return await channel.createWebhook(bot.user.name, {
         avatar: bot.user.avatarURL({
             dynamic: true,
             size: 4096

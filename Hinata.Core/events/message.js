@@ -175,6 +175,10 @@ async function checkServerUser(message) {
             userId: message.author.id,
             guildId: message.guild.id
         }
+    }).catch(err => {
+        logger.error('Error:', err,
+            '\nServer:', message.guild.name,
+            '\nUser:', message.author.tag);
     });
 }
 
@@ -193,7 +197,10 @@ async function checkPrefix(message) {
         if (!server.prefix) return;
 
         prefix.push(server.prefix);
-    })
+    }).catch(err => {
+        logger.error('Error:', err,
+            '\nserver:', message.guild.name);
+    });
 
     for (let i of prefix) {
         if (message.content.toLowerCase().indexOf(i) === 0)

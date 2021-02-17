@@ -53,7 +53,7 @@ Inventory.belongsTo(Shop, {
     foreignKey: 'shopId'
 });
 Inventory.belongsTo(Category, {
-    foreignKey: 'cateogryId'
+    foreignKey: 'categoryId'
 });
 
 
