@@ -1,35 +1,37 @@
 const {MessageEmbed} = require('discord.js');
 const config = require('../../../config.json');
-const {User} = require('../../misc/dbObjects');
+const {User, Category, Inventory, Shop} = require('../../misc/dbObjects');
 const download = require('image-downloader');
 const logger = require("log4js").getLogger();
+const cost = 10000;
 
 module.exports = {
-    name: 'setbackground',
-    aliases: ['sbg'],
+    name: 'addcustombackground',
+    aliases: ['acbg'],
     category: 'profile',
     description: 'Change the background of your xp card to a custom image.\n' +
         'Everything will be converted to a `.PNG` format.\n' +
         '**TOS breaking images will be removed without refund!**',
-    cost: `5000 ${config.currencyEmoji}`,
+    cost: `${cost} ${config.currencyEmoji}`,
     usage: '[command | alias] <image link/image attachment>',
     run: async (bot, message, args) => {
         let embed = new MessageEmbed().setTimestamp()
             .setColor(bot.embedColors.normal)
-            .setTitle('Set background');
+            .setTitle('Add custom background');
         const urlReg = new RegExp('.(jpeg|jpg|png)$');
         let url;
         let user;
+        let file;
         user = await User.findOne({
             where: {
                 userId: message.author.id
             }
         });
 
-        if (user.balance < 5000)
+        if (user.balance < cost)
             return await message.channel.send(embed.setDescription('You do not have enough balance to pay for this action!')
                 .addField('Your balance', `${user.balance} ${bot.currencyEmoji}`, true)
-                .addField('Background change price', `5000 ${bot.currencyEmoji}`, true)
+                .addField('Background change price', `${cost} ${bot.currencyEmoji}`, true)
                 .setColor(bot.embedColors.error));
 
         //detect if link or attachment
@@ -57,9 +59,44 @@ module.exports = {
                         .attachFiles([filename])
                         .setImage(`attachment://${message.author.id}.png`)
                 );
+                file = filename;
             })
             .catch((err) => logger.error(err));
 
-        User.remove(user, 5000);
+        //User.remove(user, cost);
+        //User.setBg(user, 'custom');
+        await changeDb(bot, message, file);
+    }
+}
+
+async function changeDb(bot, message, file) {
+    let cat;
+    cat = await Category.findOne({
+        where: {
+            name: 'custom'
+        }
+    });
+
+    let shop;
+    shop = await Shop.findOne({
+        where: {
+            name: `${message.author.id}_${cat.name}_background`,
+            category: cat.id
+        }
+    });
+
+    if (!shop) {
+        shop = await Shop.create({
+            name: `${message.author.id}_${cat.name}_background`,
+            image: `${message.author.id}.png`,
+            price: cost,
+            category: cat.id
+        });
+
+        Inventory.create({
+            userId: message.author.id,
+            shopId: shop.id,
+            categoryId: cat.id
+        });
     }
 }

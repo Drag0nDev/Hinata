@@ -56,7 +56,6 @@ Inventory.belongsTo(Category, {
     foreignKey: 'categoryId'
 });
 
-
 //database functions
 Reflect.defineProperty(User, 'remove', {
     value: async function add(user, amount) {
@@ -88,6 +87,18 @@ Reflect.defineProperty(User, 'addxp', {
         user.xp += amount;
         user.save();
     }
-})
+});
+Reflect.defineProperty(User, 'setBg', {
+    value: async function setBg(user, background) {
+        user.background = background;
+        user.save();
+    }
+});
+Reflect.defineProperty(Shop, 'changeImg', {
+    value: async function changeImg(shop, image) {
+        shop.image = image;
+        shop.save();
+    }
+});
 
 module.exports = { User, Server: Servers, ServerSettings, ServerUser, Timers, Warnings, Rewards, Shop, Category, Inventory };

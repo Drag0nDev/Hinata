@@ -66,15 +66,29 @@ module.exports = {
         const ctx = canvas.getContext('2d');
         ctx.font = '50px Dosis';
 
-        //look for custom background
-        let files = await readdir('./Hinata.Core/misc/images/custom');
+        //look for the background
+        if (user.background === 'custom') {
+            //look for custom background
+            let files = await readdir('./Hinata.Core/misc/images/custom');
 
-        userbg = files[files.indexOf(`${member.user.id}.png`)];
+            userbg = files[files.indexOf(`${member.user.id}.png`)];
 
-        if (!userbg)
-            background = await Canvas.loadImage('./Hinata.Core/misc/images/inventory/default_xp.jpg');
-        else
-            background = await Canvas.loadImage(`./Hinata.Core/misc/images/custom/${userbg}`);
+            if (!userbg)
+                background = await Canvas.loadImage('./Hinata.Core/misc/images/inventory/default_xp.jpg');
+            else
+                background = await Canvas.loadImage(`./Hinata.Core/misc/images/custom/${userbg}`);
+        } else {
+            //look for shop background
+            let files = await readdir('./Hinata.Core/misc/images/inventory');
+
+            userbg = files[files.indexOf(user.background)];
+
+            if (!userbg)
+                background = await Canvas.loadImage('./Hinata.Core/misc/images/inventory/default_xp.jpg');
+            else
+                background = await Canvas.loadImage(`./Hinata.Core/misc/images/inventory/${userbg}`);
+        }
+
 
         ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
 
@@ -172,7 +186,8 @@ const getGlobal = (user) => {
         neededXp: levelXp + ((levelXp / 2) * user.level),
         level: user.level,
         xp: user.xp,
-        color: user.color
+        color: user.color,
+        background: user.background
     };
 }
 

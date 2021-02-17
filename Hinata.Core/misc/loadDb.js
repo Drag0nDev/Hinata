@@ -31,7 +31,8 @@ sequelize.sync({ force }).then(async () => {
     const category =  [
         await Category.upsert({name: 'background'}),
         await Category.upsert({name: 'badge'}),
-        await Category.upsert({name: 'hidden'})
+        await Category.upsert({name: 'hidden'}),
+        await Category.upsert({name: 'custom'})
     ];
 
     await Promise.all(category);

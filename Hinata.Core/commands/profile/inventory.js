@@ -69,15 +69,16 @@ async function inventoryAll(bot, message, inventory) {
 
     for (let i = 0; i < inventory.db.length && i < 10; i++) {
         let item = inventory.db[i];
+        let name = item.Shop.name === `${message.author.id}_custom_background` ? 'Custom background' : item.Shop.name;
 
         if (item.Shop.image !== null) {
-            inventory.embed.addField(item.Shop.name,
+            inventory.embed.addField(name,
                 `**ID:** ${item.id}\n` +
                 `**Category:** ${item.Category.name}\n` +
                 `**Is image:** Yes`,
                 true);
         } else {
-            inventory.embed.addField(item.Shop.name,
+            inventory.embed.addField(name,
                 `**ID:** ${item.id}\n` +
                 `**Category:** ${item.Category.name}\n` +
                 `**Is image:** No`,
@@ -119,16 +120,17 @@ async function inventoryByName(bot, message, inventory) {
 
     for (let i = 0; i < 10 && i < inventory.db.length; i++) {
         let item = inventory.db[i];
+        let name = item.Shop.name === `${message.author.id}_custom_background` ? 'Custom background' : item.Shop.name;
 
         if (item.image !== null) {
-            inventory.embed.addField(item.Shop.name,
+            inventory.embed.addField(name,
                 `**ID:** ${item.id}\n` +
                 `**Category:** ${item.Category.name}\n` +
                 `**Is image:** Yes`,
                 true)
                 .setFooter('Page 0');
         } else {
-            inventory.embed.addField(item.Shop.name,
+            inventory.embed.addField(name,
                 `**ID:** ${item.id}\n` +
                 `**Category:** ${item.Category.name}\n` +
                 `**Is image:** No`)
@@ -185,16 +187,17 @@ async function inventoryByCategory(bot, message, inventory) {
 
     for (let i = 0; i < 10 && i < inventory.db.length; i++) {
         let item = inventory.db[i];
+        let name = item.Shop.name === `${message.author.id}_custom_background` ? 'Custom background' : item.Shop.name;
 
         if (item.image !== null) {
-            inventory.embed.addField(item.Shop.name,
+            inventory.embed.addField(name,
                 `**ID:** ${item.id}\n` +
                 `**Category:** ${item.Category.name}\n` +
                 `**Is image:** Yes`,
                 true)
                 .setFooter('Page 0');
         } else {
-            inventory.embed.addField(item.Shop.name,
+            inventory.embed.addField(name,
                 `**ID:** ${item.id}\n` +
                 `**Category:** ${item.Category.name}\n` +
                 `**Is image:** No`,
@@ -256,9 +259,10 @@ async function inventoryByNameAndCat(bot, message, inventory) {
 
     for (let i = 0; i < 10 && i < inventory.db.length; i++) {
         let item = inventory.db[i];
+        let name = item.Shop.name === `${message.author.id}_custom_background` ? 'Custom background' : item.Shop.name;
 
         if (item.image !== null) {
-            inventory.embed.addField(item.Shop.name,
+            inventory.embed.addField(name,
                 `**ID:** ${item.id}\n` +
                 `**Category:** ${item.Category.name}\n` +
                 `**Is image:** Yes`,

@@ -58,7 +58,7 @@ async function shopMenu(bot, message, shop) {
     shop.str = '';
 
     for (let cat of shop.categoryDb) {
-        if (cat.name !== 'hidden')
+        if (cat.name !== 'hidden' || cat.name !== 'custom')
             shop.str += '- ' + cat.name + '\n';
     }
 
@@ -125,7 +125,7 @@ async function shopByCategory(bot, message, shop) {
         }
     });
 
-    if (shop.categoryDb === null || shop.categoryDb.name === 'hidden') {
+    if (shop.categoryDb === null || shop.categoryDb.name === 'hidden' || shop.categoryDb.name === 'custom') {
         shop.embed.setDescription(`Category **${shop.item.category}** does not exist!`)
             .setColor(bot.embedColors.error);
 
@@ -146,7 +146,7 @@ async function shopByCategory(bot, message, shop) {
     shop.embed.setColor(bot.embedColors.normal)
         .setTimestamp();
 
-    if (shop.db.length === 0 || shop.categoryDb.name === 'hidden') {
+    if (shop.db.length === 0 || shop.categoryDb.name === 'hidden' || shop.categoryDb.name === 'custom') {
         shop.embed.setDescription(`No items found with category **${shop.item.category}**!`);
 
         return message.channel.send(shop.embed);
@@ -186,7 +186,7 @@ async function shopByNameAndCat(bot, message, shop) {
         }
     });
 
-    if (shop.categoryDb === null || shop.categoryDb.name === 'hidden') {
+    if (shop.categoryDb === null || shop.categoryDb.name === 'hidden' || shop.categoryDb.name === 'custom') {
         shop.embed.setDescription(`Category **${shop.item.category}** does not exist!`);
 
         return message.channel.send(shop.embed);
