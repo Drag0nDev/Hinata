@@ -137,8 +137,11 @@ module.exports = {
                     `**Category:** ${db.category.name}\n` +
                     `**Price:** ${db.shop.price} ${bot.currencyEmoji}\n` +
                     `**Image:**`)
-                    .attachFiles([`./Hinata.Core/misc/images/inventory/${db.shop.image}`])
-                    .setImage(`attachment://${db.shop.image}`);
+                    .attachFiles([{
+                        attachment: `./Hinata.Core/misc/images/inventory/${db.shop.image}`,
+                        name: 'preview.png'
+                    }])
+                    .setImage('attachment://preview.png');
             else
                 embed.addField('Existing item',
                     `**Name:** ${db.shop.name}\n` +
@@ -180,8 +183,11 @@ module.exports = {
                 .addField('Category:', item.category, true)
                 .addField('Price:', `${item.price} ${bot.currencyEmoji}`, true)
                 .addField('Image:', '\u200B')
-                .attachFiles([`./Hinata.Core/misc/images/inventory/${item.name}_${db.category.name}.png`])
-                .setImage(`attachment://${item.name}_${db.category.name}.png`);
+                .attachFiles([{
+                    attachment: `./Hinata.Core/misc/images/inventory/${item.name}_${db.category.name}.png`,
+                    name: 'preview.png'
+                }])
+                .setImage(`attachment://preview.png`);
         } else {
             await Shop.create({
                 name: item.name,

@@ -56,8 +56,11 @@ module.exports = {
             .then(({filename}) => {
                 message.channel.send(
                     embed.setDescription('Your new background is')
-                        .attachFiles([filename])
-                        .setImage(`attachment://${message.author.id}.png`)
+                        .attachFiles([{
+                            attachment: filename,
+                            name: 'background.png'
+                        }])
+                        .setImage(`attachment://background.png`)
                 );
                 file = filename;
             })
