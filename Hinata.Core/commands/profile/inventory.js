@@ -60,6 +60,9 @@ async function inventoryAll(bot, message, inventory) {
     inventory.embed.setDescription(`All your items`);
 
     inventory.db = await Inventory.findAll({
+        where: {
+            userId: message.author.id
+        },
         order: [
             ['categoryId', 'ASC'],
             ['shopId', 'ASC']
