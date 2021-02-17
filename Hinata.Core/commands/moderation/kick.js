@@ -56,7 +56,7 @@ module.exports = {
         if (!canKick)
             return message.channel.send(`You can't kick **${member.user.tag}** due to role hierarchy!`);
 
-        args.shift();
+        await args.shift();
 
         //kick the member
         if (args[0])

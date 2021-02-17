@@ -179,7 +179,6 @@ async function addRemove(bot, message, args, embed) {
 
 async function compRoles(bot, message, member, author, role, embed) {
     let roleArrayAuth = [];
-    let roleArrayMemb = [];
     let roleArrayBot = [];
     let botserver = message.guild.members.cache.get(bot.user.id);
 
@@ -188,16 +187,11 @@ async function compRoles(bot, message, member, author, role, embed) {
         roleArrayAuth.push(member.guild.roles.cache.get(roleId));
     });
 
-    member._roles.forEach(roleId => {
-        roleArrayMemb.push(member.guild.roles.cache.get(roleId));
-    });
-
     botserver._roles.forEach(roleId => {
         roleArrayBot.push(member.guild.roles.cache.get(roleId));
     })
 
     roleArrayAuth.sort((a, b) => b.position - a.position);
-    roleArrayMemb.sort((a, b) => b.position - a.position);
     roleArrayBot.sort((a, b) => b.position - a.position);
 
     if (role.position >= roleArrayBot[0].position) {

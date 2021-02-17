@@ -44,7 +44,7 @@ module.exports = {
             return await message.channel.send(shop.embed);
         }
 
-        if (shop.db.Category.name === 'hidden') {
+        if (shop.db.Category.name === 'hidden' || shop.db.Category.name === 'custom') {
             shop.embed.setColor(bot.embedColors.normal)
                 .setDescription('This ID is not linked to an item that is buyable!');
 

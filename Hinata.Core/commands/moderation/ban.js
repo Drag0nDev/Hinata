@@ -30,9 +30,8 @@ module.exports = {
 
         let member;
 
-        await Servers.getMember(message, args).then(memberPromise => {
-            member = memberPromise;
-        });
+        member = await Servers.getMember(message, args);
+
         const author = message.guild.members.cache.get(message.author.id);
 
         //check if member is in the server
@@ -97,8 +96,8 @@ module.exports = {
 async function tempBan(bot, message, member, embed, time, reason) {
     let expiration = new Date();
     await Dates.calcExpiration(expiration, time);
-    let timeVal = await tools.getTimeval(time);
-    let $time = await tools.getTime(time);
+    let timeVal = await Dates.getTimeval(time);
+    let $time = await Dates.getTime(time);
 
     embed.setTitle('Ban')
         .setDescription(`**${member.user.tag}** is banned for **${$time} ${timeVal}** with reason: **${reason}**!`)

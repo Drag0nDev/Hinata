@@ -31,7 +31,7 @@ function getMentions(bot, message, input) {
     let members = '';
 
     if (message.mentions.users.size > 0) {
-        message.mentions.users.forEach(user => {
+        message.mentions.users.forEach(async user => {
             if (user.id !== `${config.owner}`)
                 members += `<@!${user.id}> `
             else {
@@ -39,11 +39,11 @@ function getMentions(bot, message, input) {
                     .setTimestamp()
                     .setColor(bot.embedColors.normal)
                     .setDescription(`${message.author} <a:bonk:735549944814895115>, don't bonk my master!`);
-                message.channel.send(embed);
+                await message.channel.send(embed);
             }
         });
     } else {
-        input.forEach(id => {
+        input.forEach(async id => {
             if (id !== `${config.owner}`)
                 members += `<@!${id}> `
             if (isNaN(parseInt(id))) {
@@ -52,7 +52,7 @@ function getMentions(bot, message, input) {
                     .setTimestamp()
                     .setColor(bot.embedColors.normal)
                     .setDescription(`${message.author} <a:bonk:735549944814895115>, don't bonk my master!`);
-                message.channel.send(embed);
+                await message.channel.send(embed);
             }
         });
     }

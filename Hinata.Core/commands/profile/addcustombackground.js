@@ -62,17 +62,16 @@ module.exports = {
                         }])
                         .setImage(`attachment://background.png`)
                 );
-                file = filename;
             })
             .catch((err) => logger.error(err));
 
-        //User.remove(user, cost);
-        //User.setBg(user, 'custom');
-        await changeDb(bot, message, file);
+        User.remove(user, cost);
+        User.setBg(user, 'custom');
+        await changeDb(bot, message);
     }
 }
 
-async function changeDb(bot, message, file) {
+async function changeDb(bot, message) {
     let cat;
     cat = await Category.findOne({
         where: {
