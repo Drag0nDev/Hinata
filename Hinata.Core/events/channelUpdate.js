@@ -20,7 +20,8 @@ module.exports = async (bot, oldChannel, newChannel) => {
         //check for category change
         await checkCategorychange(oldChannel, newChannel, embed);
 
-        if (embed.fields.length > 0 || embed.description.length > 0)
+        console.log(embed)
+        if (embed.fields.length > 0 || embed.description.length)
             await Logs.serverLog(newChannel.guild, embed);
     } catch (err) {
         logger.error(err);
