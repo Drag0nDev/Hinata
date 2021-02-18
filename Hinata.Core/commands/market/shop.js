@@ -80,6 +80,7 @@ async function shopByName(bot, message, shop) {
         include: [Category],
         order: [
             ['category', 'ASC'],
+            ['id', 'ASC']
         ]
     });
 
@@ -87,7 +88,8 @@ async function shopByName(bot, message, shop) {
         .setTimestamp();
 
     if (shop.db.length === 0) {
-        shop.embed.setDescription(`No items found with name **${shop.item.name}**!`);
+        shop.embed.setDescription(`No items found with name **${shop.item.name}**!`)
+            .setColor(bot.embedColors.error);
 
         return message.channel.send(shop.embed);
     }
@@ -95,22 +97,24 @@ async function shopByName(bot, message, shop) {
     for (let i = 0; i < 10 && i < shop.db.length; i++) {
         let item = shop.db[i];
 
-        if (item.image !== null) {
-            shop.embed.addField(item.name,
-                `**Shop ID:** ${item.id}\n` +
-                `**Category:** ${item.Category.name}\n` +
-                `**Price:** ${item.price} ${bot.currencyEmoji}\n` +
-                `**Is image:** Yes`,
-                true)
-                .setFooter('Page 0');
-        } else {
-            shop.embed.addField(item.name,
-                `**Shop ID:** ${item.id}\n` +
-                `**Category:** ${item.Category.name}\n` +
-                `**Price:** ${item.price} ${bot.currencyEmoji}\n` +
-                `**Is image:** No`)
-                .setFooter('Page 0');
-        }
+        if (item.Category.name !== 'hidden' || item.Category.name !== 'custom')
+            if (item.image !== null) {
+                shop.embed.addField(item.name,
+                    `**Shop ID:** ${item.id}\n` +
+                    `**Category:** ${item.Category.name}\n` +
+                    `**Price:** ${item.price} ${bot.currencyEmoji}\n` +
+                    `**Is image:** Yes`,
+                    true)
+                    .setFooter('Page 0');
+            } else {
+                shop.embed.addField(item.name,
+                    `**Shop ID:** ${item.id}\n` +
+                    `**Category:** ${item.Category.name}\n` +
+                    `**Price:** ${item.price} ${bot.currencyEmoji}\n` +
+                    `**Is image:** No`,
+                    true)
+                    .setFooter('Page 0');
+            }
     }
 
     messageEditor(bot, message, shop);
@@ -138,8 +142,7 @@ async function shopByCategory(bot, message, shop) {
         },
         include: [Category],
         order: [
-            ['category', 'ASC'],
-            ['name', 'ASC']
+            ['id', 'ASC']
         ]
     });
 
@@ -187,7 +190,8 @@ async function shopByNameAndCat(bot, message, shop) {
     });
 
     if (shop.categoryDb === null || shop.categoryDb.name === 'hidden' || shop.categoryDb.name === 'custom') {
-        shop.embed.setDescription(`Category **${shop.item.category}** does not exist!`);
+        shop.embed.setDescription(`Category **${shop.item.category}** does not exist!`)
+            .setColor(bot.embedColors.error);
 
         return message.channel.send(shop.embed);
     }
@@ -202,7 +206,7 @@ async function shopByNameAndCat(bot, message, shop) {
         include: [Category],
         order: [
             ['category', 'ASC'],
-            ['name', 'ASC']
+            ['id', 'ASC']
         ]
     });
 
@@ -231,7 +235,8 @@ async function shopByNameAndCat(bot, message, shop) {
                 `**Shop ID:** ${item.id}\n` +
                 `**Category:** ${item.Category.name}\n` +
                 `**Price:** ${item.price} ${bot.currencyEmoji}\n` +
-                `**Is image:** No`)
+                `**Is image:** No`,
+                true)
                 .setFooter('Page 0');
         }
     }
@@ -293,7 +298,8 @@ async function pageEmbed(bot, message, shop) {
                 `**Shop ID:** ${item.id}\n` +
                 `**Category:** ${item.Category.name}\n` +
                 `**Price:** ${item.price} ${bot.currencyEmoji}\n` +
-                `**Is image:** No`);
+                `**Is image:** No`,
+                true);
         }
     }
 
