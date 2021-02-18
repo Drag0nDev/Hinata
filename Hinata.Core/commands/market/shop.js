@@ -97,7 +97,7 @@ async function shopByName(bot, message, shop) {
     for (let i = 0; i < 10 && i < shop.db.length; i++) {
         let item = shop.db[i];
 
-        if (item.Category.name !== 'hidden' || item.Category.name !== 'custom')
+        if (item.Category.name !== 'hidden' && item.Category.name !== 'custom') {
             if (item.image !== null) {
                 shop.embed.addField(item.name,
                     `**Shop ID:** ${item.id}\n` +
@@ -115,6 +115,7 @@ async function shopByName(bot, message, shop) {
                     true)
                     .setFooter('Page 0');
             }
+        }
     }
 
     messageEditor(bot, message, shop);
