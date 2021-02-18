@@ -12,6 +12,7 @@ module.exports = {
             embed: new MessageEmbed().setTitle('Buy')
                 .setTimestamp()
                 .setColor(bot.embedColors.normal),
+            nextId: 0
         };
         const checkID = new RegExp('^\\d+$');
 
@@ -90,7 +91,11 @@ module.exports = {
 
                     shop.already = true;
                 }
+                if (shop.nextId < item.id)
+                    shop.nextId = item.id;
             });
+
+            console.log(shop);
 
             if (!shop.already) {
                 shop.embed.setDescription('Do you want to buy this item?\n' +
@@ -122,6 +127,7 @@ module.exports = {
                             }
 
                             Inventory.create({
+                                invId: shop.nextId + 1,
                                 userId: message.author.id,
                                 shopId: shop.db.id,
                                 categoryId: shop.db.category

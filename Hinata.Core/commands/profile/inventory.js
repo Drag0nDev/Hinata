@@ -65,7 +65,6 @@ async function inventoryAll(bot, message, inventory) {
         },
         order: [
             ['categoryId', 'ASC'],
-            ['shopId', 'ASC']
         ],
         include: [Shop, Category]
     });
@@ -76,13 +75,13 @@ async function inventoryAll(bot, message, inventory) {
 
         if (item.Shop.image !== null) {
             inventory.embed.addField(name,
-                `**ID:** ${item.id}\n` +
+                `**ID:** ${item.invId}\n` +
                 `**Category:** ${item.Category.name}\n` +
                 `**Is image:** Yes`,
                 true);
         } else {
             inventory.embed.addField(name,
-                `**ID:** ${item.id}\n` +
+                `**ID:** ${item.invId}\n` +
                 `**Category:** ${item.Category.name}\n` +
                 `**Is image:** No`,
                 true);
@@ -127,14 +126,14 @@ async function inventoryByName(bot, message, inventory) {
 
         if (item.image !== null) {
             inventory.embed.addField(name,
-                `**ID:** ${item.id}\n` +
+                `**ID:** ${item.invId}\n` +
                 `**Category:** ${item.Category.name}\n` +
                 `**Is image:** Yes`,
                 true)
                 .setFooter('Page 0');
         } else {
             inventory.embed.addField(name,
-                `**ID:** ${item.id}\n` +
+                `**ID:** ${item.invId}\n` +
                 `**Category:** ${item.Category.name}\n` +
                 `**Is image:** No`)
                 .setFooter('Page 0');
@@ -194,14 +193,14 @@ async function inventoryByCategory(bot, message, inventory) {
 
         if (item.image !== null) {
             inventory.embed.addField(name,
-                `**ID:** ${item.id}\n` +
+                `**ID:** ${item.invId}\n` +
                 `**Category:** ${item.Category.name}\n` +
                 `**Is image:** Yes`,
                 true)
                 .setFooter('Page 0');
         } else {
             inventory.embed.addField(name,
-                `**ID:** ${item.id}\n` +
+                `**ID:** ${item.invId}\n` +
                 `**Category:** ${item.Category.name}\n` +
                 `**Is image:** No`,
                 true)
@@ -266,14 +265,14 @@ async function inventoryByNameAndCat(bot, message, inventory) {
 
         if (item.image !== null) {
             inventory.embed.addField(name,
-                `**ID:** ${item.id}\n` +
+                `**ID:** ${item.invId}\n` +
                 `**Category:** ${item.Category.name}\n` +
                 `**Is image:** Yes`,
                 true)
                 .setFooter('Page 0');
         } else {
             inventory.embed.addField(item.Shop.name,
-                `**ID:** ${item.id}\n` +
+                `**ID:** ${item.invId}\n` +
                 `**Category:** ${item.Category.name}\n` +
                 `**Is image:** No`)
                 .setFooter('Page 0');
@@ -327,14 +326,14 @@ async function pageEmbed(bot, message, inventory) {
 
         if (item.Shop.image !== null) {
             inventory.embed.addField(item.name,
-                `**ID:** ${item.id}\n` +
+                `**ID:** ${item.invId}\n` +
                 `**Name:** ${item.Shop.name}`
                     `**Category:** ${item.Category.name}\n` +
                 `**Is image:** Yes`,
                 true);
         } else {
             inventory.embed.addField(item.name,
-                `**ID:** ${item.id}\n` +
+                `**ID:** ${item.invId}\n` +
                 `**Category:** ${item.Category.name}\n` +
                 `**Is image:** No`,
                 true);

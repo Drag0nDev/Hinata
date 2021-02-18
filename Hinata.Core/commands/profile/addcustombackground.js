@@ -87,6 +87,20 @@ async function changeDb(bot, message) {
         }
     });
 
+    let inv;
+    inv = await Inventory.findAll({
+        where: {
+            userId: message.author.id,
+        }
+    });
+
+    let newId = 0;
+
+    inv.forEach(item => {
+        if (item.invId > newId)
+            newId = item.invId;
+    });
+
     if (!shop) {
         shop = await Shop.create({
             name: `${message.author.id}_${cat.name}_background`,
@@ -96,6 +110,7 @@ async function changeDb(bot, message) {
         });
 
         Inventory.create({
+            invId: newId + 1,
             userId: message.author.id,
             shopId: shop.id,
             categoryId: cat.id

@@ -1,7 +1,7 @@
 const config = require("../../../config.json")
 const {MessageEmbed} = require('discord.js');
 const log4js = require("log4js");
-const {Permissions, Dates} = require('../../misc/tools');
+const {Permissions, Dates, Servers} = require('../../misc/tools');
 
 const logger = log4js.getLogger();
 
@@ -13,6 +13,9 @@ module.exports = {
     usage: '[command | alias] <server id>',
     run: async (bot, message, args) => {
         let embed = new MessageEmbed().setTitle('Fetch server');
+        const fields = {
+            fields: []
+        };
 
         //check if the user is the bot owner
         if (message.author.id !== config.owner) {
@@ -32,30 +35,43 @@ module.exports = {
 
         //assign guild
         const guild = bot.guilds.cache.get(args[0]);
+        fields.fields.push({name: `Id`, value: `${guild.id}`, inline: true});
 
         //find the owner and all his/her info
         let owner = guild.members.cache.get(guild.ownerID);
+        fields.fields.push({name: `Owner`, value: `${owner.user.username}#${owner.user.discriminator}`, inline: true});
+        fields.fields.push({name: `Users`, value: `${guild.memberCount}`, inline: true});
 
         //find the amount of bots in the server
-        let bots = tools.getBots(guild);
+        let bots = Servers.getBots(guild);
+        fields.fields.push({name: `Bots`, value: `${bots}`, inline: true});
+
+        //get the date
+        let date = Dates.getDate(guild.createdTimestamp);
+        fields.fields.push({name: `Creation date`, value: `${date}`, inline: true});
 
         //check the amount of each channel sort
-        let textCh = tools.getChannelAmount(guild.channels.cache, 'text');
-        let voiceCh = tools.getChannelAmount(guild.channels.cache, 'voice');
-        let categoryCh = tools.getChannelAmount(guild.channels.cache, 'category');
+        let textCh = Servers.getChannelAmount(guild.channels.cache, 'text');
+        let voiceCh = Servers.getChannelAmount(guild.channels.cache, 'voice');
+        let categoryCh = Servers.getChannelAmount(guild.channels.cache, 'category');
 
         let channelString = `**Categories:** ${categoryCh}\n` +
             `**Text channels:** ${textCh}\n` +
             `**Voice channels:** ${voiceCh}`;
+        fields.fields.push({name: `Channels`, value: `${channelString}`, inline: true});
 
         //look for the system channel
         let systemchannel = getSystemChannel(guild);
+        fields.fields.push({name: `System channel`, value: `${systemchannel}`, inline: true});
 
         //look for AFK channel
         let afkChannel = getAfkChannel(guild);
+        fields.fields.push({name: `AFK voice channel`, value: `${afkChannel}`, inline: true});
 
-        //get the date
-        let date = Dates.getDate(guild.createdTimestamp);
+        fields.fields.push({name: `Region`, value: `${guild.region}`, inline: true});
+        fields.fields.push({name: `Verification level`, value: `${guild.verificationLevel}`, inline: true});
+        fields.fields.push({name: `Boost tier`, value: `${guild.premiumTier}`, inline: true});
+        fields.fields.push({name: `Boosts`, value: `${guild.premiumSubscriptionCount}`, inline: true});
 
         //get an invite code and make the embed
         guild.fetchInvites().then(async invites => {
@@ -68,26 +84,18 @@ module.exports = {
                         logger.error(error);
                     });
 
+                fields.fields.push({
+                    name: 'Invite link',
+                    value: `[Goto ${guild.name}](https://discord.gg/${invite.code})`,
+                    inline: false
+                });
+
                 await message.channel.send(embed.setTitle(guild.name)
                     .setThumbnail(guild.iconURL({
                         dynamic: true,
                         size: 4096
                     }))
-                    .addFields(
-                        {name: `Id`, value: `${guild.id}`, inline: true},
-                        {name: `Owner`, value: `${owner.user.username}#${owner.user.discriminator}`, inline: true},
-                        {name: `Users`, value: `${guild.memberCount}`, inline: true},
-                        {name: `Bots`, value: `${bots}`, inline: true},
-                        {name: `Creation date`, value: `${date}`, inline: true},
-                        {name: `Channels`, value: `${channelString}`, inline: true},
-                        {name: `System channel`, value: `${systemchannel}`, inline: true},
-                        {name: `AFK voice channel`, value: `${afkChannel}`, inline: true},
-                        {name: `Region`, value: `${guild.region}`, inline: true},
-                        {name: `Verification level`, value: `${guild.verificationLevel}`, inline: true},
-                        {name: `Boost tier`, value: `${guild.premiumTier}`, inline: true},
-                        {name: `Boosts`, value: `${guild.premiumSubscriptionCount}`, inline: true},
-                        {name: 'Invite link', value: `[Goto ${guild.name}](https://discord.gg/${invite.code})`, inline: false},
-                    )
+                    .addFields(fields.fields)
                     .setColor(bot.embedColors.normal))
             } catch (error) {
                 logger.error(error)
@@ -97,7 +105,6 @@ module.exports = {
 }
 
 function getSystemChannel(guild) {
-
     //check for null on guld.systemChannel
     if (!guild.systemChannel) return `-`;
 
@@ -107,7 +114,6 @@ function getSystemChannel(guild) {
 }
 
 function getAfkChannel(guild) {
-
     //check for null on guld.systemChannel
     if (!guild.afkChannelID) return `-`;
 
