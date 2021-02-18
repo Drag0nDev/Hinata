@@ -58,7 +58,7 @@ async function shopMenu(bot, message, shop) {
     shop.str = '';
 
     for (let cat of shop.categoryDb) {
-        if (cat.name !== 'hidden' || cat.name !== 'custom')
+        if (cat.name !== 'hidden' && cat.name !== 'custom')
             shop.str += '- ' + cat.name + '\n';
     }
 
