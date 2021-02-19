@@ -8,8 +8,9 @@ module.exports = {
     name: 'inventory',
     aliases: ['inv'],
     category: 'profile',
-    description: 'Shows your own profile',
+    description: 'Shows an inventory',
     usage: '[command | alias]',
+    examples: ['h!shop -n diamond ring -c badge -u @Drag0n#6666'],
     run: async (bot, message, args) => {
         const inventory = {
             item: {
@@ -21,14 +22,18 @@ module.exports = {
                 .setColor(bot.embedColors.normal),
             nameReg: new RegExp('-n', 'i'),
             catReg: new RegExp('-c', 'i'),
+            userReg: new RegExp('-u', 'i'),
+            idReg: new RegExp('[0-9]{17,}'),
             str: args.join(' '),
-            array: []
+            array: [],
         }
 
         if (inventory.nameReg.test(inventory.str))
             inventory.array.push(inventory.nameReg.exec(inventory.str));
         if (inventory.catReg.test(inventory.str))
             inventory.array.push(inventory.catReg.exec(inventory.str));
+        if (inventory.userReg.test(inventory.str))
+            inventory.array.push(inventory.userReg.exec(inventory.str));
 
         for (let i = 0; i < inventory.array.length; i++) {
             let input = inventory.array[i];
@@ -41,8 +46,15 @@ module.exports = {
                     case '-c':
                         inventory.item.category = getValue(inventory.str, input, inventory.catReg, inventory.array, i);
                         break;
+                    case '-u':
+                        let arg = getValue(inventory.str, input, inventory.userReg, inventory.array, i);
+                        inventory.item.user = message.guild.members.cache.get(inventory.idReg.exec(arg)[0]);
+                        break;
                 }
         }
+
+        if (!inventory.item.user)
+            inventory.item.user = message.guild.members.cache.get(message.author.id);
 
         if (inventory.item.name === '' && inventory.item.category === '') {
             await inventoryAll(bot, message, inventory);
@@ -61,7 +73,7 @@ async function inventoryAll(bot, message, inventory) {
 
     inventory.db = await Inventory.findAll({
         where: {
-            userId: message.author.id
+            userId: inventory.item.user.user.id
         },
         order: [
             ['categoryId', 'ASC'],
@@ -93,6 +105,9 @@ async function inventoryAll(bot, message, inventory) {
 
 async function inventoryByName(bot, message, inventory) {
     inventory.db = await Inventory.findAll({
+        where: {
+            userId: inventory.item.user.user.id
+        },
         include: [{
             model: Category,
             required: true
@@ -160,6 +175,9 @@ async function inventoryByCategory(bot, message, inventory) {
     }
 
     inventory.db = await Inventory.findAll({
+        where: {
+            userId: inventory.item.user.user.id
+        },
         include: [{
             model: Category,
             required: true,
@@ -227,6 +245,9 @@ async function inventoryByNameAndCat(bot, message, inventory) {
     }
 
     inventory.db = await Inventory.findAll({
+        where: {
+            userId: inventory.item.user.user.id
+        },
         include: [{
             model: Category,
             required: true,
@@ -339,8 +360,6 @@ async function pageEmbed(bot, message, inventory) {
                 true);
         }
     }
-
-    inventory.editEmbed.setFooter(`Page ${inventory.page + 1}`);
 }
 
 function getValue(str, input, reg, array, i) {

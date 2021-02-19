@@ -170,7 +170,7 @@ module.exports = {
         const avatar = await Canvas.loadImage(member.user.displayAvatarURL({format: 'png', size: 4096}));
         ctx.drawImage(avatar, 100, 100, 250, 250);
 
-        const attachment = new Discord.MessageAttachment(canvas.toBuffer(), `${member.user.id}-xp.png`);
+        const attachment = new Discord.MessageAttachment(canvas.toBuffer(), `level.png`);
 
         await message.channel.send(attachment);
     }
