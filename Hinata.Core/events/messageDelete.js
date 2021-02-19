@@ -14,8 +14,17 @@ module.exports = async (bot, message) => {
 
         if (message.author.bot) return;
 
-        if (message.content !== '')
-            embed.addField(`Message deleted in #${message.channel.name}`, message.content);
+        if (message.content !== '') {
+            let content;
+
+            if (message.content.length > 1018) {
+                content = `${message.content.substring(0, 1018)} \`...\``;
+            } else {
+                content = message.content;
+            }
+
+            embed.addField(`Message deleted in #${message.channel.name}`, content);
+        }
         if (message.attachments.size > 0) {
             embed.addField('Attachement', message.attachments.first().name);
             embed.setImage(message.attachments.first().proxyURL);

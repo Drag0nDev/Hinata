@@ -15,8 +15,24 @@ module.exports = async (bot, oldMessage, newMessage) => {
         if (newMessage.author.bot) return;
         if (oldMessage.content === newMessage.content) return;
 
-        embed.addField('Old message', oldMessage.content)
-            .addField('New message', newMessage.content);
+        let newContent;
+        let oldContent;
+
+        if (newMessage.content.length > 1018) {
+            newContent = `${newMessage.content.substring(0, 1018)} \`...\``;
+        } else {
+            newContent = newMessage.content;
+        }
+
+        if (oldMessage.content.length > 1018) {
+            oldContent = `${oldMessage.content.substring(0, 1018)} \`...\``;
+        } else {
+            oldContent = oldMessage.content;
+        }
+
+
+        embed.addField('Old message', oldContent)
+            .addField('New message', newContent);
 
         await Logs.messageLog(newMessage.guild, embed);
     } catch (err) {
