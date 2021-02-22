@@ -21,14 +21,14 @@ module.exports = async (bot, messages) => {
 
             if (i%50 === 0) {
                 embed.setDescription(description);
-                await Logs.messageLog(messages.first().guild, embed);
+                await Logs.messageLog(bot, messages.first().guild, embed);
                 description = '';
             }
         }
 
         embed.setDescription(description);
 
-        await Logs.messageLog(messages.first().guild, embed);
+        await Logs.messageLog(bot, messages.first().guild, embed);
     } catch (err) {
         logger.error(err);
     }

@@ -97,6 +97,6 @@ module.exports = {
             .setFooter(`ID: ${member.user.id}`)
             .setTimestamp();
 
-        await Logs.modlog(author, logEmbed);
+        await Logs.modlog(bot, author, logEmbed);
     }
 }

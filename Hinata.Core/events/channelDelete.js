@@ -14,7 +14,7 @@ module.exports = async (bot, channel) => {
             .addField('Name', channel.name, true)
             .addField('Category', !category ? 'No category' : category.name, true);
 
-        await Logs.serverLog(channel.guild, embed);
+        await Logs.serverLog(bot, channel.guild, embed);
     } catch (err) {
         logger.error(err);
     }

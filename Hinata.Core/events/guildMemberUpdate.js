@@ -61,7 +61,7 @@ async function roleChange(bot, oldMember, newMember) {
             .setColor(bot.embedColors.logRemove);
     }
 
-    await Logs.memberLog(newMember, embed);
+    await Logs.memberLog(bot, newMember, embed);
 }
 
 async function nicknameChange(bot, oldMember, newMember) {
@@ -86,5 +86,5 @@ async function nicknameChange(bot, oldMember, newMember) {
             .setColor(bot.embedColors.logChange);
     }
 
-    await Logs.memberLog(newMember, embed);
+    await Logs.memberLog(bot, newMember, embed);
 }

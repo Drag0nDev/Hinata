@@ -15,7 +15,7 @@ module.exports = async (bot, emoji) => {
             embed.setDescription(`<:${emoji.name}:${emoji.id}> ${emoji.name}`);
         }
 
-        await Logs.serverLog(emoji.guild, embed);
+        await Logs.serverLog(bot, emoji.guild, embed);
     } catch (err) {
         logger.error(err);
     }

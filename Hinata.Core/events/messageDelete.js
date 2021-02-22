@@ -30,7 +30,7 @@ module.exports = async (bot, message) => {
             embed.setImage(message.attachments.first().proxyURL);
         }
 
-        await Logs.messageLog(message.guild, embed);
+        await Logs.messageLog(bot, message.guild, embed);
     } catch (err) {
         logger.error(err);
     }

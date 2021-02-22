@@ -34,7 +34,7 @@ module.exports = async (bot, oldMessage, newMessage) => {
         embed.addField('Old message', oldContent)
             .addField('New message', newContent);
 
-        await Logs.messageLog(newMessage.guild, embed);
+        await Logs.messageLog(bot, newMessage.guild, embed);
     } catch (err) {
         logger.error(err);
     }

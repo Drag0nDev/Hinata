@@ -16,7 +16,7 @@ module.exports = async (bot, oldRole, newRole) => {
 
         if (embed.fields.length === 0) return;
 
-        await Logs.serverLog(newRole.guild, embed);
+        await Logs.serverLog(bot, newRole.guild, embed);
     } catch (err) {
         logger.error(err);
     }

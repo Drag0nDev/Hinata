@@ -312,79 +312,163 @@ const Levels = {
 }
 
 const Logs = {
-    modlog: async function (member, embed) {
+    modlog: async function (bot, member, embed) {
         await member.guild.fetchWebhooks()
             .then(async webhooks => {
                 let webhook = webhooks.get(await getModlogChannel(member.guild.id));
 
-                if (webhook)
+                if (webhook) {
+                    if (webhook.name !== bot.user.username)
+                        await webhook.edit({
+                            name:  bot.user.username
+                        });
+                    if (webhook.avatar !== bot.user.avatar)
+                        await webhook.edit({
+                            avatar: bot.user.avatarURL({
+                                dynamic: true,
+                                size: 4096
+                            })
+                        });
                     await webhook.send(embed);
+                }
             }).catch(err => {
                 logger.error(`error in: ${member.guild.name}\n`,err);
             });
     },
-    joinLeaveLog: async function (member, embed) {
+    joinLeaveLog: async function (bot, member, embed) {
         await member.guild.fetchWebhooks()
             .then(async webhooks => {
                 const webhook = webhooks.get(await getJoinLeavelogChannel(member.guild.id));
 
-                if (webhook)
+                if (webhook) {
+                    if (webhook.name !== bot.user.username)
+                        await webhook.edit({
+                            name:  bot.user.username
+                        });
+                    if (webhook.avatar !== bot.user.avatar)
+                        await webhook.edit({
+                            avatar: bot.user.avatarURL({
+                                dynamic: true,
+                                size: 4096
+                            })
+                        });
                     await webhook.send(embed);
+                }
             }).catch(err => {
                 logger.error(`error in: ${member.guild.name}\n`,err);
             });
     },
-    memberLog: async function (member, embed) {
+    memberLog: async function (bot, member, embed) {
         await member.guild.fetchWebhooks()
             .then(async webhooks => {
                 const webhook = webhooks.get(await getMemberLogChannel(member.guild.id));
 
-                if (webhook)
+                if (webhook) {
+                    if (webhook.name !== bot.user.username)
+                        await webhook.edit({
+                            name:  bot.user.username
+                        });
+                    if (webhook.avatar !== bot.user.avatar)
+                        await webhook.edit({
+                            avatar: bot.user.avatarURL({
+                                dynamic: true,
+                                size: 4096
+                            })
+                        });
                     await webhook.send(embed);
+                }
             }).catch(err => {
                 logger.error(`error in: ${member.guild.name}\n`,err);
             });
     },
-    memberLogGuild: async function (guild, embed) {
+    memberLogGuild: async function (bot, guild, embed) {
         await guild.fetchWebhooks()
             .then(async webhooks => {
                 const webhook = webhooks.get(await getMemberLogChannel(guild.id));
 
-                if (webhook)
+                if (webhook) {
+                    if (webhook.name !== bot.user.username)
+                        await webhook.edit({
+                            name:  bot.user.username
+                        });
+                    if (webhook.avatar !== bot.user.avatar)
+                        await webhook.edit({
+                            avatar: bot.user.avatarURL({
+                                dynamic: true,
+                                size: 4096
+                            })
+                        });
                     await webhook.send(embed);
+                }
             }).catch(err => {
                 logger.error(`error in: ${guild.name}\n`,err);
             });
     },
-    messageLog: async function (guild, embed) {
+    messageLog: async function (bot, guild, embed) {
         await guild.fetchWebhooks()
             .then(async webhooks => {
                 const webhook = webhooks.get(await getMessageLogChannel(guild.id));
 
-                if (webhook)
+                if (webhook) {
+                    if (webhook.name !== bot.user.username)
+                        await webhook.edit({
+                            name:  bot.user.username
+                        });
+                    if (webhook.avatar !== bot.user.avatar)
+                        await webhook.edit({
+                            avatar: bot.user.avatarURL({
+                                dynamic: true,
+                                size: 4096
+                            })
+                        });
                     await webhook.send(embed);
+                }
             }).catch(err => {
                 logger.error(`error in: ${guild.name}\n`,err);
             });
     },
-    serverLog: async function (guild, embed) {
+    serverLog: async function (bot, guild, embed) {
         await guild.fetchWebhooks()
             .then(async webhooks => {
                 const webhook = webhooks.get(await getServerLogChannel(guild.id));
 
-                if (webhook)
+                if (webhook) {
+                    if (webhook.name !== bot.user.username)
+                        await webhook.edit({
+                            name:  bot.user.username
+                        });
+                    if (webhook.avatar !== bot.user.avatar)
+                        await webhook.edit({
+                            avatar: bot.user.avatarURL({
+                                dynamic: true,
+                                size: 4096
+                            })
+                        });
                     await webhook.send(embed);
+                }
             }).catch(err => {
                 logger.error(`error in: ${guild.name}\n`,err);
             });
     },
-    voiceLogChannel: async function (guild, embed) {
+    voiceLogChannel: async function (bot, guild, embed) {
         await guild.fetchWebhooks()
             .then(async webhooks => {
                 const webhook = webhooks.get(await getVoiceLogChannel(guild.id));
 
-                if (webhook)
+                if (webhook) {
+                    if (webhook.name !== bot.user.username)
+                        await webhook.edit({
+                            name:  bot.user.username
+                        });
+                    if (webhook.avatar !== bot.user.avatar)
+                        await webhook.edit({
+                            avatar: bot.user.avatarURL({
+                                dynamic: true,
+                                size: 4096
+                            })
+                        });
                     await webhook.send(embed);
+                }
             }).catch(err => {
                 logger.error(`error in: ${guild.name}\n`,err);
             });

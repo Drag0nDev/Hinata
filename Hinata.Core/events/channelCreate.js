@@ -38,7 +38,7 @@ module.exports = async (bot, channel) => {
 
         }
 
-        await Logs.serverLog(channel.guild, embed);
+        await Logs.serverLog(bot, channel.guild, embed);
     } catch (err) {
         logger.error(err);
     }

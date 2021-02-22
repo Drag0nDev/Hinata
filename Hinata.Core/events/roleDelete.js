@@ -14,7 +14,7 @@ module.exports = async (bot, role) => {
             .addField('Displayed separetly', role.hoist ? 'Yes' : 'No', true)
             .addField('Position', role.rawPosition, true);
 
-        await Logs.serverLog(role.guild, embed);
+        await Logs.serverLog(bot, role.guild, embed);
     } catch (err) {
         logger.error(err);
     }

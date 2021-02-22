@@ -94,5 +94,5 @@ async function joinleaveLog(bot, member) {
         .addField('Account age', agestr, true)
         .setFooter(`ID: ${member.user.id}`);
 
-    await Logs.joinLeaveLog(member, embed);
+    await Logs.joinLeaveLog(bot, member, embed);
 }

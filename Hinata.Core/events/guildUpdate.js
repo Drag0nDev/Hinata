@@ -54,7 +54,7 @@ module.exports = async (bot, oldGuild, newGuild) => {
 
         if (embed.fields.length === 0 && embed.image === null) return;
 
-        await Logs.serverLog(newGuild, embed);
+        await Logs.serverLog(bot, newGuild, embed);
     } catch (err) {
         logger.error(err);
     }

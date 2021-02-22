@@ -100,7 +100,7 @@ module.exports = {
             .setFooter(`ID: ${member.user.id}`)
             .setTimestamp();
 
-        await Logs.modlog(message.guild.members.cache.get(message.author.id), logEmbed);
+        await Logs.modlog(bot, message.guild.members.cache.get(message.author.id), logEmbed);
 
     }
 }

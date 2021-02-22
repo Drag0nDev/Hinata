@@ -85,7 +85,7 @@ async function checkMutes(bot) {
         .setFooter(`ID: ${member.user.id}`)
         .setTimestamp();
 
-    await Logs.modlog(member, logEmbed);
+    await Logs.modlog(bot, member, logEmbed);
 }
 
 async function checkBans(bot) {
@@ -134,5 +134,5 @@ async function checkBans(bot) {
         .setFooter(`ID: ${member.user.id}`)
         .setTimestamp();
 
-    await Logs.modlog(moderator, logEmbed);
+    await Logs.modlog(bot, moderator, logEmbed);
 }

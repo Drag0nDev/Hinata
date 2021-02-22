@@ -85,6 +85,6 @@ module.exports = {
             `**Responsible moderator:** ${message.author.tag}`)
             .setFooter(`ID: ${member.id}`);
 
-        await Logs.modlog(message.guild.members.cache.get(message.author.id), logEmbed);
+        await Logs.modlog(bot, message.guild.members.cache.get(message.author.id), logEmbed);
     }
 }

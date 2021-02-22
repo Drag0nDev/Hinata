@@ -151,7 +151,7 @@ async function tempmute(bot, message, member, embed, muteRole, time, reason) {
         .setFooter(`ID: ${member.user.id}`)
         .setTimestamp();
 
-    await Logs.modlog(member, logEmbed);
+    await Logs.modlog(bot, member, logEmbed);
 }
 
 async function mute(bot, message, member, embed, muteRole, reason) {
@@ -176,5 +176,5 @@ async function mute(bot, message, member, embed, muteRole, reason) {
         .setFooter(`ID: ${member.user.id}`)
         .setTimestamp();
 
-    await Logs.modlog(member, logEmbed);
+    await Logs.modlog(bot, member, logEmbed);
 }

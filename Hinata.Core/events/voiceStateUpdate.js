@@ -19,7 +19,7 @@ module.exports = async (bot, oldState, newState) => {
         else 
             await switchChannel(bot, oldState, newState, member, embed);
 
-        await Logs.voiceLogChannel(newState.guild, embed);
+        await Logs.voiceLogChannel(bot, newState.guild, embed);
     } catch (err) {
         logger.error(err);
     }

@@ -13,7 +13,7 @@ module.exports = async (bot, role) => {
             .addField('Mentionable', role.mentionable ? 'Yes' : 'No', true)
             .addField('Displayed separetly', role.hoist ? 'Yes' : 'No', true);
 
-        await Logs.serverLog(role.guild, embed);
+        await Logs.serverLog(bot, role.guild, embed);
     } catch (err) {
         logger.error(err);
     }

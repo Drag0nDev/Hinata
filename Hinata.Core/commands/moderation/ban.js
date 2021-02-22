@@ -133,7 +133,7 @@ async function tempBan(bot, message, member, embed, time, reason) {
         .setFooter(`ID: ${member.user.id}`)
         .setTimestamp();
 
-    await Logs.modlog(message.guild.members.cache.get(message.author.id), logEmbed);
+    await Logs.modlog(bot, message.guild.members.cache.get(message.author.id), logEmbed);
 }
 
 async function ban(bot, message, member, embed, reason) {
@@ -162,7 +162,7 @@ async function ban(bot, message, member, embed, reason) {
         .setFooter(`ID: ${member.user.id}`)
         .setTimestamp();
 
-    await Logs.modlog(message.guild.members.cache.get(message.author.id), logEmbed);
+    await Logs.modlog(bot, message.guild.members.cache.get(message.author.id), logEmbed);
 
     await ServerUser.destroy({
         where: {

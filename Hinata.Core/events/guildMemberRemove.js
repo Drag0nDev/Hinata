@@ -53,7 +53,7 @@ async function checkKick(bot, member) {
         logger.warn('Failed to load the audit log!');
     }
 
-    await Logs.modlog(member, embed);
+    await Logs.modlog(bot, member, embed);
 }
 
 async function sendLeaveMessage(member) {
@@ -120,7 +120,7 @@ async function joinleaveLog(bot, member) {
         .addField('Roles', roleStr, true)
         .setFooter(`ID: ${member.user.id}`);
 
-    await Logs.joinLeaveLog(member, embed);
+    await Logs.joinLeaveLog(bot, member, embed);
 }
 
 function isClose(logTime, programTime) {

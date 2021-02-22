@@ -34,7 +34,7 @@ module.exports = async (bot, oldMember, newMember) => {
                         .addField('New username', newMember.username)
                         .setFooter(`ID: ${newMember.id}`);
 
-                    Logs.memberLogGuild(guild, embed);
+                    Logs.memberLogGuild(bot, guild, embed);
                 }
                 //post logs if the discriminator updated
                 if (oldMember.discriminator !== newMember.discriminator) {
@@ -48,7 +48,7 @@ module.exports = async (bot, oldMember, newMember) => {
                         .addField('New discriminator', newMember.discriminator)
                         .setFooter(`ID: ${newMember.id}`);
 
-                    Logs.memberLogGuild(guild, embed);
+                    Logs.memberLogGuild(bot, guild, embed);
                 }
                 //post logs if the avatar updated
                 if (oldMember.avatar !== newMember.avatar) {
@@ -64,7 +64,7 @@ module.exports = async (bot, oldMember, newMember) => {
                         }))
                         .setFooter(`ID: ${newMember.id}`);
 
-                    Logs.memberLogGuild(guild, embed);
+                    Logs.memberLogGuild(bot, guild, embed);
                 }
             }
         });
