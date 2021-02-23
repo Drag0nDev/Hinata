@@ -24,6 +24,7 @@ module.exports = {
 
         //get nickname
         let nickname = member.nickname === null ? '-' : member.nickname;
+        console.log(nickname);
 
         //get Join date
         let date = Dates.getDate(member.joinedTimestamp);
@@ -63,23 +64,31 @@ function getPermissions(member) {
         voicePerms: ""
     };
 
+    let managePerms = [];
+    let textPerms = [];
+    let voicePerms = [];
+
     //check for the managing permissions
-    if (member.hasPermission(`ADMINISTRATOR`)) permissions.managePerms += `Administrator\n`;
-    if (member.hasPermission(`MANAGE_GUILD`)) permissions.managePerms += `Manage server\n`;
-    if (member.hasPermission(`MANAGE_ROLES`)) permissions.managePerms += `Manage roles\n`;
-    if (member.hasPermission(`MANAGE_CHANNELS`)) permissions.managePerms += `Manage channels\n`;
-    if (member.hasPermission(`MANAGE_WEBHOOKS`)) permissions.managePerms += `Manage webhooks\n`;
-    if (member.hasPermission(`MANAGE_NICKNAMES`)) permissions.managePerms += `Manage nicknames\n`;
-    if (member.hasPermission(`MANAGE_EMOJIS`)) permissions.managePerms += `Manage emojis\n`;
+    if (member.hasPermission(`ADMINISTRATOR`)) managePerms.push(`Administrator`);
+    if (member.hasPermission(`MANAGE_GUILD`)) managePerms.push(`Manage server`);
+    if (member.hasPermission(`MANAGE_ROLES`)) managePerms.push(`Manage roles`);
+    if (member.hasPermission(`MANAGE_CHANNELS`)) managePerms.push(`Manage channels`);
+    if (member.hasPermission(`MANAGE_WEBHOOKS`)) managePerms.push(`Manage webhooks`);
+    if (member.hasPermission(`MANAGE_NICKNAMES`)) managePerms.push(`Manage nicknames`);
+    if (member.hasPermission(`MANAGE_EMOJIS`)) managePerms.push(`Manage emojis`);
 
     //check for the text permissions
-    if (member.hasPermission(`BAN_MEMBERS`)) permissions.textPerms += `Ban members\n`;
-    if (member.hasPermission(`KICK_MEMBERS`)) permissions.textPerms += `Kick members\n`;
-    if (member.hasPermission(`MENTION_EVERYONE`)) permissions.textPerms += `Mention everyone\n`;
+    if (member.hasPermission(`BAN_MEMBERS`)) textPerms.push(`Ban members`);
+    if (member.hasPermission(`KICK_MEMBERS`)) textPerms.push(`Kick members`);
+    if (member.hasPermission(`MENTION_EVERYONE`)) textPerms.push(`Mention everyone`);
 
     //check for the voice chat permissions
-    if (member.hasPermission(`MUTE_MEMBERS`)) permissions.voicePerms += `Mute members\n`;
-    if (member.hasPermission(`MOVE_MEMBERS`)) permissions.voicePerms += `Move members\n`;
+    if (member.hasPermission(`MUTE_MEMBERS`)) voicePerms.push(`Mute members`);
+    if (member.hasPermission(`MOVE_MEMBERS`)) voicePerms.push(`Move members`);
+
+    permissions.managePerms = managePerms.length > 0 ? managePerms.join('\n') : 'No manage permissions';
+    permissions.textPerms = textPerms.length > 0 ? textPerms.join('\n') : 'No text permissions';
+    permissions.voicePerms = voicePerms.length > 0 ? voicePerms.join('\n') : 'No voice permissions';
 
     return permissions;
 }

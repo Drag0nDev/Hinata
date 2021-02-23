@@ -1,5 +1,6 @@
 const {MessageEmbed} = require('discord.js');
 const config = require("../../../config.json");
+const package = require('../../../package.json');
 const pm = require('pretty-ms');
 const log4js = require("log4js");
 const {Dates} = require("../../misc/tools");
@@ -49,7 +50,7 @@ module.exports = {
             embed.setAuthor(botName, avatar)
                 .setColor(bot.embedColors.normal)
                 .setThumbnail(avatar)
-                .setFooter(`© 2020-${date.getFullYear()} Copyright: ${devTag}`)
+                .setFooter(`© 2020-${date.getFullYear()} Copyright: ${devTag}\nVersion: ${package.version}`)
                 .addField(`Author`, devTag, true)
                 .addField(`Bot ID`, botId, true)
                 .addField(`Developer ID`, devId, true)
