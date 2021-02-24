@@ -1,7 +1,7 @@
 const Discord = require('discord.js');
 const {promisify} = require('util');
 const Canvas = require('canvas');
-const {User, ServerUser} = require('../../misc/dbObjects');
+const {User, Inventory, Shop} = require('../../misc/dbObjects');
 const config = require("../../../config.json");
 const {Servers} = require('../../misc/tools');
 const fs = require('fs');
@@ -67,15 +67,10 @@ module.exports = {
                 profile.background = await Canvas.loadImage(`./Hinata.Core/misc/images/inventory/${profile.userbg}`);
         }
 
-        ctx.drawImage(profile.background, 0, 0, canvas.width, canvas.height/2);
-
-        /*
-        draw the filling of the bottom empty space
-        and make it go over with a nice gradient
-         */
+        ctx.drawImage(profile.background, 0, 0, canvas.width, canvas.height / 2);
 
         ctx.beginPath();
-        let grd = ctx.createLinearGradient(canvas.width/2,0,canvas.width/2, canvas.height);
+        let grd = ctx.createLinearGradient(canvas.width / 2, 0, canvas.width / 2, canvas.height);
         grd.addColorStop(0, 'rgba(68,70,77,0)');
         grd.addColorStop(0.5, '#44464d');
         ctx.fillStyle = grd;
@@ -85,40 +80,69 @@ module.exports = {
         ctx.strokeStyle = bot.embedColors.normal;
         ctx.strokeRect(0, 0, canvas.width, canvas.height);
 
+        //draw text above xp bar
+        ctx.font = '500 80px Dosis';
+        ctx.fillStyle = '#fff';
+        ctx.fillText('xp', 331 - (ctx.measureText('xp').width / 2), 500);
+        ctx.fillText('lvl', 793 - (ctx.measureText('lvl').width / 2), 500);
+        ctx.fillText('Balance', 1255 - (ctx.measureText('Balance').width / 2), 500);
+        ctx.fillText('Rank', 1717 - (ctx.measureText('Rank').width / 2), 500);
+        ctx.fillStyle = profile.color;
+        ctx.fillText(profile.user.xp, 331 - (ctx.measureText(profile.user.xp).width / 2), 625);
+        ctx.fillText(profile.user.level, 793 - (ctx.measureText(profile.user.level).width / 2), 625);
+        ctx.fillText(profile.user.balance, 1255 - (ctx.measureText(profile.user.balance).width / 2), 625);
+        ctx.fillText(globalRank.toString(), 1717 - (ctx.measureText(globalRank.toString()).width / 2), 625);
+
         //draw global xp bar
         //draw bar
         ctx.beginPath();
         ctx.lineWidth = 10;
         ctx.strokeStyle = profile.color;
-        ctx.fillStyle = '#ffffff';
-        ctx.strokeRect(100, 500, canvas.width - 200, 50);
-        ctx.fillRect(100, 500, canvas.width - 200, 50);
+        ctx.fillStyle = '#fff';
+        ctx.strokeRect(100, 800, canvas.width - 200, 50);
+        ctx.fillRect(100, 800, canvas.width - 200, 50);
 
         //fill the bar according to the xp
         ctx.beginPath();
         ctx.fillStyle = profile.color;
         const globalWidth = (canvas.width - 200) - ((canvas.width - 200) * (1 - profile.user.percentage));
-        ctx.fillRect(100, 500, globalWidth, 50);
-
-        //draw word "Global"
-        ctx.fillStyle = '#fff';
-        ctx.fillText('Global', 100, 475);
-
-        //draw the level
-        ctx.fillText(`Level ${profile.user.level}`, (canvas.width / 2) - (ctx.measureText(`Level ${profile.user.level}`).width / 2), 475);
-
-        //draw the global position
-        ctx.fillText(`#${globalRank}`, canvas.width - (100 + ctx.measureText(`#${globalRank}`).width), 475);
-
-        //draw current xp
-        ctx.fillText(profile.user.xp, 100, 600);
-
-        //draw needed xp
-        ctx.fillText(profile.user.neededXp.toString(), canvas.width - (100 + ctx.measureText(profile.user.neededXp.toString()).width), 600);
+        ctx.fillRect(100, 800, globalWidth, 50);
 
         //draw user tag
+        ctx.fillStyle = '#fff';
         ctx.font = applyText(canvas, profile.member.user.tag);
         ctx.fillText(profile.member.user.tag, 360, 260);
+
+        //draw the badges
+        for (let i = 0; i < profile.user.badges.length; i++) {
+            const badge = profile.user.badges[i];
+            if (badge) {
+                ctx.beginPath();
+                let image = await Canvas.loadImage(await findBadge(profile.member, badge));
+                const badgeWidthHeight = 400;
+
+                switch (i){
+                    case 0:
+                        ctx.drawImage(image, 216, 1000, badgeWidthHeight, badgeWidthHeight);
+                        break;
+                    case 1:
+                        ctx.drawImage(image, 832, 1000, badgeWidthHeight, badgeWidthHeight);
+                        break;
+                    case 2:
+                        ctx.drawImage(image, 1448, 1000, badgeWidthHeight, badgeWidthHeight);
+                        break;
+                    case 3:
+                        ctx.drawImage(image, 216, 1500, badgeWidthHeight, badgeWidthHeight);
+                        break;
+                    case 4:
+                        ctx.drawImage(image, 832, 1500, badgeWidthHeight, badgeWidthHeight);
+                        break;
+                    case 5:
+                        ctx.drawImage(image, 1448, 1500, badgeWidthHeight, badgeWidthHeight);
+                        break;
+                }
+            }
+        }
 
         //draw user avatar
         ctx.beginPath();
@@ -137,16 +161,27 @@ module.exports = {
 
 const getGlobal = (user) => {
     let levelXp = config.levelXp;
+    let xp = user.xp;
+    let level = user.level;
+    let previousLvlXp = 0;
 
-    let num = user.xp / (levelXp + ((levelXp / 2) * user.level))
+    let num = user.xp / (levelXp + ((levelXp / 2) * user.level));
+
+    for (; level > 0; level--) {
+        previousLvlXp = levelXp + ((levelXp / 2) * (level - 1));
+        xp += previousLvlXp;
+    }
 
     return {
         percentage: Math.round((num + Number.EPSILON) * 100) / 100,
         neededXp: levelXp + ((levelXp / 2) * user.level),
         level: user.level,
-        xp: user.xp,
+        xp: xp,
         color: user.color,
-        background: user.background
+        background: user.background,
+        balance: user.balance,
+        badges: [user.badge1, user.badge2, user.badge3,
+            user.badge4, user.badge5, user.badge6]
     };
 }
 
@@ -161,3 +196,16 @@ const applyText = (canvas, text) => {
 
     return ctx.font;
 };
+
+const findBadge = async (member, badge) => {
+    let inventory;
+    inventory = await Inventory.findOne({
+        where: {
+            userId: member.user.id,
+            invId: badge
+        },
+        include: [Shop]
+    });
+
+    return `Hinata.Core/misc/images/inventory/${inventory.Shop.image}`;
+}

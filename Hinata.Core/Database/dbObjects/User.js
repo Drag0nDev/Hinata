@@ -33,6 +33,12 @@ module.exports = (sequelize, DataTypes) => {
             },
             color: DataTypes.STRING,
             background: DataTypes.STRING,
+            badge1: DataTypes.INTEGER,
+            badge2: DataTypes.INTEGER,
+            badge3: DataTypes.INTEGER,
+            badge4: DataTypes.INTEGER,
+            badge5: DataTypes.INTEGER,
+            badge6: DataTypes.INTEGER,
         },
         {
             timestamps: false,

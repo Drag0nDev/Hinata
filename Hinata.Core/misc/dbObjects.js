@@ -55,6 +55,24 @@ Inventory.belongsTo(Shop, {
 Inventory.belongsTo(Category, {
     foreignKey: 'categoryId'
 });
+User.belongsTo(Inventory, {
+    foreignKey: 'badge1'
+});
+User.belongsTo(Inventory, {
+    foreignKey: 'badge2'
+});
+User.belongsTo(Inventory, {
+    foreignKey: 'badge3'
+});
+User.belongsTo(Inventory, {
+    foreignKey: 'badge4'
+});
+User.belongsTo(Inventory, {
+    foreignKey: 'badge5'
+});
+User.belongsTo(Inventory, {
+    foreignKey: 'badge6'
+});
 
 //database functions
 Reflect.defineProperty(User, 'remove', {

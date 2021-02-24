@@ -29,7 +29,6 @@
     "shelljs": "^0.8.4",
     "sqlite3": "^5.0.0"
   },
-  "devDependencies": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Drag0nDev/Hinata.git"
