@@ -112,6 +112,42 @@ Reflect.defineProperty(User, 'setBg', {
         user.save();
     }
 });
+Reflect.defineProperty(User, 'setBadge1', {
+    value: async function setBg(user, badge) {
+        user.badge1 = badge;
+        user.save();
+    }
+});
+Reflect.defineProperty(User, 'setBadge2', {
+    value: async function setBg(user, badge) {
+        user.badge2 = badge;
+        user.save();
+    }
+});
+Reflect.defineProperty(User, 'setBadge3', {
+    value: async function setBg(user, badge) {
+        user.badge3 = badge;
+        user.save();
+    }
+});
+Reflect.defineProperty(User, 'setBadge4', {
+    value: async function setBg(user, badge) {
+        user.badge4 = badge;
+        user.save();
+    }
+});
+Reflect.defineProperty(User, 'setBadge5', {
+    value: async function setBg(user, badge) {
+        user.badge5 = badge;
+        user.save();
+    }
+});
+Reflect.defineProperty(User, 'setBadge6', {
+    value: async function setBg(user, badge) {
+        user.badge6 = badge;
+        user.save();
+    }
+});
 Reflect.defineProperty(Shop, 'changeImg', {
     value: async function changeImg(shop, image) {
         shop.image = image;

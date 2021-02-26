@@ -160,6 +160,9 @@ async function inventoryByCategory(bot, message, inventory) {
     }
 
     inventory.db = await Inventory.findAll({
+        where: {
+            userId: message.author.id
+        },
         include: [{
             model: Category,
             required: true,
@@ -173,8 +176,7 @@ async function inventoryByCategory(bot, message, inventory) {
             required: true
         }],
         order: [
-            ['categoryId', 'ASC'],
-            ['shopId', 'ASC']
+            ['invId', 'ASC']
         ]
     });
 
@@ -190,6 +192,7 @@ async function inventoryByCategory(bot, message, inventory) {
     for (let i = 0; i < 10 && i < inventory.db.length; i++) {
         let item = inventory.db[i];
         let name = item.Shop.name === `${message.author.id}_custom_background` ? 'Custom background' : item.Shop.name;
+        console.log(item);
 
         if (item.image !== null) {
             inventory.embed.addField(name,

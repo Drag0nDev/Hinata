@@ -1,4 +1,3 @@
-//<editor-fold defaultstate="collapsed" desc="imports">
 const {Client, Collection} = require('discord.js');
 const fs = require('fs');
 const config = require("./config.json");
@@ -6,9 +5,7 @@ const colors = require("./Hinata.Core/misc/colors.js");
 const reactions = require('./Hinata.Core/misc/reactions.js')
 const log4js = require("log4js");
 const { Op } = require('sequelize');
-//</editor-fold>
 
-//<editor-fold defaultstate="collapsed" desc="variables">
 const bot = new Client();
 bot.commands = new Collection();
 bot.aliases = new Collection();
@@ -21,9 +18,7 @@ bot.embedColors = colors;
 bot.reactions = reactions;
 bot.testing = config.testing;
 bot.currencyEmoji = config.currencyEmoji;
-//</editor-fold>
 
-//<editor-fold defaultstate="collapsed" desc="logger">
 let debug = config.debug !== undefined && config.debug;
 
 log4js.configure({
@@ -47,9 +42,7 @@ log4js.configure({
 });
 
 const logger = log4js.getLogger();
-//</editor-fold>
 
-//<editor-fold defaultstate="collapsed" desc="command loader">
 fs.readdir('./Hinata.Core/commands/', (err, dir) => {
     if (err) {
         logger.error(err);
@@ -84,9 +77,7 @@ fs.readdir('./Hinata.Core/commands/', (err, dir) => {
         });
     });
 });
-//</editor-fold>
 
-//<editor-fold defaultstate="collapsed" desc="event loader">
 fs.readdir('./Hinata.Core/events/', (err, files) => {
     if (err) {
         logger.error(err);
@@ -104,7 +95,6 @@ fs.readdir('./Hinata.Core/events/', (err, files) => {
     });
     logger.info('All events loaded!\n');
 });
-//</editor-fold>
 
 //bot connection to discord
 bot.login(config.token)

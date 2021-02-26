@@ -17,8 +17,12 @@ module.exports = {
     examples: ['h!profile', 'h!profile 418037700751261708', 'h!profile @Drag0n#6666'],
     run: async (bot, message, args) => {
         const profile = {
-            userListId: []
+            userListId: [],
+            badgeXBase: 50,
+            badgeY: 475,
+            space: 25
         };
+        message.channel.startTyping();
 
         profile.member = await Servers.getMember(message, args);
 
@@ -39,7 +43,7 @@ module.exports = {
         else
             profile.color = profile.user.color;
 
-        const canvas = Canvas.createCanvas(2048, 2048);
+        const canvas = Canvas.createCanvas(1024, 1024);
 
         const ctx = canvas.getContext('2d');
         ctx.font = '50px Dosis';
@@ -81,64 +85,65 @@ module.exports = {
         ctx.strokeRect(0, 0, canvas.width, canvas.height);
 
         //draw text above xp bar
-        ctx.font = '500 80px Dosis';
+        ctx.font = '500 40px Dosis';
         ctx.fillStyle = '#fff';
-        ctx.fillText('xp', 331 - (ctx.measureText('xp').width / 2), 500);
-        ctx.fillText('lvl', 793 - (ctx.measureText('lvl').width / 2), 500);
-        ctx.fillText('Balance', 1255 - (ctx.measureText('Balance').width / 2), 500);
-        ctx.fillText('Rank', 1717 - (ctx.measureText('Rank').width / 2), 500);
+        ctx.fillText('xp', 206 - (ctx.measureText('xp').width / 2), 250);
+        ctx.fillText('lvl', 412 - (ctx.measureText('lvl').width / 2), 250);
+        ctx.fillText('Balance', 618 - (ctx.measureText('Balance').width / 2), 250);
+        ctx.fillText('Rank', 824 - (ctx.measureText('Rank').width / 2), 250);
         ctx.fillStyle = profile.color;
-        ctx.fillText(profile.user.xp, 331 - (ctx.measureText(profile.user.xp).width / 2), 625);
-        ctx.fillText(profile.user.level, 793 - (ctx.measureText(profile.user.level).width / 2), 625);
-        ctx.fillText(profile.user.balance, 1255 - (ctx.measureText(profile.user.balance).width / 2), 625);
-        ctx.fillText(globalRank.toString(), 1717 - (ctx.measureText(globalRank.toString()).width / 2), 625);
+        ctx.fillText(profile.user.xp, 206 - (ctx.measureText(profile.user.xp).width / 2), 312.5);
+        ctx.fillText(profile.user.level, 412 - (ctx.measureText(profile.user.level).width / 2), 312.5);
+        ctx.fillText(profile.user.balance, 618 - (ctx.measureText(profile.user.balance).width / 2), 312.5);
+        ctx.fillText(globalRank.toString(), 824 - (ctx.measureText(globalRank.toString()).width / 2), 312.5);
 
         //draw global xp bar
         //draw bar
         ctx.beginPath();
-        ctx.lineWidth = 10;
+        ctx.lineWidth = 5;
         ctx.strokeStyle = profile.color;
         ctx.fillStyle = '#fff';
-        ctx.strokeRect(100, 800, canvas.width - 200, 50);
-        ctx.fillRect(100, 800, canvas.width - 200, 50);
+        ctx.strokeRect(50, 400, canvas.width - 100, 25);
+        ctx.fillRect(50, 400, canvas.width - 100, 25);
 
         //fill the bar according to the xp
         ctx.beginPath();
         ctx.fillStyle = profile.color;
-        const globalWidth = (canvas.width - 200) - ((canvas.width - 200) * (1 - profile.user.percentage));
-        ctx.fillRect(100, 800, globalWidth, 50);
+        const globalWidth = (canvas.width - 100) - ((canvas.width - 100) * (1 - profile.user.percentage));
+        ctx.fillRect(50, 400, globalWidth, 25);
 
         //draw user tag
         ctx.fillStyle = '#fff';
         ctx.font = applyText(canvas, profile.member.user.tag);
-        ctx.fillText(profile.member.user.tag, 360, 260);
+        ctx.fillText(profile.member.user.tag, 190, 125);
 
         //draw the badges
         for (let i = 0; i < profile.user.badges.length; i++) {
             const badge = profile.user.badges[i];
+
             if (badge) {
                 ctx.beginPath();
                 let image = await Canvas.loadImage(await findBadge(profile.member, badge));
-                const badgeWidthHeight = 400;
+                const badgeWidthHeight = 100;
 
                 switch (i){
                     case 0:
-                        ctx.drawImage(image, 216, 1000, badgeWidthHeight, badgeWidthHeight);
+                        ctx.drawImage(image, 50, profile.badgeY, badgeWidthHeight, badgeWidthHeight);
                         break;
                     case 1:
-                        ctx.drawImage(image, 832, 1000, badgeWidthHeight, badgeWidthHeight);
+                        ctx.drawImage(image, 175, profile.badgeY, badgeWidthHeight, badgeWidthHeight);
                         break;
                     case 2:
-                        ctx.drawImage(image, 1448, 1000, badgeWidthHeight, badgeWidthHeight);
+                        ctx.drawImage(image, 300, profile.badgeY, badgeWidthHeight, badgeWidthHeight);
                         break;
                     case 3:
-                        ctx.drawImage(image, 216, 1500, badgeWidthHeight, badgeWidthHeight);
+                        ctx.drawImage(image, 425, profile.badgeY, badgeWidthHeight, badgeWidthHeight);
                         break;
                     case 4:
-                        ctx.drawImage(image, 832, 1500, badgeWidthHeight, badgeWidthHeight);
+                        ctx.drawImage(image, 550, profile.badgeY, badgeWidthHeight, badgeWidthHeight);
                         break;
                     case 5:
-                        ctx.drawImage(image, 1448, 1500, badgeWidthHeight, badgeWidthHeight);
+                        ctx.drawImage(image, 675, profile.badgeY, badgeWidthHeight, badgeWidthHeight);
                         break;
                 }
             }
@@ -146,16 +151,17 @@ module.exports = {
 
         //draw user avatar
         ctx.beginPath();
-        ctx.arc(225, 225, 125, 0, Math.PI * 2, true);
+        ctx.arc(112.5, 112.5, 60, 0, Math.PI * 2, true);
         ctx.closePath();
         ctx.clip();
 
         const avatar = await Canvas.loadImage(profile.member.user.displayAvatarURL({format: 'png', size: 4096}));
-        ctx.drawImage(avatar, 100, 100, 250, 250);
+        ctx.drawImage(avatar, 50, 50, 125, 125);
 
         const attachment = new Discord.MessageAttachment(canvas.toBuffer(), `profile.png`);
 
         await message.channel.send(attachment);
+        message.channel.stopTyping();
     }
 }
 
@@ -188,7 +194,7 @@ const getGlobal = (user) => {
 const applyText = (canvas, text) => {
     const ctx = canvas.getContext('2d');
 
-    let fontSize = 100;
+    let fontSize = 50;
 
     do {
         ctx.font = `${fontSize -= 10}px Dosis`;

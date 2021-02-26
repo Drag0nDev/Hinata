@@ -11,16 +11,19 @@ module.exports = {
     examples: ['h!use 5'],
     run: async (bot, message, args) => {
         const item = {
-            send: async function (msg) {
-                await message.channel.send(msg);
-            },
-            normal: bot.embedColors.normal,
-            error: bot.embedColors.error,
-            embed: new MessageEmbed()
-                .setTimestamp()
-                .setColor(bot.embedColors.normal),
-            idReg: new RegExp('^\\d+$')
-        };
+                send: async function (msg) {
+                    await message.channel.send(msg);
+                },
+                edit: async function (msg, edit) {
+                    await msg.edit(edit);
+                },
+                normal: bot.embedColors.normal,
+                error: bot.embedColors.error,
+                embed: new MessageEmbed()
+                    .setTimestamp()
+                    .setColor(bot.embedColors.normal),
+                idReg: new RegExp('^\\d+$')
+            };
 
         if (!item.idReg.test(args[0])) {
             item.embed.setDescription('Please provide a valid id!')
@@ -57,7 +60,7 @@ module.exports = {
                 await showXpCard(bot, message, item);
 
                 await message.channel.send(item.embed).then(msg => {
-                    const embed = new MessageEmbed().setTitle('set background')
+                    const embed = new MessageEmbed().setTitle('Set background')
                         .setTimestamp()
                         .setColor(item.normal);
                     const filter = m => m.author.id === message.author.id;
@@ -67,7 +70,7 @@ module.exports = {
                             const collect = collected.first();
 
                             if (collect.content.toLowerCase() !== 'yes') {
-                                embed.setDescription('The purchase has been canceled');
+                                embed.setDescription('The action has been canceled');
 
                                 return item.send(embed);
                             }
@@ -85,7 +88,7 @@ module.exports = {
                             return item.send(embed);
                         }).catch(collected => {
                         embed.setDescription('You failed to reply within the given timeframe.\n' +
-                            'The purchase has been canceled!');
+                            'The action has been canceled!');
 
                         item.send(embed)
                     });
@@ -98,7 +101,7 @@ module.exports = {
                 await showXpCard(bot, message, item);
 
                 await message.channel.send(item.embed).then(msg => {
-                    const embed = new MessageEmbed().setTitle('set background')
+                    const embed = new MessageEmbed().setTitle('Set custom')
                         .setTimestamp()
                         .setColor(item.normal);
                     const filter = m => m.author.id === message.author.id;
@@ -108,7 +111,7 @@ module.exports = {
                             const collect = collected.first();
 
                             if (collect.content.toLowerCase() !== 'yes') {
-                                embed.setDescription('The purchase has been canceled');
+                                embed.setDescription('The action has been canceled');
 
                                 return item.send(embed);
                             }
@@ -126,12 +129,82 @@ module.exports = {
                             return item.send(embed);
                         }).catch(collected => {
                         embed.setDescription('You failed to reply within the given timeframe.\n' +
-                            'The purchase has been canceled!');
+                            'The action has been canceled!');
 
                         item.send(embed)
                     });
                 });
 
+                break;
+            case 'badge':
+                item.embed.setDescription(`What position should the item ${item.inventory.Shop.name} be?\n` +
+                    'chose from 1 to 6');
+
+                message.channel.send(item.embed).then(msg => {
+                    const embed = new MessageEmbed().setTitle('Set badge')
+                        .setTimestamp()
+                        .setColor(item.normal);
+                    const filter = m => m.author.id === message.author.id;
+
+                    msg.channel.awaitMessages(filter, {max: 1, time: 60000, errors: ['time']})
+                        .then(async collected => {
+                            const collect = collected.first();
+                            const place = new RegExp('^[1-6]$');
+
+                            if (!place.test(collect.content)) {
+                                await collect.delete()
+                                embed.setDescription('This is not a valid location.\n' +
+                                    'The action has been canceled');
+
+                                return item.edit(msg, embed);
+                            }
+                            await collect.delete();
+
+                            item.user = await User.findOne({
+                                where: {
+                                    userId: message.author.id
+                                }
+                            });
+
+                            switch (place.exec(collect.content)[0]) {
+                                case '1':
+                                    User.setBadge1(item.user, item.inventory.invId);
+                                    embed.setDescription(`Your badge has been set successfully on position ${place.exec(collect.content)[0]} successfully`);
+                                    await item.edit(msg, embed);
+                                    break;
+                                case '2':
+                                    User.setBadge2(item.user, item.inventory.invId);
+                                    embed.setDescription(`Your badge has been set successfully on position ${place.exec(collect.content)[0]} successfully`);
+                                    await item.edit(msg, embed);
+                                    break;
+                                case '3':
+                                    User.setBadge3(item.user, item.inventory.invId);
+                                    embed.setDescription(`Your badge has been set successfully on position ${place.exec(collect.content)[0]} successfully`);
+                                    await item.edit(msg, embed);
+                                    break;
+                                case '4':
+                                    User.setBadge4(item.user, item.inventory.invId);
+                                    embed.setDescription(`Your badge has been set successfully on position ${place.exec(collect.content)[0]} successfully`);
+                                    await item.edit(msg, embed);
+                                    break;
+                                case '5':
+                                    User.setBadge5(item.user, item.inventory.invId);
+                                    embed.setDescription(`Your badge has been set successfully on position ${place.exec(collect.content)[0]} successfully`);
+                                    await item.edit(msg, embed);
+                                    break;
+                                case '6':
+                                    User.setBadge6(item.user, item.inventory.invId);
+                                    embed.setDescription(`Your badge has been set successfully on position ${place.exec(collect.content)[0]} successfully`);
+                                    await item.edit(msg, embed);
+                                    break;
+                            }
+                        }).catch(collected => {
+                        embed.setDescription('You failed to reply within the given timeframe.\n' +
+                            'The action has been canceled!');
+
+                        item.send(embed)
+                    });
+                });
                 break;
             default:
                 item.embed.setDescription('There is no use for this category/item at the moment!\n' +

@@ -76,6 +76,7 @@ module.exports = async (bot, message) => {
                     `Please report this to the bot developer in the **[support server](${invite})**`)
                 .setTimestamp();
 
+            message.channel.stopTyping();
             await message.channel.send(embed);
 
             logger.error(err);
