@@ -72,6 +72,12 @@ const Minor = {
         result = '#' + result;
 
         return result;
+    },
+    getValue: function (str, input, reg, array, i) {
+        if (array[i + 1])
+            return str.substring(input.index, array[i + 1].index).replace(reg, '').trim();
+        else
+            return str.substring(input.index).replace(reg, '').trim();
     }
 }
 
@@ -320,7 +326,7 @@ const Logs = {
                 if (webhook) {
                     if (webhook.name !== bot.user.username)
                         await webhook.edit({
-                            name:  bot.user.username
+                            name: bot.user.username
                         });
                     if (webhook.avatar !== bot.user.avatar)
                         await webhook.edit({
@@ -332,7 +338,7 @@ const Logs = {
                     await webhook.send(embed);
                 }
             }).catch(err => {
-                logger.error(`error in: ${member.guild.name}\n`,err);
+                logger.error(`error in: ${member.guild.name}\n`, err);
             });
     },
     joinLeaveLog: async function (bot, member, embed) {
@@ -343,7 +349,7 @@ const Logs = {
                 if (webhook) {
                     if (webhook.name !== bot.user.username)
                         await webhook.edit({
-                            name:  bot.user.username
+                            name: bot.user.username
                         });
                     if (webhook.avatar !== bot.user.avatar)
                         await webhook.edit({
@@ -355,7 +361,7 @@ const Logs = {
                     await webhook.send(embed);
                 }
             }).catch(err => {
-                logger.error(`error in: ${member.guild.name}\n`,err);
+                logger.error(`error in: ${member.guild.name}\n`, err);
             });
     },
     memberLog: async function (bot, member, embed) {
@@ -366,7 +372,7 @@ const Logs = {
                 if (webhook) {
                     if (webhook.name !== bot.user.username)
                         await webhook.edit({
-                            name:  bot.user.username
+                            name: bot.user.username
                         });
                     if (webhook.avatar !== bot.user.avatar)
                         await webhook.edit({
@@ -378,7 +384,7 @@ const Logs = {
                     await webhook.send(embed);
                 }
             }).catch(err => {
-                logger.error(`error in: ${member.guild.name}\n`,err);
+                logger.error(`error in: ${member.guild.name}\n`, err);
             });
     },
     memberLogGuild: async function (bot, guild, embed) {
@@ -389,7 +395,7 @@ const Logs = {
                 if (webhook) {
                     if (webhook.name !== bot.user.username)
                         await webhook.edit({
-                            name:  bot.user.username
+                            name: bot.user.username
                         });
                     if (webhook.avatar !== bot.user.avatar)
                         await webhook.edit({
@@ -401,7 +407,7 @@ const Logs = {
                     await webhook.send(embed);
                 }
             }).catch(err => {
-                logger.error(`error in: ${guild.name}\n`,err);
+                logger.error(`error in: ${guild.name}\n`, err);
             });
     },
     messageLog: async function (bot, guild, embed) {
@@ -412,7 +418,7 @@ const Logs = {
                 if (webhook) {
                     if (webhook.name !== bot.user.username)
                         await webhook.edit({
-                            name:  bot.user.username
+                            name: bot.user.username
                         });
                     if (webhook.avatar !== bot.user.avatar)
                         await webhook.edit({
@@ -424,7 +430,7 @@ const Logs = {
                     await webhook.send(embed);
                 }
             }).catch(err => {
-                logger.error(`error in: ${guild.name}\n`,err);
+                logger.error(`error in: ${guild.name}\n`, err);
             });
     },
     serverLog: async function (bot, guild, embed) {
@@ -435,7 +441,7 @@ const Logs = {
                 if (webhook) {
                     if (webhook.name !== bot.user.username)
                         await webhook.edit({
-                            name:  bot.user.username
+                            name: bot.user.username
                         });
                     if (webhook.avatar !== bot.user.avatar)
                         await webhook.edit({
@@ -447,7 +453,7 @@ const Logs = {
                     await webhook.send(embed);
                 }
             }).catch(err => {
-                logger.error(`error in: ${guild.name}\n`,err);
+                logger.error(`error in: ${guild.name}\n`, err);
             });
     },
     voiceLogChannel: async function (bot, guild, embed) {
@@ -458,7 +464,7 @@ const Logs = {
                 if (webhook) {
                     if (webhook.name !== bot.user.username)
                         await webhook.edit({
-                            name:  bot.user.username
+                            name: bot.user.username
                         });
                     if (webhook.avatar !== bot.user.avatar)
                         await webhook.edit({
@@ -470,7 +476,7 @@ const Logs = {
                     await webhook.send(embed);
                 }
             }).catch(err => {
-                logger.error(`error in: ${guild.name}\n`,err);
+                logger.error(`error in: ${guild.name}\n`, err);
             });
     }
 }

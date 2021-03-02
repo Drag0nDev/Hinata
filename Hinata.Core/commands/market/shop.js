@@ -33,10 +33,10 @@ module.exports = {
             if (input !== null)
                 switch (input[0]) {
                     case '-n':
-                        shop.item.name = getValue(shop.str, input, shop.nameReg, shop.array, i);
+                        shop.item.name = Minor.getValue(shop.str, input, shop.nameReg, shop.array, i);
                         break;
                     case '-c':
-                        shop.item.category = getValue(shop.str, input, shop.catReg, shop.array, i);
+                        shop.item.category = Minor.getValue(shop.str, input, shop.catReg, shop.array, i);
                         break;
                 }
         }
@@ -305,11 +305,4 @@ async function pageEmbed(bot, message, shop) {
     }
 
     shop.editEmbed.setFooter(`Page ${shop.page + 1}`);
-}
-
-function getValue(str, input, reg, array, i) {
-    if (array[i + 1])
-        return str.substring(input.index, array[i + 1].index).replace(reg, '').trim();
-    else
-        return str.substring(input.index).replace(reg, '').trim();
 }
