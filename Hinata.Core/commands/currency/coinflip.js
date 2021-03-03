@@ -16,7 +16,7 @@ module.exports = {
             send: async function (msg) {
                 await message.channel.send(msg);
             },
-            embed: new MessageEmbed().setTitle('Emoji')
+            embed: new MessageEmbed().setTitle('Coinflip')
                 .setTimestamp(),
             colors: {
                 win: bot.embedColors.logAdd,
