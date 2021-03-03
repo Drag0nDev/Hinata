@@ -60,17 +60,17 @@ module.exports = {
             User.add(cf.dbUser, parseInt(cf.amount));
 
             cf.embed.setDescription('Result')
-                .addField('Bet', cf.amount, true)
+                .addField('Bet', `${cf.amount} ${cf.emoji}`, true)
                 .addField('Side', cf.result, true)
-                .addField('New total', cf.dbUser.balance, true)
+                .addField('New total', `${cf.dbUser.balance} ${cf.emoji}`, true)
                 .setColor(cf.colors.win);
         } else {
             User.remove(cf.dbUser, parseInt(cf.amount));
 
             cf.embed.setDescription('Result')
-                .addField('Bet', cf.amount, true)
+                .addField('Bet', `${cf.amount} ${cf.emoji}`, true)
                 .addField('Side', cf.result, true)
-                .addField('New total', cf.dbUser.balance, true)
+                .addField('New total', `${cf.dbUser.balance} ${cf.emoji}`, true)
                 .setColor(cf.colors.lose);
         }
 
