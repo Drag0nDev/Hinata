@@ -15,7 +15,7 @@ module.exports = {
             send: async function (msg) {
                 await message.channel.send(msg);
             },
-            embed: new MessageEmbed().setTitle('Role create')
+            embed: new MessageEmbed().setTitle('Role delete')
                 .setColor(bot.embedColors.normal)
                 .setTimestamp(),
             name: args.join(' '),
