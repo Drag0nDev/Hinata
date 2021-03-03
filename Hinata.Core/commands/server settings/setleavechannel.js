@@ -4,7 +4,6 @@ const {Permissions} = require('../../misc/tools');
 let neededPerm = ['MANAGE_GUILD'];
 
 module.exports = {
-    //<editor-fold defaultstate="collapsed" desc="userinfo help">
     name: 'setleavechannel',
     aliases: ['slc'],
     category: 'server settings',
@@ -13,7 +12,6 @@ module.exports = {
         'use `h!slm remove` to disable the elave messages.',
     examples: ['h!slc', 'h!slc #general', 'h!slc remove'],
     neededPermissions: neededPerm,
-    //</editor-fold>
     run: async (bot, message, args) => {
         let embed = new MessageEmbed().setTitle('Set leave channel')
             .setTimestamp()

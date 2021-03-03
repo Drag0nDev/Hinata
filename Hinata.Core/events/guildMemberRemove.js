@@ -1,7 +1,7 @@
 const logger = require("log4js").getLogger();
 const {ServerSettings} = require('../misc/dbObjects');
 const {MessageEmbed} = require('discord.js');
-const {Logs, Roles} = require('../misc/tools');
+const {Logs, Roles, Levels} = require('../misc/tools');
 const pm = require('pretty-ms');
 
 module.exports = async (bot, member) => {
@@ -71,7 +71,7 @@ async function sendLeaveMessage(member) {
     let leaveMessage = settings.leaveMessage;
     let LeaveChannel = guild.channels.cache.get(settings.leaveMessageChannel);
 
-    leaveMessage = await tools.customReplace(guild, leaveMessage, member);
+    leaveMessage = await Levels.customReplace(guild, leaveMessage, member);
 
     try {
         let embed = new MessageEmbed();
