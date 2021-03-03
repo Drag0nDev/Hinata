@@ -1,5 +1,5 @@
 const {MessageEmbed} = require('discord.js');
-const {Minor, Permissions, Roles} = require('../../misc/tools');
+const {Permissions} = require('../../misc/tools');
 let neededPerm = ['MANAGE_ROLES'];
 
 module.exports = {

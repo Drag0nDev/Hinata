@@ -1,5 +1,5 @@
 const {MessageEmbed} = require('discord.js');
-const {Minor, Permissions, Roles} = require('../../misc/tools');
+const {Permissions} = require('../../misc/tools');
 let neededPerm = ['MANAGE_EMOJIS'];
 
 module.exports = {
@@ -8,7 +8,7 @@ module.exports = {
     category: 'emojis',
     description: 'Create a new emoji or add one that already exists.',
     usage: '[command | alias] [name/emoji] <link/attachment>',
-    examples: ['h!rc Laughing <image>'],
+    examples: ['h!ec Laughing <image>'],
     neededPermissions: neededPerm,
     run: async (bot, message, args) => {
         const emoji = {
