@@ -72,10 +72,6 @@ async function serverLb(bot, message, lb) {
 
     lb.dbUsers.sort((a, b) => b.user.balance - a.user.balance);
 
-    lb.dbUsers.forEach(user => {
-        console.log(user.user.userTag + ': ' + user.user.balance)
-    });
-
     lb.totalPages = Math.ceil(lb.dbUsers.length / 10);
 
     if (lb.page > lb.totalPages) {
