@@ -28,8 +28,6 @@ module.exports = {
         else
             lb.page = parseInt(args[1]) - 1;
 
-        console.log(lb.page)
-
         let noBotPermission = Permissions.checkBotPermissions(bot, message, neededPerm, lb.embed);
         if (noBotPermission)
             return message.channel.send(lb.embed);
