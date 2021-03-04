@@ -24,7 +24,6 @@ module.exports = {
 
         //get nickname
         let nickname = member.nickname === null ? '-' : member.nickname;
-        console.log(nickname);
 
         //get Join date
         let date = Dates.getDate(member.joinedTimestamp);

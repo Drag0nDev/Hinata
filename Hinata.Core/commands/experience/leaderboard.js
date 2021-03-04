@@ -10,32 +10,37 @@ module.exports = {
     aliases: ['lb', 'glb', 'globalleaderboard'],
     category: 'experience',
     description: 'Show the level leaderboard of the server or the overall leaderboard on the bot.\n' +
-        'To see the global leaderboard use ``glb`` or ``globalleaderboard``',
-    usage: '[command | alias]',
+        'To see the global leaderboard use ``glb`` or ``globalleaderboard``.\n' +
+        'You can also jump to a certain page by providing the page number.',
+    usage: '[command | alias] <page>',
     examples: ['h!lb', 'h!glb'],
     neededPermissions: neededPerm,
-    run: async (bot, message) => {
-        let embed = new MessageEmbed();
-        let noBotPermission = Permissions.checkBotPermissions(bot, message, neededPerm, embed);
+    run: async (bot, message, args) => {
+        const lb = {
+            embed: new MessageEmbed()
+        }
+
+        if (isNaN(parseInt(args[0])) || !args[0])
+            lb.page = 0;
+        else
+            lb.page = parseInt(args[0]) - 1;
+
+        let noBotPermission = Permissions.checkBotPermissions(bot, message, neededPerm, lb.embed);
         if (noBotPermission)
-            return message.channel.send(embed);
+            return message.channel.send(lb.embed);
 
         if (message.content.includes('glb') || message.content.includes('globalleaderboard')) {
-            await globalLb(bot, message, 'Global');
+            lb.variation = 'Global';
+            await globalLb(bot, message, lb);
         } else {
-            await serverLb(bot, message, 'Server');
+            lb.variation = 'Server';
+            await serverLb(bot, message, lb);
         }
     }
 }
 
-async function serverLb(bot, message, variation) {
-    const embed = new MessageEmbed()
-        .setTitle(`${variation} leaderboard`)
-        .setColor(bot.embedColors.normal)
-        .setFooter(`Page 1`);
-    let dbUsers;
-
-    dbUsers = await ServerUser.findAll({
+async function serverLb(bot, message, lb) {
+    lb.dbUsers = await ServerUser.findAll({
         where: {
             guildId: message.guild.id,
             xp: {
@@ -47,24 +52,32 @@ async function serverLb(bot, message, variation) {
         ]
     });
 
-    for (let i = 0; i < 10 && i < dbUsers.length; i++) {
-        let memberTag = await getUserTag(message, dbUsers[i].userId);
-        let level = Levels.getLevel(dbUsers[i].xp);
+    lb.totalPages = Math.ceil(lb.dbUsers.length / 10);
+    lb.embed.setTitle(`${lb.variation} leaderboard`);
 
-        embed.addField(`${i + 1}. ${memberTag}`, `Level ${level}\n(${dbUsers[i].xp}xp)`, true);
+
+    if (lb.page > lb.totalPages) {
+        lb.embed.setColor(bot.embedColors.error)
+            .setDescription(`There are only **${lb.totalPages}** pages in total.\n` +
+                'Please pick another page!');
+        return message.channel.send(lb.embed);
     }
 
-    messageEditor(bot, message, embed, dbUsers, variation);
+    lb.embed.setColor(bot.embedColors.normal)
+        .setFooter(`Page ${lb.page + 1}/${lb.totalPages}`);
+
+    for (let i = 10 * lb.page; (i < 10 + (10 * lb.page)) && i < lb.dbUsers.length; i++) {
+        let memberTag = await getUserTag(message, lb.dbUsers[i].userId);
+        let level = Levels.getLevel(lb.dbUsers[i].xp);
+
+        lb.embed.addField(`${i + 1}. ${memberTag}`, `Level ${level}\n(${lb.dbUsers[i].xp}xp)`, true);
+    }
+
+    messageEditor(bot, message, lb);
 }
 
-async function globalLb(bot, message, variation) {
-    const embed = new MessageEmbed()
-        .setTitle(`${variation} leaderboard`)
-        .setColor(bot.embedColors.normal)
-        .setFooter(`Page 1`);
-    let dbUsers;
-
-    dbUsers = await User.findAll({
+async function globalLb(bot, message, lb) {
+    lb.dbUsers = await User.findAll({
         where: {
             xp: {
                 [Op.gt]: 0
@@ -76,10 +89,26 @@ async function globalLb(bot, message, variation) {
         ]
     });
 
-    for (let i = 0; i < 10 && i < dbUsers.length; i++) {
-        let xp = dbUsers[i].xp;
+    lb.totalPages = Math.ceil(lb.dbUsers.length / 10);
+
+    lb.embed = new MessageEmbed()
+        .setTitle(`${lb.variation} leaderboard`);
+
+
+    if (lb.page > lb.totalPages) {
+        embed.setColor(bot.embedColors.error)
+            .setDescription(`There are only **${lb.totalPages}** pages in total.\n` +
+                'Please pick another page!');
+        return message.channel.send(embed);
+    }
+
+    lb.embed.setColor(bot.embedColors.normal)
+        .setFooter(`Page ${lb.page + 1}/${lb.totalPages}`);
+
+    for (let i = 10 * lb.page; (i < 10 + (10 * lb.page)) && i < lb.dbUsers.length; i++) {
+        let xp = lb.dbUsers[i].xp;
         let lvlXp = config.levelXp;
-        let level = dbUsers[i].level;
+        let level = lb.dbUsers[i].level;
         let previousLvlXp = 0;
 
         for (; level > 0; level--) {
@@ -87,17 +116,16 @@ async function globalLb(bot, message, variation) {
             xp += previousLvlXp;
         }
 
-        embed.addField(`${i + 1}. ${dbUsers[i].userTag}`, `Level ${dbUsers[i].level}\n(${xp}xp)`, true);
+        lb.embed.addField(`${i + 1}. ${lb.dbUsers[i].userTag}`, `Level ${lb.dbUsers[i].level}\n(${xp}xp)`, true);
     }
 
-    messageEditor(bot, message, embed, dbUsers, variation);
+    messageEditor(bot, message, lb);
 }
 
-function messageEditor(bot, message, embed, users, variation) {
-    message.channel.send(embed)
+function messageEditor(bot, message, lb) {
+    message.channel.send(lb.embed)
         .then(async messageBot => {
             await Minor.addPageArrows(messageBot);
-            let page = 0;
 
             const filter = (reaction, user) => {
                 return (reaction.emoji.name === '◀' || reaction.emoji.name === '▶') && user.id === message.author.id;
@@ -106,40 +134,40 @@ function messageEditor(bot, message, embed, users, variation) {
             const collector = messageBot.createReactionCollector(filter, {time: 60000});
 
             collector.on('collect', async (reaction, user) => {
-                let editEmbed = new MessageEmbed()
-                    .setTitle(`${variation} leaderboard`)
+                lb.editEmbed = new MessageEmbed()
+                    .setTitle(`${lb.variation} leaderboard`)
                     .setColor(bot.embedColors.normal);
 
                 if (reaction.emoji.name === '▶') {
-                    page++;
-                    await pageEmbed(message, page, users, editEmbed);
+                    lb.page++;
+                    await pageEmbed(message, lb, lb.page);
+                    lb.editEmbed.setFooter(`Page ${lb.page + 1}/${lb.totalPages}`);
                 } else if (reaction.emoji.name === '◀') {
-                    page--;
-                    if (page < 0)
+                    lb.page--;
+                    if (lb.page < 0)
                         return;
-                    await pageEmbed(message, page, users, editEmbed);
+                    await pageEmbed(message, lb, lb.page);
+                    lb.editEmbed.setFooter(`Page ${lb.page + 1}/${lb.totalPages}`);
                 }
 
-                if (Object.keys(editEmbed.fields).length !== 0) {
-                    await messageBot.edit(editEmbed);
+                if (lb.editEmbed.fields.length !== 0) {
+                    await messageBot.edit(lb.editEmbed);
                 }
             });
 
-            collector.on('end', collected => {
+            collector.on('end', () => {
                 messageBot.reactions.removeAll();
             });
         });
 }
 
-async function pageEmbed(message, page, users, editEmbed) {
-    for (let i = 10 * page; (i < 10 + (10 * page)) && (i < Object.keys(users).length); i++) {
-        let memberTag = await getUserTag(message, users[i].userId);
-        let level = Levels.getLevel(users[i].xp);
+async function pageEmbed(message, lb) {
+    for (let i = 10 * lb.page; (i < 10 + (10 * lb.page)) && (i < lb.dbUsers.length); i++) {
+        let memberTag = await getUserTag(message, lb.dbUsers[i].userId);
+        let level = Levels.getLevel(lb.dbUsers[i].xp);
 
-        editEmbed.addField(`${i + 1}. ${memberTag}`, `Level ${level}\n (${users[i].xp}xp)`, true);
+        lb.editEmbed.addField(`${i + 1}. ${memberTag}`, `Level ${level}\n (${lb.dbUsers[i].xp}xp)`, true);
     }
-
-    editEmbed.setFooter(`Page ${page + 1}`);
 }
 
 async function getUserTag(message, id) {
