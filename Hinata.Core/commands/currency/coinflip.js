@@ -41,13 +41,15 @@ module.exports = {
             return cf.send(cf.embed);
         }
 
+        cf.amount = parseInt(cf.amount);
+
         cf.dbUser = await User.findOne({
             where: {
                 userId: cf.member.user.id
             }
         });
 
-        if (cf.dbUser.balance < cf.amount) {
+        if (cf.dbUser.balance < cf.amount || cf.amount < 1) {
             cf.embed.setDescription(`You don't have enough ${cf.emoji} to do this command.\n` +
                 `Your balance is **${cf.dbUser.balance} ${cf.emoji}**.`)
                 .setColor(cf.colors.error);

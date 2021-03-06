@@ -4,7 +4,6 @@ const config = require("./config.json");
 const colors = require("./Hinata.Core/misc/colors.js");
 const reactions = require('./Hinata.Core/misc/reactions.js')
 const log4js = require("log4js");
-const { Op } = require('sequelize');
 
 const bot = new Client();
 bot.commands = new Collection();
