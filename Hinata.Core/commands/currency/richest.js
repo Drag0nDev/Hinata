@@ -20,7 +20,7 @@ module.exports = {
             },
             embed: new MessageEmbed()
                 .setColor(bot.embedColors.normal),
-            variation: args[0].toLowerCase(),
+            variation: args[0],
         }
 
         if (isNaN(parseInt(args[1])) || !args[1])
@@ -28,11 +28,19 @@ module.exports = {
         else
             lb.page = parseInt(args[1]) - 1;
 
+        if (!lb.variation){
+            lb.embed.setDescription('Please provide a valid leaderboard.\n' +
+                '- ``server``\n' +
+                '- ``global``')
+                .setTitle('Richest');
+            return  lb.send(lb.embed);
+        }
+
         let noBotPermission = Permissions.checkBotPermissions(bot, message, neededPerm, lb.embed);
         if (noBotPermission)
             return message.channel.send(lb.embed);
 
-        switch (lb.variation) {
+        switch (lb.variation.toLowerCase()) {
             case 'server':
                 lb.embed.setTitle(`Richest ${lb.variation}`);
                 await serverLb(bot, message, lb);
