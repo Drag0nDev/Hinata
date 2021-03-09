@@ -159,4 +159,4 @@ Reflect.defineProperty(Shop, 'changeImg', {
     }
 });
 
-module.exports = { User, Servers, ServerSettings, ServerUser, Timers, Warnings, Rewards, Shop, Category, Inventory, Autofeeds };
+module.exports = { User, Server: Servers, ServerSettings, ServerUser, Timers, Warnings, Rewards, Shop, Category, Inventory, Autofeeds };
