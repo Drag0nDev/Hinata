@@ -25,6 +25,8 @@ module.exports = async bot => {
         type: 'PLAYING'
     });
 
+    startReddit();
+
     await channel.send(embed);
 
     try {
@@ -135,4 +137,8 @@ async function checkBans(bot) {
         .setTimestamp();
 
     await Logs.modlog(bot, moderator, logEmbed);
+}
+
+function startReddit() {
+
 }

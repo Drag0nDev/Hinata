@@ -4,7 +4,6 @@ const {Permissions, Levels} = require('../../misc/tools');
 let neededPerm = ['MANAGE_GUILD'];
 
 module.exports = {
-    //<editor-fold defaultstate="collapsed" desc="userinfo help">
     name: 'setleveluprolemessage',
     aliases: ['slurm'],
     category: 'server settings',
@@ -20,11 +19,10 @@ module.exports = {
         '`%level%` shows the new level they reached.',
     usage: '[command | alias] [new prefix]',
     examples: [
-        'h!slum Congratulations %mention% you just advanced to **%level%**!',
-        'h!slum {"color": "BE4F70","title": "Level up","description": "Congratulations %mention% you just leveled up","fields": [{"name": "New level","value": "%level%", "inline": true},{"name": "New role","value": "%role%"}],"thumbnail": "%avatar%"}'
+        'h!slurm Congratulations %mention% you just advanced to **%level%**!',
+        'h!slurm {"color": "BE4F70","title": "Level up","description": "Congratulations %mention% you just leveled up","fields": [{"name": "New level","value": "%level%", "inline": true},{"name": "New role","value": "%role%"}],"thumbnail": "%avatar%"}'
     ],
     neededPermissions: neededPerm,
-    //</editor-fold>
     run: async (bot, message, args) => {
         let customMessage = args.join(' ');
         let embed = new MessageEmbed();
