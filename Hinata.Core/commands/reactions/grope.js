@@ -16,7 +16,7 @@ module.exports = {
 
         if (!message.channel.nsfw) {
             embed.setDescription('This command can only be used in an NSFW marked channel!');
-            message.channel.send(embed);
+            return message.channel.send(embed);
         }
 
         if (args[0]) {
