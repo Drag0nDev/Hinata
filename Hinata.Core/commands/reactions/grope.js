@@ -19,8 +19,8 @@ module.exports = {
             return message.channel.send(embed);
         }
 
-        if (args[0]) {
-            Servers.getMembers(message, args, userMentions).then(membersPromise => {
+        if (args[0]){
+            await Servers.getMembers(message, args, userMentions).then(membersPromise => {
                 members = membersPromise;
             });
         }
@@ -35,9 +35,9 @@ module.exports = {
 
         if (members.length === 0) {
             userMentions.push(author.user.id)
-            text = `*Gropes ${author}, lewd!*`;
+            text = `*hugs* ${author}!`;
         } else
-            text = `${members}you have been groped by **${author.nickname === null ? author.user.username : author.nickname}**!`;
+            text = `${members}you have been groped by **${author.nickname === null ? author.user.username : author.nickname}**, *lewd*!`;
 
         await message.channel.send(
             {
