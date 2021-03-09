@@ -46,7 +46,7 @@ module.exports = {
             customMessage = await Levels.customReplace(guild, customMessage, user, newLevel);
 
             try {
-                const jsonEmbed = JSON.parse(customMessage);
+                const jsonEmbed = JSON.parse(customMessage.message);
 
                 if (jsonEmbed.color) embed.setColor(jsonEmbed.color);
                 if (jsonEmbed.title) embed.setTitle(jsonEmbed.title);
@@ -69,7 +69,12 @@ module.exports = {
                     embed: embed
                 });
             } catch (err) {
-                message.channel.send(`New server level up message set to:\n${customMessage}`);
+                message.channel.send({
+                    content: `New server level up message set to:\n${customMessage}`,
+                    allowedMentions: {
+                        user: customMessage.user
+                    }
+                });
             }
         });
     }

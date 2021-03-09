@@ -28,6 +28,7 @@ const ServerUser = require('../Database/dbObjects/ServerUser')(sequelize, Sequel
 const Timers = require('../Database/dbObjects/Timers')(sequelize, Sequelize.DataTypes);
 const Warnings = require('../Database/dbObjects/Warnings')(sequelize, Sequelize.DataTypes);
 const Rewards = require('../Database/dbObjects/Rewards')(sequelize, Sequelize.DataTypes);
+const Autofeeds = require('../Database/dbObjects/autofeed')(sequelize, Sequelize.DataTypes);
 const Shop = require('../Database/dbObjects/Shop')(sequelize, Sequelize.DataTypes);
 const Category = require('../Database/dbObjects/Category')(sequelize, Sequelize.DataTypes);
 const Inventory = require('../Database/dbObjects/Inventory')(sequelize, Sequelize.DataTypes);
@@ -72,6 +73,9 @@ User.belongsTo(Inventory, {
 });
 User.belongsTo(Inventory, {
     foreignKey: 'badge6'
+});
+Autofeeds.belongsTo(Servers, {
+    foreignKey: 'serverId'
 });
 
 //database functions
@@ -155,4 +159,4 @@ Reflect.defineProperty(Shop, 'changeImg', {
     }
 });
 
-module.exports = { User, Server: Servers, ServerSettings, ServerUser, Timers, Warnings, Rewards, Shop, Category, Inventory };
+module.exports = { User, Servers, ServerSettings, ServerUser, Timers, Warnings, Rewards, Shop, Category, Inventory, Autofeeds };

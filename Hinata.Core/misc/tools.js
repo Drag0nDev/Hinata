@@ -2,6 +2,7 @@ const {User, ServerUser, Server, ServerSettings} = require('./dbObjects');
 const {MessageEmbed} = require('discord.js');
 const logger = require("log4js").getLogger();
 const config = require("../../config.json");
+const Snooper = require('reddit-snooper');
 
 const user = new RegExp('%user%', 'g');
 const server = new RegExp('%server%', 'g');
@@ -13,6 +14,16 @@ const role = new RegExp('%role%', 'g');
 const icon = new RegExp('%icon%', 'g');
 
 const reglist = [user, server, membercount, usermention, avatar, level, role, icon];
+
+const snooper = new Snooper({
+    username: config.reddit.username,
+    password: config.reddit.password,
+    api_secret: config.reddit.secret,
+    api_id: config.reddit.appId,
+
+    automatic_retries: true,
+    api_requests_per_minuite: 60
+});
 
 const Minor = {
     testing: async function (bot, message) {
@@ -252,7 +263,7 @@ const Levels = {
         customMessage = await customReplace(message, customMessage, newLevel, newRoleId);
 
         try {
-            const jsonEmbed = JSON.parse(customMessage);
+            const jsonEmbed = JSON.parse(customMessage.message);
 
             if (jsonEmbed.color) embed.setColor(jsonEmbed.color);
             if (jsonEmbed.title) embed.setTitle(jsonEmbed.title);
@@ -272,7 +283,12 @@ const Levels = {
 
             await message.channel.send({embed: embed});
         } catch (err) {
-            message.channel.send(customMessage);
+            message.channel.send({
+                content: customMessage.message,
+                allowedMentions: {
+                    user: customMessage.user
+                }
+            });
         }
     },
     customReplace: async function (guild, customMessage, user, newLevel, newRoleId) {
@@ -293,9 +309,15 @@ const Levels = {
                             customMessage = customMessage.replace(reg, `<@!${user.user.id}>`);
                             break;
                         case '%avatar%':
-                            customMessage = customMessage.replace(reg, user.user.avatarURL({
+                            let avatarURL = user.user.avatarURL({
                                 dynamic: true
-                            }));
+                            });
+
+                            if (avatarURL === null){
+                                avatarURL = `https://cdn.discordapp.com/embed/avatars/${user.user.discriminator % 5}.png`;
+                            }
+
+                            customMessage = customMessage.replace(reg, avatarURL);
                             break;
                         case '%role%':
                             customMessage = customMessage.replace(reg, `<@&${newRoleId}>`);
@@ -310,7 +332,7 @@ const Levels = {
                 }
             });
 
-            return customMessage;
+            return {message: customMessage, user: `<@!${user.user.id}>`};
         } catch (err) {
             logger.error(err);
         }
@@ -388,7 +410,7 @@ const Logs = {
             });
     },
     memberLogGuild: async function (bot, guild, embed) {
-        await guild.fetchWebhooks()
+        guild.fetchWebhooks()
             .then(async webhooks => {
                 const webhook = webhooks.get(await getMemberLogChannel(guild.id));
 
@@ -595,11 +617,16 @@ const Permissions = {
         roleArray.sort((a, b) => b.position - a.position);
 
         if (roleArray[0].position < role.position) {
-            3
             console.log(roleArray[0].position, role.position)
             return embed.setColor(bot.embedColors.error)
                 .setDescription('I can\'t assign this role due to role hierarchy!');
         }
+    }
+}
+
+const Autofeeds = {
+    reddit: async function (reddit) {
+
     }
 }
 
@@ -694,9 +721,15 @@ async function customReplace(message, customMessage, newLevel, newRoleId) {
                         customMessage = customMessage.replace(reg, `<@!${message.author.id}>`);
                         break;
                     case '%avatar%':
-                        customMessage = customMessage.replace(reg, message.author.avatarURL({
+                        let avatarURL = message.author.avatarURL({
                             dynamic: true
-                        }));
+                        });
+
+                        if (avatarURL === null){
+                            avatarURL = `https://cdn.discordapp.com/embed/avatars/${message.member.user.discriminator % 5}.png`;
+                        }
+
+                        customMessage = customMessage.replace(reg, avatarURL);
                         break;
                     case '%role%':
                         customMessage = customMessage.replace(reg, `<@&${newRoleId}>`);
@@ -708,10 +741,10 @@ async function customReplace(message, customMessage, newLevel, newRoleId) {
             }
         });
 
-        return customMessage;
+        return {message: customMessage, user: `<@!${message.author.id}>`};
     } catch (err) {
         logger.error(err);
     }
 }
 
-module.exports = {Minor, Compare, Roles, Servers, Levels, Logs, Dates, Permissions}
+module.exports = {Minor, Compare, Roles, Servers, Levels, Logs, Dates, Permissions, Autofeeds}

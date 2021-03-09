@@ -25,6 +25,7 @@
     "nodemon": "^2.0.7",
     "parse-ms": "^2.1.0",
     "pretty-ms": "^7.0.1",
+    "reddit-snooper": "^1.0.1",
     "sequelize": "^6.3.5",
     "shelljs": "^0.8.4",
     "sqlite3": "^5.0.0"
