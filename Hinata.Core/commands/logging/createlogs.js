@@ -23,6 +23,13 @@ module.exports = {
         let $message;
         let voice;
 
+        let serverDb;
+        serverDb = await ServerSettings.findOne({
+            where: {
+                serverId: guild.id
+            }
+        });
+
         let noUserPermission = Permissions.checkUserPermissions(bot, message, neededPerm, embed);
         if (noUserPermission)
             return await message.channel.send(embed);
@@ -60,23 +67,24 @@ module.exports = {
                 .addField('server log', `<#${$server.channelId}>`, true)
                 .addField('message log', `<#${$message.channelId}>`, true)
                 .addField('voice log', `<#${voice.channelId}>`, true);
-        });
-        
-        await ServerSettings.findOne({
-            where: {
-                serverId: guild.id
-            }
-        }).then(async server => {
-            server.joinLeaveLogChannel = joinleave.hookId;
-            server.memberLogChannel = member.hookId;
-            server.serverLogChannel = $server.hookId;
-            server.messageLogChannel = $message.hookId;
-            server.voiceLogChannel = voice.hookId;
 
-            server.save();
-        });
+            serverDb.joinLeaveLogChannel = null;
+            serverDb.memberLogChannel = null;
+            serverDb.serverLogChannel = null;
+            serverDb.messageLogChannel = null;
+            serverDb.voiceLogChannel = null;
 
-        await message.channel.send(embed);
+            serverDb.joinLeaveLogChannel = joinleave.hookId;
+            serverDb.memberLogChannel = member.hookId;
+            serverDb.serverLogChannel = $server.hookId;
+            serverDb.messageLogChannel = $message.hookId;
+            serverDb.voiceLogChannel = voice.hookId;
+
+            serverDb.save();
+
+
+            await message.channel.send(embed);
+        });
     }
 }
 
