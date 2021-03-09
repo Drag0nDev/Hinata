@@ -75,7 +75,7 @@ async function sendLeaveMessage(member) {
 
     try {
         let embed = new MessageEmbed();
-        const jsonEmbed = JSON.parse(leaveMessage);
+        const jsonEmbed = JSON.parse(leaveMessage.message);
 
         if (jsonEmbed.color) embed.setColor(jsonEmbed.color);
         if (jsonEmbed.title) embed.setTitle(jsonEmbed.title);
@@ -95,7 +95,12 @@ async function sendLeaveMessage(member) {
 
         await LeaveChannel.send({embed: embed});
     } catch (err) {
-        await LeaveChannel.send(leaveMessage);
+        await LeaveChannel.send({
+            content: leaveMessage.message,
+            allowedMentions: {
+                user: leaveMessage.user
+            }
+        });
     }
 }
 

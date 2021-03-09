@@ -52,7 +52,7 @@ async function sendWelcomeMessage(member) {
 
     try {
         let embed = new MessageEmbed();
-        const jsonEmbed = JSON.parse(joinMessage);
+        const jsonEmbed = JSON.parse(joinMessage.message);
 
         if (jsonEmbed.color) embed.setColor(jsonEmbed.color);
         if (jsonEmbed.title) embed.setTitle(jsonEmbed.title);
@@ -72,7 +72,12 @@ async function sendWelcomeMessage(member) {
 
         await joinChannel.send({embed: embed});
     } catch (err) {
-        await joinChannel.send(joinMessage);
+        await joinChannel.send({
+            content: joinMessage.message,
+            allowedMentions: {
+                user: joinMessage.user
+            }
+        });
     }
 }
 
