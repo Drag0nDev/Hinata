@@ -40,7 +40,7 @@ module.exports = {
             return message.channel.send(preview.embed);
         }
 
-        if (preview.db.Category.name === 'hidden' || shop.db.Category.name === 'custom') {
+        if (preview.db.Category.name === 'hidden' || preview.db.Category.name === 'custom') {
             preview.embed.setColor(bot.embedColors.error)
                 .setDescription(`**${preview.id}** is not a valid id!`);
 
