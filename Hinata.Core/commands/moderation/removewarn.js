@@ -1,7 +1,7 @@
 const neededPerm = ['MANAGE_GUILD'];
 const {MessageEmbed} = require("discord.js");
-const {Warnings, User, Servers} = require('../../misc/dbObjects');
-const {Permissions} = require('../../misc/tools');
+const {Warnings, User} = require('../../misc/dbObjects');
+const {Permissions, Servers} = require('../../misc/tools');
 const logger = require("log4js").getLogger();
 
 module.exports = {

@@ -206,7 +206,7 @@ const getServer = (user) => {
         }
 
         nextLvlXp = lvlXp + ((lvlXp / 2) * level);
-    } while (userXp > nextLvlXp);
+    } while (userXp >= nextLvlXp);
 
     let num = userXp / nextLvlXp;
 
