@@ -49,7 +49,6 @@ module.exports = {
 
                                             if (webhook) {
                                                 await webhook.send(embed);
-                                                logger.info(`new reddit post from ${post.data.subreddit} posted`);
                                             } else {
                                                 await Autofeeds.destroy({
                                                     where: {
