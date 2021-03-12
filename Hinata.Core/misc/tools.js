@@ -357,7 +357,9 @@ const Logs = {
                                 size: 4096
                             })
                         });
-                    await webhook.send(embed);
+                    await webhook.send(embed).catch(err => {
+                        logger.error(`error in: ${member.guild.name}\n`, err);
+                    });
                 }
             }).catch(err => {
                 logger.error(`error in: ${member.guild.name}\n`, err);
@@ -380,7 +382,9 @@ const Logs = {
                                 size: 4096
                             })
                         });
-                    await webhook.send(embed);
+                    await webhook.send(embed).catch(err => {
+                        logger.error(`error in: ${member.guild.name}\n`, err);
+                    });
                 }
             }).catch(err => {
                 logger.error(`error in: ${member.guild.name}\n`, err);
@@ -403,14 +407,16 @@ const Logs = {
                                 size: 4096
                             })
                         });
-                    await webhook.send(embed);
+                    await webhook.send(embed).catch(err => {
+                        logger.error(`error in: ${member.guild.name}\n`, err);
+                    });
                 }
             }).catch(err => {
                 logger.error(`error in: ${member.guild.name}\n`, err);
             });
     },
     memberLogGuild: async function (bot, guild, embed) {
-        guild.fetchWebhooks()
+        await guild.fetchWebhooks()
             .then(async webhooks => {
                 const webhook = webhooks.get(await getMemberLogChannel(guild.id));
 
@@ -426,7 +432,9 @@ const Logs = {
                                 size: 4096
                             })
                         });
-                    await webhook.send(embed);
+                    await webhook.send(embed).catch(err => {
+                        logger.error(`error in: ${guild.name}\n`, err);
+                    });
                 }
             }).catch(err => {
                 logger.error(`error in: ${guild.name}\n`, err);
@@ -449,7 +457,9 @@ const Logs = {
                                 size: 4096
                             })
                         });
-                    await webhook.send(embed);
+                    await webhook.send(embed).catch(err => {
+                        logger.error(`error in: ${guild.name}\n`, err);
+                    });
                 }
             }).catch(err => {
                 logger.error(`error in: ${guild.name}\n`, err);
@@ -472,7 +482,9 @@ const Logs = {
                                 size: 4096
                             })
                         });
-                    await webhook.send(embed);
+                    await webhook.send(embed).catch(err => {
+                        logger.error(`error in: ${guild.name}\n`, err);
+                    });
                 }
             }).catch(err => {
                 logger.error(`error in: ${guild.name}\n`, err);
@@ -495,7 +507,9 @@ const Logs = {
                                 size: 4096
                             })
                         });
-                    await webhook.send(embed);
+                    await webhook.send(embed).catch(err => {
+                        logger.error(`error in: ${guild.name}\n`, err);
+                    });
                 }
             }).catch(err => {
                 logger.error(`error in: ${guild.name}\n`, err);
@@ -624,12 +638,6 @@ const Permissions = {
     }
 }
 
-const Autofeeds = {
-    reddit: async function (reddit) {
-
-    }
-}
-
 //private functions
 async function getModlogChannel(serverId) {
     return await ServerSettings.findOne({
@@ -747,4 +755,4 @@ async function customReplace(message, customMessage, newLevel, newRoleId) {
     }
 }
 
-module.exports = {Minor, Compare, Roles, Servers, Levels, Logs, Dates, Permissions, Autofeeds}
+module.exports = {Minor, Compare, Roles, Servers, Levels, Logs, Dates, Permissions}

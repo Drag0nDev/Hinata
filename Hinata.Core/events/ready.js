@@ -2,6 +2,7 @@ const logger = require("log4js").getLogger();
 const {MessageEmbed} = require('discord.js');
 const {Timers, ServerSettings} = require('../misc/dbObjects');
 const {Logs, Roles} = require('../misc/tools');
+const reddit = require('../misc/redditAutofeed');
 
 module.exports = async bot => {
     let embed = new MessageEmbed()
@@ -25,7 +26,7 @@ module.exports = async bot => {
         type: 'PLAYING'
     });
 
-    startReddit();
+    await reddit.run(bot);
 
     await channel.send(embed);
 
@@ -137,8 +138,4 @@ async function checkBans(bot) {
         .setTimestamp();
 
     await Logs.modlog(bot, moderator, logEmbed);
-}
-
-function startReddit() {
-
 }
