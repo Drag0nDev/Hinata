@@ -4,6 +4,8 @@ const {MessageEmbed} = require('discord.js');
 const {Autofeeds} = require('./dbObjects');
 const logger = require("log4js").getLogger();
 
+const link = new RegExp('.(jpeg|jpg|png|gif)$');
+
 module.exports = {
     run: async function (bot) {
         const snooper = new Snooper({
@@ -19,10 +21,12 @@ module.exports = {
         snooper.watcher.getPostWatcher('all')
             .on('post', post => {
                 const embed = new MessageEmbed()
-                    .setColor("RANDOM")
-                    .setTitle(`Author: ${post.data.author}`)
-                    .setDescription(`[Post link](https://www.reddit.com${post.data.permalink})\n` + post.data.title)
-                    .setFooter(post.data.subreddit);
+                    .setAuthor(`Author: u/${post.data.author}`)
+                    .setTitle(`Post link`)
+                    .setURL(`https://www.reddit.com${post.data.permalink}`)
+                    .setDescription(post.data.title)
+                    .setFooter(post.data.subreddit)
+                    .setTimestamp();
 
                 Autofeeds.findAll({
                     where: {
@@ -36,29 +40,44 @@ module.exports = {
                             if (channel) {
 
                                 if (post.data.subreddit === autofeed.subreddit) {
-                                    if (post.data.url !== '')
-                                        if (post.data.over_18 && channel.nsfw) {
-                                            embed.setImage(post.data.url);
+                                    if (link.test(post.data.url)) {
+                                        if (post.data.over_18) {
+                                            if (channel.nsfw) {
+                                                embed.setImage(post.data.url);
+                                            }
                                         } else {
                                             embed.setImage(post.data.url);
                                         }
 
-                                    server.fetchWebhooks()
-                                        .then(async webhooks => {
-                                            const webhook = webhooks.get(autofeed.webhookId);
+                                        embed.setColor(bot.embedColors.logChange);
+                                    } else if (post.data.selftext !== '') {
+                                        let content
+                                        if (post.data.selftext.length > 1018) {
+                                            content = `${post.data.selftext.substring(0, 1018)} \`...\``;
+                                        } else {
+                                            content = post.data.selftext;
+                                        }
 
-                                            if (webhook) {
-                                                await webhook.send(embed);
-                                            } else {
-                                                await Autofeeds.destroy({
-                                                    where: {
-                                                        id: autofeed.id
-                                                    }
-                                                });
-                                            }
-                                        }).catch(err => {
-                                        logger.error(`error in: ${server.name}\n`, err);
-                                    });
+                                        embed.addField('​', content)
+                                            .setColor(bot.embedColors.logAdd);
+                                    }
+
+                                        server.fetchWebhooks()
+                                            .then(async webhooks => {
+                                                const webhook = webhooks.get(autofeed.webhookId);
+
+                                                if (webhook) {
+                                                    await webhook.send(embed);
+                                                } else {
+                                                    await Autofeeds.destroy({
+                                                        where: {
+                                                            id: autofeed.id
+                                                        }
+                                                    });
+                                                }
+                                            }).catch(err => {
+                                            logger.error(`error in: ${server.name}\n`, err);
+                                        });
                                 }
                             }
                         }
