@@ -110,3 +110,10 @@ process.on('unhandledRejection', error => {
 
     logger.error(error);
 });
+
+process.on('DiscordAPIError', error => {
+    if (error.message === 'Cannot send an empty message')
+        return;
+
+    logger.error(error);
+})
