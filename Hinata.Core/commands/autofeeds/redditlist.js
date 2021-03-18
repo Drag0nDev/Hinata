@@ -7,13 +7,15 @@ module.exports = {
     category: 'autofeeds',
     description: 'Show a list of all followed subreddits',
     usage: '[command | alias]',
+    cooldown: 5,
     run: async (bot, message) => {
         const list = {
             send: async (embed) => {
                 return message.channel.send(embed);
             },
             embed: new MessageEmbed().setTitle('Reddit list')
-                .setTimestamp(),
+                .setTimestamp()
+                .setColor(bot.embedColors.normal),
             autofeeds: await Autofeeds.findAll({
                 where: {
                     serverId: message.guild.id

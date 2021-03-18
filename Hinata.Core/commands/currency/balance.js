@@ -9,6 +9,7 @@ module.exports = {
     description: 'Show your balance',
     usage: '[command | alias]',
     examples: ['h!$', 'h!$ 418037700751261708', 'h!$ @Drag0n#6666'],
+    cooldown: 10,
     run: async (bot, message, args) => {
         let embed = new MessageEmbed().setColor(bot.embedColors.normal);
         let member;

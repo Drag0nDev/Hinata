@@ -15,15 +15,6 @@ module.exports = {
     run: async (bot, message, args) => {
         let embed = new MessageEmbed().setColor(bot.embedColors.normal);
 
-        //check member and bot permissions
-        let noUserPermission = Permissions.checkUserPermissions(bot, message, neededPerm, embed);
-        if (noUserPermission)
-            return await message.channel.send(embed);
-
-        let noBotPermission = Permissions.checkBotPermissions(bot, message, neededPerm, embed);
-        if (noBotPermission)
-            return message.channel.send(embed);
-
         if (!args[0])
             return message.channel.send(embed.setColor(bot.embedColors.error)
                 .setDescription(`Please provide a channelId`));

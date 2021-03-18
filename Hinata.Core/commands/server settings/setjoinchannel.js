@@ -20,10 +20,6 @@ module.exports = {
             .setColor(bot.embedColors.normal);
         const choice = new RegExp('remove|[0-9]{17,}');
 
-        let noUserPermission = Permissions.checkUserPermissions(bot, message, neededPerm, embed);
-        if (noUserPermission)
-            return await message.channel.send(embed);
-
         if (choice.test(args[0])) {
             if (choice.exec(args[0])[0] === 'remove') {
                 await remove(message, embed);

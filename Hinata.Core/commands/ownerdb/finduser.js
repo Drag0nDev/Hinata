@@ -9,14 +9,10 @@ module.exports = {
     category: 'ownerdb',
     description: 'Find info about a user',
     usage: '[command | alias] <id/mention>',
+    ownerOnly: true,
     run: async (bot, message, args) => {
         let embed = new MessageEmbed()
         let guild;
-
-        if (message.author.id !== config.owner) {
-            Permissions.ownerOnly(bot, message.channel)
-            return;
-        }
 
         if (!args[0]) {
             embed.setColor(bot.embedColors.error)

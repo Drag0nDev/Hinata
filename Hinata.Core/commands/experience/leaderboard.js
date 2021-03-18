@@ -15,6 +15,7 @@ module.exports = {
     usage: '[command | alias] <page>',
     examples: ['h!lb', 'h!glb'],
     neededPermissions: neededPerm,
+    cooldown: 30,
     run: async (bot, message, args) => {
         const lb = {
             embed: new MessageEmbed()

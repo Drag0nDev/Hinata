@@ -8,6 +8,7 @@ module.exports = {
     description: 'Get the prefix for the bot',
     usage: '[command]',
     examples: ['h!prefix'],
+    cooldown: 10,
     run: async (bot, message) => {
         const embed = new MessageEmbed().setTitle('prefix')
             .setColor(bot.embedColors.normal)

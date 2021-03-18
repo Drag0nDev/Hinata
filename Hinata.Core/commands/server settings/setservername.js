@@ -2,7 +2,6 @@ const {MessageEmbed} = require('discord.js');
 let neededPerm = ['MANAGE_GUILD'];
 
 module.exports = {
-    //<editor-fold defaultstate="collapsed" desc="serverinfo help">
     name: 'setservername',
     aliases: ['ssn', 'servername'],
     category: 'server settings',
@@ -10,22 +9,11 @@ module.exports = {
     usage: '[command | alias] [new name]',
     examples: ['h!ssn Totally awesome server'],
     neededPermissions: neededPerm,
-    //</editor-fold>
     run: async (bot, message, args) => {
         let embed = new MessageEmbed().setColor(bot.embedColors.normal);
 
-        //<editor-fold defaultstate="collapsed" desc="Used variable declarations">
         //simplify the guild
         let guild = message.guild;
-
-        //check member and bot permissions
-        let noUserPermission = tools.checkUserPermissions(bot, message, neededPerm, embed);
-        if (noUserPermission)
-            return await message.channel.send(embed);
-
-        let noBotPermission = tools.checkBotPermissions(bot, message, neededPerm, embed);
-        if (noBotPermission)
-            return message.channel.send(embed);
 
         //check if new name is given
         if(!args[0])
@@ -39,7 +27,6 @@ module.exports = {
 
         //save the old server name
         let oldName = message.guild.name;
-        //</editor-fold>
 
         guild.setName(newName)
             .then(updated => {

@@ -8,13 +8,9 @@ module.exports = {
     category: 'owner',
     description: 'Make the bot leave a guild',
     usage: '[command | alias]',
+    ownerOnly: true,
     run: async (bot, message, args) => {
         let embed = new MessageEmbed().setTitle('Leave Guild');
-
-        if (message.author.id !== config.owner) {
-            Permissions.ownerOnly(bot, message.channel)
-            return;
-        }
 
         //check if serverid is given
         if (!args[0]) {

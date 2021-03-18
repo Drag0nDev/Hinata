@@ -4,6 +4,7 @@ module.exports = {
     description: 'Let Esdeath say something that you want',
     usage: '[command | alias] [text]',
     examples: ['h!say Hello world'],
+    cooldown: 10,
     run: async (bot, message, args) => {
         let response = args.join(' ');
         let userMentions = [];

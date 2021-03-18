@@ -25,15 +25,6 @@ module.exports = {
             emoji: await message.guild.emojis.cache.find(emoji => emoji.name === args[0])
         };
 
-        //check permissions
-        let noUserPermission = Permissions.checkUserPermissions(bot, message, neededPerm, emoji.embed);
-        if (noUserPermission)
-            return await emoji.send(emoji.embed);
-
-        let noBotPermission = Permissions.checkBotPermissions(bot, message, neededPerm, emoji.embed);
-        if (noBotPermission)
-            return emoji.send(emoji.embed);
-
         if (!emoji.emoji) {
             emoji.embed.setDescription(`No emoji with name **${args[0]}** found!`)
                 .setColor(emoji.colors.error);

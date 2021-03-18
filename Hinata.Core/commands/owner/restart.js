@@ -9,17 +9,13 @@ module.exports = {
     category: 'owner',
     description: 'Update and restart the bot',
     usage: '[command | alias]',
+    ownerOnly: true,
     run: async (bot, message) => {
         let embed = new Discord.MessageEmbed()
             .setColor(bot.embedColors.normal)
             .setTitle("Restart")
             .setDescription("I am updating and restarting myself")
             .setTimestamp();
-
-        if (message.author.id !== config.owner) {
-            Permissions.ownerOnly(bot, message.channel)
-            return;
-        }
 
         await message.channel.send(embed)
             .then(msg => bot.destroy());

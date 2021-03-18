@@ -9,13 +9,11 @@ module.exports = {
     category: 'ownerdb',
     description: 'Dragon bonks aakash',
     usage: '[command | alias]',
+    ownerOnly: true,
     run: async (bot, message, args) => {
         let embed = new MessageEmbed().setColor(bot.embedColors.normal);
         const id = new RegExp('[0-9]{17,}');
         let member;
-
-        if (message.author.id !== config.owner)
-            return Permissions.ownerOnly(bot, message.channel);
 
         if (!id.exec(args[0])) {
             embed.setColor(bot.embedColors.error)

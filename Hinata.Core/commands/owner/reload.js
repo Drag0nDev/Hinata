@@ -9,14 +9,10 @@ module.exports = {
     category: 'owner',
     description: 'Command to reload a command/category or all commands',
     usage: '[command | alias] [all/cat/command] <command>',
+    ownerOnly: true,
     run: async (bot, message, args) => {
         let embed = new MessageEmbed().setColor(bot.embedColors.normal);
         let sort = new RegExp('all|cat');
-
-        if (message.author.id !== config.owner) {
-            Permissions.ownerOnly(bot, message.channel)
-            return;
-        }
 
         if (sort.exec(args[0])) {
             if (sort.exec(args[0])[0] === 'all') {

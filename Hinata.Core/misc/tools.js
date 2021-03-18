@@ -592,34 +592,6 @@ const Dates = {
 }
 
 const Permissions = {
-    ownerOnly: function (bot, channel) {
-        let embed = new MessageEmbed().setColor(bot.embedColors.error)
-            .setDescription('This command is only for the owner of the bot');
-
-        channel.send(embed);
-    },
-    checkUserPermissions: function (bot, message, neededPermissions, embed) {
-        for (let i = 0; i < neededPermissions.length; i++) {
-            let neededPerm = neededPermissions[i];
-
-            if (!message.member.hasPermission(neededPerm)) {
-                return embed.setColor(bot.embedColors.error)
-                    .setDescription(`You don't have the required permission to run this command\n` +
-                        `**Missing requirements:** ${neededPerm}`);
-            }
-        }
-    },
-    checkBotPermissions: function (bot, message, neededPermissions, embed) {
-        for (let i = 0; i < neededPermissions.length; i++) {
-            let neededPerm = neededPermissions[i];
-
-            if (!message.guild.me.hasPermission(neededPerm)) {
-                return embed.setColor(bot.embedColors.error)
-                    .setDescription(`I don't have the required permission to run this command\n` +
-                        `**Missing requirements:** ${neededPerm}`);
-            }
-        }
-    },
     checkRolePosition: function (bot, message, role, embed) {
         const botUser = message.guild.members.cache.get(bot.user.id);
         let roleArray = [];

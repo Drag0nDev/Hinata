@@ -8,6 +8,7 @@ module.exports = {
     description: 'Get the info of yourself/another person',
     usage: '[command | alias] <mention/id>',
     examples: ['h!uinfo', 'h!uinfo 418037700751261708', 'h!uinfo @Drag0n#6666'],
+    cooldown: 10,
     run: async (bot, message, args) => {
         let embed = new MessageEmbed().setColor(bot.embedColors.normal);
 

@@ -7,14 +7,10 @@ module.exports = {
     category: 'owner',
     description: 'Displaying all joined guilds with their respective member count',
     usage: '[command | alias]',
+    ownerOnly: true,
     run: async (bot, message) => {
         let embed = new MessageEmbed().setTitle('Guilds').setColor(bot.embedColors.normal);
         let servers = [];
-
-        if (message.author.id !== config.owner) {
-            Permissions.ownerOnly(bot, message.channel)
-            return;
-        }
 
         bot.guilds.cache.forEach(guild => {
             servers.push(guild);

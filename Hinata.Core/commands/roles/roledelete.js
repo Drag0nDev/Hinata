@@ -26,15 +26,6 @@ module.exports = {
         };
         const guild = message.guild;
 
-        //check permissions
-        let noUserPermission = Permissions.checkUserPermissions(bot, message, neededPerm, oldRole.embed);
-        if (noUserPermission)
-            return await oldRole.send(oldRole.embed);
-
-        let noBotPermission = Permissions.checkBotPermissions(bot, message, neededPerm, oldRole.embed);
-        if (noBotPermission)
-            return oldRole.send(oldRole.embed);
-
         oldRole.role = guild.roles.cache.find(role => role.name === oldRole.name);
 
         oldRole.role.delete()

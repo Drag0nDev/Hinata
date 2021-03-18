@@ -9,15 +9,11 @@ module.exports = {
     category: 'ownerdb',
     description: 'Reload a server for the database',
     usage: '[command | alias] <server id>',
+    ownerOnly: true,
     run: async (bot, message, args) => {
         const server = bot.guilds.cache.get(args[0]);
         let embed = new MessageEmbed().setColor(bot.embedColors.ready);
         let count = 0;
-
-        if (message.author.id !== config.owner) {
-            Permissions.ownerOnly(bot, message.channel)
-            return;
-        }
 
         try {
             for (const member of server.members.cache) {

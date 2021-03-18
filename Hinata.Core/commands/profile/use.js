@@ -9,6 +9,7 @@ module.exports = {
     description: 'Set the background for your xp card!',
     usage: '[command | alias] [id]',
     examples: ['h!use 5'],
+    cooldown: 10,
     run: async (bot, message, args) => {
         const item = {
                 send: async function (msg) {

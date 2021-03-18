@@ -7,6 +7,7 @@ module.exports = {
     description: 'Bonk a user',
     usage: '[command | alias] [mention user]',
     examples: ['h!bonk 418037700751261708', 'h!bonk @Drag0n#6666'],
+    cooldown: 10,
     run: async (bot, message, args) => {
         let embed = new MessageEmbed().setTitle('bonk')
             .setTimestamp()

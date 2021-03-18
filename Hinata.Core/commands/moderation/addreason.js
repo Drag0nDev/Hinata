@@ -14,11 +14,6 @@ module.exports = {
         let embed = new MessageEmbed().setTitle('Add reason');
         const $case = new RegExp('^[0-9]');
 
-        //check member and bot permissions
-        let noUserPermission = Permissions.checkUserPermissions(bot, message, neededPerm, embed);
-        if (noUserPermission)
-            return await message.channel.send(embed);
-
         if (!args[0]){
             embed.setColor(bot.embedColors.error)
                 .setDescription('No arguments given')

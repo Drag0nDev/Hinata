@@ -13,6 +13,7 @@ module.exports = {
         '- A command and all the info of the command',
     usage: '[command | alias] <categoryname/commandname>',
     examples: ['h!help', 'h!help info', 'h!help slum'],
+    cooldown: 10,
     run: async (bot, message, args) => {
         const embed = new MessageEmbed();
 
@@ -143,7 +144,9 @@ function getCmd(bot, message, cmd) {
 
         embed.addField('Needed permissions', `\`${table}\``, false);
     }
-
+    if (cmd.cooldown) {
+        embed.addField('Cooldown', cmd.cooldown, true);
+    }
 
     return message.channel.send(embed);
 }

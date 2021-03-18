@@ -7,6 +7,7 @@ module.exports = {
     description: 'Buy an item from the shop',
     usage: '[command | alias] [id]',
     examples: ['h!shop 5'],
+    cooldown: 10,
     run: async (bot, message, args) => {
         const shop = {
             embed: new MessageEmbed().setTitle('Buy')

@@ -19,14 +19,6 @@ module.exports = {
         let $channel;
         let messageLogChannel;
 
-        let noUserPermission = Permissions.checkUserPermissions(bot, message, neededPerm, embed);
-        if (noUserPermission)
-            return await message.channel.send(embed);
-
-        let noBotPermission = Permissions.checkBotPermissions(bot, message, neededPerm, embed);
-        if (noBotPermission)
-            return message.channel.send(embed);
-
         if (!args[0]) {
             await guild.channels.create('message-log', {
                 type: "text",

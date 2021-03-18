@@ -8,13 +8,9 @@ module.exports = {
     category: 'owner',
     description: 'Change the displayed activity of Esdeath.',
     usage: '[command | alias] [type (streaming|watching|listening)] [text]',
+    ownerOnly: true,
     run: async (bot, message, args) => {
         let embed = new MessageEmbed()
-
-        if (message.author.id !== config.owner) {
-            Permissions.ownerOnly(bot, message.channel)
-            return;
-        }
 
         //splitting in to parts
         const type = args.shift().toUpperCase();

@@ -9,6 +9,7 @@ module.exports = {
     description: 'Shows how long someones pp is',
     usage: '[command | alias] <user mention>',
     examples: ['h!pp', 'h!pp 418037700751261708', 'h!pp @Drag0n#6666'],
+    cooldown: 10,
     run: async (bot, message, args) => {
         let embed = new MessageEmbed().setTitle('PP')
             .setColor(bot.embedColors.normal)

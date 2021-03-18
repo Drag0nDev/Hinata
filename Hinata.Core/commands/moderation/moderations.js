@@ -17,15 +17,6 @@ module.exports = {
         let timers;
         let server;
 
-        //check member and bot permissions
-        let noUserPermission = Permissions.checkUserPermissions(bot, message, neededPerm, embed);
-        if (noUserPermission)
-            return await message.channel.send(embed);
-
-        let noBotPermission = Permissions.checkBotPermissions(bot, message, neededPerm, embed);
-        if (noBotPermission)
-            return message.channel.send(embed);
-
         embed.setTitle(`Moderations`)
             .setThumbnail(message.guild.iconURL({
                 dynamic: true,

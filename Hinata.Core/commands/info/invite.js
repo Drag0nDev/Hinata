@@ -8,6 +8,7 @@ module.exports = {
     description: 'Invitelink for the bot',
     usage: '[command / alias]',
     examples: ['h!invite'],
+    cooldown: 10,
     run: async (bot, message) => {
         let embed = new MessageEmbed().setColor(bot.embedColors.normal);
 

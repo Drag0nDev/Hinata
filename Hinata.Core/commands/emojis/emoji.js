@@ -8,6 +8,7 @@ module.exports = {
     description: 'Show a bigger version of an emoji.\n' +
         'Only works with 1 emoji.',
     usage: '[command | alias] [name/id]',
+    cooldown: 10,
     run: async (bot, message, args) => {
         const emoji = {
             send: async function (msg) {

@@ -18,15 +18,6 @@ module.exports = {
         const memberChoice = new RegExp('all|^[0-9]+');
         const id = new RegExp('[0-9]{17,}');
 
-        //check member and bot permissions
-        let noUserPermission = Permissions.checkUserPermissions(bot, message, neededPerm, embed);
-        if (noUserPermission)
-            return await message.channel.send(embed);
-
-        let noBotPermission = Permissions.checkBotPermissions(bot, message, neededPerm, embed);
-        if (noBotPermission)
-            return message.channel.send(embed);
-
         if (choice.test(args[0])){
             embed.setColor(bot.embedColors.error)
                 .setDescription('Please provide a valid argument!')

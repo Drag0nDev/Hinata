@@ -9,14 +9,10 @@ module.exports = {
     category: 'ownerdb',
     description: 'Resets all global xp/balance/level/streak of a user',
     usage: '[command | alias] <id>',
+    ownerOnly: true,
     run: async (bot, message, args) => {
         let embed = new MessageEmbed();
         const id = new RegExp('[0-9]{17,}');
-
-        if (message.author.id !== config.owner) {
-            Permissions.ownerOnly(bot, message.channel)
-            return;
-        }
 
         if (!id.exec(args[0]))
             return message.channel.send(embed.setColor(bot.embedColors.error)

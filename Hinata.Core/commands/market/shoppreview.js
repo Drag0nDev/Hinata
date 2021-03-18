@@ -11,6 +11,7 @@ module.exports = {
         'This command only works if the item has an image',
     usage: '[command | alias] [id]',
     examples: ['h!shop -n diamond ring -c badge '],
+    cooldown: 30,
     run: async (bot, message, args) => {
         let preview = {
             embed: new MessageEmbed().setTitle('Shop preview')

@@ -9,14 +9,10 @@ module.exports = {
     category: 'owner',
     description: 'Change esdeaths displayname',
     usage: '[command | alias] [new name]',
+    ownerOnly: true,
     run: async (bot, message, args) => {
         const logger = log4js.getLogger();
         let embed = new MessageEmbed();
-
-        if (message.author.id !== config.owner) {
-            Permissions.ownerOnly(bot, message.channel)
-            return;
-        }
 
         const newName = args.join(' ');
 

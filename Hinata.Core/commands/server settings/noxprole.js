@@ -18,11 +18,6 @@ module.exports = {
         let noXpRole;
         await Servers.getGuild(message).then(guildProm => server = guildProm);
 
-        //check member and bot permissions
-        let noUserPermission = Permissions.checkUserPermissions(bot, message, neededPerm, embed);
-        if (noUserPermission)
-            return await message.channel.send(embed);
-
         if (args[0]) {
             if (message.mentions.roles.size > 0) {
                 noXpRole = message.mentions.roles.first();

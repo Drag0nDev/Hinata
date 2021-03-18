@@ -15,6 +15,7 @@ module.exports = {
     description: 'Remove an item from the shop.\n',
     usage: '[command | alias] [id]',
     examples: ['h!rshop 10'],
+    ownerOnly: true,
     run: async (bot, message, args) => {
         let shop = {
             embed: new MessageEmbed().setTitle('Remove shop')

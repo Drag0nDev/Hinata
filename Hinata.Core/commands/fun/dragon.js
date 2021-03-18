@@ -8,6 +8,7 @@ module.exports = {
     description: 'A mysterious command',
     usage: '[command | alias]',
     examples: ['h!d'],
+    cooldown: 10,
     run: async (bot, message) => {
         let embed = new MessageEmbed()
             .setColor(bot.embedColors.normal)

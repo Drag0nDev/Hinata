@@ -9,6 +9,7 @@ module.exports = {
     description: 'Get a users ip (not really)',
     usage: '[command | alias] [mention user]',
     examples: ['h!gi', 'h!gi 418037700751261708', 'h!gi @Drag0n#6666'],
+    cooldown: 10,
     run: async (bot, message, args) => {
         let embed = new MessageEmbed()
             .setTitle('getip')

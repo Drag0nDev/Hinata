@@ -38,15 +38,6 @@ module.exports = {
         };
         const guild = message.guild;
 
-        //check permissions
-        let noUserPermission = Permissions.checkUserPermissions(bot, message, neededPerm, newRole.embed);
-        if (noUserPermission)
-            return await newRole.send(newRole.embed);
-
-        let noBotPermission = Permissions.checkBotPermissions(bot, message, neededPerm, newRole.embed);
-        if (noBotPermission)
-            return newRole.send(newRole.embed);
-
         if (newRole.regs.name.test(newRole.str))
             newRole.array.push(newRole.regs.name.exec(newRole.str));
         else {

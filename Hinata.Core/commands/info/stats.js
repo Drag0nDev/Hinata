@@ -6,13 +6,12 @@ const log4js = require("log4js");
 const {Dates} = require("../../misc/tools");
 
 module.exports = {
-    //<editor-fold defaultstate="collapsed" desc="stats help">
     name: 'stats',
     category: 'info',
     description: 'Get the bot statistics',
     usage: '[command | alias]',
     examples: ['h!stats'],
-    //</editor-fold>
+    cooldown: 10,
     run: async (bot, message) => {
         const logger = log4js.getLogger();
         let embed = new MessageEmbed().setColor(bot.embedColors.normal);

@@ -8,13 +8,9 @@ module.exports = {
     category: 'owner',
     description: 'Change the state from online to testing',
     usage: '[command | alias]',
+    ownerOnly: true,
     run: async (bot, message) => {
         let embed = new MessageEmbed().setColor(bot.embedColors.normal);
-
-        if (message.author.id !== config.owner) {
-            Permissions.ownerOnly(bot, message.channel)
-            return;
-        }
 
         bot.testing = !bot.testing;
 

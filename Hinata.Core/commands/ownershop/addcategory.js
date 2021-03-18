@@ -11,12 +11,8 @@ module.exports = {
     description: 'Add an category to the shop',
     usage: '[command | alias] [categoryname}',
     examples: ['h!ac Background'],
+    ownerOnly: true,
     run: async (bot, message, args) => {
-        if (message.author.id !== config.owner) {
-            Permissions.ownerOnly(bot, message.channel)
-            return;
-        }
-
         const name = args.join(' ').toLowerCase();
         let db;
         let embed = new MessageEmbed().setTitle('Add category');

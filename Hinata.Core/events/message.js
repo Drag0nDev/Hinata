@@ -5,8 +5,10 @@ const {User, ServerUser, Rewards, ServerSettings} = require('../misc/dbObjects')
 const pm = require('parse-ms');
 const {Minor, Levels, Roles, Servers} = require('../misc/tools');
 
+let recentlyRan = [];
+
 module.exports = async (bot, message) => {
-    const guild = bot.guilds.cache.get('645047329141030936');
+    const support = bot.guilds.cache.get('645047329141030936');
 
     //check if the new message is from a bot or webhook
     if (message.author.bot) return;
@@ -41,11 +43,47 @@ module.exports = async (bot, message) => {
     let cmd = bot.commands.get(command);
     if (!cmd) cmd = bot.commands.get(bot.aliases.get(command));
 
+    const {
+        name,
+        run,
+        cooldown = -1,
+        neededPermissions = [],
+        ownerOnly = false
+    } = cmd;
+
     //enter in the logger
     if (cmd) {
         try {
+            if (ownerOnly && message.author.id !== config.owner) {
+                return message.channel.send(new MessageEmbed().setColor(bot.embedColors.error)
+                    .setDescription('This command is only for the owner of the bot'));
+            }
+
+            for (const permission of neededPermissions) {
+                //check user permissions
+                if (!message.member.hasPermission(permission)) {
+                    return message.channel.send(new MessageEmbed().setColor(bot.embedColors.error)
+                        .setDescription(`You don't have the required permission to run this command\n` +
+                            `**Missing requirements:** ${permission}`));
+                }
+
+                //check bot permissions
+                if (!message.guild.me.hasPermission(permission)) {
+                    return message.channel.send(new MessageEmbed().setColor(bot.embedColors.error)
+                        .setDescription(`I don't have the required permission to run this command\n` +
+                            `**Missing requirements:** ${permission}`));
+                }
+            }
+
+            let cooldownString = `${message.guild.id}-${message.author.id}-${name}`;
+
+            if (cooldown > 0 && recentlyRan.includes(cooldownString)) {
+                message.reply('You cannot use that command so soon, please wait.');
+                return;
+            }
+
             let logging = `------------------------------\n` +
-                `Command: '${cmd.name}'\n` +
+                `Command: '${name}'\n` +
                 `Arguments: '${args.join(' ')}'\n` +
                 `User: '${message.author.tag}'\n` +
                 `Server: '${message.guild.name}'\n` +
@@ -53,14 +91,27 @@ module.exports = async (bot, message) => {
                 `Channel: '${message.channel.name}'`;
 
             logger.info(logging);
-            await cmd.run(bot, message, args);
+
+            if (cooldown > 0) {
+                recentlyRan.push(cooldownString);
+
+                setTimeout(() => {
+
+                    recentlyRan = recentlyRan.filter((string) => {
+                        return string !== cooldownString;
+                    });
+
+                }, 1000 * cooldown);
+            }
+
+            await run(bot, message, args);
         } catch (err) {
             let invite;
-            await guild.fetchInvites().then(async invites => {
+            await support.fetchInvites().then(async invites => {
                 try {
                     invite = invites.first();
                     if (!invite)
-                        await createNew(guild).then(inv => {
+                        await createNew(support).then(inv => {
                             invite = inv;
                         }).catch(error => {
                             logger.error(error);

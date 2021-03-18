@@ -9,15 +9,11 @@ module.exports = {
     category: 'ownerdb',
     description: 'Add a streak to a specified user',
     usage: '[command | alias] <id/mention>',
+    ownerOnly: true,
     run: async (bot, message, args) => {
         let embed = new MessageEmbed();
         const id = new RegExp('[0-9]{17,}');
         const streak = new RegExp('[0-9]*');
-
-        if (message.author.id !== config.owner) {
-            Permissions.ownerOnly(bot, message.channel)
-            return;
-        }
 
         if (!id.exec(args[0])) {
             embed.setColor(bot.embedColors.error)

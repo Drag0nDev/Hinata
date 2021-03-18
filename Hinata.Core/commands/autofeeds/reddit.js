@@ -35,14 +35,6 @@ module.exports = {
             embed: new MessageEmbed().setTitle('Reddit')
         };
 
-        let noUserPermission = Permissions.checkUserPermissions(bot, message, neededPermissions, reddit.embed);
-        if (noUserPermission)
-            return await reddit.send(reddit.embed);
-
-        let noBotPermission = Permissions.checkBotPermissions(bot, message, neededPermissions, reddit.embed);
-        if (noBotPermission)
-            return reddit.send(reddit.embed);
-
         if (!args[0] || (args[0].toLowerCase() !== 'add' && args[0].toLowerCase() !== 'remove')) {
             reddit.embed.setDescription('Please provide the action you want to do. `add` or `remove`.')
                 .setColor(bot.embedColors.error);

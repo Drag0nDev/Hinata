@@ -18,15 +18,6 @@ module.exports = {
         let guild = message.guild;
         let muteRoleId;
 
-        //check member and bot permissions
-        let noUserPermission = Permissions.checkUserPermissions(bot, message, neededPerm, embed);
-        if (noUserPermission)
-            return await message.channel.send(embed);
-
-        let noBotPermission = Permissions.checkBotPermissions(bot, message, neededPerm, embed);
-        if (noBotPermission)
-            return message.channel.send(embed);
-
         //check if there is an argument
         if (!args[0])
             return message.channel.send(embed.setDescription('No user found with this id/name')

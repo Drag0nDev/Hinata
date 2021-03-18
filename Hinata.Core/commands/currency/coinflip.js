@@ -11,6 +11,7 @@ module.exports = {
         'If you guessed right then the bet amount will be doubled.',
     usage: '[command | alias] [amount]',
     examples: ['h!cf 100'],
+    cooldown: 10,
     run: async (bot, message, args) => {
         const cf = {
             send: async function (msg) {

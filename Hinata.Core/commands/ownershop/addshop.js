@@ -12,6 +12,7 @@ module.exports = {
     description: 'Add an item to the shop.\n',
     usage: '[command | alias] [itemname] [price] [category] <image/link>',
     examples: ['h!as -n diamond ring -p 500 -c badge -im'],
+    ownerOnly: true,
     run: async (bot, message, args) => {
         let embed = new MessageEmbed().setTitle('Add shop');
         const name = new RegExp('-n', 'i');
@@ -22,11 +23,6 @@ module.exports = {
         let item = {};
         let str = args.join(' ');
         let db = {};
-
-        if (message.author.id !== config.owner) {
-            Permissions.ownerOnly(bot, message.channel)
-            return;
-        }
 
         //check if the name, price and category are given
         if (!name.test(str) && !price.test(str) && !category.test(str)) {

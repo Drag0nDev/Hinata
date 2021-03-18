@@ -9,6 +9,7 @@ module.exports = {
         'use `default` if u want to reset it back to the default color!',
     usage: '[command | alias]',
     examples: ['h!setcolor #BE4F70', 'h!setcolor default'],
+    cooldown: 60,
     run: async (bot, message, args) => {
         let user;
         let embed = new Discord.MessageEmbed().setTitle('Sec custom color')

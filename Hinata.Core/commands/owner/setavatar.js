@@ -8,13 +8,9 @@ module.exports = {
     category: 'owner',
     description: 'Command to change Esdeaths profilepicture',
     usage: '[command | alias] [link new picture]',
+    ownerOnly: true,
     run: async (bot, message, args) => {
         let embed = new MessageEmbed();
-
-        if (message.author.id !== config.owner) {
-            Permissions.ownerOnly(bot, message.channel)
-            return;
-        }
 
         bot.user.setAvatar(args.toString()).then(updated => {
                 embed.setTitle(`setavatar`)

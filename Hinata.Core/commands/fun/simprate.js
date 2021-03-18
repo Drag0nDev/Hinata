@@ -9,6 +9,7 @@ module.exports = {
     description: 'Get the simprate of a person',
     usage: '[command | alias] <user mention>',
     examples: ['h!simprate', 'h!simprate 418037700751261708', 'h!simprate @Drag0n#6666'],
+    cooldown: 10,
     run: async (bot, message, args) => {
         let embed = new MessageEmbed()
             .setTitle('simprate')

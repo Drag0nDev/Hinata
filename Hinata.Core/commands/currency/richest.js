@@ -13,6 +13,7 @@ module.exports = {
     usage: '[command | alias] <page>',
     examples: ['h!richest server', 'h!global 1'],
     neededPermissions: neededPerm,
+    cooldown: 30,
     run: async (bot, message, args) => {
         const lb = {
             send: async function (msg) {

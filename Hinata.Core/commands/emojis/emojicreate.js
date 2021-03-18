@@ -40,15 +40,6 @@ module.exports = {
             guild: message.guild
         };
 
-        //check permissions
-        let noUserPermission = Permissions.checkUserPermissions(bot, message, neededPerm, emoji.embed);
-        if (noUserPermission)
-            return await emoji.send(emoji.embed);
-
-        let noBotPermission = Permissions.checkBotPermissions(bot, message, neededPerm, emoji.embed);
-        if (noBotPermission)
-            return emoji.send(emoji.embed);
-
         if (emoji.regs.emoji.test(emoji.str)) {
             await emojiFunct(emoji)
         } else if (emoji.name !== '' && message.attachments.size > 0) {

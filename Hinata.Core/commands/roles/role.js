@@ -3,7 +3,6 @@ const {Servers, Permissions, Roles} = require('../../misc/tools');
 let neededPerm = ['MANAGE_ROLES'];
 
 module.exports = {
-    //<editor-fold defaultstate="collapsed" desc="userinfo help">
     name: 'role',
     aliases: ['r'],
     category: 'roles',
@@ -11,20 +10,10 @@ module.exports = {
     usage: '[command | alias] [add/remove] [member mention/id] [role mention/id]',
     examples: ['h!role add @Drag0n#6666 @Member', 'h!role add 418037700751261708 762241241605210113', 'h!role remove @Drag0n#6666 762241241605210113', "h!role @Drag0n#6666 @Member"],
     neededPermissions: neededPerm,
-    //</editor-fold>
     run: async (bot, message, args) => {
         const embed = new MessageEmbed().setTitle('Role');
         const action = new RegExp('add|remove');
         const id = new RegExp('[0-9]{17,}');
-
-        //check permissions
-        let noUserPermission = Permissions.checkUserPermissions(bot, message, neededPerm, embed);
-        if (noUserPermission)
-            return await message.channel.send(embed);
-
-        let noBotPermission = Permissions.checkBotPermissions(bot, message, neededPerm, embed);
-        if (noBotPermission)
-            return message.channel.send(embed);
 
         if (action.exec(args[0])) {
             if (action.exec(args[0])[0] === 'add') {

@@ -2,14 +2,13 @@ const {MessageEmbed} = require('discord.js');
 const {Servers, Dates} = require('../../misc/tools');
 
 module.exports = {
-    //<editor-fold defaultstate="collapsed" desc="serverinfo help">
     name: 'serverinfo',
     aliases: ['sinfo'],
     category: 'info',
     description: 'see info about the server',
     usage: '[command | alias]',
     examples: ['h!sinfo', 'h!sinfo 418037700751261708', 'h!sinfo @Drag0n#6666'],
-    //</editor-fold>
+    cooldown: 10,
     run: async (bot, message) => {
         let embed = new MessageEmbed().setColor(bot.embedColors.normal);
 

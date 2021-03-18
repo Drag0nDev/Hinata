@@ -14,6 +14,7 @@ module.exports = {
         '**TOS breaking images will be removed without refund!**',
     cost: `${cost} ${config.currencyEmoji}`,
     usage: '[command | alias] <image link/image attachment>',
+    cooldown: 60,
     run: async (bot, message, args) => {
         let embed = new MessageEmbed().setTimestamp()
             .setColor(bot.embedColors.normal)

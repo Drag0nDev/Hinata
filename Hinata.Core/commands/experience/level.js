@@ -15,6 +15,7 @@ module.exports = {
     description: 'Show the level card of yourself or a server member',
     usage: '[command | alias] <mention/ID>',
     examples: ['h!xp', 'h!xp 418037700751261708', 'h!xp @Drag0n#6666'],
+    cooldown: 60,
     run: async (bot, message, args) => {
         let member;
         let users;

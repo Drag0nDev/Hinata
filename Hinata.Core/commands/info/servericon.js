@@ -1,14 +1,13 @@
 const {MessageEmbed} = require('discord.js');
 
 module.exports = {
-    //<editor-fold defaultstate="collapsed" desc="serverinfo help">
     name: 'servericon',
     aliases: ['si', 'icon'],
     category: 'info',
     description: 'see the icon of the server',
     usage: '[command | alias]',
     examples: ['h!si'],
-    //</editor-fold>
+    cooldown: 10,
     run: async (bot, message) => {
         let embed = new MessageEmbed().setColor(bot.embedColors.normal);
 

@@ -16,11 +16,6 @@ module.exports = {
         let embed = new MessageEmbed().setTitle('levelupreward');
         const choice = new RegExp('add|remove');
 
-        //check member and bot permissions
-        let noUserPermission = Permissions.checkUserPermissions(bot, message, neededPerm, embed);
-        if (noUserPermission)
-            return await message.channel.send(embed);
-
         try {
             if (args[0].match(choice)) {
                 switch (choice.exec(args[0])[0].toLowerCase()) {

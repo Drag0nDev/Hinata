@@ -15,6 +15,7 @@ module.exports = {
     description: 'Show the profile card of yourself or a server member',
     usage: '[command | alias] <mention/ID>',
     examples: ['h!profile', 'h!profile 418037700751261708', 'h!profile @Drag0n#6666'],
+    cooldown: 60,
     run: async (bot, message, args) => {
         const profile = {
             userListId: [],

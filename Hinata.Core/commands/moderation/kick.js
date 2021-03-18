@@ -10,7 +10,6 @@ module.exports = {
     examples: ['h!kick @Drag0n#6666', 'h!kick @Drag0n#6666 being a bad boy'],
     neededPermissions: neededPerm,
     run: async (bot, message, args) => {
-        const neededPerm = ['KICK_MEMBERS'];
         let reason = 'No reason provided';
         let embed = new MessageEmbed().setTimestamp().setColor(bot.embedColors.kick).setTitle('User kicked');
         let guild = message.guild;
@@ -18,15 +17,6 @@ module.exports = {
         //check if there is an argument
         if (!args[0])
             return message.channel.send('Please provide a user to kick!');
-
-        //check member and bot permissions
-        let noUserPermission = Permissions.checkUserPermissions(bot, message, neededPerm, embed);
-        if (noUserPermission)
-            return await message.channel.send(embed);
-
-        let noBotPermission = Permissions.checkBotPermissions(bot, message, neededPerm, embed);
-        if (noBotPermission)
-            return message.channel.send(embed);
 
         let member;
 

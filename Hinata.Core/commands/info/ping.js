@@ -6,6 +6,7 @@ module.exports = {
     description: 'Show response time of the bot',
     usage: '[command | alias]',
     examples: ['h!ping'],
+    cooldown: 5,
     run: async (bot, message, args) => {
         let ping = Date.now() - message.createdTimestamp;
         if (ping < 0) ping *= -1;

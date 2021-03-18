@@ -11,17 +11,12 @@ module.exports = {
     category: 'owner',
     description: 'Make the bot leave a guild',
     usage: '[command | alias] <server id>',
+    ownerOnly: true,
     run: async (bot, message, args) => {
         let embed = new MessageEmbed().setTitle('Fetch server');
         const fields = {
             fields: []
         };
-
-        //check if the user is the bot owner
-        if (message.author.id !== config.owner) {
-            Permissions.ownerOnly(bot, message.channel)
-            return;
-        }
 
         //check if serverid is given
         if (!args[0])
