@@ -43,17 +43,17 @@ module.exports = async (bot, message) => {
     let cmd = bot.commands.get(command);
     if (!cmd) cmd = bot.commands.get(bot.aliases.get(command));
 
-    const {
-        name,
-        run,
-        cooldown = -1,
-        neededPermissions = [],
-        ownerOnly = false
-    } = cmd;
-
     //enter in the logger
     if (cmd) {
         try {
+            const {
+                name,
+                run,
+                cooldown = -1,
+                neededPermissions = [],
+                ownerOnly = false
+            } = cmd;
+
             if (ownerOnly && message.author.id !== config.owner) {
                 return message.channel.send(new MessageEmbed().setColor(bot.embedColors.error)
                     .setDescription('This command is only for the owner of the bot'));

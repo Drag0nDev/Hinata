@@ -145,7 +145,7 @@ function getCmd(bot, message, cmd) {
         embed.addField('Needed permissions', `\`${table}\``, false);
     }
     if (cmd.cooldown) {
-        embed.addField('Cooldown', cmd.cooldown, true);
+        embed.addField('Cooldown', `${cmd.cooldown} seconds`, true);
     }
 
     return message.channel.send(embed);
