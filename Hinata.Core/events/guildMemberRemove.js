@@ -7,7 +7,7 @@ const pm = require('pretty-ms');
 module.exports = async (bot, member) => {
     await sendLeaveMessage(member);
     await joinleaveLog(bot, member);
-    if (bot.hasPermission('VIEW_AUDIT_LOG')) {
+    if (member.guild.me.hasPermission('VIEW_AUDIT_LOG')) {
         await checkKick(bot, member);
     }
 };
