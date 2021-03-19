@@ -9,7 +9,8 @@ module.exports = {
     name: 'fetchserver',
     aliases: ['fs', 'server', 'getserver'],
     category: 'owner',
-    description: 'Make the bot leave a guild',
+    description: 'Fetch all info on a server including invite link.\n' +
+        'Invite link is used when a server is used to inspect servers if they are behaving weirdly.',
     usage: '[command | alias] <server id>',
     ownerOnly: true,
     run: async (bot, message, args) => {
@@ -69,33 +70,41 @@ module.exports = {
         fields.fields.push({name: `Boosts`, value: `${guild.premiumSubscriptionCount}`, inline: true});
 
         //get an invite code and make the embed
-        guild.fetchInvites().then(async invites => {
-            try {
-                let invite = invites.first();
-                if (!invite)
-                    await createNew(guild).then(inv => {
-                        invite = inv;
-                    }).catch(error => {
-                        logger.error(error);
-                    });
+        let invites;
 
-                fields.fields.push({
-                    name: 'Invite link',
-                    value: `[Goto ${guild.name}](https://discord.gg/${invite.code})`,
-                    inline: false
+        try {
+            invites = await guild.fetchInvites();
+
+            let invite = invites.first();
+            if (!invite)
+                await createNew(guild).then(inv => {
+                    invite = inv;
+                }).catch(error => {
+                    logger.error(error);
                 });
 
-                await message.channel.send(embed.setTitle(guild.name)
-                    .setThumbnail(guild.iconURL({
-                        dynamic: true,
-                        size: 4096
-                    }))
-                    .addFields(fields.fields)
-                    .setColor(bot.embedColors.normal))
-            } catch (error) {
-                logger.error(error)
-            }
-        });
+            fields.fields.push({
+                name: 'Invite link',
+                value: `[Goto ${guild.name}](https://discord.gg/${invite.code})`,
+                inline: false
+            });
+
+            await message.channel.send(embed.setTitle(guild.name)
+                .setThumbnail(guild.iconURL({
+                    dynamic: true,
+                    size: 4096
+                }))
+                .addFields(fields.fields)
+                .setColor(bot.embedColors.normal));
+        } catch (error) {
+            await message.channel.send(embed.setTitle(guild.name)
+                .setThumbnail(guild.iconURL({
+                    dynamic: true,
+                    size: 4096
+                }))
+                .addFields(fields.fields)
+                .setColor(bot.embedColors.normal));
+        }
     }
 }
 
