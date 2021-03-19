@@ -11,6 +11,7 @@ bot.aliases = new Collection();
 bot.embedColors = new Collection();
 bot.reactions = new Collection();
 bot.testingEmbed = new Collection();
+bot.subreddits = [];
 
 bot.categories = fs.readdirSync("./Hinata.Core/commands/");
 bot.embedColors = colors;

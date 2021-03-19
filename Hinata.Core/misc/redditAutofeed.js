@@ -6,19 +6,19 @@ const logger = require("log4js").getLogger();
 
 const link = new RegExp('.(jpeg|jpg|png|gif)$');
 
+const snooper = new Snooper({
+    username: config.reddit.username,
+    password: config.reddit.password,
+    api_secret: config.reddit.secret,
+    api_id: config.reddit.appId,
+
+    automatic_retries: true,
+    api_requests_per_minuite: 60
+});
+
 module.exports = {
-    run: async function (bot) {
-        const snooper = new Snooper({
-            username: config.reddit.username,
-            password: config.reddit.password,
-            api_secret: config.reddit.secret,
-            api_id: config.reddit.appId,
-
-            automatic_retries: true,
-            api_requests_per_minuite: 60
-        });
-
-        snooper.watcher.getPostWatcher('all')
+    run: async function (bot, subreddit) {
+        snooper.watcher.getPostWatcher(subreddit)
             .on('post', post => {
                 const embed = new MessageEmbed()
                     .setAuthor(`Author: u/${post.data.author}`)
@@ -62,22 +62,22 @@ module.exports = {
                                             .setColor(bot.embedColors.logAdd);
                                     }
 
-                                        server.fetchWebhooks()
-                                            .then(async webhooks => {
-                                                const webhook = webhooks.get(autofeed.webhookId);
+                                    server.fetchWebhooks()
+                                        .then(async webhooks => {
+                                            const webhook = webhooks.get(autofeed.webhookId);
 
-                                                if (webhook) {
-                                                    await webhook.send(embed);
-                                                } else {
-                                                    await Autofeeds.destroy({
-                                                        where: {
-                                                            id: autofeed.id
-                                                        }
-                                                    });
-                                                }
-                                            }).catch(err => {
-                                            logger.error(`error in: ${server.name}\n`, err);
-                                        });
+                                            if (webhook) {
+                                                await webhook.send(embed);
+                                            } else {
+                                                await Autofeeds.destroy({
+                                                    where: {
+                                                        id: autofeed.id
+                                                    }
+                                                });
+                                            }
+                                        }).catch(err => {
+                                        logger.error(`error in: ${server.name}\n`, err);
+                                    });
                                 }
                             }
                         }
@@ -85,8 +85,10 @@ module.exports = {
                 });
             })
             .on('error', error => {
-                if (error !== 'Requested too many items (reddit does not keep this large of a listing)')
-                    logger.error(error);
+                if (error === 'Requested too many items (reddit does not keep this large of a listing)')
+                    return;
+
+                logger.error(error);
             });
     }
 }

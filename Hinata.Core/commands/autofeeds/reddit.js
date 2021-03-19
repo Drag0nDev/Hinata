@@ -3,6 +3,7 @@ const {MessageEmbed} = require("discord.js");
 const Snooper = require('reddit-snooper');
 const config = require("../../../config.json");
 const {Autofeeds} = require('../../misc/dbObjects');
+const redditFeed = require('../../misc/redditAutofeed');
 
 let neededPermissions = ['MANAGE_WEBHOOKS'];
 
@@ -80,6 +81,11 @@ module.exports = {
                     subreddit: reddit.subreddit,
                     channel: reddit.channel.id
                 });
+
+                if (!bot.subreddits.includes(reddit.subreddit)){
+                    await redditFeed.run(bot, reddit.subreddit);
+                    bot.subreddits.push(reddit.subreddit);
+                }
 
                 reddit.embed.setDescription(`Subreddit **${reddit.subreddit}** added in this channel.`)
                     .setColor(bot.embedColors.normal);

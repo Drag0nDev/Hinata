@@ -1,6 +1,6 @@
 const logger = require("log4js").getLogger();
 const {MessageEmbed} = require('discord.js');
-const {Timers, ServerSettings} = require('../misc/dbObjects');
+const {Timers, ServerSettings, Autofeeds} = require('../misc/dbObjects');
 const {Logs, Roles} = require('../misc/tools');
 const reddit = require('../misc/redditAutofeed');
 
@@ -16,6 +16,7 @@ module.exports = async bot => {
         ))
         .setDescription('I am online and ready to go!')
         .setTimestamp();
+    let autofeeds;
 
     let channel = bot.channels.cache.get('762241328599269396');
 
@@ -26,7 +27,15 @@ module.exports = async bot => {
         type: 'PLAYING'
     });
 
-    await reddit.run(bot);
+    autofeeds = await Autofeeds.findAll({
+        group: ['subreddit']
+    });
+
+    autofeeds.forEach(autofeed => {
+        const {subreddit} = autofeed;
+        bot.subreddits.push(subreddit);
+        reddit.run(bot, subreddit);
+    });
 
     await channel.send(embed);
 
