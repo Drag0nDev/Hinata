@@ -12,6 +12,7 @@ const avatar = new RegExp('%avatar%', 'g');
 const level = new RegExp('%level%', 'g');
 const role = new RegExp('%role%', 'g');
 const icon = new RegExp('%icon%', 'g');
+const roleId = new RegExp('\\d+');
 
 const reglist = [user, server, membercount, usermention, avatar, level, role, icon];
 
@@ -159,6 +160,11 @@ const Roles = {
         }
 
         return roleList;
+    },
+    getRole: async function (message, args) {
+        if (roleId.test(args[0])){
+            return message.guild.roles.cache.get(roleId.exec(args[0])[0]);
+        }
     }
 }
 
@@ -234,7 +240,7 @@ const Levels = {
         let embed = new MessageEmbed();
 
         try {
-            const jsonEmbed = JSON.parse(customMessage);
+            const jsonEmbed = JSON.parse(customMessage.message);
 
             if (jsonEmbed.color) embed.setColor(jsonEmbed.color);
             if (jsonEmbed.title) embed.setTitle(jsonEmbed.title);

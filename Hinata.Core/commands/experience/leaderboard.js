@@ -26,10 +26,6 @@ module.exports = {
         else
             lb.page = parseInt(args[0]) - 1;
 
-        let noBotPermission = Permissions.checkBotPermissions(bot, message, neededPerm, lb.embed);
-        if (noBotPermission)
-            return message.channel.send(lb.embed);
-
         if (message.content.includes('glb') || message.content.includes('globalleaderboard')) {
             lb.variation = 'Global';
             await globalLb(bot, message, lb);

@@ -1,6 +1,6 @@
 const {MessageEmbed} = require('discord.js');
-const {Permissions} = require('../../misc/tools');
 let neededPerm = ['MANAGE_EMOJIS'];
+const logger = require("log4js").getLogger();
 
 module.exports = {
     name: 'emojicreate',
@@ -71,6 +71,7 @@ module.exports = {
                 emoji.embed.setDescription(error.message)
                     .setColor(emoji.colors.error);
                 emoji.send(emoji.embed);
+                logger.error(error);
             });
     }
 }

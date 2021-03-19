@@ -39,10 +39,13 @@ async function checkKick(bot, member) {
     )
         return;
 
-    const {executor, target, reason} = kickLog;
+    let {executor, target, reason} = kickLog;
 
     if (executor.bot)
         return;
+
+    if (!reason)
+        reason = 'No reason given'
 
     if (target.id === member.id) {
         embed.setTitle('User kicked')

@@ -181,7 +181,8 @@ async function checkUser(message) {
 }
 
 async function serverLevel(bot, message) {
-    let member
+    let member;
+    let user;
     await Servers.getMember(message, []).then(memberPromise => {
         member = memberPromise;
     });
@@ -193,32 +194,32 @@ async function serverLevel(bot, message) {
         }
     });
 
-    await ServerUser.findOne({
+    user = await ServerUser.findOne({
         where: {
             userId: message.author.id,
             guildId: message.guild.id
         }
-    }).then(async serverUser => {
-        if (settings.noXpRole !== null)
-            if (member._roles.includes(settings.noXpRole))
-                return;
-
-        let now = new Date();
-
-        if (serverUser.lastMessageDate !== '0') {
-            const diff = pm(now.getTime() - parseInt(serverUser.lastMessageDate));
-
-            if (diff.minutes < 1 && diff.hours === 0)
-                return;
-        }
-
-        serverUser.xp += 5;
-        serverUser.lastMessageDate = message.createdTimestamp;
-
-        serverUser.save();
-
-        await checkLevelUp(bot, message, serverUser);
     });
+
+    if (settings.noXpRole !== null)
+        if (member._roles.includes(settings.noXpRole))
+            return;
+
+    let now = new Date();
+
+    if (user.lastMessageDate !== '0') {
+        const diff = pm(now.getTime() - parseInt(user.lastMessageDate));
+
+        if (diff.minutes < 1 && diff.hours === 0)
+            return;
+    }
+
+    user.xp += 5;
+    user.lastMessageDate = message.createdTimestamp;
+
+    await user.save();
+
+    await checkLevelUp(bot, message, user);
 }
 
 async function checkServerUser(message) {
@@ -293,56 +294,57 @@ async function createNew(guild) {
 
 async function checkLevelUp(bot, message, serverUser) {
     try {
-        Rewards.findOne({
+        let reward;
+        let settings;
+
+        reward = await Rewards.findOne({
             where: {
                 serverId: message.guild.id,
                 xp: serverUser.xp
             }
-        }).then(async reward => {
-                await ServerSettings.findOne({
-                    where: {
-                        serverid: message.guild.id
-                    }
-                }).then(async serverSetting => {
-                    let user = message.guild.members.cache.get(message.author.id);
-                    let guild = message.guild;
-                    let xp = serverUser.xp
-                    let lvlXp = config.levelXp;
-                    let level = 0;
-                    let nextLvlXp = 0;
+        });
 
-                    do {
-                        nextLvlXp = lvlXp + ((lvlXp / 2) * level);
-
-                        if (xp >= nextLvlXp) {
-                            level++;
-                            xp -= nextLvlXp;
-                        }
-                    } while (xp > nextLvlXp);
-
-                    if ((!reward || user._roles.includes(reward.roleId) || !serverSetting.levelUpRoleMessage)) {
-                        if (xp === 0) {
-                            if (serverSetting.levelUpMessage)
-                                await Levels.levelUp(message, serverSetting.levelUpMessage, level);
-                        }
-                        return;
-                    }
-
-                    let role = message.guild.roles.cache.get(reward.roleId);
-
-                    if (!role) {
-                        reward.destroy();
-                        return;
-                    }
-
-                    await Levels.levelUpRole(message, serverSetting.levelUpRoleMessage, level, reward.roleId);
-
-                    await Roles.giveRole(user, role);
-                });
+        settings = await ServerSettings.findOne({
+            where: {
+                serverid: message.guild.id
             }
-        );
-    } catch
-        (err) {
+        });
+
+        let user = message.guild.members.cache.get(message.author.id);
+        let guild = message.guild;
+        let xp = serverUser.xp
+        let lvlXp = config.levelXp;
+        let level = 0;
+        let nextLvlXp = 0;
+
+        do {
+            nextLvlXp = lvlXp + ((lvlXp / 2) * level);
+
+            if (xp >= nextLvlXp) {
+                level++;
+                xp -= nextLvlXp;
+            }
+        } while (xp > nextLvlXp);
+
+        if ((!reward || user._roles.includes(reward.roleId) || !settings.levelUpRoleMessage)) {
+            if (xp === 0) {
+                if (settings.levelUpMessage)
+                    await Levels.levelUp(message, settings.levelUpMessage, level);
+            }
+            return;
+        }
+
+        let role = await message.guild.roles.cache.get(reward.roleId);
+
+        if (!role) {
+            reward.destroy();
+            return;
+        }
+
+        await Levels.levelUpRole(message, settings.levelUpRoleMessage, level, reward.roleId);
+
+        await Roles.giveRole(user, role);
+    } catch (err) {
         logger.error(err)
     }
 }

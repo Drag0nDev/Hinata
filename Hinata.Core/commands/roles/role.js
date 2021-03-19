@@ -48,9 +48,7 @@ async function addRole(bot, message, args, embed) {
 
     await args.shift();
 
-    await Roles.getRole(message, args).then(rolePromise => {
-        role = rolePromise;
-    });
+    role = await Roles.getRole(message, args);
 
     if (!role) {
         embed.setColor(bot.embedColors.error)
@@ -87,9 +85,7 @@ async function remRole(bot, message, args, embed) {
 
     await args.shift();
 
-    await Roles.getRole(message, args).then(rolePromise => {
-        role = rolePromise;
-    });
+    role = await Roles.getRole(message, args);
 
     if (!role) {
         embed.setColor(bot.embedColors.error)
@@ -127,9 +123,7 @@ async function addRemove(bot, message, args, embed) {
 
     await args.shift();
 
-    await Roles.getRole(message, args).then(rolePromise => {
-        role = rolePromise;
-    });
+    role = await Roles.getRole(message, args);
 
     if (!role) {
         embed.setColor(bot.embedColors.error)
