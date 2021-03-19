@@ -24,6 +24,7 @@ module.exports = {
                     .setAuthor(`Author: u/${post.data.author}`)
                     .setTitle(`Post link`)
                     .setURL(`https://www.reddit.com${post.data.permalink}`)
+                    .setColor(bot.embedColors.normal)
                     .setDescription(post.data.title)
                     .setFooter(post.data.subreddit)
                     .setTimestamp();
