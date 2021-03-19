@@ -260,7 +260,7 @@ const Levels = {
 
             await message.channel.send({embed: embed});
         } catch (err) {
-            message.channel.send(customMessage);
+            message.channel.send(customMessage.message);
         }
     },
     levelUpRole: async function (message, customMessage, newLevel, newRoleId) {
