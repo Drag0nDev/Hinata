@@ -13,7 +13,7 @@ module.exports = {
         '- A command and all the info of the command',
     usage: '[command | alias] <categoryname/commandname>',
     examples: ['h!help', 'h!help info', 'h!help slum'],
-    cooldown: 10,
+    cooldown: 5,
     run: async (bot, message, args) => {
         const embed = new MessageEmbed();
 

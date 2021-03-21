@@ -326,11 +326,15 @@ async function checkLevelUp(bot, message, serverUser) {
             }
         } while (xp > nextLvlXp);
 
-        if ((!reward || user._roles.includes(reward.roleId) || !settings.levelUpRoleMessage)) {
-            if (xp === 0) {
-                if (settings.levelUpMessage)
-                    await Levels.levelUp(message, settings.levelUpMessage, level);
+        try {
+            if ((!reward || user._roles.includes(reward.roleId) || !settings.levelUpRoleMessage)) {
+                if (xp === 0) {
+                    if (settings.levelUpMessage)
+                        await Levels.levelUp(message, settings.levelUpMessage, level);
+                }
+                return;
             }
+        } catch (e) {
             return;
         }
 
