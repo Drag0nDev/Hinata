@@ -3,6 +3,7 @@ const {MessageEmbed} = require('discord.js');
 const {Timers, ServerSettings, Autofeeds} = require('../misc/dbObjects');
 const {Logs, Roles} = require('../misc/tools');
 const reddit = require('../misc/redditAutofeed');
+const shell = require('shelljs');
 
 module.exports = async bot => {
     let embed = new MessageEmbed()
@@ -42,6 +43,12 @@ module.exports = async bot => {
     try {
         setInterval(checkMutes, 1000, bot);
         setInterval(checkBans, 1000, bot);
+        setInterval(() => {
+            if (shell.exec('pm2 restart hinata').code !== 0) {
+                logger.error('command failed to run');
+                shell.exit(1);
+            }
+        }, 86400000)
     } catch (error) {
         logger.error(error);
     }
