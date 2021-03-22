@@ -1,8 +1,7 @@
 const {Op} = require('sequelize')
 const {MessageEmbed} = require('discord.js');
 const {User, ServerUser} = require('../../misc/dbObjects');
-const config = require("../../../config.json");
-const {Permissions, Levels, Minor} = require('../../misc/tools');
+const {Minor} = require('../../misc/tools');
 const neededPerm = ['ADD_REACTIONS'];
 
 module.exports = {
@@ -36,10 +35,6 @@ module.exports = {
                 .setTitle('Richest');
             return  lb.send(lb.embed);
         }
-
-        let noBotPermission = Permissions.checkBotPermissions(bot, message, neededPerm, lb.embed);
-        if (noBotPermission)
-            return message.channel.send(lb.embed);
 
         switch (lb.variation.toLowerCase()) {
             case 'server':
