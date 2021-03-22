@@ -1,5 +1,5 @@
 const {MessageEmbed} = require("discord.js");
-const {Permissions, Compare, Servers, Logs} = require('../../misc/tools');
+const {Compare, Servers, Logs} = require('../../misc/tools');
 const neededPerm = ['BAN_MEMBERS'];
 
 module.exports = {
@@ -12,7 +12,7 @@ module.exports = {
     neededPermissions: neededPerm,
     run: async (bot, message, args) => {
         let reason = 'No reason provided';
-        let embed = new MessageEmbed().setTimestamp().setColor(bot.embedColors.ban).setTitle('Softban');
+        let embed = new MessageEmbed().setTimestamp().setColor(bot.embedColors.ban);
 
         //check if there is an argument
         if (!args[0])
@@ -26,23 +26,30 @@ module.exports = {
         const author = message.guild.members.cache.get(message.author.id);
 
         //check if member is in the server
-        if (!member) {
-            return message.channel.send("No member found with this id/name!");
-        }
+        if (!member)
+            return message.channel.send(embed
+                .setColor(bot.embedColors.error)
+                .setDescription(`No member found with this id or name`));
 
         const canBan = Compare.compareRoles(author, member);
 
         //check if the author has a higher role then the member
         if (!canBan)
-            return message.channel.send(`You can't softban **${member.user.tag}** due to role hierarchy!`);
+            return message.channel.send(embed.setTitle('Action not allowed!')
+                .setColor(bot.embedColors.error)
+                .setDescription(`You can't softban **${member.user.tag}** due to role hierarchy!`));
         //check if member is banable
-        if (!member.bannable) {
-            return message.channel.send(`I can't softban **${member.user.tag}** due to role hierarchy!`);
-        }
+        if (!member.bannable)
+            return message.channel.send(embed.setTitle('Action not allowed!')
+                .setColor(bot.embedColors.error)
+                .setDescription(`I can't softban **${member.user.tag}** due to role hierarchy!`));
+
 
         //check if it is self ban, or bot ban
         if (member.user.id === message.author.id) {
-            return message.channel.send("You can't ban yourself");
+            return message.channel.send(embed.setTitle('Action not allowed!')
+                .setColor(bot.embedColors.error)
+                .setDescription(`You can't ban yourself!`));
         }
 
         await args.shift();

@@ -43,15 +43,6 @@ module.exports = {
 
         const newReason = args.join(' ');
 
-        if (newReason.length > 1000){
-            embed.setColor(bot.embedColors.error)
-                .setDescription('The reason is too long.\n' +
-                    'Keep it under 1000 characters.')
-                .setTimestamp();
-
-            return await message.channel.send(embed);
-        }
-
         await Warnings.findOne({
             where: {
                 guildId: message.guild.id,

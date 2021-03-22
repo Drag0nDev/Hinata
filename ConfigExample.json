@@ -6,6 +6,12 @@
   "levelXp": 100,
   "username": "<username>",
   "password": "<password>",
+  "reddit": {
+    "secret": "<reddit secret>",
+    "appId": "<reddit app id>",
+    "username": "<account username>",
+    "password": "<account password>"
+  },
   "debug": false,
   "testing": false
 }

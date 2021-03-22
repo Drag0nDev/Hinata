@@ -11,40 +11,44 @@ module.exports = {
     neededPermissions: neededPerm,
     run: async (bot, message, args) => {
         let reason = 'No reason provided';
-        let embed = new MessageEmbed().setTimestamp().setColor(bot.embedColors.kick).setTitle('User kicked');
+        let embed = new MessageEmbed().setTimestamp().setColor(bot.embedColors.kick);
         let guild = message.guild;
 
         //check if there is an argument
         if (!args[0])
-            return message.channel.send('Please provide a user to kick!');
+            return message.channel.send(embed
+                .setColor(bot.embedColors.error)
+                .setDescription('Please provide a user to kick!'));
 
-        let member;
-
-        await Servers.getMember(message, args).then(memberPromise => {
-            member = memberPromise;
-        });
+        let member = await Servers.getMember(message, args);
         const author = message.guild.members.cache.get(message.author.id);
 
         //check if member is in the server
-        if (!member) {
-            return message.channel.send("No member found with this id/name!");
-        }
+        if (!member)
+            return message.channel.send(embed
+                .setColor(bot.embedColors.error)
+                .setDescription(`No member found with this id or name`));
+
 
         const canKick = Compare.compareRoles(author, member);
 
         //check if member is kickable
-        if (!member.kickable) {
-            return message.channel.send(`I can't kick **${member.user.tag}** due to role hierarchy!`);
-        }
+        if (!member.kickable)
+            return message.channel.send(embed.setTitle('Action not allowed!')
+                .setColor(bot.embedColors.error)
+                .setDescription(`I can't kick **${member.user.tag}** due to role hierarchy!`));
 
         //check if it is self kick, or bot kick
-        if (member.user.id === message.author.id) {
-            return message.channel.send("You can't kick yourself");
-        }
+        if (member.user.id === message.author.id)
+            return message.channel.send(embed.setTitle('Action not allowed!')
+                .setColor(bot.embedColors.error)
+                .setDescription(`You can't kick yourself!`));
 
         //check if the author has a higher role then the member
         if (!canKick)
-            return message.channel.send(`You can't kick **${member.user.tag}** due to role hierarchy!`);
+            return message.channel.send(embed.setTitle('Action not allowed!')
+                .setColor(bot.embedColors.error)
+                .setDescription(`You can't kick **${member.user.tag}** due to role hierarchy!`));
 
         await args.shift();
 
@@ -52,27 +56,22 @@ module.exports = {
         if (args[0])
             reason = args.join(' ');
 
-        if (reason.length > 1000){
-            embed.setColor(bot.embedColors.error)
-                .setDescription('The reason is too long.\n' +
-                    'Keep it under 1000 characters.')
-                .setTimestamp();
-
-            return await message.channel.send(embed);
-        }
-
         await member.createDM().then(async dmChannel => {
-            await dmChannel.send(`\`You got kicked from **${guild.name}** with reason: **${reason}**!`);
+            await dmChannel.send(`You got kicked from **${guild.name}** with reason: **${reason}**!`);
         }).catch(error => {
             embed.addField('No DM sent', `${member.user.tag} was kicked but could not be DMed!`);
         });
 
         await member.kick(`${reason}`);
-        message.channel.send(`**${member.user.tag}** got kicked for reason: **${reason}**`);
+        message.channel.send(embed.setTitle('User kicked')
+            .setDescription(`**${member.user.tag}** got kicked for reason: **${reason}**`));
 
-        const logEmbed = new MessageEmbed().setDescription(`**Member:** ${member.user.tag}\n` +
-            `**Reason:** ${reason}\n` +
-            `**Responsible moderator:** ${message.author.tag}`)
+        const logEmbed = new MessageEmbed()
+            .setTitle('User kicked')
+            .setColor(bot.embedColors.kick)
+            .setDescription(`**Member:** ${member.user.tag}\n` +
+                `**Reason:** ${reason}\n` +
+                `**Responsible moderator:** ${message.author.tag}`)
             .setFooter(`ID: ${member.id}`);
 
         await Logs.modlog(bot, message.guild.members.cache.get(message.author.id), logEmbed);

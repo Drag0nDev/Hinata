@@ -115,7 +115,7 @@ const Compare = {
         } else if (!roleArrayAuth[0] && roleArrayMemb[0]) {
             return false;
         } else {
-            return roleArrayAuth[0].position >= roleArrayMemb[0].position;
+            return roleArrayAuth[0].position > roleArrayMemb[0].position;
         }
     },
     arrayEquals: function (a, b) {

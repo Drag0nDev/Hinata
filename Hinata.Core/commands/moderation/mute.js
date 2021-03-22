@@ -23,11 +23,7 @@ module.exports = {
             return message.channel.send(embed.setDescription('No user found with this id/name')
                 .setColor(bot.embedColors.error));
 
-        let member;
-
-        await Servers.getMember(message, args).then(memberPromise => {
-            member = memberPromise;
-        });
+        let member = await Servers.getMember(message, args);
 
         //check if member is in the server
         if (!member) {
@@ -76,28 +72,10 @@ module.exports = {
             if (args[0])
                 reason = args.join(' ');
 
-            if (reason.length > 1000){
-                embed.setColor(bot.embedColors.error)
-                    .setDescription('The reason is too long.\n' +
-                        'Keep it under 1000 characters.')
-                    .setTimestamp();
-
-                return await message.channel.send(embed);
-            }
-
             await tempmute(bot, message, member, embed, muteRole, time, reason);
         } else {
             if (args[0])
                 reason = args.join(' ');
-
-            if (reason.length > 1000){
-                embed.setColor(bot.embedColors.error)
-                    .setDescription('The reason is too long.\n' +
-                        'Keep it under 1000 characters.')
-                    .setTimestamp();
-
-                return await message.channel.send(embed);
-            }
 
             await mute(bot, message, member, embed, muteRole, reason);
         }

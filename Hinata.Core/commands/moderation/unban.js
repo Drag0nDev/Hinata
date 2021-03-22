@@ -11,7 +11,7 @@ module.exports = {
     neededPermissions: neededPerm,
     run: async (bot, message, args) => {
         let reason = 'No reason provided';
-        let embed = new MessageEmbed().setTimestamp().setColor(bot.embedColors.unban).setTitle('User unbanned');
+        let embed = new MessageEmbed().setTimestamp().setColor(bot.embedColors.unban);
         let guild = message.guild;
         let member;
 
@@ -20,11 +20,11 @@ module.exports = {
             !args[0]
             && isNaN(parseInt(args[0]))
         )
-            return message.channel.send('Please provide a valid id to unban!');
+            return message.channel.send(embed
+                .setColor(bot.embedColors.error)
+                .setDescription('Please provide a user to unban!'));
 
         const id = args.shift();
-
-        const author = message.guild.members.cache.get(message.author.id);
 
         await message.guild.fetchBans()
             .then(banList => {
@@ -32,23 +32,14 @@ module.exports = {
             });
 
         if (!member)
-            return message.channel.send(`The member with id **${id}** member is not banned!`);
+            return message.channel.send(embed.setDescription(`The member with id **${id}** member is not banned!`));
 
         if (args[0])
             reason = args.join(' ');
 
-        if (reason.length > 1000){
-            embed.setColor(bot.embedColors.error)
-                .setDescription('The reason is too long.\n' +
-                    'Keep it under 1000 characters.')
-                .setTimestamp();
-
-            return await message.channel.send(embed);
-        }
-
         await guild.members.unban(id, reason);
 
-        message.channel.send(`**${member.user.tag}** got unbanned for reason: **${reason}**`);
+        message.channel.send(embed.setDescription(`**${member.user.tag}** got unbanned for reason: **${reason}**`));
 
         const logEmbed = new MessageEmbed().setTitle('User unbanned')
             .setColor(bot.embedColors.softban)

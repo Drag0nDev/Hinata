@@ -13,11 +13,13 @@ module.exports = {
     run: async (bot, message, args) => {
         let checkTemp = new RegExp('^[0-9]*[smhd]');
         let reason = 'No reason provided';
-        let embed = new MessageEmbed().setTimestamp().setColor(bot.embedColors.ban).setTitle('User banned');
+        let embed = new MessageEmbed().setTimestamp().setColor(bot.embedColors.ban);
 
         //check if there is an argument
         if (!args[0])
-            return message.channel.send('Please provide a user to ban!');
+            return message.channel.send(embed
+                .setColor(bot.embedColors.error)
+                .setDescription('Please provide a user to ban!'));
 
         let member;
 
@@ -26,24 +28,32 @@ module.exports = {
         const author = message.guild.members.cache.get(message.author.id);
 
         //check if member is in the server
-        if (!member) {
-            return message.channel.send("No member found with this id/name!");
-        }
+        if (!member)
+            return message.channel.send(embed
+                .setColor(bot.embedColors.error)
+                .setDescription(`No member found with this id or name`));
+
 
         const canBan = Compare.compareRoles(author, member);
 
         //check if the author has a higher role then the member
         if (!canBan)
-            return message.channel.send(`You can't ban **${member.user.tag}** due to role hierarchy!`);
+            return message.channel.send(embed.setTitle('Action not allowed!')
+                .setColor(bot.embedColors.error)
+                .setDescription(`You can't ban **${member.user.tag}** due to role hierarchy!`));
         //check if member is banable
         if (!member.bannable) {
-            return message.channel.send(`I can't ban **${member.user.tag}** due to role hierarchy!`);
+            return message.channel.send(embed.setTitle('Action not allowed!')
+                .setColor(bot.embedColors.error)
+                .setDescription(`I can't ban **${member.user.tag}** due to role hierarchy!`));
         }
 
         //check if it is self ban, or bot ban
-        if (member.user.id === message.author.id) {
-            return message.channel.send("You can't ban yourself");
-        }
+        if (member.user.id === message.author.id)
+            return message.channel.send(embed.setTitle('Action not allowed!')
+                .setColor(bot.embedColors.error)
+                .setDescription(`You can't ban yourself!`));
+
 
         await args.shift();
 
@@ -55,28 +65,10 @@ module.exports = {
                 reason = args.join(' ');
             }
 
-            if (reason.length > 1000){
-                embed.setColor(bot.embedColors.error)
-                    .setDescription('The reason is too long.\n' +
-                        'Keep it under 1000 characters.')
-                    .setTimestamp();
-
-                return await message.channel.send(embed);
-            }
-
             await tempBan(bot, message, member, embed, time, reason);
         } else {
             if (args[0]) {
                 reason = args.join(' ');
-            }
-
-            if (reason.length > 1000){
-                embed.setColor(bot.embedColors.error)
-                    .setDescription('The reason is too long.\n' +
-                        'Keep it under 1000 characters.')
-                    .setTimestamp();
-
-                return await message.channel.send(embed);
             }
 
             await ban(bot, message, member, embed, reason);
