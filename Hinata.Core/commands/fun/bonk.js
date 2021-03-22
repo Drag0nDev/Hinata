@@ -18,7 +18,6 @@ module.exports = {
             return await message.channel.send(embed);
         }
 
-
         const members = getMentions(bot, message, args);
         if (members !== ''){
             embed.setDescription(`${members} <a:bonk:735549944814895115>`);
@@ -45,15 +44,16 @@ function getMentions(bot, message, input) {
         });
     } else {
         input.forEach(async id => {
-            if (id !== `${config.owner}`)
-                members += `<@!${id}> `
-            if (isNaN(parseInt(id))) {
-            } else {
-                let embed = new MessageEmbed().setTitle('bonk')
-                    .setTimestamp()
-                    .setColor(bot.embedColors.normal)
-                    .setDescription(`${message.author} <a:bonk:735549944814895115>, don't bonk my master!`);
-                await message.channel.send(embed);
+            if (!isNaN(parseInt(id))) {
+                if (id !== `${config.owner}`) {
+                    members += `<@!${id}> `
+                }else {
+                    let embed = new MessageEmbed().setTitle('bonk')
+                        .setTimestamp()
+                        .setColor(bot.embedColors.normal)
+                        .setDescription(`${message.author} <a:bonk:735549944814895115>, don't bonk my master!`);
+                    await message.channel.send(embed);
+                }
             }
         });
     }

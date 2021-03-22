@@ -75,13 +75,6 @@ module.exports = async (bot, message) => {
                 }
             }
 
-            let cooldownString = `${message.guild.id}-${message.author.id}-${name}`;
-
-            if (cooldown > 0 && recentlyRan.includes(cooldownString)) {
-                message.reply('You cannot use that command so soon, please wait.');
-                return;
-            }
-
             let logging = `------------------------------\n` +
                 `Command: '${name}'\n` +
                 `Arguments: '${args.join(' ')}'\n` +
@@ -91,6 +84,14 @@ module.exports = async (bot, message) => {
                 `Channel: '${message.channel.name}'`;
 
             logger.info(logging);
+
+            let cooldownString = `${message.guild.id}-${message.author.id}-${name}`;
+
+            if (cooldown > 0 && recentlyRan.includes(cooldownString))
+                return message.channel.send(new MessageEmbed()
+                    .setColor(bot.embedColors.error)
+                    .setDescription('You cannot use that command so soon, please wait.'));
+
 
             if (cooldown > 0) {
                 recentlyRan.push(cooldownString);
