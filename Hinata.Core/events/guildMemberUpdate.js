@@ -4,6 +4,7 @@ const {Compare, Logs} = require('../misc/tools');
 
 module.exports = async (bot, oldMember, newMember) => {
     try {
+        if (newMember.guild.me.hasPermission("MANAGE_WEBHOOKS")) return;
         await updateCheck(bot, oldMember, newMember);
     } catch (err) {
         logger.error(err);
@@ -18,13 +19,13 @@ async function updateCheck(bot, oldMember, newMember) {
 
 async function roleChange(bot, oldMember, newMember) {
     let embed = new MessageEmbed().setTimestamp()
-        .setAuthor(`${newMember.user.username}#${newMember.user.discriminator}`, newMember.user.avatarURL({dynamic: true}), newMember.user.avatarURL({
-            dynamic: true,
-            size: 4096
-        }))
+        .setAuthor(`${newMember.user.username}#${newMember.user.discriminator}`,
+            newMember.user.avatarURL({dynamic: true}),
+            newMember.user.avatarURL({
+                dynamic: true,
+                size: 4096
+            }))
         .setFooter(`ID: ${newMember.user.id}`);
-    const guild = newMember.guild;
-    const channel = guild.channels.cache.get('762241328599269396');
     let newRoles = [];
     let removedRoles = [];
 

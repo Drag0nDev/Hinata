@@ -4,6 +4,8 @@ const {Logs, Minor} = require("../misc/tools");
 
 module.exports = async (bot, role) => {
     try {
+        if (role.guild.me.hasPermission("MANAGE_WEBHOOKS")) return;
+
         let embed = new MessageEmbed().setTimestamp()
             .setColor(bot.embedColors.logAdd)
             .setTitle(`Role created`)

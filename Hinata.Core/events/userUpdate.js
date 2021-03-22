@@ -21,52 +21,54 @@ module.exports = async (bot, oldMember, newMember) => {
         });
 
         await bot.guilds.cache.forEach(guild => {
-            if (guild.members.cache.get(newMember.id)) {
-                //post logs if the username updated
-                if (oldMember.username !== newMember.username) {
-                    let embed = new MessageEmbed().setTimestamp()
-                        .setColor(bot.embedColors.logChange)
-                        .setAuthor(`${newMember.username}#${newMember.discriminator}`,
-                            newMember.avatarURL({dynamic: true}),
-                            newMember.avatarURL({dynamic: true, size: 4096}))
-                        .setTitle('Username changed')
-                        .addField('Old username', oldMember.username)
-                        .addField('New username', newMember.username)
-                        .setFooter(`ID: ${newMember.id}`);
+            if (guild.me.hasPermission('MANAGE_WEBHOOKS'))
+                if (guild.members.cache.get(newMember.id)) {
+                    //post logs if the username updated
+                    if (oldMember.username !== newMember.username) {
+                        let embed = new MessageEmbed().setTimestamp()
+                            .setColor(bot.embedColors.logChange)
+                            .setAuthor(`${newMember.username}#${newMember.discriminator}`,
+                                newMember.avatarURL({dynamic: true}),
+                                newMember.avatarURL({dynamic: true, size: 4096}))
+                            .setTitle('Username changed')
+                            .addField('Old username', oldMember.username)
+                            .addField('New username', newMember.username)
+                            .setFooter(`ID: ${newMember.id}`);
 
-                    Logs.memberLogGuild(bot, guild, embed);
-                }
-                //post logs if the discriminator updated
-                if (oldMember.discriminator !== newMember.discriminator) {
-                    let embed = new MessageEmbed().setTimestamp()
-                        .setColor(bot.embedColors.logChange)
-                        .setAuthor(`${newMember.username}#${newMember.discriminator}`,
-                            newMember.avatarURL({dynamic: true}),
-                            newMember.avatarURL({dynamic: true, size: 4096}))
-                        .setTitle('Discriminator changed')
-                        .addField('Old discriminator', oldMember.discriminator)
-                        .addField('New discriminator', newMember.discriminator)
-                        .setFooter(`ID: ${newMember.id}`);
+                        Logs.memberLogGuild(bot, guild, embed);
+                    }
+                    //post logs if the discriminator updated
+                    if (oldMember.discriminator !== newMember.discriminator) {
+                        let embed = new MessageEmbed().setTimestamp()
+                            .setColor(bot.embedColors.logChange)
+                            .setAuthor(`${newMember.username}#${newMember.discriminator}`,
+                                newMember.avatarURL({dynamic: true}),
+                                newMember.avatarURL({dynamic: true, size: 4096}))
+                            .setTitle('Discriminator changed')
+                            .addField('Old discriminator', oldMember.discriminator)
+                            .addField('New discriminator', newMember.discriminator)
+                            .setFooter(`ID: ${newMember.id}`);
 
-                    Logs.memberLogGuild(bot, guild, embed);
-                }
-                //post logs if the avatar updated
-                if (oldMember.avatar !== newMember.avatar) {
-                    let embed = new MessageEmbed().setTimestamp()
-                        .setColor(bot.embedColors.logChange)
-                        .setAuthor(`${newMember.username}#${newMember.discriminator}`,
-                            newMember.avatarURL({dynamic: true}),
-                            newMember.avatarURL({dynamic: true, size: 4096}))
-                        .setTitle('Avatar changed')
-                        .setImage(newMember.avatarURL({
-                            dynamic: true,
-                            size: 4096
-                        }))
-                        .setFooter(`ID: ${newMember.id}`);
+                        Logs.memberLogGuild(bot, guild, embed);
+                    }
+                    //post logs if the avatar updated
+                    if (oldMember.avatar !== newMember.avatar) {
+                        let embed = new MessageEmbed().setTimestamp()
+                            .setColor(bot.embedColors.logChange)
+                            .setAuthor(`${newMember.username}#${newMember.discriminator}`,
+                                newMember.avatarURL({dynamic: true}),
 
-                    Logs.memberLogGuild(bot, guild, embed);
+                                newMember.avatarURL({dynamic: true, size: 4096}))
+                            .setTitle('Avatar changed')
+                            .setImage(newMember.avatarURL({
+                                dynamic: true,
+                                size: 4096
+                            }))
+                            .setFooter(`ID: ${newMember.id}`);
+
+                        Logs.memberLogGuild(bot, guild, embed);
+                    }
                 }
-            }
         });
     } catch (err) {
         logger.error(err);

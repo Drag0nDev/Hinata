@@ -4,6 +4,8 @@ const {Logs} = require('../misc/tools');
 
 module.exports = async (bot, emoji) => {
     try {
+        if (emoji.guild.me.hasPermission("MANAGE_WEBHOOKS")) return;
+
         let embed = new MessageEmbed().setTimestamp()
             .setColor(bot.embedColors.logAdd)
             .setTitle(`Emoji created`)

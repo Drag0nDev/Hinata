@@ -4,6 +4,8 @@ const {Logs} = require("../misc/tools");
 
 module.exports = async (bot, oldMessage, newMessage) => {
     try {
+        if (newMessage.guild.me.hasPermission("MANAGE_WEBHOOKS")) return;
+
         let embed = new MessageEmbed().setTimestamp()
             .setColor(bot.embedColors.logChange)
             .setAuthor(`${newMessage.author.username}#${newMessage.author.discriminator}`,

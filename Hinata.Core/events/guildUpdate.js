@@ -4,7 +4,7 @@ const {Logs} = require('../misc/tools');
 
 module.exports = async (bot, oldGuild, newGuild) => {
     try {
-        //console.log('oldGuild:', oldGuild, '\nnewGuild:', newGuild)
+        if (newGuild.me.hasPermission("MANAGE_WEBHOOKS")) return;
         let embed = new MessageEmbed().setTimestamp()
             .setColor(bot.embedColors.logChange)
             .setTitle(`Server updated`);

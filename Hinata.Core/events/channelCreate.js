@@ -4,6 +4,8 @@ const {Logs} = require('../misc/tools');
 
 module.exports = async (bot, channel) => {
     try {
+        if (channel.guild.me.hasPermission("MANAGE_WEBHOOKS")) return;
+
         if (channel.type === 'dm') return;
 
         const type = channel.type.charAt(0).toUpperCase() + channel.type.slice(1);
