@@ -6,6 +6,7 @@ const pm = require('parse-ms');
 const {Minor, Levels, Roles, Servers} = require('../misc/tools');
 
 let recentlyRan = [];
+const timeReg = new RegExp('\\d+$');
 
 module.exports = async (bot, message) => {
     const support = bot.guilds.cache.get('645047329141030936');
@@ -85,14 +86,26 @@ module.exports = async (bot, message) => {
 
             logger.info(logging);
 
-            let cooldownString = `${message.guild.id}-${message.author.id}-${name}`;
+            //format guildId-userId-commandName
+            let cooldownString = `${message.guild.id}-${message.author.id}-${name}-${message.createdTimestamp}`;
+            console.log(recentlyRan)
 
-            if (cooldown > 0 && recentlyRan.includes(cooldownString))
-                return message.channel.send(new MessageEmbed()
-                    .setColor(bot.embedColors.error)
-                    .setDescription('You cannot use that command so soon, please wait.'));
+            for (let index = 0; index < recentlyRan.length; index++) {
+                let recentlyRanStr = recentlyRan[index];
+                if (recentlyRanStr.substr(0, `${message.guild.id}-${message.author.id}-${name}-`.length) === `${message.guild.id}-${message.author.id}-${name}-` && cooldown > 0) {
+                    let expiration = new Date(parseInt(timeReg.exec(recentlyRanStr)[0]));
+                    let now = new Date();
 
+                    expiration.setSeconds(expiration.getSeconds() + cooldown);
 
+                    const timeleft = pm(expiration.getTime() - now.getTime());
+
+                    return message.channel.send(new MessageEmbed()
+                        .setColor(bot.embedColors.error)
+                        .setDescription(`You cannot use that command for ${timeleft.seconds} seconds.`));
+                }
+            }
+            // set cooldown timer
             if (cooldown > 0) {
                 recentlyRan.push(cooldownString);
 
@@ -106,7 +119,9 @@ module.exports = async (bot, message) => {
             }
 
             await run(bot, message, args);
-        } catch (err) {
+        }
+        // if something went wrong while running a command send an error embed with a link to the support server
+        catch (err) {
             let invite;
             await support.fetchInvites().then(async invites => {
                 try {
