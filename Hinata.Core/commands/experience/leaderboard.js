@@ -153,7 +153,7 @@ function messageEditor(bot, message, lb) {
             });
 
             collector.on('end', () => {
-                messageBot.reactions.removeAll();
+                messageBot.reactions.removeAll().catch();
             });
         });
 }

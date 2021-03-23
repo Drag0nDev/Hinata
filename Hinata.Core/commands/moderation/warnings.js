@@ -1,7 +1,7 @@
 const neededPerm = ['KICK_MEMBERS'];
 const {MessageEmbed} = require("discord.js");
 const {Warnings, User, Server} = require('../../misc/dbObjects');
-const {Permissions, Minor, Compare, Servers, Dates, Roles, Levels, Logs} = require('../../misc/tools');
+const {Minor, Servers} = require('../../misc/tools');
 const logger = require("log4js").getLogger();
 
 module.exports = {
@@ -217,7 +217,7 @@ function messageEditor(bot, message, embed, warnings, variation, description) {
             });
 
             collector.on('end', collected => {
-                messageBot.reactions.removeAll();
+                messageBot.reactions.removeAll().catch();
             });
         });
 }

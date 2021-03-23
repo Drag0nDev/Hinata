@@ -131,7 +131,7 @@ function messageEditor(bot, message, embed, timers, description, now) {
             });
 
             collector.on('end', collected => {
-                messageBot.reactions.removeAll();
+                messageBot.reactions.removeAll().catch();
             });
         });
 }

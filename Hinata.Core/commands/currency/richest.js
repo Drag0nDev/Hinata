@@ -2,7 +2,6 @@ const {Op} = require('sequelize')
 const {MessageEmbed} = require('discord.js');
 const {User, ServerUser} = require('../../misc/dbObjects');
 const {Minor} = require('../../misc/tools');
-const neededPerm = ['ADD_REACTIONS'];
 
 module.exports = {
     name: 'richest',
@@ -11,7 +10,6 @@ module.exports = {
         'To see the global leaderboard use ``global`` and for the server leaderboard use ``server``',
     usage: '[command | alias] <page>',
     examples: ['h!richest server', 'h!global 1'],
-    neededPermissions: neededPerm,
     cooldown: 30,
     run: async (bot, message, args) => {
         const lb = {
@@ -160,7 +158,7 @@ function messageEditor(bot, message, lb) {
             });
 
             collector.on('end', () => {
-                messageBot.reactions.removeAll();
+                messageBot.reactions.removeAll().catch();
             });
         });
 }

@@ -319,7 +319,7 @@ function messageEditor(bot, message, inventory) {
             });
 
             collector.on('end', collected => {
-                messageBot.reactions.removeAll();
+                messageBot.reactions.removeAll().catch();
             });
         });
 }
