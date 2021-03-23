@@ -39,7 +39,6 @@ module.exports = {
                             let channel = await server.channels.cache.get(autofeed.channel);
 
                             if (channel) {
-
                                 if (post.data.subreddit === autofeed.subreddit) {
                                     if (link.test(post.data.url)) {
                                         if (post.data.over_18) {
@@ -51,6 +50,9 @@ module.exports = {
                                         }
 
                                         embed.setColor(bot.embedColors.logChange);
+                                    } else if (post.data.url) {
+                                        embed.addField('​', post.data.url)
+                                            .setColor(bot.embedColors.logChange);
                                     } else if (post.data.selftext !== '') {
                                         let content
                                         if (post.data.selftext.length > 1018) {

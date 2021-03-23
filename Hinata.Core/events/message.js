@@ -88,7 +88,6 @@ module.exports = async (bot, message) => {
 
             //format guildId-userId-commandName
             let cooldownString = `${message.guild.id}-${message.author.id}-${name}-${message.createdTimestamp}`;
-            console.log(recentlyRan)
 
             for (let index = 0; index < recentlyRan.length; index++) {
                 let recentlyRanStr = recentlyRan[index];
