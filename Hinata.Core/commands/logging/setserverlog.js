@@ -1,7 +1,6 @@
-const {Permissions} = require("../../misc/tools");
 const {MessageEmbed} = require('discord.js');
 const {ServerSettings} = require('../../misc/dbObjects');
-const neededPerm = ['MANAGE_CHANNELS'];
+const neededPerm = ['MANAGE_CHANNELS', 'MANAGE_WEBHOOKS'];
 
 module.exports = {
     name: 'setserverlog',
