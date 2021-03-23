@@ -21,7 +21,7 @@ module.exports = async (bot, oldMember, newMember) => {
         });
 
         await bot.guilds.cache.forEach(guild => {
-            if (guild.me.hasPermission('MANAGE_WEBHOOKS'))
+            if (!guild.me.hasPermission('MANAGE_WEBHOOKS'))
                 if (guild.members.cache.get(newMember.id)) {
                     //post logs if the username updated
                     if (oldMember.username !== newMember.username) {

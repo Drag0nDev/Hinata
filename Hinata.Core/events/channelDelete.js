@@ -4,7 +4,7 @@ const {Logs} = require('../misc/tools');
 
 module.exports = async (bot, channel) => {
     try {
-        if (channel.guild.me.hasPermission("MANAGE_WEBHOOKS")) return;
+        if (!channel.guild.me.hasPermission("MANAGE_WEBHOOKS")) return;
 
         const type = channel.type.charAt(0).toUpperCase() + channel.type.slice(1);
         const category = channel.guild.channels.cache.get(channel.parentID);

@@ -6,7 +6,7 @@ const pm = require('pretty-ms');
 
 module.exports = async (bot, member) => {
     await sendLeaveMessage(member);
-    if (member.guild.me.hasPermission("MANAGE_WEBHOOKS")) return;
+    if (!member.guild.me.hasPermission("MANAGE_WEBHOOKS")) return;
     await joinleaveLog(bot, member);
     if (member.guild.me.hasPermission('VIEW_AUDIT_LOG'))
         await checkKick(bot, member);

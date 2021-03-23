@@ -8,7 +8,7 @@ module.exports = async (bot, member) => {
     try {
         await addDb(member);
         await sendWelcomeMessage(member);
-        if (member.guild.me.hasPermission("MANAGE_WEBHOOKS")) return;
+        if (!member.guild.me.hasPermission("MANAGE_WEBHOOKS")) return;
         await joinleaveLog(bot, member);
     } catch (err) {
         logger.error(err);

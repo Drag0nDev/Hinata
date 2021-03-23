@@ -5,7 +5,7 @@ const {Logs, Compare} = require('../misc/tools');
 module.exports = async (bot, oldChannel, newChannel) => {
     const repl = new RegExp('_', 'g');
     try {
-        if (newChannel.guild.me.hasPermission("MANAGE_WEBHOOKS")) return;
+        if (!newChannel.guild.me.hasPermission("MANAGE_WEBHOOKS")) return;
 
         const type = newChannel.type.charAt(0).toUpperCase() + newChannel.type.slice(1);
         let embed = new MessageEmbed().setTimestamp()

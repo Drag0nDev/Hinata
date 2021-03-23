@@ -4,7 +4,7 @@ const {Logs} = require("../misc/tools");
 
 module.exports = async (bot, oldState, newState) => {
     try {
-        if (newState.guild.me.hasPermission("MANAGE_WEBHOOKS")) return;
+        if (!newState.guild.me.hasPermission("MANAGE_WEBHOOKS")) return;
 
         const member = newState.guild.members.cache.get(newState.id);
 

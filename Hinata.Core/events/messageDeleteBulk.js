@@ -4,7 +4,7 @@ const {Logs} = require("../misc/tools");
 
 module.exports = async (bot, messages) => {
     try {
-        if (messages.guild.me.hasPermission("MANAGE_WEBHOOKS")) return;
+        if (!messages.guild.me.hasPermission("MANAGE_WEBHOOKS")) return;
 
         let embed = new MessageEmbed().setTimestamp()
             .setColor(bot.embedColors.logRemove)
