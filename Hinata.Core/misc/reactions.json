@@ -1,5 +1,5 @@
-module.exports = {
-  hug: [
+{
+  "hug": [
     "https://i.imgur.com/04UFajc.gif",
     "https://i.imgur.com/gAcJs8p.gif",
     "https://i.imgur.com/NBqaFNq.gif",
@@ -12,7 +12,7 @@ module.exports = {
     "https://i.imgur.com/A3aj2AF.gif",
     "https://i.pinimg.com/originals/38/93/c1/3893c18b81ef6e070f6a1c3a2f469d9d.gif"
   ],
-  kiss: [
+  "kiss": [
     "https://i.imgur.com/xELnNfC.gif",
     "https://i.imgur.com/nCwCS55.gif",
     "https://i.imgur.com/siVySzs.gif",
@@ -28,7 +28,7 @@ module.exports = {
     "https://i.imgur.com/8WKFiAa.gif",
     "https://i.imgur.com/wrDZ14I.gif"
   ],
-  slap: [
+  "slap": [
     "https://i.imgur.com/o5SrT0V.gif",
     "https://i.imgur.com/7CpOrix.gif",
     "https://i.imgur.com/g8A6W8t.gif",
@@ -51,7 +51,7 @@ module.exports = {
     "https://i.imgur.com/pe9d4Fm.gif",
     "https://i.imgur.com/fuR2Pko.gif"
   ],
-  blush: [
+  "blush": [
     "https://i.imgur.com/hJWIeMv.gif",
     "https://i.imgur.com/RHHL6aK.gif",
     "https://i.imgur.com/dXS8TDc.gif",
@@ -70,7 +70,7 @@ module.exports = {
     "https://i.imgur.com/K9KHnbX.gif",
     "https://i.imgur.com/oi6bTZh.gif"
   ],
-  grope: [
+  "grope": [
     "https://i.imgur.com/lMNVEeS.gif",
     "https://i.imgur.com/2T4UY8Z.gif",
     "https://i.imgur.com/SICwu0O.gif",
@@ -85,7 +85,7 @@ module.exports = {
     "https://i.imgur.com/lGpvcIN.gif",
     "https://i.imgur.com/EbLmDx6.gif"
   ],
-  cry: [
+  "cry": [
     "https://i.imgur.com/gD8wSJt.gif",
     "https://i.imgur.com/MSxWi8a.gif",
     "https://i.imgur.com/W4ulgbm.gif",
@@ -105,7 +105,7 @@ module.exports = {
     "https://i.imgur.com/edbPydA.gif",
     "https://i.imgur.com/2JRSf41.gif"
   ],
-  pat: [
+  "pat": [
     "https://i.imgur.com/o0RfGwO.gif",
     "https://i.imgur.com/MxesVdu.gif",
     "https://i.imgur.com/PHoLTsi.gif",
