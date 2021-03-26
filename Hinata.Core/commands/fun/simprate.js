@@ -13,7 +13,7 @@ module.exports = {
     run: async (bot, message, args) => {
         let embed = new MessageEmbed()
             .setTitle('simprate')
-            .setColor(bot.embedColors.normal)
+            .setColor(bot.embedColors.embeds.normal)
             .setDescription('Calculating');
 
         await message.channel.send(embed).then(async msg => {
@@ -24,7 +24,7 @@ module.exports = {
             });
 
             if (!member)
-                return message.channel.send(embed.setColor(bot.embedColors.error)
+                return message.channel.send(embed.setColor(bot.embedColors.embeds.error)
                     .setDescription('Please provide a valid user ID or mention!'));
 
             let simprate = getRandomInt(100);
@@ -33,7 +33,7 @@ module.exports = {
 
             let editEmbed = new MessageEmbed()
                 .setTitle('simprate')
-                .setColor(bot.embedColors.normal)
+                .setColor(bot.embedColors.embeds.normal)
                 .setDescription(`**${member.user.tag}** is ${simprate}% simp!`);
 
             if (simprate > 50)

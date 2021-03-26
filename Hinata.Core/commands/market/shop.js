@@ -85,12 +85,12 @@ async function shopByName(bot, message, shop) {
         ]
     });
 
-    shop.embed.setColor(bot.embedColors.normal)
+    shop.embed.setColor(bot.embedColors.embeds.embeds.normal)
         .setTimestamp();
 
     if (shop.db.length === 0) {
         shop.embed.setDescription(`No items found with name **${shop.item.name}**!`)
-            .setColor(bot.embedColors.error);
+            .setColor(bot.embedColors.embeds.error);
 
         return message.channel.send(shop.embed);
     }
@@ -133,7 +133,7 @@ async function shopByCategory(bot, message, shop) {
 
     if (shop.categoryDb === null || shop.categoryDb.name === 'hidden' || shop.categoryDb.name === 'custom') {
         shop.embed.setDescription(`Category **${shop.item.category}** does not exist!`)
-            .setColor(bot.embedColors.error);
+            .setColor(bot.embedColors.embeds.error);
 
         return message.channel.send(shop.embed);
     }
@@ -148,7 +148,7 @@ async function shopByCategory(bot, message, shop) {
         ]
     });
 
-    shop.embed.setColor(bot.embedColors.normal)
+    shop.embed.setColor(bot.embedColors.embeds.normal)
         .setTimestamp();
 
     if (shop.db.length === 0 || shop.categoryDb.name === 'hidden' || shop.categoryDb.name === 'custom') {
@@ -212,7 +212,7 @@ async function shopByNameAndCat(bot, message, shop) {
         ]
     });
 
-    shop.embed.setColor(bot.embedColors.normal)
+    shop.embed.setColor(bot.embedColors.embeds.embeds.normal)
         .setTimestamp();
 
     if (shop.db.length === 0) {
@@ -261,7 +261,7 @@ function messageEditor(bot, message, shop) {
             collector.on('collect', async (reaction, user) => {
                 shop.editEmbed = new MessageEmbed()
                     .setTitle(`Shop`)
-                    .setColor(bot.embedColors.normal);
+                    .setColor(bot.embedColors.embeds.normal);
 
                 if (reaction.emoji.name === '▶') {
                     shop.page++;

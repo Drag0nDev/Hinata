@@ -9,7 +9,7 @@ module.exports = async (bot, oldChannel, newChannel) => {
 
         const type = newChannel.type.charAt(0).toUpperCase() + newChannel.type.slice(1);
         let embed = new MessageEmbed().setTimestamp()
-            .setColor(bot.embedColors.logChange)
+            .setColor(bot.embedColors.logs.logChange)
             .setTitle(`${type} channel updated`)
             .setFooter(`Channel ID: ${newChannel.id}`);
 

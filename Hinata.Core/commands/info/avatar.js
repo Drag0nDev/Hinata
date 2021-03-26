@@ -10,30 +10,26 @@ module.exports = {
     examples: ['h!av', 'h!av 418037700751261708', 'h!av @Drag0n#6666'],
     cooldown: 10,
     run: async (bot, message, args) => {
-        let embed = new MessageEmbed().setColor(bot.embedColors.normal);
+        const avatar = {
+            send: async (msg) => {
+                return message.channel.send(msg);
+            },
+            embed: new MessageEmbed().setColor(bot.embedColors.embeds.normal)
+        };
 
-        //<editor-fold defaultstate="collapsed" desc="Used variable declarations">
         //find the member if one is asked if not then use the author
-        let member;
+        avatar.member = await Servers.getMember(message, args);
 
-        await Servers.getMember(message, args).then(memberPromise => {
-            member = memberPromise;
-        });
-
-        if (!member)
-            return message.channel.send(embed.setColor(bot.embedColors.error)
+        if (!avatar.member)
+            return avatar.send(avatar.embed.setColor(bot.embedColors.embeds.error)
                 .setDescription('Please provide a valid user ID or mention!'));
 
-        //</editor-fold>
-
-        //<editor-fold defaultstate="collapsed" desc="embed creation">
-        embed.setTitle(`avatar of: ${member.user.username}#${member.user.discriminator}`)
-            .setImage(member.user.avatarURL({
+        avatar.embed.setTitle(`avatar of: ${avatar.member.user.username}#${avatar.member.user.discriminator}`)
+            .setImage(avatar.member.user.avatarURL({
                 dynamic: true,
                 size: 4096
             }));
-        // </editor-fold>
 
-        await message.channel.send(embed);
+        await avatar.send(avatar.embed);
     }
 }

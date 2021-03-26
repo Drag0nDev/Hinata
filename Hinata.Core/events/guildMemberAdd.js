@@ -93,7 +93,7 @@ async function joinleaveLog(bot, member) {
 
     let embed = new MessageEmbed().setTitle('Member joined')
         .setTimestamp()
-        .setColor(bot.embedColors.join)
+        .setColor(bot.embedColors.logs.join)
         .setAuthor(`${member.user.username}#${member.user.discriminator}`, member.user.avatarURL({dynamic: true}), member.user.avatarURL({dynamic: true, size: 4096}))
         .setDescription(`<@!${member.user.id}> joined the server`)
         .addField(`Membercount`, member.guild.memberCount, true)

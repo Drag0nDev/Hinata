@@ -24,7 +24,7 @@ module.exports = {
                     .setAuthor(`Author: u/${post.data.author}`)
                     .setTitle(`Post link`)
                     .setURL(`https://www.reddit.com${post.data.permalink}`)
-                    .setColor(bot.embedColors.normal)
+                    .setColor(bot.embedColors.embeds.normal)
                     .setDescription(post.data.title)
                     .setFooter(post.data.subreddit)
                     .setTimestamp();
@@ -49,10 +49,10 @@ module.exports = {
                                             embed.setImage(post.data.url);
                                         }
 
-                                        embed.setColor(bot.embedColors.logChange);
+                                        embed.setColor(bot.embedColors.logs.logChange);
                                     } else if (post.data.url) {
                                         embed.addField('​', post.data.url)
-                                            .setColor(bot.embedColors.logChange);
+                                            .setColor(bot.embedColors.logs.logChange);
                                     } else if (post.data.selftext !== '') {
                                         let content
                                         if (post.data.selftext.length > 1018) {
@@ -62,7 +62,7 @@ module.exports = {
                                         }
 
                                         embed.addField('​', content)
-                                            .setColor(bot.embedColors.logAdd);
+                                            .setColor(bot.embedColors.logs.logAdd);
                                     }
 
                                     server.fetchWebhooks()

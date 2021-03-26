@@ -1,6 +1,5 @@
 const {MessageEmbed} = require('discord.js');
 const { Warnings } = require('../../misc/dbObjects');
-const {Permissions} = require("../../misc/tools");
 const neededPerm = ['KICK_MEMBERS'];
 
 module.exports = {
@@ -11,59 +10,66 @@ module.exports = {
     neededPermissions: neededPerm,
     usage: '[command | alias] [casenr]',
     run: async (bot, message, args) => {
-        let embed = new MessageEmbed().setTitle('Add reason');
-        const $case = new RegExp('^[0-9]');
+        const ar = {
+            send: async (msg) => {
+                await message.channel.send(msg);
+            },
+            embed: new MessageEmbed().setTitle('Add reason'),
+            reg: {
+                case: new RegExp('^[0-9]')
+            }
+        }
 
         if (!args[0]){
-            embed.setColor(bot.embedColors.error)
+            ar.embed.setColor(bot.embedColors.embeds.error)
                 .setDescription('No arguments given')
                 .setTimestamp();
 
-            return await message.channel.send(embed);
+            return await ar.send(ar.embed);
         }
 
-        if (!$case.exec(args[0])){
-            embed.setColor(bot.embedColors.error)
+        if (!ar.reg.case.exec(args[0])){
+            ar.embed.setColor(bot.embedColors.embeds.error)
                 .setDescription('Please give a valid case number')
                 .setTimestamp();
 
-            return await message.channel.send(embed);
+            return await ar.send(ar.embed);
         }
 
-        const casenr = $case.exec(args[0])[0];
+        ar.casenr = ar.case.exec(args[0])[0];
         await args.shift();
 
         if (!args[0]){
-            embed.setColor(bot.embedColors.error)
+            ar.embed.setColor(bot.embedColors.embeds.error)
                 .setDescription('Please give a reason')
                 .setTimestamp();
 
-            return await message.channel.send(embed);
+            return await ar.send(ar.embed);
         }
 
-        const newReason = args.join(' ');
+        ar.newReason = args.join(' ');
 
         await Warnings.findOne({
             where: {
                 guildId: message.guild.id,
-                casenr: casenr
+                casenr: ar.casenr
             }
         }).then(warn => {
-            const oldReason = warn.reason;
-            warn.reason = newReason;
+            ar.oldReason = warn.reason;
+            warn.reason = ar.newReason;
             warn.save();
 
-            embed.setColor(bot.embedColors.normal)
+            ar.embed.setColor(bot.embedColors.embeds.normal)
                 .setDescription('Reason changed successfully!')
-                .addField('__Old reason__', oldReason, false)
-                .addField('__New Reason__', newReason, false)
+                .addField('__Old reason__', ar.oldReason, false)
+                .addField('__New Reason__', ar.newReason, false)
                 .setTimestamp();
         }).catch(err => {
-            embed.setColor(bot.embedColors.error)
-                .setDescription(`No warning found with case number **${casenr}**!`)
+            ar.embed.setColor(bot.embedColors.embeds.error)
+                .setDescription(`No warning found with case number **${ar.casenr}**!`)
                 .setTimestamp();
         });
 
-        await message.channel.send(embed);
+        await ar.send(ar.embed);
     }
 }

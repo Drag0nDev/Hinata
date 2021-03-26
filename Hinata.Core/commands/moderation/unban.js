@@ -11,7 +11,7 @@ module.exports = {
     neededPermissions: neededPerm,
     run: async (bot, message, args) => {
         let reason = 'No reason provided';
-        let embed = new MessageEmbed().setTimestamp().setColor(bot.embedColors.unban);
+        let embed = new MessageEmbed().setTimestamp().setColor(bot.embedColors.moderations.unban);
         let guild = message.guild;
         let member;
 
@@ -21,7 +21,7 @@ module.exports = {
             && isNaN(parseInt(args[0]))
         )
             return message.channel.send(embed
-                .setColor(bot.embedColors.error)
+                .setColor(bot.embedColors.embeds.error)
                 .setDescription('Please provide a user to unban!'));
 
         const id = args.shift();
@@ -42,7 +42,7 @@ module.exports = {
         message.channel.send(embed.setDescription(`**${member.user.tag}** got unbanned for reason: **${reason}**`));
 
         const logEmbed = new MessageEmbed().setTitle('User unbanned')
-            .setColor(bot.embedColors.softban)
+            .setColor(bot.embedColors.moderations.unban)
             .setDescription(`**Member:** ${member.user.tag}\n` +
                 `**Reason:** ${reason}\n` +
                 `**Responsible Moderator:** ${message.author.tag}`)

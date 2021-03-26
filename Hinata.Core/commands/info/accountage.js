@@ -11,29 +11,31 @@ module.exports = {
     examples: ['h!age', 'h!age 418037700751261708', 'h!age @Drag0n#6666'],
     cooldown: 10,
     run: async (bot, message, args) => {
-        let embed = new MessageEmbed().setColor(bot.embedColors.normal);
-        let date = new Date();
-        let member;
+        const age = {
+            send: async (msg) => {
+                return message.channel.send(msg);
+            },
+            embed: new MessageEmbed().setColor(bot.embedColors.embeds.normal),
+            date: new Date(),
+        }
 
-        await Servers.getMember(message, args).then(memberPromise => {
-            member = memberPromise;
-        });
+        age.member = await Servers.getMember(message, args);
 
-        if (!member)
-            return message.channel.send(embed.setColor(bot.embedColors.error)
+        if (!age.member)
+            return message.channel.send(age.embed.setColor(bot.embedColors.embeds.error)
                 .setDescription('Please provide a valid user ID or mention!'));
 
-        let creation = member.user.createdTimestamp;
+        age.age.creation = age.member.user.createdTimestamp;
 
-        let age = date.getTime() - creation;
+        age.age.age = age.date.getTime() - age.creation;
 
-        let agestr = pm(age, {
+        age.agestr = pm(age.age.age, {
             verbose: true,
         });
 
-        embed.setTitle(`Account age of: ${member.user.username}#${member.user.discriminator}`)
-            .setDescription(`**${member.user.username}#${member.user.discriminator}**'s account is **${agestr}** old`);
+        age.embed.setTitle(`Account age of: ${age.member.user.username}#${age.member.user.discriminator}`)
+            .setDescription(`**${age.member.user.username}#${age.member.user.discriminator}**'s account is **${age.agestr}** old`);
 
-        await message.channel.send(embed);
+        await age.send(age.embed);
     }
 }

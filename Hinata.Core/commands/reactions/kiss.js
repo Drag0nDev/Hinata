@@ -1,5 +1,6 @@
 const {MessageEmbed} = require('discord.js');
 const {Servers} = require('../../misc/tools');
+const kiss = require('../../misc/reactions.json').kiss;
 
 module.exports = {
     //<editor-fold defaultstate="collapsed" desc="userinfo help">
@@ -9,45 +10,43 @@ module.exports = {
     usage: '[command | alias] <mention / id>',
     //</editor-fold>
     run: async (bot, message, args) => {
-        let embed = new MessageEmbed().setColor(bot.embedColors.normal);
-        let userMentions = [];
-        let text;
-        let members = '';
+        const reaction = {
+            embed: new MessageEmbed().setColor(bot.embedColors.embeds.normal),
+            userMentions: [],
+            members: '',
+        };
 
-        if (args[0]){
-            await Servers.getMembers(message, args, userMentions).then(membersPromise => {
-                members = membersPromise;
-            });
-        }
+        if (args[0])
+            reaction.members = await Servers.getMembers(message, args, reaction.userMentions);
 
         if (message.mentions.everyone > 0)
-            members += '@everyone ';
+            reaction.members += '@everyone ';
 
-        let author = message.guild.members.cache.get(message.author.id);
+        reaction.author = message.guild.members.cache.get(message.author.id);
 
-        embed.setImage(getGif(bot).toString())
+        reaction.embed.setImage(getGif())
             .setFooter('Powered by lost hopes and dreams');
 
-        if (members.length === 0) {
-            userMentions.push(author.user.id)
-            text = `*Kisses* ${author}!`;
+        if (reaction.members.length === 0) {
+            reaction.userMentions.push(reaction.author.user.id)
+            reaction.text = `*Kisses* ${reaction.author}!`;
         } else
-            text = `${members}you have been kissed by **${author.nickname === null ? author.user.username : author.nickname}**!`;
+            reaction.text = `${reaction.members}you have been kissed by **${reaction.author.nickname === null ? reaction.author.user.username : reaction.author.nickname}**!`;
 
         await message.channel.send(
             {
-                content: text,
-                embed: embed,
+                content: reaction.text,
+                embed: reaction.embed,
                 allowedMentions: {
-                    users: userMentions,
+                    users: reaction.userMentions,
                 }
             }
         );
     }
 }
 
-function getGif(bot) {
-    return bot.reactions.kiss[getRandom(bot.reactions.kiss.length - 1)];
+function getGif() {
+    return kiss[getRandom(kiss.length)];
 }
 
 function getRandom(max) {

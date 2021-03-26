@@ -12,28 +12,28 @@ module.exports = {
     examples: ['h!cl'],
     neededPermissions: neededPerm,
     run: async (bot, message) => {
-        let embed = new MessageEmbed().setColor(bot.embedColors.normal)
-            .setTitle('Create logs');
-        let user = message.author;
-        let guild = message.guild;
-        let joinleave;
-        let member;
-        let $server;
-        let $message;
-        let voice;
+        const cl = {
+            send: async (msg) => {
+                await message.channel.send(msg);
+            },
+            embed: new MessageEmbed().setColor(bot.embedColors.embeds.normal)
+                .setTitle('Create logs'),
+            user: message.author,
+            guild: message.guild,
+            channel:{}
+        }
 
-        let serverDb;
-        serverDb = await ServerSettings.findOne({
+        cl.serverDb = await ServerSettings.findOne({
             where: {
-                serverId: guild.id
+                serverId: cl.guild.id
             }
         });
 
-        await guild.channels.create('logs', {
+        await cl.guild.channels.create('logs', {
             type: "category",
             permissionOverwrites: [
                 {
-                    id: user.id,
+                    id: cl.user.id,
                     allow: ['VIEW_CHANNEL', "MANAGE_CHANNELS"],
                 },
                 {
@@ -46,48 +46,48 @@ module.exports = {
                 }
             ]
         }).then(async category => {
-            joinleave = await createChannel(bot, message, guild, user, 'join-leave-log', category);
-            member = await createChannel(bot, message, guild, user, 'member-log', category);
-            $server = await createChannel(bot, message, guild, user, 'server-log', category);
-            $message = await createChannel(bot, message, guild, user, 'message-log', category);
-            voice = await createChannel(bot, message, guild, user, 'voice-log', category);
+            cl.channel.joinleave = await createChannel(bot, message, cl, 'join-leave-log', category);
+            cl.channel.member = await createChannel(bot, message, cl, 'member-log', category);
+            cl.channel.server = await createChannel(bot, message, cl, 'server-log', category);
+            cl.channel.message = await createChannel(bot, message, cl, 'message-log', category);
+            cl.channel.voice = await createChannel(bot, message, cl, 'voice-log', category);
 
-            embed.setDescription('All logging channels created.')
-                .addField('join/leave log', `<#${joinleave.channelId}>`, true)
-                .addField('member log', `<#${member.channelId}>`, true)
-                .addField('server log', `<#${$server.channelId}>`, true)
-                .addField('message log', `<#${$message.channelId}>`, true)
-                .addField('voice log', `<#${voice.channelId}>`, true);
+            cl.embed.setDescription('All logging channels created.')
+                .addField('join/leave log', `<#${cl.channel.joinleave.channelId}>`, true)
+                .addField('member log', `<#${cl.channel.member.channelId}>`, true)
+                .addField('server log', `<#${cl.channel.server.channelId}>`, true)
+                .addField('message log', `<#${cl.channel.message.channelId}>`, true)
+                .addField('voice log', `<#${cl.channel.voice.channelId}>`, true);
 
-            serverDb.joinLeaveLogChannel = null;
-            serverDb.memberLogChannel = null;
-            serverDb.serverLogChannel = null;
-            serverDb.messageLogChannel = null;
-            serverDb.voiceLogChannel = null;
+            cl.serverDb.joinLeaveLogChannel = null;
+            cl.serverDb.memberLogChannel = null;
+            cl.serverDb.serverLogChannel = null;
+            cl.serverDb.messageLogChannel = null;
+            cl.serverDb.voiceLogChannel = null;
 
-            serverDb.joinLeaveLogChannel = joinleave.hookId;
-            serverDb.memberLogChannel = member.hookId;
-            serverDb.serverLogChannel = $server.hookId;
-            serverDb.messageLogChannel = $message.hookId;
-            serverDb.voiceLogChannel = voice.hookId;
+            cl.serverDb.joinLeaveLogChannel = cl.channel.joinleave.hookId;
+            cl.serverDb.memberLogChannel = cl.channel.member.hookId;
+            cl.serverDb.serverLogChannel = cl.channel.server.hookId;
+            cl.serverDb.messageLogChannel = cl.channel.message.hookId;
+            cl.serverDb.voiceLogChannel = cl.channel.voice.hookId;
 
-            serverDb.save();
+            cl.serverDb.save();
 
 
-            await message.channel.send(embed);
+            await cl.send(cl.embed);
         });
     }
 }
 
-async function createChannel(bot, message, guild, user, channelName, parent) {
+async function createChannel(bot, message, cl, channelName, parent) {
     let channel;
 
-    await guild.channels.create(channelName, {
+    channel = await cl.guild.channels.create(channelName, {
         type: "text",
         parent: parent,
         permissionOverwrites: [
             {
-                id: user.id,
+                id: cl.user.id,
                 allow: ['VIEW_CHANNEL', "MANAGE_CHANNELS"],
             },
             {
@@ -99,8 +99,6 @@ async function createChannel(bot, message, guild, user, channelName, parent) {
                 deny: ['VIEW_CHANNEL'],
             }
         ]
-    }).then(newChannel => {
-        channel = newChannel;
     });
 
     return await channel.createWebhook('Hinata', {
@@ -109,7 +107,9 @@ async function createChannel(bot, message, guild, user, channelName, parent) {
             size: 4096
         })
     }).then(hook => {
-        return {hookId: hook.id,
-            channelId: channel.id};
+        return {
+            hookId: hook.id,
+            channelId: channel.id
+        };
     });
 }

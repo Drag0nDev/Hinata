@@ -11,87 +11,87 @@ module.exports = {
     examples: ['h!muterole @Muted', 'h!muterole 786901348863967242'],
     neededPermissions: neededPerm,
     run: async (bot, message, args) => {
-        let embed = new MessageEmbed();
-        let server;
-        let muteRole;
-        let dbServer;
-        await Servers.getGuild(message).then(guildProm => server = guildProm);
+        const mr = {
+            send: async (msg) => {
+                message.channel.send(msg);
+            },
+            embed: new MessageEmbed(),
+            server: await Servers.getGuild(message)
+        };
 
         if (args[0]) {
             if (message.mentions.roles.size > 0) {
-                muteRole = message.mentions.roles.first();
+                mr.muteRole = message.mentions.roles.first();
             } else if (!isNaN(parseInt(args[0]))) {
-                muteRole = server.roles.cache.get(args[0]);
+                mr.muteRole = mr.server.roles.cache.get(args[0]);
             }
 
-            if (!muteRole) {
-                embed.setColor(bot.embedColors.error)
+            if (!mr.muteRole) {
+                mr.embed.setColor(bot.embedColors.embeds.error)
                     .setDescription('Please provide a valid role or a valid RoleId');
-                return message.channel.send(embed);
+                return mr.send(mr.embed);
             }
-            
+
             //check if assigned role is higher then bots highest role
-            let roleCheck = Permissions.checkRolePosition(bot, message, muteRole, embed);
+            let roleCheck = Permissions.checkRolePosition(bot, message, mr.muteRole, mr.embed);
             if (roleCheck)
-                return await message.channel.send(embed);
+                return await mr.send(mr.embed);
 
 
             //put muterole ID in the db
             await ServerSettings.findOne({
                 where: {
-                    serverId: server.id
+                    serverId: mr.server.id
                 }
             }).then(result => {
-                result.muteRoleId = muteRole.id;
+                result.muteRoleId = mr.muteRole.id;
                 result.save();
             });
         } else {
-            dbServer = await ServerSettings.findOne({
+            mr.dbServer = await ServerSettings.findOne({
                 where: {
-                    serverId: server.id
+                    serverId: mr.server.id
                 }
             });
 
-            if (dbServer.muteRoleId !== null)
-                muteRole = server.roles.cache.get(dbServer.muteRoleId);
+            if (mr.dbServer.muteRoleId !== null)
+                mr.muteRole = mr.server.roles.cache.get(mr.dbServer.muteRoleId);
 
-            if (!muteRole) {
-                await server.roles.create({
+            if (!mr.muteRole) {
+                mr.muteRole = await mr.server.roles.create({
                     data: {
                         name: 'Muted',
-                        color: bot.embedColors.normal,
+                        color: bot.embedColors.embeds.normal,
                         permissions: []
                     },
                     reason: 'Creation of muterole for Hinata'
-                }).then(role => {
-                    muteRole = role;
                 });
 
                 await ServerSettings.findOne({
                     where: {
-                        serverId: server.id
+                        serverId: mr.server.id
                     }
                 }).then(result => {
-                    result.muteRoleId = muteRole.id;
+                    result.muteRoleId = mr.muteRole.id;
                     result.save();
                 });
 
-                server.channels.cache.forEach(channel => {
-                    channel.updateOverwrite(muteRole , {
+                mr.server.channels.cache.forEach(channel => {
+                    channel.updateOverwrite(mr.muteRole, {
                         'SEND_MESSAGES': false,
                         'ADD_REACTIONS': false,
                         'SPEAK': false
                     });
                 });
 
-                embed.setColor(bot.embedColors.normal)
-                    .setDescription(`muterole created and is named <@&${muteRole.id}>`);
-                return message.channel.send(embed);
+                mr.embed.setColor(bot.embedColors.embeds.normal)
+                    .setDescription(`muterole created and is named <@&${mr.muteRole.id}>`);
+                return mr.send(mr.embed);
             }
         }
 
-        embed.setColor(bot.embedColors.normal)
-            .setDescription(`muterole is set to <@&${muteRole.id}>`);
-        return message.channel.send(embed);
+        mr.embed.setColor(bot.embedColors.embeds.normal)
+            .setDescription(`muterole is set to <@&${mr.muteRole.id}>`);
+        return mr.send(mr.embed);
     }
 }

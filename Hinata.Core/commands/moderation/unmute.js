@@ -14,7 +14,7 @@ module.exports = {
         let reason = 'No reason provided';
         let muteRole;
         let embed = new MessageEmbed().setTitle('Unmute')
-            .setColor(bot.embedColors.normal);
+            .setColor(bot.embedColors.embeds.normal);
         let guild = message.guild;
         let muteRoleId;
 
@@ -35,7 +35,7 @@ module.exports = {
 
         if (!Compare.compareRoles(message.guild.members.cache.get(message.author.id), member)) {
             return message.channel.send(embed.setTitle('Action not allowed!')
-                .setColor(bot.embedColors.error)
+                .setColor(bot.embedColors.embeds.error)
                 .setDescription(`You can't unmute **${member.user.tag}** due to role hierarchy!`));
         }
 
@@ -49,7 +49,7 @@ module.exports = {
 
         if (muteRoleId === null) {
             embed.setDescription('Please provide a mute role for this command to work')
-                .setColor(bot.embedColors.error);
+                .setColor(bot.embedColors.embeds.error);
             return message.channel.send(embed);
         }
 
@@ -57,7 +57,7 @@ module.exports = {
 
         if (!member._roles.includes(muteRoleId)) {
             embed.setDescription(`**${member.user.tag}** is not muted!`)
-                .setColor(bot.embedColors.error);
+                .setColor(bot.embedColors.embeds.error);
             return message.channel.send(embed);
         }
 
@@ -67,7 +67,7 @@ module.exports = {
             reason = args.join(' ');
 
         if (reason.length > 1000){
-            embed.setColor(bot.embedColors.error)
+            embed.setColor(bot.embedColors.embeds.error)
                 .setDescription('The reason is too long.\n' +
                     'Keep it under 1000 characters.')
                 .setTimestamp();
@@ -93,7 +93,7 @@ module.exports = {
         await message.channel.send(embed);
 
         const logEmbed = new MessageEmbed().setTitle('User unmuted')
-            .setColor(bot.embedColors.unban)
+            .setColor(bot.embedColors.moderations.unban)
             .setDescription(`**Member:** ${member.user.tag}\n` +
                 `**Reason:** ${reason}\n` +
                 `**Responsible Moderator:** ${message.author.tag}`)

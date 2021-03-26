@@ -11,7 +11,7 @@ module.exports = {
     cooldown: 10,
     run: async (bot, message) => {
         let embed = new MessageEmbed()
-            .setColor(bot.embedColors.normal)
+            .setColor(bot.embedColors.embeds.normal)
             .setTitle('Dragon')
             .setTimestamp();
 

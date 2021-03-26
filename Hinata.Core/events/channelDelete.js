@@ -10,7 +10,7 @@ module.exports = async (bot, channel) => {
         const category = channel.guild.channels.cache.get(channel.parentID);
 
         let embed = new MessageEmbed().setTimestamp()
-            .setColor(bot.embedColors.logRemove)
+            .setColor(bot.embedColors.logs.logRemove)
             .setTitle(`${type} channel deleted`)
             .setFooter(`Channel ID: ${channel.id}`)
             .addField('Name', channel.name, true)

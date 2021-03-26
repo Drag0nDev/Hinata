@@ -56,21 +56,21 @@ module.exports = async (bot, message) => {
             } = cmd;
 
             if (ownerOnly && message.author.id !== config.owner) {
-                return message.channel.send(new MessageEmbed().setColor(bot.embedColors.error)
+                return message.channel.send(new MessageEmbed().setColor(bot.embedColors.embeds.error)
                     .setDescription('This command is only for the owner of the bot'));
             }
 
             for (const permission of neededPermissions) {
                 //check user permissions
                 if (!message.member.hasPermission(permission)) {
-                    return message.channel.send(new MessageEmbed().setColor(bot.embedColors.error)
+                    return message.channel.send(new MessageEmbed().setColor(bot.embedColors.embeds.error)
                         .setDescription(`You don't have the required permission to run this command\n` +
                             `**Missing requirements:** ${permission}`));
                 }
 
                 //check bot permissions
                 if (!message.guild.me.hasPermission(permission)) {
-                    return message.channel.send(new MessageEmbed().setColor(bot.embedColors.error)
+                    return message.channel.send(new MessageEmbed().setColor(bot.embedColors.embeds.error)
                         .setDescription(`I don't have the required permission to run this command\n` +
                             `**Missing requirements:** ${permission}`));
                 }
@@ -100,7 +100,7 @@ module.exports = async (bot, message) => {
                     const timeleft = pm(expiration.getTime() - now.getTime());
 
                     return message.channel.send(new MessageEmbed()
-                        .setColor(bot.embedColors.error)
+                        .setColor(bot.embedColors.embeds.error)
                         .setDescription(`You cannot use that command for ${timeleft.seconds} seconds.`));
                 }
             }
@@ -136,7 +136,7 @@ module.exports = async (bot, message) => {
                 }
             });
             let embed = new MessageEmbed()
-                .setColor(bot.embedColors.error)
+                .setColor(bot.embedColors.embeds.error)
                 .setTitle('An error occurred')
                 .setDescription(`An error occurred and the command stopped executing.\n` +
                     `Please report this to the bot developer in the **[support server](${invite})**`)

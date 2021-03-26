@@ -11,146 +11,152 @@ module.exports = {
     examples: ['h!ban @Drag0n#6666', 'h!ban @Drag0n#6666 1h', 'h!ban @Drag0n#6666 1h being a bad boy', "h!ban @Drag0n#6666 Bad boys are not welcome"],
     neededPermissions: neededPerm,
     run: async (bot, message, args) => {
-        let checkTemp = new RegExp('^[0-9]*[smhd]');
-        let reason = 'No reason provided';
-        let embed = new MessageEmbed().setTimestamp().setColor(bot.embedColors.ban);
+        const $ban = {
+            send: async (msg) => {
+                await message.channel.send(msg);
+            },
+            checkTemp: new RegExp('^[0-9]*[smhd]'),
+            reason: 'No reason provided',
+            embed: new MessageEmbed().setTimestamp().setColor(bot.embedColors.moderations.ban),
+        }
 
         //check if there is an argument
         if (!args[0])
-            return message.channel.send(embed
-                .setColor(bot.embedColors.error)
+            return $ban.send($ban.embed
+                .setColor(bot.embedColors.embeds.error)
                 .setDescription('Please provide a user to ban!'));
 
-        let member;
-
-        member = await Servers.getMember(message, args);
+        $ban.member = await Servers.getMember(message, args);
 
         const author = message.guild.members.cache.get(message.author.id);
 
         //check if member is in the server
-        if (!member)
-            return message.channel.send(embed
-                .setColor(bot.embedColors.error)
+        if (!$ban.member)
+            return $ban.send($ban.embed
+                .setColor(bot.embedColors.embeds.error)
                 .setDescription(`No member found with this id or name`));
 
 
-        const canBan = Compare.compareRoles(author, member);
+        const canBan = Compare.compareRoles(author, $ban.member);
 
         //check if the author has a higher role then the member
         if (!canBan)
             return message.channel.send(embed.setTitle('Action not allowed!')
-                .setColor(bot.embedColors.error)
-                .setDescription(`You can't ban **${member.user.tag}** due to role hierarchy!`));
+                .setColor(bot.embedColors.embeds.error)
+                .setDescription(`You can't ban **${$ban.member.user.tag}** due to role hierarchy!`));
         //check if member is banable
-        if (!member.bannable) {
+        if (!$ban.member.bannable) {
             return message.channel.send(embed.setTitle('Action not allowed!')
-                .setColor(bot.embedColors.error)
-                .setDescription(`I can't ban **${member.user.tag}** due to role hierarchy!`));
+                .setColor(bot.embedColors.embeds.error)
+                .setDescription(`I can't ban **${$ban.member.user.tag}** due to role hierarchy!`));
         }
 
         //check if it is self ban, or bot ban
-        if (member.user.id === message.author.id)
-            return message.channel.send(embed.setTitle('Action not allowed!')
-                .setColor(bot.embedColors.error)
+        if ($ban.member.user.id === message.author.id)
+            return $ban.send($ban.embed.setTitle('Action not allowed!')
+                .setColor(bot.embedColors.embeds.error)
                 .setDescription(`You can't ban yourself!`));
 
 
         await args.shift();
 
-        if (checkTemp.exec(args[0])) {
-            let time = checkTemp.exec(args[0])[0];
+        if ($ban.checkTemp.exec(args[0])) {
+            $ban.time = $ban.checkTemp.exec(args[0])[0];
             await args.shift();
 
             if (args[0]) {
-                reason = args.join(' ');
+                $ban.reason = args.join(' ');
             }
 
-            await tempBan(bot, message, member, embed, time, reason);
+            await tempBan(bot, message, $ban);
         } else {
             if (args[0]) {
-                reason = args.join(' ');
+                $ban.reason = args.join(' ');
             }
 
-            await ban(bot, message, member, embed, reason);
+            await ban(bot, message, $ban);
         }
     }
 }
 
-async function tempBan(bot, message, member, embed, time, reason) {
-    let expiration = new Date();
-    await Dates.calcExpiration(expiration, time);
-    let timeVal = await Dates.getTimeval(time);
-    let $time = await Dates.getTime(time);
+async function tempBan(bot, message, ban) {
+    const tempban = {
+        expiration: new Date(),
+        timeVal: await Dates.getTimeval(ban.time),
+        time: await Dates.getTime(ban.time),
+    }
 
-    embed.setTitle('Ban')
-        .setDescription(`**${member.user.tag}** is banned for **${$time} ${timeVal}** with reason: **${reason}**!`)
-        .setColor(bot.embedColors.normal);
+    await Dates.calcExpiration(tempban.expiration, ban.time);
 
-    await member.createDM().then(async dmChannel => {
-        await dmChannel.send(`You got banned from **${message.guild.name}** for **${$time} ${timeVal}** with reason: **${reason}**!`);
+    ban.embed.setTitle('Ban')
+        .setDescription(`**${ban.member.user.tag}** is banned for **${tempban.time} ${tempban.timeVal}** with reason: **${ban.reason}**!`)
+        .setColor(bot.embedColors.embeds.normal);
+
+    await ban.member.createDM().then(async dmChannel => {
+        await dmChannel.send(`You got banned from **${message.guild.name}** for **${tempban.time} ${tempban.timeVal}** with reason: **${ban.reason}**!`);
     }).catch(error => {
-        embed.addField('No DM sent', `${member.user.tag} was temporary banned but could not be DMed!`);
+        ban.embed.addField('No DM sent', `${ban.member.user.tag} was temporary banned but could not be DMed!`);
     });
 
-    await message.channel.send(embed);
+    await ban.send(ban.embed);
 
-    await member.ban({
+    await ban.member.ban({
         days: 7,
-        reason: `${reason}`
+        reason: `${ban.reason}`
     });
 
     Timers.create({
         guildId: message.guild.id,
-        userId: member.id,
+        userId: ban.member.id,
         moderatorId: message.author.id,
         type: 'Ban',
-        expiration: expiration.getTime()
+        expiration: tempban.expiration.getTime()
     });
 
     const logEmbed = new MessageEmbed().setTitle('User temporary banned')
-        .setColor(bot.embedColors.ban)
-        .setDescription(`**Member:** ${member.user.tag}\n` +
-            `**Duration:** ${$time} ${timeVal}\n` +
-            `**Reason:** ${reason}\n` +
+        .setColor(bot.embedColors.moderations.ban)
+        .setDescription(`**Member:** ${ban.member.user.tag}\n` +
+            `**Duration:** ${tempban.time} ${tempban.timeVal}\n` +
+            `**Reason:** ${ban.reason}\n` +
             `**Responsible Moderator:** ${message.author.tag}`)
-        .setFooter(`ID: ${member.user.id}`)
+        .setFooter(`ID: ${ban.member.user.id}`)
         .setTimestamp();
 
     await Logs.modlog(bot, message.guild.members.cache.get(message.author.id), logEmbed);
 }
 
-async function ban(bot, message, member, embed, reason) {
-    embed.setTitle('Ban')
-        .setDescription(`**${member.user.tag}** is banned for reason: **${reason}**.`)
-        .setColor(bot.embedColors.normal);
+async function ban(bot, message, ban) {
+    ban.embed.setTitle('Ban')
+        .setDescription(`**${ban.member.user.tag}** is banned for reason: **${ban.reason}**.`)
+        .setColor(bot.embedColors.embeds.normal);
 
-    await member.createDM().then(async dmChannel => {
-        await dmChannel.send(`You got banned from **${message.guild.name}** with reason: **${reason}**!`);
+    await ban.member.createDM().then(async dmChannel => {
+        await dmChannel.send(`You got banned from **${message.guild.name}** with reason: **${ban.reason}**!`);
     }).catch(error => {
-        embed.addField('No DM sent', `${member.user.tag} was banned but could not be DMed!`);
+        ban.embed.addField('No DM sent', `${ban.member.user.tag} was banned but could not be DMed!`);
     });
 
-    await message.channel.send(embed);
+    await message.channel.send(ban.embed);
 
-    await member.ban({
+    await ban.member.ban({
         days: 7,
-        reason: `${reason}`
+        reason: ban.reason
     });
 
     const logEmbed = new MessageEmbed().setTitle('User banned')
-        .setColor(bot.embedColors.ban)
-        .setDescription(`**Member:** ${member.user.tag}\n` +
-            `**Reason:** ${reason}\n` +
+        .setColor(bot.embedColors.moderations.ban)
+        .setDescription(`**Member:** ${ban.member.user.tag}\n` +
+            `**Reason:** ${ban.reason}\n` +
             `**Responsible Moderator:** ${message.author.tag}`)
-        .setFooter(`ID: ${member.user.id}`)
+        .setFooter(`ID: ${ban.member.user.id}`)
         .setTimestamp();
 
     await Logs.modlog(bot, message.guild.members.cache.get(message.author.id), logEmbed);
 
     await ServerUser.destroy({
         where: {
-            guildId: member.guild.id,
-            userId: member.user.id
+            guildId: ban.member.guild.id,
+            userId: ban.member.user.id
         }
     });
 }

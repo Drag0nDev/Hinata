@@ -11,7 +11,7 @@ module.exports = {
     examples: ['h!lurl'],
     cooldown: 10,
     run: async (bot, message) => {
-        let embed = new MessageEmbed().setColor(bot.embedColors.normal)
+        let embed = new MessageEmbed().setColor(bot.embedColors.embeds.normal)
             .setThumbnail(message.guild.iconURL({dynamic: true}))
             .setTitle('Level up role list')
         let rewards;

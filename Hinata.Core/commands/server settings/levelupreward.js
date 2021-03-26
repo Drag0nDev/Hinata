@@ -29,12 +29,12 @@ module.exports = {
                         break;
                 }
             } else {
-                embed.setColor(bot.embedColors.error)
+                embed.setColor(bot.embedColors.embeds.error)
                     .setDescription('What action do you want to do?')
                     .setTimestamp();
             }
         } catch (err) {
-            embed.setColor(bot.embedColors.error)
+            embed.setColor(bot.embedColors.embeds.error)
                 .setDescription('Please provide valid arguments')
                 .setTimestamp();
         }
@@ -65,7 +65,7 @@ async function add(bot, message, args, embed) {
                 let roleId = role.exec(args[0])[0];
 
                 if (!message.guild.roles.cache.get(roleId)) {
-                    embed.setColor(bot.embedColors.error)
+                    embed.setColor(bot.embedColors.embeds.error)
                         .setDescription('Please provide a valid role')
                         .setTimestamp();
                     return;
@@ -77,24 +77,24 @@ async function add(bot, message, args, embed) {
                     roleId: roleId
                 });
 
-                embed.setColor(bot.embedColors.normal)
+                embed.setColor(bot.embedColors.embeds.normal)
                     .setDescription(`Level up role has been set with parameters:\n` +
                         `**Level**: ${level}\n` +
                         `**Role**: <@&${roleId}>`)
                     .setTimestamp();
             } else {
-                embed.setColor(bot.embedColors.error)
+                embed.setColor(bot.embedColors.embeds.error)
                     .setDescription('Please provide a valid role ID')
                     .setTimestamp();
             }
         } else {
-            embed.setColor(bot.embedColors.error)
+            embed.setColor(bot.embedColors.embeds.error)
                 .setDescription('Please provide a valid level')
                 .setTimestamp();
         }
     } catch (err) {
         console.log(err)
-        embed.setColor(bot.embedColors.error)
+        embed.setColor(bot.embedColors.embeds.error)
             .setDescription('Please provide valid arguments')
             .setTimestamp();
     }
@@ -121,7 +121,7 @@ async function remove(bot, message, args, embed) {
                     xp: xp
                 }
             }).then(rewards => {
-                embed.setColor(bot.embedColors.normal)
+                embed.setColor(bot.embedColors.embeds.normal)
                     .setThumbnail(message.guild.iconURL({
                         dynamic: true
                     }))
@@ -142,12 +142,12 @@ async function remove(bot, message, args, embed) {
                 }
             });
         } else {
-            embed.setColor(bot.embedColors.error)
+            embed.setColor(bot.embedColors.embeds.error)
                 .setDescription('Please provide a valid level')
                 .setTimestamp();
         }
     } catch (err) {
-        embed.setColor(bot.embedColors.error)
+        embed.setColor(bot.embedColors.embeds.error)
             .setDescription('Please provide valid arguments')
             .setTimestamp();
     }

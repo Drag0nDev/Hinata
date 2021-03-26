@@ -7,7 +7,7 @@ module.exports = async (bot, message) => {
         if (!message.guild.me.hasPermission("MANAGE_WEBHOOKS")) return;
 
         let embed = new MessageEmbed().setTimestamp()
-            .setColor(bot.embedColors.logRemove)
+            .setColor(bot.embedColors.logs.logRemove)
             .setAuthor(`${message.author.username}#${message.author.discriminator}`,
                 message.author.avatarURL({dynamic: true}),
                 message.author.avatarURL({dynamic: true, size: 4096}))

@@ -7,7 +7,7 @@ module.exports = async (bot, oldRole, newRole) => {
         if (!newRole.guild.me.hasPermission("MANAGE_WEBHOOKS")) return;
 
         let embed = new MessageEmbed().setTimestamp()
-            .setColor(bot.embedColors.logChange)
+            .setColor(bot.embedColors.logs.logChange)
             .setTitle(`Role "${oldRole.name}" updated`)
             .setFooter(`Role ID: ${newRole.id}`);
 

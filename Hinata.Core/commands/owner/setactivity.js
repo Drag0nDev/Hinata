@@ -10,7 +10,7 @@ module.exports = {
     usage: '[command | alias] [type (streaming|watching|listening)] [text]',
     ownerOnly: true,
     run: async (bot, message, args) => {
-        let embed = new MessageEmbed()
+        let embed = new MessageEmbed();
 
         //splitting in to parts
         const type = args.shift().toUpperCase();
@@ -40,7 +40,7 @@ module.exports = {
         }
 
         embed.setDescription('Activity changed successfully!')
-            .setColor(bot.embedColors.normal);
+            .setColor(bot.embedColors.embeds.normal);
 
         await message.channel.send(embed);
 

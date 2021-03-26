@@ -15,7 +15,7 @@ module.exports = {
             },
             embed: new MessageEmbed().setTitle('Reddit list')
                 .setTimestamp()
-                .setColor(bot.embedColors.normal),
+                .setColor(bot.embedColors.embeds.normal),
             autofeeds: await Autofeeds.findAll({
                 where: {
                     serverId: message.guild.id

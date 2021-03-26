@@ -13,7 +13,6 @@ module.exports = {
     run: async (bot, message, args) => {
         const embed = new MessageEmbed().setTitle('Role');
         const action = new RegExp('add|remove');
-        const id = new RegExp('[0-9]{17,}');
 
         if (action.exec(args[0])) {
             if (action.exec(args[0])[0] === 'add') {
@@ -40,7 +39,7 @@ async function addRole(bot, message, args, embed) {
     });
 
     if (!member) {
-        embed.setColor(bot.embedColors.error)
+        embed.setColor(bot.embedColors.embeds.error)
             .setDescription('No member found with this id!')
             .setTimestamp();
         return;
@@ -51,7 +50,7 @@ async function addRole(bot, message, args, embed) {
     role = await Roles.getRole(message, args);
 
     if (!role) {
-        embed.setColor(bot.embedColors.error)
+        embed.setColor(bot.embedColors.embeds.error)
             .setDescription('No role found with this id!')
             .setTimestamp();
         return;
@@ -64,7 +63,7 @@ async function addRole(bot, message, args, embed) {
 
     await Roles.giveRole(member, role);
 
-    embed.setColor(bot.embedColors.normal)
+    embed.setColor(bot.embedColors.embeds.normal)
         .setDescription(`Role <@&${role.id}> added to <@!${member.user.id}>!`);
 }
 
@@ -77,7 +76,7 @@ async function remRole(bot, message, args, embed) {
     });
 
     if (!member) {
-        embed.setColor(bot.embedColors.error)
+        embed.setColor(bot.embedColors.embeds.error)
             .setDescription('No member found with this id!')
             .setTimestamp();
         return;
@@ -88,7 +87,7 @@ async function remRole(bot, message, args, embed) {
     role = await Roles.getRole(message, args);
 
     if (!role) {
-        embed.setColor(bot.embedColors.error)
+        embed.setColor(bot.embedColors.embeds.error)
             .setDescription('No role found with this id!')
             .setTimestamp();
         return;
@@ -101,7 +100,7 @@ async function remRole(bot, message, args, embed) {
 
     await Roles.removeRole(member, role);
 
-    embed.setColor(bot.embedColors.normal)
+    embed.setColor(bot.embedColors.embeds.normal)
         .setDescription(`Role <@&${role.id}> removed from <@!${member.user.id}>!`);
 }
 
@@ -115,7 +114,7 @@ async function addRemove(bot, message, args, embed) {
     });
 
     if (!member) {
-        embed.setColor(bot.embedColors.error)
+        embed.setColor(bot.embedColors.embeds.error)
             .setDescription('No member found with this id!')
             .setTimestamp();
         return;
@@ -126,14 +125,14 @@ async function addRemove(bot, message, args, embed) {
     role = await Roles.getRole(message, args);
 
     if (!role) {
-        embed.setColor(bot.embedColors.error)
+        embed.setColor(bot.embedColors.embeds.error)
             .setDescription('No role found with this id!')
             .setTimestamp();
         return;
     }
 
     if (role.managed === true) {
-        embed.setColor(bot.embedColors.error)
+        embed.setColor(bot.embedColors.embeds.error)
             .setDescription('I can\'t manage this role!')
             .setTimestamp();
 
@@ -150,12 +149,12 @@ async function addRemove(bot, message, args, embed) {
     if (roleArray.includes(role.id)){
         await Roles.removeRole(member, role);
 
-        embed.setColor(bot.embedColors.normal)
+        embed.setColor(bot.embedColors.embeds.normal)
             .setDescription(`Role <@&${role.id}> removed from <@!${member.user.id}>!`);
     } else {
         await Roles.giveRole(member, role);
 
-        embed.setColor(bot.embedColors.normal)
+        embed.setColor(bot.embedColors.embeds.normal)
             .setDescription(`Role <@&${role.id}> added to <@!${member.user.id}>!`);
     }
 }
@@ -178,7 +177,7 @@ async function compRoles(bot, message, member, author, role, embed) {
     roleArrayBot.sort((a, b) => b.position - a.position);
 
     if (role.position >= roleArrayBot[0].position) {
-        embed.setColor(bot.embedColors.error)
+        embed.setColor(bot.embedColors.embeds.error)
             .setDescription('I can\'t assign this role due to role hierarchy!')
             .setTimestamp();
 
@@ -186,7 +185,7 @@ async function compRoles(bot, message, member, author, role, embed) {
     }
 
     if (role.position >= roleArrayAuth[0].position) {
-        embed.setColor(bot.embedColors.error)
+        embed.setColor(bot.embedColors.embeds.error)
             .setDescription('You can\'t assign this role due to role hierarchy!')
             .setTimestamp();
 

@@ -12,7 +12,7 @@ module.exports = {
     cooldown: 10,
     run: async (bot, message, args) => {
         let embed = new MessageEmbed().setTitle('PP')
-            .setColor(bot.embedColors.normal)
+            .setColor(bot.embedColors.embeds.normal)
             .setDescription('Looking')
 
         let member;
@@ -22,7 +22,7 @@ module.exports = {
         });
 
         if (!member)
-            return message.channel.send(embed.setColor(bot.embedColors.error)
+            return message.channel.send(embed.setColor(bot.embedColors.embeds.error)
                 .setDescription('Please provide a valid user ID or mention!'));
 
         await message.channel.send(embed).then(async msg => {

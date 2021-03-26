@@ -12,8 +12,8 @@ module.exports = {
         if (ping < 0) ping *= -1;
 
         const embed = new MessageEmbed().setTitle('Ping')
-            .setColor(bot.embedColors.normal)
-            .setDescription(`\`${ping}\``)
+            .setColor(bot.embedColors.embeds.normal)
+            .setDescription(`${ping}ms`)
             .setTimestamp();
 
         await message.channel.send(embed);

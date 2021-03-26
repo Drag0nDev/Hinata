@@ -20,14 +20,14 @@ module.exports = {
                 return att.url;
             },
             embed: new MessageEmbed().setTitle('Emoji create')
-                .setColor(bot.embedColors.normal)
+                .setColor(bot.embedColors.embeds.normal)
                 .setTimestamp(),
             name: args[0],
             link: args[1] ? args[1] : '',
             str: args.join(' '),
             colors: {
-                normal: bot.embedColors.normal,
-                error: bot.embedColors.error
+                normal: bot.embedColors.embeds.normal,
+                error: bot.embedColors.embeds.error
             },
             regs: {
                 emoji: new RegExp('<a:.+?:\\d+>|<:.+?:\\d+>'),

@@ -16,7 +16,7 @@ module.exports = {
         const streak = new RegExp('[0-9]*');
 
         if (!id.exec(args[0])) {
-            embed.setColor(bot.embedColors.error)
+            embed.setColor(bot.embedColors.embeds.error)
                 .setDescription('Please provide a valid memberid / mention');
 
             return message.channel.send(embed);
@@ -29,7 +29,7 @@ module.exports = {
         });
 
         if (streak.exec(args[1])[0] === '')
-            return message.channel.send(embed.setColor(bot.embedColors.error)
+            return message.channel.send(embed.setColor(bot.embedColors.embeds.error)
                 .setDescription('Please provide an amount to add!'))
 
         await User.findOne({
@@ -42,7 +42,7 @@ module.exports = {
             user.save();
 
             embed.setTitle(`Add dailystreak`)
-                .setColor(bot.embedColors.normal)
+                .setColor(bot.embedColors.embeds.normal)
                 .setDescription(`Dailystreak successfully increased!
                 The streak of **${user.userTag}** is now **${user.dailyStreak} days**.`)
                 .setTimestamp();

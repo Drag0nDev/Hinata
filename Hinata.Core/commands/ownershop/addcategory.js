@@ -27,7 +27,7 @@ module.exports = {
 
         if (db !== null) {
             embed.setDescription(`The category **${name}** already existh!`)
-                .setColor(bot.embedColors.error);
+                .setColor(bot.embedColors.embeds.error);
 
             return await message.channel.send(embed);
         }
@@ -36,7 +36,7 @@ module.exports = {
             name: name
         }).then(cat => {
             embed.setDescription(`The category **${cat.name}** created!`)
-                .setColor(bot.embedColors.logAdd);
+                .setColor(bot.embedColors.logs.logAdd);
 
             message.channel.send(embed);
         }).catch(err => {

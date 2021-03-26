@@ -7,7 +7,7 @@ module.exports = async (bot, emoji) => {
         if (!emoji.guild.me.hasPermission("MANAGE_WEBHOOKS")) return;
 
         let embed = new MessageEmbed().setTimestamp()
-            .setColor(bot.embedColors.logAdd)
+            .setColor(bot.embedColors.logs.logAdd)
             .setTitle(`Emoji created`)
             .setFooter(`Emoji ID: ${emoji.id}`);
 

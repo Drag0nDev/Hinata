@@ -12,13 +12,13 @@ module.exports = {
         const shop = {
             embed: new MessageEmbed().setTitle('Buy')
                 .setTimestamp()
-                .setColor(bot.embedColors.normal),
+                .setColor(bot.embedColors.embeds.normal),
             nextId: 0
         };
         const checkID = new RegExp('^\\d+$');
 
         if (!checkID.test(args[0])) {
-            shop.embed.setColor(bot.embedColors.error)
+            shop.embed.setColor(bot.embedColors.embeds.error)
                 .setDescription('Please provide a valid ID!');
 
             return await message.channel.send(shop.embed);
@@ -40,14 +40,14 @@ module.exports = {
         });
 
         if (shop.db === null) {
-            shop.embed.setColor(bot.embedColors.normal)
+            shop.embed.setColor(bot.embedColors.embeds.normal)
                 .setDescription(`No item with ID **${shop.id}** found!`);
 
             return await message.channel.send(shop.embed);
         }
 
         if (shop.db.Category.name === 'hidden' || shop.db.Category.name === 'custom') {
-            shop.embed.setColor(bot.embedColors.normal)
+            shop.embed.setColor(bot.embedColors.embeds.normal)
                 .setDescription('This ID is not linked to an item that is buyable!');
 
             return await message.channel.send(shop.embed);
@@ -96,8 +96,6 @@ module.exports = {
                     shop.nextId = item.id;
             });
 
-            console.log(shop);
-
             if (!shop.already) {
                 shop.embed.setDescription('Do you want to buy this item?\n' +
                     'Type `yes` to confirm.')
@@ -114,7 +112,7 @@ module.exports = {
                 await message.channel.send(shop.embed).then(async msg => {
                     const embed = new MessageEmbed().setTitle('Buy')
                         .setTimestamp()
-                        .setColor(bot.embedColors.normal);
+                        .setColor(bot.embedColors.embeds.normal);
                     const filter = m => m.author.id === message.author.id;
 
                     msg.channel.awaitMessages(filter, {max: 1, time: 60000, errors: ['time']})

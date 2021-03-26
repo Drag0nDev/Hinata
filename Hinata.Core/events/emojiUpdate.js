@@ -7,7 +7,7 @@ module.exports = async (bot, oldEmoji, newEmoji) => {
         if (!newEmoji.guild.me.hasPermission("MANAGE_WEBHOOKS")) return;
 
         let embed = new MessageEmbed().setTimestamp()
-            .setColor(bot.embedColors.logAdd)
+            .setColor(bot.embedColors.logs.logAdd)
             .setTitle(`Emoji renamed`)
             .setFooter(`Emoji ID: ${newEmoji.id}`);
 

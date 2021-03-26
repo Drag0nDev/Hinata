@@ -20,9 +20,9 @@ module.exports = {
             embed: new MessageEmbed().setTitle('Coinflip')
                 .setTimestamp(),
             colors: {
-                win: bot.embedColors.logAdd,
-                lose: bot.embedColors.logRemove,
-                error: bot.embedColors.error
+                win: bot.embedColors.logs.logAdd,
+                lose: bot.embedColors.logs.logRemove,
+                error: bot.embedColors.embeds.error
             },
             results: ['heads', 'tails'],
             member: message.guild.members.cache.get(message.author.id),

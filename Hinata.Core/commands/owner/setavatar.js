@@ -14,7 +14,7 @@ module.exports = {
 
         bot.user.setAvatar(args.toString()).then(updated => {
                 embed.setTitle(`setavatar`)
-                    .setColor(bot.embedColors.normal)
+                    .setColor(bot.embedColors.embeds.normal)
                     .setDescription('Avatar changed successfully to:')
                     .setImage(updated.avatarURL({dynamic: true, size: 4096}));
 
@@ -22,7 +22,7 @@ module.exports = {
             }
         ).catch(err => {
             embed.setDescription(err)
-                .setColor(bot.embedColors.error);
+                .setColor(bot.embedColors.embeds.error);
             message.channel.send(embed);
         })
 

@@ -29,7 +29,7 @@ const snooper = new Snooper({
 const Minor = {
     testing: async function (bot, message) {
         let embed = new MessageEmbed().setTitle('Currently out of order!')
-            .setColor(bot.embedColors.error)
+            .setColor(bot.embedColors.embeds.error)
             .setFooter('Try again later')
             .setDescription('**__I am sorry but currently I am either one of both:__**\n' +
                 '**1.** I am locked down because a major bug has appeared that could lead to unwanted behaviour.\n' +
@@ -367,9 +367,7 @@ const Logs = {
                         logger.error(`error in: ${member.guild.name}\n`, err);
                     });
                 }
-            }).catch(err => {
-                logger.error(`error in: ${member.guild.name}\n`, err);
-            });
+            }).catch();
     },
     joinLeaveLog: async function (bot, member, embed) {
         await member.guild.fetchWebhooks()
@@ -392,9 +390,7 @@ const Logs = {
                         logger.error(`error in: ${member.guild.name}\n`, err);
                     });
                 }
-            }).catch(err => {
-                logger.error(`error in: ${member.guild.name}\n`, err);
-            });
+            }).catch();
     },
     memberLog: async function (bot, member, embed) {
         await member.guild.fetchWebhooks()
@@ -417,9 +413,7 @@ const Logs = {
                         logger.error(`error in: ${member.guild.name}\n`, err);
                     });
                 }
-            }).catch(err => {
-                logger.error(`error in: ${member.guild.name}\n`, err);
-            });
+            }).catch();
     },
     memberLogGuild: async function (bot, guild, embed) {
         await guild.fetchWebhooks()
@@ -442,9 +436,7 @@ const Logs = {
                         logger.error(`error in: ${guild.name}\n`, err);
                     });
                 }
-            }).catch(err => {
-                logger.error(`error in: ${guild.name}\n`, err);
-            });
+            }).catch();
     },
     messageLog: async function (bot, guild, embed) {
         await guild.fetchWebhooks()
@@ -467,9 +459,7 @@ const Logs = {
                         logger.error(`error in: ${guild.name}\n`, err);
                     });
                 }
-            }).catch(err => {
-                logger.error(`error in: ${guild.name}\n`, err);
-            });
+            }).catch();
     },
     serverLog: async function (bot, guild, embed) {
         await guild.fetchWebhooks()
@@ -492,9 +482,7 @@ const Logs = {
                         logger.error(`error in: ${guild.name}\n`, err);
                     });
                 }
-            }).catch(err => {
-                logger.error(`error in: ${guild.name}\n`, err);
-            });
+            }).catch();
     },
     voiceLogChannel: async function (bot, guild, embed) {
         await guild.fetchWebhooks()
@@ -517,9 +505,7 @@ const Logs = {
                         logger.error(`error in: ${guild.name}\n`, err);
                     });
                 }
-            }).catch(err => {
-                logger.error(`error in: ${guild.name}\n`, err);
-            });
+            }).catch();
     }
 }
 
@@ -610,7 +596,7 @@ const Permissions = {
 
         if (roleArray[0].position < role.position) {
             console.log(roleArray[0].position, role.position)
-            return embed.setColor(bot.embedColors.error)
+            return embed.setColor(bot.embedColors.embeds.error)
                 .setDescription('I can\'t assign this role due to role hierarchy!');
         }
     }

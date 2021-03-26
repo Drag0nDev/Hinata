@@ -25,7 +25,7 @@ module.exports = {
         if (shop.idReg.test(args[0]))
             shop.id = shop.idReg.exec(args[0])[0];
         else {
-            shop.embed.setColor(bot.embedColors.error)
+            shop.embed.setColor(bot.embedColors.embeds.error)
                 .setDescription('Please provide a valid id!');
 
             return message.channel.send(shop.embed);
@@ -44,7 +44,7 @@ module.exports = {
         });
 
         if (shop.item === null) {
-            shop.embed.setColor(bot.embedColors.error)
+            shop.embed.setColor(bot.embedColors.embeds.error)
                 .setDescription('Please provide a valid id!');
 
             return message.channel.send(shop.embed);
@@ -53,7 +53,7 @@ module.exports = {
         shop.item.category = shop.categoryDb.id;
         shop.item.save();
 
-        shop.embed.setColor(bot.embedColors.normal)
+        shop.embed.setColor(bot.embedColors.embeds.normal)
             .setDescription(`Item **${shop.item.name}** has been removed from the shop display.`);
 
         await message.channel.send(shop.embed)

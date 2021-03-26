@@ -11,19 +11,22 @@ module.exports = {
     examples: ['h!svl', 'h!svl 763039768870649856', 'h!svl #voice-log'],
     neededPermissions: neededPerm,
     run: async (bot, message, args) => {
-        let embed = new MessageEmbed().setColor(bot.embedColors.normal);
-        const chan = new RegExp('[0-9]{17,}');
-        let user = message.author;
-        let guild = message.guild;
-        let $channel;
-        let voiceLogChannel;
+        const svl = {
+            send: async (msg) => {
+                await message.channel.send(msg);
+            },
+            embed: new MessageEmbed().setColor(bot.embedColors.embeds.normal),
+            chan: new RegExp('[0-9]{17,}'),
+            user: message.author,
+            guild: message.guild,
+        };
 
         if (!args[0]) {
-            await guild.channels.create('voice-log', {
+            svl.channel = await svl.guild.channels.create('voice-log', {
                 type: "text",
                 permissionOverwrites: [
                     {
-                        id: user.id,
+                        id: svl.user.id,
                         allow: ['VIEW_CHANNEL', "MANAGE_CHANNELS"],
                     },
                     {
@@ -35,61 +38,55 @@ module.exports = {
                         deny: ['VIEW_CHANNEL'],
                     }
                 ]
-            }).then(channel => {
-                $channel = channel;
-
-                embed.setTitle('Set voice log')
-                    .setColor(bot.embedColors.normal)
-                    .setDescription(`New voice log created with name <#${channel.id}>`);
             });
 
-            await $channel.createWebhook('Hinata', {
+                svl.embed.setTitle('Set voice log')
+                    .setColor(bot.embedColors.embeds.normal)
+                    .setDescription(`New voice log created with name <#${svl.channel.id}>`);
+
+            svl.voiceLogChannel = await svl.channel.createWebhook('Hinata', {
                 avatar: bot.user.avatarURL({
                     dynamic: true,
                     size: 4096
                 })
-            }).then(hook => {
-                voiceLogChannel = hook.id;
-            });
+            }).id;
         } else {
-            if (!chan.test(args[0])) {
-                return embed.setTitle('Set voice log')
-                    .setColor(bot.embedColors.error)
+            if (!svl.chan.test(args[0])) {
+                return svl.embed.setTitle('Set voice log')
+                    .setColor(bot.embedColors.embeds.error)
                     .setDescription('Please provide a valid id');
             }
 
-            let channel = guild.channels.cache.get(chan.exec(args[0])[0]);
+            svl.channel = svl.guild.channels.cache.get(svl.chan.exec(args[0])[0]);
 
-            if (!channel) {
-                return embed.setTitle('Set voice log')
-                    .setColor(bot.embedColors.error)
+            if (!svl.channel) {
+                return svl.embed.setTitle('Set voice log')
+                    .setColor(bot.embedColors.embeds.error)
                     .setDescription('Please provide a valid id');
             }
 
-            await channel.createWebhook('Hinata', {
+            svl.voiceLogChannel = await svl.channel.createWebhook('Hinata', {
                 avatar: bot.user.avatarURL({
                     dynamic: true,
                     size: 4096
                 })
-            }).then(hook => {
-                voiceLogChannel = hook.id;
-            });
+            }).id;
 
-            embed.setTitle('Set voice log')
-                .setColor(bot.embedColors.normal)
-                .setDescription(`Voice log channel set to <#${channel.id}>`);
+            svl.embed.setTitle('Set voice log')
+                .setColor(bot.embedColors.embeds.normal)
+                .setDescription(`Voice log channel set to <#${svl.channel.id}>`);
         }
 
         await ServerSettings.findOne({
             where: {
-                serverId: guild.id
+                serverId: svl.guild.id
             }
         }).then(async server => {
-            server.voiceLogChannel = voiceLogChannel;
+            server.voiceLogChannel = svl.voiceLogChannel;
 
             server.save();
         });
 
-        await message.channel.send(embed);
+        await svl.send(svl.embed);
     }
 }

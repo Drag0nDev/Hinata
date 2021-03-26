@@ -13,7 +13,6 @@ module.exports = {
         '- A command and all the info of the command',
     usage: '[command | alias] <categoryname/commandname>',
     examples: ['h!help', 'h!help info', 'h!help slum'],
-    cooldown: 5,
     run: async (bot, message, args) => {
         const embed = new MessageEmbed();
 
@@ -33,7 +32,7 @@ module.exports = {
 
             if (cmd) {
                 if (cmd.category.includes('owner') && message.member.id !== config.owner){
-                    embed.setColor(bot.embedColors.error)
+                    embed.setColor(bot.embedColors.embeds.error)
                         .setTitle('Bot owner only command')
                         .setDescription('This command is not available for your use.\n' +
                             'This command can only be used by the bot owner.')
@@ -46,7 +45,7 @@ module.exports = {
             }
             if (cat){
                 if (catVal.includes('owner') && message.member.id !== config.owner){
-                    embed.setColor(bot.embedColors.error)
+                    embed.setColor(bot.embedColors.embeds.error)
                         .setTitle('Bot owner only category')
                         .setDescription('This category is not available for your use.\n' +
                             'The commands in this category can only be used by the bot owner.')
@@ -58,7 +57,7 @@ module.exports = {
                 return getCat(bot, message, catVal);
             }
             else {
-                embed.setColor(bot.embedColors.error)
+                embed.setColor(bot.embedColors.embeds.error)
                     .setTitle('No command found')
                     .setDescription(info)
                     .setTimestamp()
@@ -82,7 +81,7 @@ function getAll(bot, message) {
 
     //embed creation
     const embed = new MessageEmbed()
-        .setColor(bot.embedColors.normal)
+        .setColor(bot.embedColors.embeds.normal)
         .setTitle('Help')
         .setURL('https://discord.gg/ReBJ4AB')
         .setTimestamp()
@@ -110,7 +109,7 @@ function getAll(bot, message) {
 function getCmd(bot, message, cmd) {
     const embed = new MessageEmbed();
 
-    embed.setColor(bot.embedColors.normal).setTimestamp();
+    embed.setColor(bot.embedColors.embeds.normal).setTimestamp();
 
     //add all cmd info
     if (cmd.name) {
@@ -154,7 +153,7 @@ function getCmd(bot, message, cmd) {
 function getCat(bot, message, input) {
     const embed = new MessageEmbed()
 
-    embed.setColor(bot.embedColors.normal).setTimestamp();
+    embed.setColor(bot.embedColors.embeds.normal).setTimestamp();
 
     const commands = (category) => {
         return bot.commands
@@ -190,7 +189,7 @@ function messageEditor(bot, message, embed, categories, commands) {
                 let editEmbed = new MessageEmbed()
                     .setTitle('Help')
                     .setURL('https://discord.gg/ReBJ4AB')
-                    .setColor(bot.embedColors.normal);
+                    .setColor(bot.embedColors.embeds.normal);
 
                 if (reaction.emoji.name === '▶') {
                     page++;

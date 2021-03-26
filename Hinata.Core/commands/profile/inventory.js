@@ -19,7 +19,7 @@ module.exports = {
             },
             embed: new MessageEmbed().setTitle('Inventory')
                 .setTimestamp()
-                .setColor(bot.embedColors.normal),
+                .setColor(bot.embedColors.embeds.normal),
             nameReg: new RegExp('-n', 'i'),
             catReg: new RegExp('-c', 'i'),
             str: args.join(' '),
@@ -112,7 +112,7 @@ async function inventoryByName(bot, message, inventory) {
         ]
     });
 
-    inventory.embed.setColor(bot.embedColors.normal)
+    inventory.embed.setColor(bot.embedColors.embeds.normal)
         .setTimestamp();
 
     if (inventory.db.length === 0) {
@@ -155,7 +155,7 @@ async function inventoryByCategory(bot, message, inventory) {
 
     if (inventory.categoryDb === null || inventory.categoryDb.name === 'hidden') {
         inventory.embed.setDescription(`Category **${inventory.item.category}** does not exist!`)
-            .setColor(bot.embedColors.error);
+            .setColor(bot.embedColors.embeds.error);
 
         return message.channel.send(inventory.embed);
     }
@@ -181,7 +181,7 @@ async function inventoryByCategory(bot, message, inventory) {
         ]
     });
 
-    inventory.embed.setColor(bot.embedColors.normal)
+    inventory.embed.setColor(bot.embedColors.embeds.normal)
         .setTimestamp();
 
     if (inventory.db.length === 0 || inventory.categoryDb.name === 'hidden') {
@@ -254,7 +254,7 @@ async function inventoryByNameAndCat(bot, message, inventory) {
         ]
     });
 
-    inventory.embed.setColor(bot.embedColors.normal)
+    inventory.embed.setColor(bot.embedColors.embeds.normal)
         .setTimestamp();
 
     if (inventory.db.length === 0) {
@@ -301,7 +301,7 @@ function messageEditor(bot, message, inventory) {
             collector.on('collect', async (reaction, user) => {
                 inventory.editEmbed = new MessageEmbed()
                     .setTitle(`Shop`)
-                    .setColor(bot.embedColors.normal);
+                    .setColor(bot.embedColors.embeds.normal);
 
                 if (reaction.emoji.name === '▶') {
                     inventory.page++;

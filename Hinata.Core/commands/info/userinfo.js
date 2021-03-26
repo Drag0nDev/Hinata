@@ -10,50 +10,75 @@ module.exports = {
     examples: ['h!uinfo', 'h!uinfo 418037700751261708', 'h!uinfo @Drag0n#6666'],
     cooldown: 10,
     run: async (bot, message, args) => {
-        let embed = new MessageEmbed().setColor(bot.embedColors.normal);
+        const uinfo = {
+            send: async (msg) => {
+                await message.channel.send(msg);
+            },
+            embed: new MessageEmbed().setColor(bot.embedColors.embeds.normal),
+            fields: []
+        };
 
         //find the member if one is asked if not then use the author
-        let member;
+        uinfo.member = await Servers.getMember(message, args);
 
-        await Servers.getMember(message, args).then(memberPromise => {
-            member = memberPromise;
-        });
-
-        if (!member)
-            return message.channel.send(embed.setColor(bot.embedColors.error)
+        if (!uinfo.member)
+            return message.channel.send(uinfo.embed.setColor(bot.embedColors.embeds.error)
                 .setDescription('Please provide a valid user ID or mention!'));
 
-        //get nickname
-        let nickname = member.nickname === null ? '-' : member.nickname;
+        uinfo.fields.push(
+            {
+                name: 'Username',
+                value: `${uinfo.member.user.username}#${uinfo.member.user.discriminator}`,
+                inline: true
+            },
+            {
+                name: 'Nickname',
+                value: uinfo.member.nickname === null ? '-' : uinfo.member.nickname,
+                inline: true
+            },
+            {
+                name: `Id`,
+                value: uinfo.member.user.id.toString(),
+                inline: true
+            },
+            {
+                name: 'Joined server',
+                value: Dates.getDate(uinfo.member.joinedTimestamp),
+                inline: true
+            },
+            {
+                name: 'Created at',
+                value: Dates.getDate(uinfo.member.user.createdTimestamp),
+                inline: true
+            },
+            {
+                name: `Roles (${uinfo.member._roles.length})`,
+                value: Roles.getRoles(uinfo.member),
+                inline: true
+            },
+            {
+                name: `Managing permissions`,
+                value: getPermissions(uinfo.member).managePerms,
+                inline: true
+            },
+            {
+                name: `Text permissions`,
+                value: getPermissions(uinfo.member).textPerms,
+                inline: true
+            },
+            {
+                name: `Voice permissions`,
+                value: getPermissions(uinfo.member).voicePerms,
+                inline: true
+            }
+        );
 
-        //get Join date
-        let date = Dates.getDate(member.joinedTimestamp);
-
-        //get account creation date
-        let creation = Dates.getDate(member.user.createdTimestamp);
-
-        //get roles
-        let roles = Roles.getRoles(member);
-
-        //get the permissions
-        let permissions = getPermissions(member);
-
-        embed.setTitle(`Userinfo of: ${member.user.username}#${member.user.discriminator}`)
-            .setThumbnail(member.user.avatarURL({dynamic: true}))
-            .addFields(
-                {name: 'Username', value: `${member.user.username}#${member.user.discriminator}`, inline: true},
-                {name: 'Nickname', value: `${nickname}`, inline: true},
-                {name: `Id`, value: `${member.user.id}`, inline: true},
-                {name: 'Joined server', value: `${date}`, inline: true},
-                {name: 'Created at', value: `${creation}`, inline: true},
-                {name: `Roles (${member._roles.length})`, value: `${roles}`, inline: true},
-                {name: `Managing permissions`, value: `${permissions.managePerms}`, inline: true},
-                {name: `Text permissions`, value: `${permissions.textPerms}`, inline: true},
-                {name: `Voice permissions`, value: `${permissions.voicePerms}`, inline: true},
-            )
+        uinfo.embed.setTitle(`Userinfo of: ${uinfo.member.user.username}#${uinfo.member.user.discriminator}`)
+            .setThumbnail(uinfo.member.user.avatarURL({dynamic: true}))
+            .addFields(uinfo.fields)
             .setFooter('Max amount of shown roles is 10!');
 
-        await message.channel.send(embed);
+        await uinfo.send(uinfo.embed);
     }
 }
 

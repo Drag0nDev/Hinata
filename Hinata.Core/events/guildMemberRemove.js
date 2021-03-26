@@ -49,7 +49,7 @@ async function checkKick(bot, member) {
 
     if (target.id === member.id) {
         embed.setTitle('User kicked')
-            .setColor(bot.embedColors.kick)
+            .setColor(bot.embedColors.moderations.kick)
             .setDescription(`**Member:** ${member.user.tag}\n` +
                 `**Reason:** ${reason}\n` +
                 `**Responsible moderator:** ${executor.tag}`)
@@ -122,7 +122,7 @@ async function joinleaveLog(bot, member) {
 
     let embed = new MessageEmbed().setTitle('Member left')
         .setTimestamp()
-        .setColor(bot.embedColors.leave)
+        .setColor(bot.embedColors.logs.leave)
         .setAuthor(`${member.user.username}#${member.user.discriminator}`, member.user.avatarURL({dynamic: true}), member.user.avatarURL({dynamic: true, size: 4096}))
         .setDescription(`<@!${member.user.id}> left the server`)
         .addField(`Membercount`, member.guild.memberCount, true)

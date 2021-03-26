@@ -16,12 +16,12 @@ module.exports = {
                 await message.channel.send(msg);
             },
             embed: new MessageEmbed().setTitle('Role delete')
-                .setColor(bot.embedColors.normal)
+                .setColor(bot.embedColors.embeds.normal)
                 .setTimestamp(),
             name: args.join(' '),
             colors: {
-                normal: bot.embedColors.normal,
-                error: bot.embedColors.error
+                normal: bot.embedColors.embeds.normal,
+                error: bot.embedColors.embeds.error
             }
         };
         const guild = message.guild;

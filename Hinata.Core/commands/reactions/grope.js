@@ -1,5 +1,6 @@
 const {MessageEmbed} = require('discord.js');
 const {Servers} = require('../../misc/tools');
+const grope = require('../../misc/reactions.json').grope;
 
 module.exports = {
     //<editor-fold defaultstate="collapsed" desc="userinfo help">
@@ -9,50 +10,48 @@ module.exports = {
     usage: '[command | alias] <mention / id>',
     //</editor-fold>
     run: async (bot, message, args) => {
-        let embed = new MessageEmbed().setColor(bot.embedColors.normal);
-        let userMentions = [];
-        let text;
-        let members = '';
+        const reaction = {
+            embed: new MessageEmbed().setColor(bot.embedColors.embeds.normal),
+            userMentions: [],
+            members: '',
+        }
 
         if (!message.channel.nsfw) {
-            embed.setDescription('This command can only be used in an NSFW marked channel!');
-            return message.channel.send(embed);
+            reaction.embed.setDescription('This command can only be used in an NSFW marked channel!');
+            return message.channel.send(reaction.embed);
         }
 
-        if (args[0]){
-            await Servers.getMembers(message, args, userMentions).then(membersPromise => {
-                members = membersPromise;
-            });
-        }
+        if (args[0])
+            reaction.members = await Servers.getMembers(message, args, reaction.userMentions);
 
         if (message.mentions.everyone > 0)
-            members += '@everyone ';
+            reaction.members += '@everyone ';
 
-        let author = message.guild.members.cache.get(message.author.id);
+        reaction. author = await message.guild.members.cache.get(message.author.id);
 
-        embed.setImage(getGif(bot).toString())
+        embed.setImage(getGif())
             .setFooter('Powered by lost hopes and dreams');
 
-        if (members.length === 0) {
-            userMentions.push(author.user.id)
-            text = `*hugs* ${author}!`;
+        if (reaction.members.length === 0) {
+            reaction.userMentions.push(reaction.author.user.id)
+            reaction.text = `*gropes* ${reaction.author}!`;
         } else
-            text = `${members}you have been groped by **${author.nickname === null ? author.user.username : author.nickname}**, *lewd*!`;
+            reaction.text = `${reaction.members}you have been groped by **${reaction.author.nickname === null ? reaction.author.user.username : reaction.author.nickname}**, *lewd*!`;
 
         await message.channel.send(
             {
-                content: text,
-                embed: embed,
+                content: reaction.text,
+                embed: reaction.embed,
                 allowedMentions: {
-                    users: userMentions,
+                    users: reaction.userMentions,
                 }
             }
         );
     }
 }
 
-function getGif(bot) {
-    return bot.reactions.grope[getRandom(bot.reactions.grope.length)];
+function getGif() {
+    return grope[getRandom(grope.length)];
 }
 
 function getRandom(max) {

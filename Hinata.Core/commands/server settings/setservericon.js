@@ -1,5 +1,5 @@
 const {MessageEmbed} = require('discord.js');
-const log4js = require("log4js");
+const log4js = require("log4js").getLogger();
 let neededPerm = ['MANAGE_GUILD'];
 const {Permissions, Roles, Servers, Levels, Compare, Logs, Minor, Dates} = require('../../misc/tools');
 
@@ -14,18 +14,17 @@ module.exports = {
     neededPermissions: neededPerm,
     //</editor-fold>
     run: async (bot, message, args) => {
-        const logger = log4js.getLogger();
-        let embed = new MessageEmbed().setColor(bot.embedColors.normal);
+        let embed = new MessageEmbed().setColor(bot.embedColors.embeds.normal);
 
         if (!args[0])
-            return message.channel.send(embed.setColor(bot.embedColors.error)
+            return message.channel.send(embed.setColor(bot.embedColors.embeds.error)
                 .setDescription('Please provide a valid link'));
 
         let guild = message.guild;
 
         guild.setIcon(args.toString()).then(updated => {
                 embed.setTitle('setservericon')
-                    .setColor(bot.embedColors.normal)
+                    .setColor(bot.embedColors.embeds.normal)
                     .setDescription('Server icon changed successfully to:')
                     .setImage(guild.iconURL({dynamic: true, size: 4096}));
 
@@ -33,7 +32,7 @@ module.exports = {
             }
         ).catch(err => {
             embed.setDescription(err.message.toString().replace("Invalid Form Body\n", ""))
-                .setColor(bot.embedColors.error);
+                .setColor(bot.embedColors.embeds.error);
             message.channel.send(embed);
         })
     }

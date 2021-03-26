@@ -12,20 +12,22 @@ module.exports = {
     usage: '[command | alias]',
     examples: ['h!moderations'],
     neededPermissions: neededPerm,
-    run: async (bot, message, args) => {
-        let embed = new MessageEmbed().setFooter('Page 1');
-        let timers;
-        let server;
+    run: async (bot, message) => {
+        const moderations = {
+            send: async (msg) => {
+                await message.channel.send(msg);
+            },
+            embed: new MessageEmbed().setFooter('Page 1')
+        };
 
-        embed.setTitle(`Moderations`)
+        moderations.embed.setTitle(`Moderations`)
             .setThumbnail(message.guild.iconURL({
                 dynamic: true,
                 size: 4096
             }));
-        let description;
-        const now = new Date();
+        moderations.now = new Date();
 
-        timers = await Timers.findAll({
+        moderations.timers = await Timers.findAll({
                 where: {
                     guildId: message.guild.id
                 },
@@ -35,21 +37,21 @@ module.exports = {
             }
         ).catch(async err => {
             logger.error(err);
-            embed.setColor(bot.embedColors.error)
+            moderations.embed.setColor(bot.embedColors.embeds.error)
                 .setDescription(`Please contact the bot developer to resolve the error that occured!\n` +
                     `error: **${err}**`)
                 .setTimestamp();
 
-            await message.channel.send(embed);
+            await moderations.send(moderations.embed);
         });
 
-        if (!timers[0])
-            return message.channel.send(embed.setDescription('No moderations in this server!')
-                .setColor(bot.embedColors.normal)
+        if (!moderations.timers[0])
+            return moderations.send(moderations.embed.setDescription('No moderations in this server!')
+                .setColor(bot.embedColors.embeds.normal)
                 .setTimestamp());
 
-        for (let i = 0; i < 5 && i < timers.length; i++) {
-            const timer = timers[i];
+        for (let i = 0; i < 5 && i < moderations.timers.length; i++) {
+            const timer = moderations.timers[i];
             let user;
             let moderator;
 
@@ -66,9 +68,9 @@ module.exports = {
             });
 
             let timeLeft;
-            await timediff(now, timer.expiration).then(left => timeLeft = left);
+            await timediff(moderations.now, timer.expiration).then(left => timeLeft = left);
 
-            embed.addField(
+            moderations.embed.addField(
                 `${timer.type}: ${user.userTag}`,
                 `**Reason**: ${timer.reason}\n` +
                 `**Moderator**: ${moderator.userTag}\n` +
@@ -77,18 +79,18 @@ module.exports = {
             );
         }
 
-        server = await Server.findOne({
+        moderations.server = await Server.findOne({
             where: {
                 serverId: message.guild.id
             }
         });
 
-        description = `All warnings for server **${server.serverName}**.`;
-        embed.setColor(bot.embedColors.normal)
-            .setDescription(description)
+        moderations.description = `All warnings for server **${moderations.server.serverName}**.`;
+        moderations.embed.setColor(bot.embedColors.embeds.normal)
+            .setDescription(moderations.description)
             .setTimestamp();
 
-        messageEditor(bot, message, embed, timers, description, now);
+        messageEditor(bot, message, moderations.embed, moderations.timers, moderations.description, moderations.now);
     }
 }
 
@@ -112,7 +114,7 @@ function messageEditor(bot, message, embed, timers, description, now) {
                         size: 4096
                     }))
                     .setDescription(description)
-                    .setColor(bot.embedColors.normal)
+                    .setColor(bot.embedColors.embeds.normal)
                     .setTimestamp();
 
                 if (reaction.emoji.name === '▶') {

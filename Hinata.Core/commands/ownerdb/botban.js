@@ -11,12 +11,12 @@ module.exports = {
     usage: '[command | alias]',
     ownerOnly: true,
     run: async (bot, message, args) => {
-        let embed = new MessageEmbed().setColor(bot.embedColors.normal);
+        let embed = new MessageEmbed().setColor(bot.embedColors.embeds.normal);
         const id = new RegExp('[0-9]{17,}');
         let member;
 
         if (!id.exec(args[0])) {
-            embed.setColor(bot.embedColors.error)
+            embed.setColor(bot.embedColors.embeds.error)
                 .setDescription('Please provide a valid memberid / mention');
 
             return message.channel.send(embed);
@@ -53,7 +53,7 @@ module.exports = {
 
 
         }).catch(err => {
-            embed.setColor(bot.embedColors.error)
+            embed.setColor(bot.embedColors.embeds.error)
                 .setDescription(`No user with id **${args[0]}** found in the database`)
                 .setTimestamp();
         });

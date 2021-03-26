@@ -38,7 +38,7 @@ module.exports = {
 
         if (!args[0] || (args[0].toLowerCase() !== 'add' && args[0].toLowerCase() !== 'remove')) {
             reddit.embed.setDescription('Please provide the action you want to do. `add` or `remove`.')
-                .setColor(bot.embedColors.error);
+                .setColor(bot.embedColors.embeds.error);
 
             return reddit.send(reddit.embed);
         }
@@ -47,7 +47,7 @@ module.exports = {
 
         if (!args[1]) {
             reddit.embed.setDescription('Please provide a subreddit to add (case sensitive).')
-                .setColor(bot.embedColors.error);
+                .setColor(bot.embedColors.embeds.error);
 
             return reddit.send(reddit.embed);
         }
@@ -65,7 +65,7 @@ module.exports = {
 
                 if (reddit.autofeeds !== null){
                     reddit.embed.setDescription(`You already have an autofeed for **${reddit.subreddit}**`)
-                        .setColor(bot.embedColors.error);
+                        .setColor(bot.embedColors.embeds.error);
                     break;
                 }
 
@@ -88,7 +88,7 @@ module.exports = {
                 }
 
                 reddit.embed.setDescription(`Subreddit **${reddit.subreddit}** added in this channel.`)
-                    .setColor(bot.embedColors.normal);
+                    .setColor(bot.embedColors.embeds.normal);
 
                 break;
             case 'remove':
@@ -114,7 +114,7 @@ module.exports = {
                     });
 
                     reddit.embed.setDescription(`Subreddit **${reddit.subreddit}** was removed from this server.`)
-                        .setColor(bot.embedColors.normal);
+                        .setColor(bot.embedColors.embeds.normal);
                 });
                 break;
         }

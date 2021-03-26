@@ -17,7 +17,7 @@ module.exports = {
         let user;
 
         if (!id.exec(args[0])) {
-            embed.setColor(bot.embedColors.error)
+            embed.setColor(bot.embedColors.embeds.error)
                 .setDescription('Please provide a valid memberid / mention');
 
             return message.channel.send(embed);
@@ -30,7 +30,7 @@ module.exports = {
         });
 
         if (bal.exec(args[1])[0] === '')
-            return message.channel.send(embed.setColor(bot.embedColors.error)
+            return message.channel.send(embed.setColor(bot.embedColors.embeds.error)
                 .setDescription('Please provide an amount to add!'))
 
         user = await User.findOne({
@@ -40,7 +40,7 @@ module.exports = {
                 }
         })
         .catch(err => {
-            embed.setColor(bot.embedColors.error)
+            embed.setColor(bot.embedColors.embeds.error)
                 .setDescription(`No user with id **${args[0]}** found in the database`)
                 .setTimestamp();
         });
@@ -48,7 +48,7 @@ module.exports = {
         User.add(user, parseInt(args[1]));
 
         embed.setTitle(`Add balance`)
-            .setColor(bot.embedColors.normal)
+            .setColor(bot.embedColors.embeds.normal)
             .setDescription(`Balance successfully added!\n` +
                 `The balance of **${user.userTag}** is now **${user.balance}${bot.currencyEmoji}**.`)
             .setTimestamp();

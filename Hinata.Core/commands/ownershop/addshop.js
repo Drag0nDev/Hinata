@@ -26,7 +26,7 @@ module.exports = {
 
         //check if the name, price and category are given
         if (!name.test(str) && !price.test(str) && !category.test(str)) {
-            embed.setColor(bot.embedColors.error);
+            embed.setColor(bot.embedColors.embeds.error);
 
             if (!name.test(str))
                 embed.addField('Name', 'Please provide a name!');
@@ -80,10 +80,10 @@ module.exports = {
                             let file = message.attachments.first();
                             item.image = file.url;
                         } else if (message.attachments.size === 0) {
-                            return await message.channel.send(embed.setDescription('Please provide a valid image link/attachment!').setColor(bot.embedColors.error));
+                            return await message.channel.send(embed.setDescription('Please provide a valid image link/attachment!').setColor(bot.embedColors.embeds.error));
                         }
                     } else if (item.image !== '' && message.attachments.size > 0) {
-                        return await message.channel.send(embed.setDescription('Please provide only an image link/attachment!').setColor(bot.embedColors.error));
+                        return await message.channel.send(embed.setDescription('Please provide only an image link/attachment!').setColor(bot.embedColors.embeds.error));
                     }
                     break;
             }
@@ -100,14 +100,14 @@ module.exports = {
 
         if (db.category === null) {
             embed.setDescription(`The category **${item.category}** doesn't existh!`)
-                .setColor(bot.embedColors.error);
+                .setColor(bot.embedColors.embeds.error);
 
             return await message.channel.send(embed);
         }
 
         //check if price is a number
         if (isNaN(parseInt(item.price))) {
-            embed.setColor(bot.embedColors.error)
+            embed.setColor(bot.embedColors.embeds.error)
                 .setDescription('Please provide a valid price!');
 
             return await message.channel.send(embed);
@@ -125,7 +125,7 @@ module.exports = {
 
         if (db.shop !== null) {
             embed.setDescription(`The item **${item.name}** already exists under the category **${item.category}**!`)
-                .setColor(bot.embedColors.error);
+                .setColor(bot.embedColors.embeds.error);
 
             if (db.shop.image !== null)
                 embed.addField('Existing item',
@@ -150,7 +150,7 @@ module.exports = {
         //check if there is an image
         if (item.image) {
             if (!format.test(item.image)) {
-                embed.setColor(bot.embedColors.error)
+                embed.setColor(bot.embedColors.embeds.error)
                     .setDescription('Please provide a valid image link!');
 
                 return await message.channel.send(embed);
@@ -172,7 +172,7 @@ module.exports = {
             await download.image(options)
                 .catch((err) => logger.error(err));
 
-            await embed.setColor(bot.embedColors.logAdd)
+            await embed.setColor(bot.embedColors.logs.logAdd)
                 .setDescription('New item added!\n' +
                     '**Values:**')
                 .addField('Name:', item.name, true)
@@ -191,7 +191,7 @@ module.exports = {
                 category: db.category.id
             });
 
-            await embed.setColor(bot.embedColors.logAdd)
+            await embed.setColor(bot.embedColors.logs.logAdd)
                 .setDescription('New item added!\n' +
                     '**Values:**')
                 .addField('Name:', item.name, true)

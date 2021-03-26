@@ -26,7 +26,7 @@ module.exports = {
             }
 
             if (!noXpRole) {
-                embed.setColor(bot.embedColors.error)
+                embed.setColor(bot.embedColors.embeds.error)
                     .setDescription('Please provide a valid role or a valid RoleId');
                 return message.channel.send(embed);
             }
@@ -48,7 +48,7 @@ module.exports = {
             });
         }
 
-        embed.setColor(bot.embedColors.normal)
+        embed.setColor(bot.embedColors.embeds.normal)
             .setDescription(`muterole is set to <@&${noXpRole.id}>`);
         return message.channel.send(embed);
     }

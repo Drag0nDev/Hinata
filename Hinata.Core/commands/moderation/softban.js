@@ -12,23 +12,19 @@ module.exports = {
     neededPermissions: neededPerm,
     run: async (bot, message, args) => {
         let reason = 'No reason provided';
-        let embed = new MessageEmbed().setTimestamp().setColor(bot.embedColors.ban);
+        let embed = new MessageEmbed().setTimestamp().setColor(bot.embedColors.moderations.softban);
 
         //check if there is an argument
         if (!args[0])
             return message.channel.send('Please provide a user to softban!');
 
-        let member;
-
-        await Servers.getMember(message, args).then(memberPromise => {
-            member = memberPromise;
-        });
+        const member = await Servers.getMember(message, args);
         const author = message.guild.members.cache.get(message.author.id);
 
         //check if member is in the server
         if (!member)
             return message.channel.send(embed
-                .setColor(bot.embedColors.error)
+                .setColor(bot.embedColors.embeds.error)
                 .setDescription(`No member found with this id or name`));
 
         const canBan = Compare.compareRoles(author, member);
@@ -36,19 +32,19 @@ module.exports = {
         //check if the author has a higher role then the member
         if (!canBan)
             return message.channel.send(embed.setTitle('Action not allowed!')
-                .setColor(bot.embedColors.error)
+                .setColor(bot.embedColors.embeds.error)
                 .setDescription(`You can't softban **${member.user.tag}** due to role hierarchy!`));
         //check if member is banable
         if (!member.bannable)
             return message.channel.send(embed.setTitle('Action not allowed!')
-                .setColor(bot.embedColors.error)
+                .setColor(bot.embedColors.embeds.error)
                 .setDescription(`I can't softban **${member.user.tag}** due to role hierarchy!`));
 
 
         //check if it is self ban, or bot ban
         if (member.user.id === message.author.id) {
             return message.channel.send(embed.setTitle('Action not allowed!')
-                .setColor(bot.embedColors.error)
+                .setColor(bot.embedColors.embeds.error)
                 .setDescription(`You can't ban yourself!`));
         }
 
@@ -59,7 +55,7 @@ module.exports = {
         }
 
         if (reason.length > 1000) {
-            embed.setColor(bot.embedColors.error)
+            embed.setColor(bot.embedColors.embeds.error)
                 .setDescription('The reason is too long.\n' +
                     'Keep it under 1000 characters.')
                 .setTimestamp();
@@ -68,7 +64,7 @@ module.exports = {
         }
 
         embed.setDescription(`**${member.user.tag}** is softbanned for reason: **${reason}**.`)
-            .setColor(bot.embedColors.normal);
+            .setColor(bot.embedColors.embeds.normal);
 
         await member.createDM().then(async dmChannel => {
             await dmChannel.send(`You got softbanned from **${message.guild.name}** with reason: **${reason}**!`);
@@ -91,7 +87,7 @@ module.exports = {
         });
 
         const logEmbed = new MessageEmbed().setTitle('User softbanned')
-            .setColor(bot.embedColors.softban)
+            .setColor(bot.embedColors.moderations.softban)
             .setDescription(`**Member:** ${member.user.tag}\n` +
                 `**Reason:** ${reason}\n` +
                 `**Responsible Moderator:** ${message.author.tag}`)

@@ -21,12 +21,12 @@ module.exports = {
         });
 
         if (!member)
-            return message.channel.send(embed.setColor(bot.embedColors.error)
+            return message.channel.send(embed.setColor(bot.embedColors.embeds.error)
                 .setDescription('Please provide a valid user ID or mention!'));
 
         embed.setImage('https://media1.tenor.com/images/b7cd57136bb82a1784bedc5408149eb1/tenor.gif?itemid=13247943')
             .setDescription('Getting ip ...')
-            .setColor(bot.embedColors.normal);
+            .setColor(bot.embedColors.embeds.normal);
 
         await message.channel.send(embed).then(async msg => {
             await delay(1250);

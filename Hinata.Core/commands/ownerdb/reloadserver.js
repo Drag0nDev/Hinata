@@ -27,7 +27,7 @@ module.exports = {
 
             await message.channel.send(embed);
         } catch (err) {
-            embed.setColor(bot.embedColors.error)
+            embed.setColor(bot.embedColors.embeds.error)
                 .setDescription(err);
             logger.error(err);
             await message.channel.send(embed);

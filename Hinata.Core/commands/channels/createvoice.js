@@ -1,9 +1,7 @@
 const {MessageEmbed} = require('discord.js');
-const {Permissions} = require('../../misc/tools');
 let neededPerm = ['MANAGE_GUILD'];
 
 module.exports = {
-    //<editor-fold defaultstate="collapsed" desc="userinfo help">
     name: 'createvoice',
     aliases: ['cv', 'newvoice'],
     category: 'channels',
@@ -11,26 +9,29 @@ module.exports = {
     usage: '[command | alias] [voice channel name]',
     examples: ['h!cv general'],
     neededPermissions: neededPerm,
-    //</editor-fold>
     run: async (bot, message, args) => {
-        let embed = new MessageEmbed().setColor(bot.embedColors.normal);
-        let neededPerm = 'MANAGE_CHANNELS';
-        let user = message.author;
+        const voice = {
+            send: async (msg) => {
+                message.channel.send(msg);
+            },
+            embed: new MessageEmbed().setColor(bot.embedColors.embeds.normal),
+            user: message.author,
+            name: args.join(' '),
+            title: 'Create new voice channel!',
+        }
 
-        const catName = args.join(' ');
-        const title = 'Create new voice channel!';
         const channel = message.channel;
 
         if (!args[0])
-            return message.channel.send(embed.setColor(bot.embedColors.error)
+            return voice.send(voice.embed.setColor(bot.embedColors.embeds.error)
                 .setDescription('Please provide a name!'));
 
-        await message.guild.channels.create(catName,
+        await message.guild.channels.create(voice.name,
             {
                 type: "voice",
                 permissionOverwrites: [
                     {
-                        id: user.id,
+                        id: voice.user.id,
                         allow: ['VIEW_CHANNEL', "MANAGE_CHANNELS"],
                     },
                     {
@@ -44,11 +45,11 @@ module.exports = {
                 ]
             }).then(newChannel => {
 
-            embed.setTitle(title)
-                .setColor(bot.embedColors.normal)
-                .setDescription(`New voice channel created with name **${catName}**!`);
+            voice.embed.setTitle(voice.title)
+                .setColor(bot.embedColors.embeds.normal)
+                .setDescription(`New voice channel created with name **${voice.name}**!`);
 
-            channel.send(embed);
+            voice.send(voice.embed);
         });
     }
 }

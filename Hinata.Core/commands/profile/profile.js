@@ -40,7 +40,7 @@ module.exports = {
         let globalRank = profile.userListId.indexOf(profile.member.user.id) + 1;
 
         if (profile.user.color === null)
-            profile.color = bot.embedColors.normal;
+            profile.color = bot.embedColors.embeds.normal;
         else
             profile.color = profile.user.color;
 
@@ -82,7 +82,7 @@ module.exports = {
         ctx.strokeRect(0, 0, canvas.width, canvas.height);
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        ctx.strokeStyle = bot.embedColors.normal;
+        ctx.strokeStyle = bot.embedColors.embeds.normal;
         ctx.strokeRect(0, 0, canvas.width, canvas.height);
 
         //draw text above xp bar

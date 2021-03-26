@@ -6,7 +6,7 @@ module.exports = async (bot, oldGuild, newGuild) => {
     try {
         if (newGuild.me.hasPermission("MANAGE_WEBHOOKS")) return;
         let embed = new MessageEmbed().setTimestamp()
-            .setColor(bot.embedColors.logChange)
+            .setColor(bot.embedColors.logs.logChange)
             .setTitle(`Server updated`);
         let before = '';
         let after = '';

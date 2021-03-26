@@ -14,11 +14,11 @@ module.exports = {
     neededPermissions: neededPerm,
     //</editor-fold>
     run: async (bot, message, args) => {
-        let embed = new MessageEmbed().setColor(bot.embedColors.normal);
+        let embed = new MessageEmbed().setColor(bot.embedColors.embeds.normal);
         const re = new RegExp('(remove)$');
 
         if (!args[0])
-            return message.channel.send(embed.setColor(bot.embedColors.error)
+            return message.channel.send(embed.setColor(bot.embedColors.embeds.error)
                 .setDescription('Please provide a prefix!'));
 
         if (re.exec(args[0])) {

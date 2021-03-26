@@ -18,7 +18,7 @@ module.exports = {
 
         //check if there is an argument
         if (!args[0])
-            return message.channel.send(embed.setColor(bot.embedColors.error)
+            return message.channel.send(embed.setColor(bot.embedColors.embeds.error)
                 .setDescription('Please provide a member to warn!'));
 
         let member;
@@ -34,7 +34,7 @@ module.exports = {
 
         if (!Compare.compareRoles(message.guild.members.cache.get(message.author.id), member)) {
             return message.channel.send(embed = new MessageEmbed().setTitle('Action not allowed!')
-                .setColor(bot.embedColors.error)
+                .setColor(bot.embedColors.embeds.error)
                 .setDescription(`You can't warn **${member.user.tag}** due to role hierarchy!`));
         }
 
@@ -43,7 +43,7 @@ module.exports = {
             reason = args.join(' ');
 
         if (reason.length > 1000){
-            embed.setColor(bot.embedColors.error)
+            embed.setColor(bot.embedColors.embeds.error)
                 .setDescription('The reason is too long.\n' +
                     'Keep it under 1000 characters.')
                 .setTimestamp();
@@ -63,7 +63,7 @@ module.exports = {
                 moderatorId: author.user.id,
                 reason: reason
             }).then(warning => {
-                embed.setColor(bot.embedColors.normal)
+                embed.setColor(bot.embedColors.embeds.normal)
                     .setTitle('Warn')
                     .setDescription(`**${member.user.tag}** got warned with reason: **${warning.reason}**!`)
                     .setTimestamp();
@@ -80,7 +80,7 @@ module.exports = {
         await message.channel.send(embed);
 
         const logEmbed = new MessageEmbed().setTitle('User warned')
-            .setColor(bot.embedColors.warn)
+            .setColor(bot.embedColors.moderations.warn)
             .setDescription(`**Member:** ${member.user.tag}\n` +
                 `**Reason:** ${reason}\n` +
                 `**Responsible Moderator:** ${message.author.tag}\n` +

@@ -13,23 +13,26 @@ module.exports = {
     neededPermissions: neededPerm,
     //</editor-fold>
     run: async (bot, message, args) => {
-        let embed = new MessageEmbed().setColor(bot.embedColors.normal);
-        let user = message.author;
-
-        const catName = args.join(' ');
-        const title = 'Create new category!';
-        const channel = message.channel;
+        const category = {
+            send: async function (msg) {
+                return message.channel.send(msg);
+            },
+            embed: new MessageEmbed().setColor(bot.embedColors.embeds.normal),
+            user: message.author,
+            name: args.join(' '),
+            title: 'Create new category!'
+        };
 
         if (!args[0])
-            return message.channel.send(embed.setColor(bot.embedColors.error)
+            return category.send(category.embed.setColor(bot.embedColors.embeds.error)
                 .setDescription('Please provide a name!'));
 
-        await message.guild.channels.create(catName,
+        await message.guild.channels.create(category.name,
             {
                 type: "category",
                 permissionOverwrites: [
                     {
-                        id: user.id,
+                        id: category.user.id,
                         allow: ['VIEW_CHANNEL', "MANAGE_CHANNELS"],
                     },
                     {
@@ -39,11 +42,11 @@ module.exports = {
                 ]
             }).then(newChannel => {
 
-            embed.setTitle(title)
-                .setColor(bot.embedColors.normal)
-                .setDescription(`New categoty created with name **${catName}**!`);
+            category.embed.setTitle(category.title)
+                .setColor(bot.embedColors.embeds.normal)
+                .setDescription(`New categoty created with name **${category.name}**!`);
 
-            channel.send(embed);
+            category.send(category.embed);
         });
     }
 }

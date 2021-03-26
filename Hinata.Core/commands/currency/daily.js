@@ -9,26 +9,29 @@ module.exports = {
     usage: '[command | alias]',
     examples: ['h!daily'],
     run: async (bot, message) => {
-        let embed = new MessageEmbed();
-        const dailyReward = 100;
-        const now = new Date();
-        let dbUser;
-        let daily;
+        const daily = {
+            send: async (msg) => {
+                return message.channel.send(msg)
+            },
+            embed: new MessageEmbed(),
+            dailyReward: 100,
+            now: new Date(),
+        }
 
-        dbUser = await User.findOne({
+        daily.dbUser = await User.findOne({
             where: {
                 userId: message.author.id
             }
         });
 
-        if (dbUser.isBanned === 1)
-            return embed.setColor(bot.embedColors.error)
+        if (daily.dbUser.isBanned === 1)
+            return daily.send(daily.embed.setColor(bot.embedColors.embeds.error)
                 .setTitle('You have a botban')
                 .setTimestamp()
                 .setDescription('You can\'t claim dailies due to being banned from using the daily command.\n' +
-                    'You will also not earn any xp globaly with the botban.');
+                    'You will also not earn any xp globaly with the botban.'));
 
-        const diff = pm(now.getTime() - parseInt(dbUser.dailyTaken));
+        const diff = pm(daily.now.getTime() - parseInt(daily.dbUser.dailyTaken));
 
         let hours = 23 - diff.hours;
         let minutes = 59 - diff.minutes;
@@ -47,26 +50,27 @@ module.exports = {
 
         if (diff.days !== 1){
             if (diff.days === 0){
-                embed.setColor(bot.embedColors.error)
+                daily.embed.setColor(bot.embedColors.embeds.error)
                     .setDescription(`You can claim your next daily in: **${timeLeft}**`);
-                message.channel.send(embed);
+                await daily.send(daily.embed);
                 return;
             } else {
-                dbUser.dailyStreak = 0;
-                dbUser.save();
+                daily.dbUser.dailyStreak = 0;
+                daily.dbUser.save();
             }
         }
 
-        daily = dailyReward + ((dailyReward / 10) * dbUser.dailyStreak);
+        daily.daily = daily.dailyReward + ((daily.dailyReward / 10) * daily.dbUser.dailyStreak);
 
-        dbUser.dailyTaken = message.createdTimestamp;
-        User.addDaily(dbUser, daily);
+        daily.dbUser.dailyTaken = message.createdTimestamp;
+        User.addDaily(daily.dbUser, daily.daily);
+        console.log(daily.dbUser.balance)
 
-        embed.setColor(bot.embedColors.normal)
-            .setDescription(`You have claimed your daily of **${daily} ${bot.currencyEmoji}**\n` +
-                `Your total balance now is at **${dbUser.balance} ${bot.currencyEmoji}**\n` +
-                `Your daily streak is at **${dbUser.dailyStreak - 1} day(s)**`);
+        daily.embed.setColor(bot.embedColors.embeds.normal)
+            .setDescription(`You have claimed your daily of **${daily.daily} ${bot.currencyEmoji}**\n` +
+                `Your total balance now is at **${daily.dbUser.balance.toString()} ${bot.currencyEmoji}**\n` +
+                `Your daily streak is at **${daily.dbUser.dailyStreak - 1} day(s)**`);
 
-        message.channel.send(embed);
+        await daily.send(daily.embed);
     }
 }

@@ -11,15 +11,18 @@ module.exports = {
     examples: ['h!sjll', 'h!sjll 763039768870649856', 'h!sjll #join-leave-log'],
     neededPermissions: neededPerm,
     run: async (bot, message, args) => {
-        let embed = new MessageEmbed().setColor(bot.embedColors.normal);
-        const chan = new RegExp('[0-9]{17,}');
-        let user = message.author;
-        let guild = message.guild;
-        let $channel;
-        let joinLeaveLogChannel;
+        const sjl = {
+            send: async (msg) => {
+                await message.channel.send(msg);
+            },
+            embed: new MessageEmbed().setColor(bot.embedColors.embeds.normal),
+            chan: new RegExp('[0-9]{17,}'),
+            user: message.author,
+            guild: message.guild,
+        };
 
         if (!args[0]) {
-            await guild.channels.create('join-leave-log', {
+            sjl.channel = await sjl.guild.channels.create('join-leave-log', {
                 type: "text",
                 permissionOverwrites: [
                     {
@@ -35,61 +38,56 @@ module.exports = {
                         deny: ['VIEW_CHANNEL'],
                     }
                 ]
-            }).then(channel => {
-                $channel = channel;
-
-                embed.setTitle('Set join/leave log')
-                    .setColor(bot.embedColors.normal)
-                    .setDescription(`New join/leave log created with name <#${channel.id}>`);
             });
 
-            await $channel.createWebhook('Hinata', {
+            sjl.embed.setTitle('Set join/leave log')
+                .setColor(bot.embedColors.embeds.normal)
+                .setDescription(`New join/leave log created with name <#${sjl.channel.id}>`);
+
+
+            sjl.joinLeaveLogChannel = await sjl.channel.createWebhook('Hinata', {
                 avatar: bot.user.avatarURL({
                     dynamic: true,
                     size: 4096
                 })
-            }).then(hook => {
-                joinLeaveLogChannel = hook.id;
-            });
+            }).id;
         } else {
-            if (!chan.test(args[0])) {
-                return embed.setTitle('Set join/leave log')
-                    .setColor(bot.embedColors.error)
+            if (!sjl.chan.test(args[0])) {
+                return sjl.embed.setTitle('Set join/leave log')
+                    .setColor(bot.embedColors.embeds.error)
                     .setDescription('Please provide a valid id');
             }
 
-            let channel = guild.channels.cache.get(chan.exec(args[0])[0]);
+            sjl.channel = sjl.guild.channels.cache.get(sjl.chan.exec(args[0])[0]);
 
-            if (!channel) {
-                return embed.setTitle('Set join/leave log')
-                    .setColor(bot.embedColors.error)
+            if (!sjl.channel) {
+                return sjl.embed.setTitle('Set join/leave log')
+                    .setColor(bot.embedColors.embeds.error)
                     .setDescription('Please provide a valid id');
             }
 
-            await channel.createWebhook('Hinata', {
+            sjl.joinLeaveLogChannel = await sjl.channel.createWebhook('Hinata', {
                 avatar: bot.user.avatarURL({
                     dynamic: true,
                     size: 4096
                 })
-            }).then(hook => {
-                joinLeaveLogChannel = hook.id;
-            });
+            }).id;
 
-            embed.setTitle('Set join/leave log')
-                .setColor(bot.embedColors.normal)
-                .setDescription(`join/leave log channel set to <#${channel.id}>`);
+            sjl.embed.setTitle('Set join/leave log')
+                .setColor(bot.embedColors.embeds.normal)
+                .setDescription(`join/leave log channel set to <#${sjl.channel.id}>`);
         }
 
         await ServerSettings.findOne({
             where: {
-                serverId: guild.id
+                serverId: sjl.guild.id
             }
         }).then(async server => {
-            server.joinLeaveLogChannel = joinLeaveLogChannel;
+            server.joinLeaveLogChannel = sjl.joinLeaveLogChannel;
 
             server.save();
         });
 
-        await message.channel.send(embed);
+        await sjl.send(sjl.embed);
     }
 }

@@ -15,13 +15,13 @@ module.exports = {
         let guild;
 
         if (!args[0]) {
-            embed.setColor(bot.embedColors.error)
+            embed.setColor(bot.embedColors.embeds.error)
                 .setDescription('Please provide a valid memberid / mention');
 
             return message.channel.send(embed);
         }
 
-        embed.setColor(bot.embedColors.normal)
+        embed.setColor(bot.embedColors.embeds.normal)
             .setDescription(`Getting the info of user with id **${args[0]}**`);
 
         await ServerUser.findAll({
@@ -36,7 +36,7 @@ module.exports = {
         const userB = await guild.members.fetch({user: args[0], force: true});
 
         await message.channel.send(embed).then(async message => {
-            let edit = new MessageEmbed().setColor(bot.embedColors.normal);
+            let edit = new MessageEmbed().setColor(bot.embedColors.embeds.normal);
             let mutual = 0;
 
             await bot.guilds.cache.forEach(guild => {

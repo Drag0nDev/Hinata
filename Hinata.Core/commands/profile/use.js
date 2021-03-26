@@ -18,11 +18,11 @@ module.exports = {
                 edit: async function (msg, edit) {
                     await msg.edit(edit);
                 },
-                normal: bot.embedColors.normal,
-                error: bot.embedColors.error,
+                normal: bot.embedColors.embeds.normal,
+                error: bot.embedColors.embeds.error,
                 embed: new MessageEmbed()
                     .setTimestamp()
-                    .setColor(bot.embedColors.normal),
+                    .setColor(bot.embedColors.embeds.normal),
                 idReg: new RegExp('^\\d+$')
             };
 
@@ -232,7 +232,7 @@ async function showXpCard(bot, message, preview) {
     }));
 
     if (preview.user.color === null)
-        preview.color = bot.embedColors.normal;
+        preview.color = bot.embedColors.embeds.normal;
     else
         preview.color = preview.user.color;
 
@@ -245,7 +245,7 @@ async function showXpCard(bot, message, preview) {
 
     preview.ctx.drawImage(preview.background, 0, 0, preview.canvas.width, preview.canvas.height);
 
-    preview.ctx.strokeStyle = bot.embedColors.normal;
+    preview.ctx.strokeStyle = bot.embedColors.embeds.normal;
     preview.ctx.strokeRect(0, 0, preview.canvas.width, preview.canvas.height);
 
     //draw global xp bar
@@ -326,7 +326,7 @@ async function showXpCard(bot, message, preview) {
     preview.embed.setDescription(`Preview for:\n` +
         `**Name:** ${preview.inventory.Shop.name}\n` +
         'Do you want to use this background? type `yes` to apply.')
-        .setColor(bot.embedColors.normal)
+        .setColor(bot.embedColors.embeds.normal)
         .attachFiles([{attachment: preview.canvas.toBuffer(), name: 'preview.png'}])
         .setImage(`attachment://preview.png`);
 }

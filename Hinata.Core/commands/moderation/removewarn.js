@@ -13,46 +13,48 @@ module.exports = {
     examples: ['h!rw all', 'h!rw @Drag0n#6666 69', 'h!rw @Drag0n#6666 all'],
     neededPermissions: neededPerm,
     run: async (bot, message, args) => {
-        let embed = new MessageEmbed().setTitle('Remove warn');
-        const choice = new RegExp('all|[0-9]{17,}');
-        const memberChoice = new RegExp('all|^[0-9]+');
-        const id = new RegExp('[0-9]{17,}');
+        const rm = {
+            send: async (msg) => {
+                await message.channel.send(msg);
+            },
+            embed: new MessageEmbed().setTitle('Remove warn'),
+            regs: {
+                choice: new RegExp('all|[0-9]{17,}'),
+                memberChoice: new RegExp('all|^[0-9]+'),
+            }
+        }
 
-        if (choice.test(args[0])){
-            embed.setColor(bot.embedColors.error)
+        if (rm.regs.choice.test(args[0])){
+            rm.embed.setColor(bot.embedColors.embeds.error)
                 .setDescription('Please provide a valid argument!')
                 .setTimestamp();
 
-            return  message.channel.send(embed);
+            return  rm.send(rm.embed);
         }
 
-        if (choice.exec(args[0])[0] === 'all') {
+        if (rm.regs.choice.exec(args[0])[0] === 'all') {
             await removeAll(bot, message, embed);
-        } else if (parseInt(choice.exec(args[0])[0])) {
-            let member;
-
-            await Servers.getMember(message, args).then(memberPromise => {
-                member = memberPromise.user.id;
-            });
+        } else if (parseInt(rm.regs.choice.exec(args[0])[0])) {
+            rm.member = await Servers.getMember(message, args).user.id;
 
             await args.shift()
 
-            if (memberChoice.exec(args[0])[0] === 'all') {
-                await removeMemberAll(bot, message, member, embed);
-            } else if (parseInt(memberChoice.exec(args)[0])) {
-                await removeOne(bot, message, member, memberChoice.exec(args[0])[0], embed);
+            if (rm.regs.memberChoice.exec(args[0])[0] === 'all') {
+                await removeMemberAll(bot, message, rm.member, rm.embed);
+            } else if (parseInt(rm.regs.memberChoice.exec(args)[0])) {
+                await removeOne(bot, message, rm.member, rm.regs.memberChoice.exec(args[0])[0], rm.embed);
             } else {
-                embed.setColor(bot.embedColors.error)
+                rm.embed.setColor(bot.embedColors.embeds.error)
                     .setDescription('Please provide a valid argument!')
                     .setTimestamp();
             }
         } else {
-            embed.setColor(bot.embedColors.error)
+            rm.embed.setColor(bot.embedColors.embeds.error)
                 .setDescription('Please provide a valid argument!')
                 .setTimestamp();
         }
 
-        await message.channel.send(embed);
+        await rm.send(rm.embed);
     }
 }
 
@@ -68,13 +70,13 @@ async function removeAll(bot, message, embed) {
         });
     }).catch(err => {
         logger.error(err);
-        embed.setColor(bot.embedColors.error)
+        embed.setColor(bot.embedColors.embeds.error)
             .setDescription(`Please contact the bot developer to resolve the error that occured\n` +
                 `error: **${err}**`)
             .setTimestamp();
     });
 
-    embed.setColor(bot.embedColors.normal)
+    embed.setColor(bot.embedColors.embeds.normal)
         .setDescription(`All warnings for server **${message.guild.name}** successfully removed!`)
         .setTimestamp();
 }
@@ -96,13 +98,13 @@ async function removeMemberAll(bot, message, memberId, embed) {
                 userId: memberId
             }
         }).then(user => {
-            embed.setColor(bot.embedColors.normal)
+            embed.setColor(bot.embedColors.embeds.normal)
                 .setDescription(`All warnings for user **${user.userTag}** successfully removed!`)
                 .setTimestamp();
         });
     }).catch(err => {
         logger.error(err);
-        embed.setColor(bot.embedColors.error)
+        embed.setColor(bot.embedColors.embeds.error)
             .setDescription(`Please contact the bot developer to resolve the error that occured\n` +
                 `error: **${err}**`)
             .setTimestamp();
@@ -124,7 +126,7 @@ async function removeOne (bot, message, memberId, casenr, embed) {
                 userId: memberId
             }
         }).then(user => {
-            embed.setColor(bot.embedColors.normal)
+            embed.setColor(bot.embedColors.embeds.normal)
                 .setDescription(`Warnings for user **${user.userTag}** successfully removed!`)
                 .setTimestamp();
         });
@@ -144,7 +146,7 @@ async function removeOne (bot, message, memberId, casenr, embed) {
         });
     }).catch(err => {
         logger.error(err);
-        embed.setColor(bot.embedColors.error)
+        embed.setColor(bot.embedColors.embeds.error)
             .setDescription(`Please contact the bot developer to resolve the error that occured\n` +
                 `error: **${err}**`)
             .setTimestamp();

@@ -15,7 +15,7 @@ module.exports = {
         const id = new RegExp('[0-9]{17,}');
 
         if (!id.exec(args[0]))
-            return message.channel.send(embed.setColor(bot.embedColors.error)
+            return message.channel.send(embed.setColor(bot.embedColors.embeds.error)
                 .setDescription('Please provide a valid memberid / mention'));
 
         let member;
@@ -35,10 +35,10 @@ module.exports = {
             user.balance = 0;
             user.save();
 
-            embed.setColor(bot.embedColors.normal)
+            embed.setColor(bot.embedColors.embeds.normal)
                 .setDescription(`The user **${user.userTag}** has been reset successfully!`);
         }).catch(err => {
-            embed.setColor(bot.embedColors.error)
+            embed.setColor(bot.embedColors.embeds.error)
                 .setDescription(`No user with id **${args[0]}** found in the database`)
                 .setTimestamp();
         });

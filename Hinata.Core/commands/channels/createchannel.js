@@ -1,6 +1,5 @@
 const {MessageEmbed} = require('discord.js');
 let neededPerm = ['MANAGE_GUILD'];
-const {Permissions} = require('../../misc/tools');
 
 module.exports = {
     //<editor-fold defaultstate="collapsed" desc="userinfo help">
@@ -13,24 +12,28 @@ module.exports = {
     neededPermissions: neededPerm,
     //</editor-fold>
     run: async (bot, message, args) => {
-        let embed = new MessageEmbed().setColor(bot.embedColors.normal);
-        let user = message.author;
+        const channel = {
+            send: async function (msg) {
+                return message.channel.send(msg);
+            },
+            embed: new MessageEmbed().setColor(bot.embedColors.embeds.normal),
+            user: message.author,
+            name: args.join('-'),
+            title: 'Create new channel!'
+        }
 
-        const name = args.join('-');
-        const title = 'Create new channel!';
-        const channel = message.channel;
 
         if (!args[0])
-            return message.channel.send(embed.setColor(bot.embedColors.error)
+            return channel.send(channel.embed.setColor(bot.embedColors.embeds.error)
                 .setDescription('Please provide a name!'));
 
 
-        await message.guild.channels.create(name,
+        await message.guild.channels.create(channel.name,
             {
                 type: "text",
                 permissionOverwrites: [
                     {
-                        id: user.id,
+                        id: channel.user.id,
                         allow: ['VIEW_CHANNEL', "MANAGE_CHANNELS"],
                     },
                     {
@@ -43,12 +46,11 @@ module.exports = {
                     }
                 ]
             }).then(newChannel => {
-
-            embed.setTitle(title)
-                .setColor(bot.embedColors.normal)
+            channel.embed.setTitle(channel.title)
+                .setColor(bot.embedColors.embeds.normal)
                 .setDescription(`New channel created with name **${newChannel.name}**!`);
 
-            channel.send(embed);
+            channel.send(channel.embed);
         });
     }
 }

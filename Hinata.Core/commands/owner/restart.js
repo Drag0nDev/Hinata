@@ -12,7 +12,7 @@ module.exports = {
     ownerOnly: true,
     run: async (bot, message) => {
         let embed = new Discord.MessageEmbed()
-            .setColor(bot.embedColors.normal)
+            .setColor(bot.embedColors.embeds.normal)
             .setTitle("Restart")
             .setDescription("I am updating and restarting myself")
             .setTimestamp();

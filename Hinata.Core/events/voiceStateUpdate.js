@@ -31,7 +31,7 @@ async function joinChannel(bot, oldState, newState, member, embed) {
     const channel = await newState.guild.channels.cache.get(newState.channelID);
 
     embed.setTitle('Member joined voice channel')
-        .setColor(bot.embedColors.logAdd)
+        .setColor(bot.embedColors.logs.logAdd)
         .setDescription(`**${member.user.username}#${member.user.discriminator}** joined #${channel.name}`);
 }
 
@@ -39,7 +39,7 @@ async function leaveChannel(bot, oldState, newState, member, embed) {
     const channel = await newState.guild.channels.cache.get(oldState.channelID);
 
     embed.setTitle('Member left voice channel')
-        .setColor(bot.embedColors.logRemove)
+        .setColor(bot.embedColors.logs.logRemove)
         .setDescription(`**${member.user.username}#${member.user.discriminator}** left #${channel.name}`);
 }
 
@@ -48,7 +48,7 @@ async function switchChannel(bot, oldState, newState, member, embed) {
     const newChannel = await newState.guild.channels.cache.get(newState.channelID);
 
     embed.setTitle('Member switched voice channel')
-        .setColor(bot.embedColors.logChange)
+        .setColor(bot.embedColors.logs.logChange)
         .setDescription(`**${member.user.username}#${member.user.discriminator}** switched channel`)
         .addField('Before', oldChannel.name, true)
         .addField('After', newChannel.name, true);

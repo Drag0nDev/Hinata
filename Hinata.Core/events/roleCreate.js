@@ -7,7 +7,7 @@ module.exports = async (bot, role) => {
         if (!role.guild.me.hasPermission("MANAGE_WEBHOOKS")) return;
 
         let embed = new MessageEmbed().setTimestamp()
-            .setColor(bot.embedColors.logAdd)
+            .setColor(bot.embedColors.logs.logAdd)
             .setTitle(`Role created`)
             .setFooter(`Role ID: ${role.id}`)
             .addField('Name', role.name, true)

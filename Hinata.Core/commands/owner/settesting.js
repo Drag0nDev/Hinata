@@ -10,7 +10,7 @@ module.exports = {
     usage: '[command | alias]',
     ownerOnly: true,
     run: async (bot, message) => {
-        let embed = new MessageEmbed().setColor(bot.embedColors.normal);
+        let embed = new MessageEmbed().setColor(bot.embedColors.embeds.normal);
 
         bot.testing = !bot.testing;
 

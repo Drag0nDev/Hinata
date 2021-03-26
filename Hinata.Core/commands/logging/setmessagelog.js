@@ -11,19 +11,22 @@ module.exports = {
     examples: ['h!smsgl', 'h!smsgl 763039768870649856', 'h!smsgl #message-log'],
     neededPermissions: neededPerm,
     run: async (bot, message, args) => {
-        let embed = new MessageEmbed().setColor(bot.embedColors.normal);
-        const chan = new RegExp('[0-9]{17,}');
-        let user = message.author;
-        let guild = message.guild;
-        let $channel;
-        let messageLogChannel;
+        const sml = {
+            send: async (msg) => {
+                await message.channel.send(msg);
+            },
+            embed: new MessageEmbed().setColor(bot.embedColors.embeds.normal),
+            chan: new RegExp('[0-9]{17,}'),
+            user: message.author,
+            guild: message.guild,
+        };
 
         if (!args[0]) {
-            await guild.channels.create('message-log', {
+            sml.channel = await sml.guild.channels.create('message-log', {
                 type: "text",
                 permissionOverwrites: [
                     {
-                        id: user.id,
+                        id: sml.user.id,
                         allow: ['VIEW_CHANNEL', "MANAGE_CHANNELS"],
                     },
                     {
@@ -35,61 +38,56 @@ module.exports = {
                         deny: ['VIEW_CHANNEL'],
                     }
                 ]
-            }).then(channel => {
-                $channel = channel;
-
-                embed.setTitle('Set message log')
-                    .setColor(bot.embedColors.normal)
-                    .setDescription(`New message log created with name <#${channel.id}>`);
             });
 
-            await $channel.createWebhook('Hinata', {
+                sml.embed.setTitle('Set message log')
+                    .setColor(bot.embedColors.embeds.normal)
+                    .setDescription(`New message log created with name <#${sml.channel.id}>`);
+
+
+            sml.messageLogChannel = await sml.channel.createWebhook('Hinata', {
                 avatar: bot.user.avatarURL({
                     dynamic: true,
                     size: 4096
                 })
-            }).then(hook => {
-                messageLogChannel = hook.id;
-            });
+            }).id;
         } else {
-            if (!chan.test(args[0])) {
-                return embed.setTitle('Set message log')
-                    .setColor(bot.embedColors.error)
+            if (!sml.chan.test(args[0])) {
+                return sml.embed.setTitle('Set message log')
+                    .setColor(bot.embedColors.embeds.error)
                     .setDescription('Please provide a valid id');
             }
 
-            let channel = guild.channels.cache.get(chan.exec(args[0])[0]);
+            sml.channel = sml.guild.channels.cache.get(sml.chan.exec(args[0])[0]);
 
-            if (!channel) {
-                return embed.setTitle('Set message log')
-                    .setColor(bot.embedColors.error)
+            if (!sml.channel) {
+                return sml.embed.setTitle('Set message log')
+                    .setColor(bot.embedColors.embeds.error)
                     .setDescription('Please provide a valid id');
             }
 
-            await channel.createWebhook('Hinata', {
+            sml.messageLogChannel = await sml.channel.createWebhook('Hinata', {
                 avatar: bot.user.avatarURL({
                     dynamic: true,
                     size: 4096
                 })
-            }).then(hook => {
-                messageLogChannel = hook.id;
-            });
+            }).id;
 
-            embed.setTitle('Set message log')
-                .setColor(bot.embedColors.normal)
-                .setDescription(`Message log channel set to <#${channel.id}>`);
+            sml.embed.setTitle('Set message log')
+                .setColor(bot.embedColors.embeds.normal)
+                .setDescription(`Message log channel set to <#${sml.channel.id}>`);
         }
 
         await ServerSettings.findOne({
             where: {
-                serverId: guild.id
+                serverId: sml.guild.id
             }
         }).then(async server => {
-            server.messageLogChannel = messageLogChannel;
+            server.messageLogChannel = sml.messageLogChannel;
 
             server.save();
         });
 
-        await message.channel.send(embed);
+        await sml.send(sml.embed);
     }
 }

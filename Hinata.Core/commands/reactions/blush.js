@@ -1,4 +1,5 @@
 const {MessageEmbed} = require('discord.js');
+const blush = require('../../misc/reactions.json').blush;
 
 module.exports = {
     //<editor-fold defaultstate="collapsed" desc="userinfo help">
@@ -8,9 +9,9 @@ module.exports = {
     usage: '[command | alias]',
     //</editor-fold>
     run: async (bot, message) => {
-        let embed = new MessageEmbed().setColor(bot.embedColors.normal);
+        let embed = new MessageEmbed().setColor(bot.embedColors.embeds.normal);
 
-        embed.setImage(getGif(bot).toString())
+        embed.setImage(getGif())
             .setFooter('Powered by lost hopes and dreams');
 
         let text = `${message.author} is blushing!`;
@@ -24,8 +25,8 @@ module.exports = {
     }
 }
 
-function getGif(bot) {
-    return bot.reactions.blush[getRandom(bot.reactions.blush.length)];
+function getGif() {
+    return blush[getRandom(blush.length)];
 }
 
 function getRandom(max) {

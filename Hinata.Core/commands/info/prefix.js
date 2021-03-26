@@ -11,7 +11,7 @@ module.exports = {
     cooldown: 10,
     run: async (bot, message) => {
         const embed = new MessageEmbed().setTitle('prefix')
-            .setColor(bot.embedColors.normal)
+            .setColor(bot.embedColors.embeds.normal)
             .setTimestamp()
             .addField('Global prefixes', config.prefix.join('\n'), true);
 

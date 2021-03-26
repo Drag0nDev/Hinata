@@ -17,7 +17,7 @@ module.exports = {
     run: async (bot, message, args) => {
         let embed = new MessageEmbed().setTitle('Set join channel')
             .setTimestamp()
-            .setColor(bot.embedColors.normal);
+            .setColor(bot.embedColors.embeds.normal);
         const choice = new RegExp('remove|[0-9]{17,}');
 
         if (choice.test(args[0])) {

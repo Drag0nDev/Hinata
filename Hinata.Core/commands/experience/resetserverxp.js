@@ -13,39 +13,38 @@ module.exports = {
     neededPermissions: neededPerm,
     cooldown: 60,
     run: async (bot, message, args) => {
-        let embed = new MessageEmbed();
-        const mode = new RegExp('all');
-        const id = new RegExp('[0-9]{17,}');
-
-        //check member and bot permissions
-        let noUserPermission = Permissions.checkUserPermissions(bot, message, neededPerm, embed);
-        if (noUserPermission)
-            return await message.channel.send(embed);
-
-        let noBotPermission = Permissions.checkBotPermissions(bot, message, neededPerm, embed);
-        if (noBotPermission)
-            return message.channel.send(embed);
+        const reset = {
+            send: async (msg) => {
+                return message.channel.send(msg);
+            },
+            embed: new MessageEmbed(),
+            regex: {
+                mode: new RegExp('all'),
+                id: new RegExp('[0-9]{17,}'),
+            }
+        }
 
         try {
-            if (mode.exec(args[0])) {
-                await resetAll(bot, message, embed);
+            if (reset.regex.mode.exec(args[0])) {
+                await resetAll(bot, message, reset);
             } else {
-                if (!id.exec(args[0]))
-                    return await message.channel.send(embed.setColor(bot.embedColors.error)
+                if (!reset.regex.id.exec(args[0]))
+                    return await message.channel.send(reset.embed.setColor(bot.embedColors.embeds.error)
                         .setDescription('Please provide a valid memberid / mention'));
 
-                await resetServerUser(bot, message, id.exec(args[0])[0], embed);
+                reset.id = reset.id.exec(args[0])[0];
+
+                await resetServerUser(bot, message, reset);
             }
         } catch (err) {
-            await message.channel.send(embed.setColor(bot.embedColors.error)
+            await reset.send(reset.embed.setColor(bot.embedColors.embeds.error)
                 .setDescription('No valid arguments given.'));
         }
     }
 }
 
-async function resetAll(bot, message, embed) {
-    let amount;
-    await ServerUser.findAll({
+async function resetAll(bot, message, reset) {
+    reset.users = await ServerUser.findAll({
         where: {
             guildId: message.guild.id
         }
@@ -55,37 +54,37 @@ async function resetAll(bot, message, embed) {
             user.save();
         });
 
-        amount = users.length;
+        reset.amount = users.length;
     });
 
-    embed.setColor(bot.embedColors.normal)
+    reset.embed.setColor(bot.embedColors.embeds.normal)
         .setTitle(`Reset server xp`)
-        .setDescription(`All **${users.length}** members xp have been reset to 0xp!`)
+        .setDescription(`All **${reset.users.length}** members xp have been reset to 0xp!`)
         .setTimestamp();
 
-    await message.channel.send(embed);
+    await reset.send(reset.embed);
 }
 
-async function resetServerUser(bot, message, id, embed) {
-    await ServerUser.findOne({
+async function resetServerUser(bot, message, reset) {
+    reset.user = await ServerUser.findOne({
         where: {
-            userId: id
+            userId: reset.id
         }
     }).then(user => {
-        const member = message.guild.members.cache.get(id);
+        const member = message.guild.members.cache.get(reset.id);
 
         user.xp = 0;
         user.save();
 
-        embed.setColor(bot.embedColors.normal)
+        reset.embed.setColor(bot.embedColors.embeds.normal)
             .setTitle(`Reset server xp`)
             .setDescription(`**${member.user.tag}**'s xp has been reset to 0xp!`)
             .setTimestamp();
     }).catch(err => {
-        embed.setColor(bot.embedColors.error)
-            .setDescription(`No user with id **${id}** found in the database`)
+        reset.embed.setColor(bot.embedColors.embeds.error)
+            .setDescription(`No user with id **${reset.id}** found in the database`)
             .setTimestamp();
     });
 
-    await message.channel.send(embed);
+    await reset.send(reset.embed);
 }

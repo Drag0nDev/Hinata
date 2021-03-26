@@ -16,47 +16,50 @@ module.exports = {
     usage: '[command | alias] <image link/image attachment>',
     cooldown: 60,
     run: async (bot, message, args) => {
-        let embed = new MessageEmbed().setTimestamp()
-            .setColor(bot.embedColors.normal)
-            .setTitle('Add custom background');
-        const urlReg = new RegExp('.(jpeg|jpg|png)$');
-        let url;
-        let user;
-        let file;
-        user = await User.findOne({
+        const acb = {
+            send: async (msg) => {
+                await message.channel.send(msg);
+            },
+            embed: new MessageEmbed().setTimestamp()
+                .setColor(bot.embedColors.embeds.normal)
+                .setTitle('Add custom background'),
+            urlReg: new RegExp('.(jpeg|jpg|png)$')
+        }
+
+        acb.user = await User.findOne({
             where: {
                 userId: message.author.id
             }
         });
 
-        if (user.balance < cost)
-            return await message.channel.send(embed.setDescription('You do not have enough balance to pay for this action!')
-                .addField('Your balance', `${user.balance} ${bot.currencyEmoji}`, true)
+        if (acb.user.balance < cost)
+            return await message.channel.send(acb.embed.setDescription('You do not have enough balance to pay for this action!')
+                .addField('Your balance', `${acb.user.balance} ${bot.currencyEmoji}`, true)
                 .addField('Background change price', `${cost} ${bot.currencyEmoji}`, true)
-                .setColor(bot.embedColors.error));
+                .setColor(bot.embedColors.embeds.error));
 
         //detect if link or attachment
-        if (message.attachments.size > 0 && !urlReg.test(args[0])) {
+        if (message.attachments.size > 0 && !acb.urlReg.test(args[0])) {
             let file = message.attachments.first();
-            url = file.url;
-        } else if (message.attachments.size === 0 && urlReg.test(args[0])) {
-            url = args[0];
-        } else if (message.attachments.size === 0 && !urlReg.test(args[0])) {
-            return await message.channel.send(embed.setDescription('Please provide a valid image link/attachment!').setColor(bot.embedColors.error));
+            acb.url = file.url;
+        } else if (message.attachments.size === 0 && acb.urlReg.test(args[0])) {
+            acb.url = args[0];
+        } else if (message.attachments.size === 0 && !acb.urlReg.test(args[0])) {
+            return await message.channel.send(embed.setDescription('Please provide a valid image link/attachment!').setColor(bot.embedColors.embeds.error));
         } else {
-            return await message.channel.send(embed.setDescription('Please provide only an image link/attachment!').setColor(bot.embedColors.error));
+            return await message.channel.send(embed.setDescription('Please provide only an image link/attachment!').setColor(bot.embedColors.embeds.error));
         }
 
         const path = `./Hinata.Core/misc/images/custom/${message.author.id}.png`;
         const options = {
-            url: url,
+            url: acb.url,
             dest: path
         };
 
         await download.image(options)
             .then(({filename}) => {
                 message.channel.send(
-                    embed.setDescription('Your new background is')
+                    acb.embed.setDescription('Your new background is')
                         .attachFiles([{
                             attachment: filename,
                             name: 'background.png'
@@ -66,8 +69,8 @@ module.exports = {
             })
             .catch((err) => logger.error(err));
 
-        User.remove(user, cost);
-        User.setBg(user, 'custom');
+        User.remove(acb.user, cost);
+        User.setBg(acb.user, 'custom');
         await changeDb(bot, message);
     }
 }

@@ -20,7 +20,7 @@ module.exports = {
 
         bot.user.setUsername(newName)
             .then(updated => {
-                embed.setColor(bot.embedColors.normal)
+                embed.setColor(bot.embedColors.embeds.normal)
                     .setDescription('Username changed successfully!')
                     .addField('Old name', oldName)
                     .addField('New name', updated.tag);
@@ -31,7 +31,7 @@ module.exports = {
             })
             .catch(err => {
                 embed.setDescription(err)
-                    .setColor(bot.embedColors.error);
+                    .setColor(bot.embedColors.embeds.error);
                 message.channel.send(embed);
             });
     }

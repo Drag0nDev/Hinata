@@ -43,12 +43,6 @@ module.exports = async bot => {
     try {
         setInterval(checkMutes, 1000, bot);
         setInterval(checkBans, 1000, bot);
-        setInterval(() => {
-            if (shell.exec('pm2 restart hinata').code !== 0) {
-                logger.error('command failed to run');
-                shell.exit(1);
-            }
-        }, 86400000)
     } catch (error) {
         logger.error(error);
     }
@@ -97,7 +91,7 @@ async function checkMutes(bot) {
     await Roles.removeRole(member, muteRole);
 
     const logEmbed = new MessageEmbed().setTitle('User unmuted')
-        .setColor(bot.embedColors.unban)
+        .setColor(bot.embedColors.moderations.unban)
         .setDescription(`**Member:** ${member.user.tag}\n` +
             `**Reason:** Automatic unmute from mute made by ${moderator.user.tag}\n` +
             `**Responsible Moderator:** ${moderator.user.tag}`)
@@ -146,7 +140,7 @@ async function checkBans(bot) {
     await server.members.unban(id);
 
     const logEmbed = new MessageEmbed().setTitle('User unbanned')
-        .setColor(bot.embedColors.unban)
+        .setColor(bot.embedColors.moderations.unban)
         .setDescription(`**Member:** ${member.user.tag}\n` +
             `**Reason:** Automatic unmute from mute made by ${moderator.user.tag}\n` +
             `**Responsible Moderator:** ${moderator.user.tag}`)

@@ -17,7 +17,7 @@ module.exports = {
                 return message.channel.send(msg);
             },
             embed: new MessageEmbed()
-                .setColor(bot.embedColors.normal),
+                .setColor(bot.embedColors.embeds.normal),
             variation: args[0],
         }
 
@@ -77,13 +77,13 @@ async function serverLb(bot, message, lb) {
     lb.totalPages = Math.ceil(lb.dbUsers.length / 10);
 
     if (lb.page > lb.totalPages) {
-        lb.embed.setColor(bot.embedColors.error)
+        lb.embed.setColor(bot.embedColors.embeds.error)
             .setDescription(`There are only **${lb.totalPages}** pages in total.\n` +
                 'Please pick another page!');
         return message.channel.send(lb.embed);
     }
 
-    lb.embed.setColor(bot.embedColors.normal)
+    lb.embed.setColor(bot.embedColors.embeds.normal)
         .setFooter(`Page ${lb.page + 1}/${lb.totalPages}`);
 
     for (let i = 10 * lb.page; (i < 10 + (10 * lb.page)) && i < lb.dbUsers.length; i++) {
@@ -108,13 +108,13 @@ async function globalLb(bot, message, lb) {
     lb.totalPages = Math.ceil(lb.dbUsers.length / 10);
 
     if (lb.page > lb.totalPages) {
-        lb.embed.setColor(bot.embedColors.error)
+        lb.embed.setColor(bot.embedColors.embeds.error)
             .setDescription(`There are only **${lb.totalPages}** pages in total.\n` +
                 'Please pick another page!');
         return message.channel.send(embed);
     }
 
-    lb.embed.setColor(bot.embedColors.normal)
+    lb.embed.setColor(bot.embedColors.embeds.normal)
         .setFooter(`Page ${lb.page + 1}/${lb.totalPages}`);
 
     for (let i = 10 * lb.page; (i < 10 + (10 * lb.page)) && i < lb.dbUsers.length; i++) {
@@ -138,7 +138,7 @@ function messageEditor(bot, message, lb) {
             collector.on('collect', async (reaction, user) => {
                 lb.editEmbed = new MessageEmbed()
                     .setTitle(`${lb.variation} leaderboard`)
-                    .setColor(bot.embedColors.normal);
+                    .setColor(bot.embedColors.embeds.normal);
 
                 if (reaction.emoji.name === '▶') {
                     lb.page++;

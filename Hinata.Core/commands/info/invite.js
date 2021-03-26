@@ -10,7 +10,7 @@ module.exports = {
     examples: ['h!invite'],
     cooldown: 10,
     run: async (bot, message) => {
-        let embed = new MessageEmbed().setColor(bot.embedColors.normal);
+        let embed = new MessageEmbed().setColor(bot.embedColors.embeds.normal);
 
         bot.generateInvite({
             permissions: ["ADMINISTRATOR"]

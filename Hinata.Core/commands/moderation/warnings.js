@@ -56,7 +56,7 @@ async function showAll(bot, message, embed, variation) {
         }
     ).catch(async err => {
         logger.error(err);
-        embed.setColor(bot.embedColors.error)
+        embed.setColor(bot.embedColors.embeds.error)
             .setDescription(`Please contact the bot developer to resolve the error that occured!\n` +
                 `error: **${err}**`)
             .setTimestamp();
@@ -66,7 +66,7 @@ async function showAll(bot, message, embed, variation) {
 
     if (!warnings[0])
         return message.channel.send(embed.setDescription('No warns in this server!')
-            .setColor(bot.embedColors.normal)
+            .setColor(bot.embedColors.embeds.normal)
             .setTimestamp());
 
     for (let i = 0; i < 5 && i < warnings.length; i++) {
@@ -98,7 +98,7 @@ async function showAll(bot, message, embed, variation) {
         });
 
         description = `All warnings for server **${server.serverName}**.`;
-        embed.setColor(bot.embedColors.normal)
+        embed.setColor(bot.embedColors.embeds.normal)
             .setDescription(description)
             .setTimestamp();
     }
@@ -126,7 +126,7 @@ async function showUser(bot, message, memberId, embed, variation) {
         }
     ).catch(async err => {
         logger.error(err);
-        embed.setColor(bot.embedColors.error)
+        embed.setColor(bot.embedColors.embeds.error)
             .setDescription(`Please contact the bot developer to resolve the error that occured!\n` +
                 `error: **${err}**`)
             .setTimestamp();
@@ -136,7 +136,7 @@ async function showUser(bot, message, memberId, embed, variation) {
 
     if (!warnings[0])
         return message.channel.send(embed.setDescription('No warns for this user!')
-            .setColor(bot.embedColors.normal)
+            .setColor(bot.embedColors.embeds.normal)
             .setTimestamp());
 
     for (let i = 0; i < 5 && i < warnings.length; i++) {
@@ -171,7 +171,7 @@ async function showUser(bot, message, memberId, embed, variation) {
     });
 
     description = `All warnings for server **${server.serverName}**.`;
-    embed.setColor(bot.embedColors.normal)
+    embed.setColor(bot.embedColors.embeds.normal)
         .setDescription(description)
         .setTimestamp();
 
@@ -198,7 +198,7 @@ function messageEditor(bot, message, embed, warnings, variation, description) {
                         size: 4096
                     }))
                     .setDescription(description)
-                    .setColor(bot.embedColors.normal)
+                    .setColor(bot.embedColors.embeds.normal)
                     .setTimestamp();
 
                 if (reaction.emoji.name === '▶') {

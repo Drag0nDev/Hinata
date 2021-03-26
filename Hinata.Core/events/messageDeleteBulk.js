@@ -7,7 +7,7 @@ module.exports = async (bot, messages) => {
         if (!messages.guild.me.hasPermission("MANAGE_WEBHOOKS")) return;
 
         let embed = new MessageEmbed().setTimestamp()
-            .setColor(bot.embedColors.logRemove)
+            .setColor(bot.embedColors.logs.logRemove)
             .setTitle(`${messages.size} messages purged in ${messages.first().channel.name}`)
             .setFooter(`latest ${messages.size} shown`);
         let description = '';

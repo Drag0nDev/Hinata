@@ -26,9 +26,9 @@ module.exports = {
         if (hex.test(args[0]))
             color = hex.exec(args[0])[0];
         else if (args[0] === 'default')
-            color = bot.embedColors.normal;
+            color = bot.embedColors.embeds.normal;
         else {
-            embed.setColor(bot.embedColors.error)
+            embed.setColor(bot.embedColors.embeds.error)
                 .setDescription('Please provide a valid hex color code!');
             return message.channel.send(embed);
         }

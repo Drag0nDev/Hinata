@@ -26,7 +26,7 @@ module.exports = async (bot, oldMember, newMember) => {
                     //post logs if the username updated
                     if (oldMember.username !== newMember.username) {
                         let embed = new MessageEmbed().setTimestamp()
-                            .setColor(bot.embedColors.logChange)
+                            .setColor(bot.embedColors.logs.logChange)
                             .setAuthor(`${newMember.username}#${newMember.discriminator}`,
                                 newMember.avatarURL({dynamic: true}),
                                 newMember.avatarURL({dynamic: true, size: 4096}))
@@ -40,7 +40,7 @@ module.exports = async (bot, oldMember, newMember) => {
                     //post logs if the discriminator updated
                     if (oldMember.discriminator !== newMember.discriminator) {
                         let embed = new MessageEmbed().setTimestamp()
-                            .setColor(bot.embedColors.logChange)
+                            .setColor(bot.embedColors.logs.logChange)
                             .setAuthor(`${newMember.username}#${newMember.discriminator}`,
                                 newMember.avatarURL({dynamic: true}),
                                 newMember.avatarURL({dynamic: true, size: 4096}))
@@ -54,7 +54,7 @@ module.exports = async (bot, oldMember, newMember) => {
                     //post logs if the avatar updated
                     if (oldMember.avatar !== newMember.avatar) {
                         let embed = new MessageEmbed().setTimestamp()
-                            .setColor(bot.embedColors.logChange)
+                            .setColor(bot.embedColors.logs.logChange)
                             .setAuthor(`${newMember.username}#${newMember.discriminator}`,
                                 newMember.avatarURL({dynamic: true}),
 

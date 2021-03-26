@@ -17,50 +17,45 @@ module.exports = {
     examples: ['h!xp', 'h!xp 418037700751261708', 'h!xp @Drag0n#6666'],
     cooldown: 60,
     run: async (bot, message, args) => {
-        let member;
-        let users;
-        let userbg;
-        let user;
-        let background;
-        let serverUser;
-        let serverUsers;
-        let userListId = [];
-        let userServerListId = [];
-        let color;
+        const level = {
+            send: async (msg) => {
+                return message.channel.send(msg);
+            },
+            userListId: [],
+            userServerListId: []
+        };
 
-        await Servers.getMember(message, args).then(memberPromise => {
-            member = memberPromise;
-        });
+        level.member = await Servers.getMember(message, args);
 
-        users = await User.findAll({
+        level.users = await User.findAll({
             order: [['level', 'DESC'], ['xp', 'DESC']]
         });
 
-        serverUsers = await ServerUser.findAll({
+        level.serverUsers = await ServerUser.findAll({
             order: [['xp', 'DESC']],
             where: {
                 guildId: message.guild.id
             }
         });
 
-        users.forEach(user => {
-            userListId.push(user.userId);
+        level.users.forEach(user => {
+            level.userListId.push(user.userId);
         });
 
-        serverUsers.forEach(userServer => {
-            userServerListId.push(userServer.userId);
+        level.serverUsers.forEach(userServer => {
+            level.userServerListId.push(userServer.userId);
         });
 
-        user = getGlobal(users[userListId.indexOf(member.user.id)]);
-        serverUser = getServer(serverUsers[userServerListId.indexOf(member.user.id)]);
+        level.user = getGlobal(level.users[level.userListId.indexOf(level.member.user.id)]);
+        level.serverUser = getServer(level.serverUsers[level.userServerListId.indexOf(level.member.user.id)]);
 
-        let globalRank = userListId.indexOf(member.user.id) + 1;
-        let serverRank = userServerListId.indexOf(member.user.id) + 1;
+        level.globalRank = level.userListId.indexOf(level.member.user.id) + 1;
+        level.serverRank = level.userServerListId.indexOf(level.member.user.id) + 1;
 
-        if (user.color === null)
-            color = bot.embedColors.normal;
+        if (level.user.color === null)
+            level.color = bot.embedColors.embeds.normal;
         else
-            color = user.color;
+            level.color = level.user.color;
 
         const canvas = Canvas.createCanvas(2048, 1024);
 
@@ -68,47 +63,47 @@ module.exports = {
         ctx.font = '50px Dosis';
 
         //look for the background
-        if (user.background === 'custom') {
+        if (level.user.background === 'custom') {
             //look for custom background
             let files = await readdir('./Hinata.Core/misc/images/custom');
 
-            userbg = files[files.indexOf(`${member.user.id}.png`)];
+            level.userbg = files[files.indexOf(`${level.member.user.id}.png`)];
 
-            if (!userbg)
-                background = await Canvas.loadImage('./Hinata.Core/misc/images/inventory/default_xp.jpg');
+            if (!level.userbg)
+                level.background = await Canvas.loadImage('./Hinata.Core/misc/images/inventory/default_xp.jpg');
             else
-                background = await Canvas.loadImage(`./Hinata.Core/misc/images/custom/${userbg}`);
+                level.background = await Canvas.loadImage(`./Hinata.Core/misc/images/custom/${level.userbg}`);
         } else {
             //look for shop background
             let files = await readdir('./Hinata.Core/misc/images/inventory');
 
-            userbg = files[files.indexOf(user.background)];
+            level.userbg = files[files.indexOf(level.user.background)];
 
-            if (!userbg)
-                background = await Canvas.loadImage('./Hinata.Core/misc/images/inventory/default_xp.jpg');
+            if (!level.userbg)
+                level.background = await Canvas.loadImage('./Hinata.Core/misc/images/inventory/default_xp.jpg');
             else
-                background = await Canvas.loadImage(`./Hinata.Core/misc/images/inventory/${userbg}`);
+                level.background = await Canvas.loadImage(`./Hinata.Core/misc/images/inventory/${level.userbg}`);
         }
 
 
-        ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
+        ctx.drawImage(level.background, 0, 0, canvas.width, canvas.height);
 
-        ctx.strokeStyle = bot.embedColors.normal;
+        ctx.strokeStyle = bot.embedColors.embeds.normal;
         ctx.strokeRect(0, 0, canvas.width, canvas.height);
 
         //draw global xp bar
         //draw bar
         ctx.beginPath();
         ctx.lineWidth = 10;
-        ctx.strokeStyle = color;
+        ctx.strokeStyle = level.color;
         ctx.fillStyle = '#fff';
         ctx.strokeRect(100, 500, canvas.width - 200, 50);
         ctx.fillRect(100, 500, canvas.width - 200, 50);
 
         //fill the bar according to the xp
         ctx.beginPath();
-        ctx.fillStyle = color;
-        const globalWidth = (canvas.width - 200) - ((canvas.width - 200) * (1 - user.percentage));
+        ctx.fillStyle = level.color;
+        const globalWidth = (canvas.width - 200) - ((canvas.width - 200) * (1 - level.user.percentage));
         ctx.fillRect(100, 500, globalWidth, 50);
 
         //draw word "Global"
@@ -116,30 +111,30 @@ module.exports = {
         ctx.fillText('Global', 100, 475);
 
         //draw the level
-        ctx.fillText(`Level ${user.level}`, (canvas.width / 2) - (ctx.measureText(`Level ${user.level}`).width / 2), 475);
+        ctx.fillText(`Level ${level.user.level}`, (canvas.width / 2) - (ctx.measureText(`Level ${level.user.level}`).width / 2), 475);
 
         //draw the global position
-        ctx.fillText(`#${globalRank}`, canvas.width - (100 + ctx.measureText(`#${globalRank}`).width), 475);
+        ctx.fillText(`#${level.globalRank}`, canvas.width - (100 + ctx.measureText(`#${level.globalRank}`).width), 475);
 
         //draw current xp
-        ctx.fillText(user.xp, 100, 600);
+        ctx.fillText(level.user.xp, 100, 600);
 
         //draw needed xp
-        ctx.fillText(user.neededXp.toString(), canvas.width - (100 + ctx.measureText(user.neededXp.toString()).width), 600);
+        ctx.fillText(level.user.neededXp.toString(), canvas.width - (100 + ctx.measureText(level.user.neededXp.toString()).width), 600);
 
         //draw the server xp bar
         //draw bar
         ctx.beginPath();
         ctx.lineWidth = 10;
-        ctx.strokeStyle = color;
+        ctx.strokeStyle = level.color;
         ctx.fillStyle = '#fff';
         ctx.strokeRect(100, 800, canvas.width - 200, 50);
         ctx.fillRect(100, 800, canvas.width - 200, 50);
 
         //fill the bar according to the xp
         ctx.beginPath();
-        ctx.fillStyle = color;
-        const serverWidth = (canvas.width - 200) - ((canvas.width - 200) * (1 - serverUser.percentage));
+        ctx.fillStyle = level.color;
+        const serverWidth = (canvas.width - 200) - ((canvas.width - 200) * (1 - level.serverUser.percentage));
         ctx.fillRect(100, 800, serverWidth, 50);
 
         //draw word "Server"
@@ -147,20 +142,20 @@ module.exports = {
         ctx.fillText('Server', 100, 775);
 
         //draw the level
-        ctx.fillText(`Level ${serverUser.level}`, (canvas.width / 2) - (ctx.measureText(`Level ${serverUser.level}`).width / 2), 775);
+        ctx.fillText(`Level ${level.serverUser.level}`, (canvas.width / 2) - (ctx.measureText(`Level ${level.serverUser.level}`).width / 2), 775);
 
         //draw the global position
-        ctx.fillText(`#${serverRank}`, canvas.width - (100 + ctx.measureText(`#${serverRank}`).width), 775);
+        ctx.fillText(`#${level.serverRank}`, canvas.width - (100 + ctx.measureText(`#${level.serverRank}`).width), 775);
 
         //draw current xp
-        ctx.fillText(serverUser.currentxp, 100, 900);
+        ctx.fillText(level.serverUser.currentxp, 100, 900);
 
         //draw needed xp
-        ctx.fillText(serverUser.neededxp.toString(), canvas.width - (100 + ctx.measureText(serverUser.neededxp.toString()).width), 900);
+        ctx.fillText(level.serverUser.neededxp.toString(), canvas.width - (100 + ctx.measureText(level.serverUser.neededxp.toString()).width), 900);
 
         //draw user tag
-        ctx.font = applyText(canvas, member.user.tag);
-        ctx.fillText(member.user.tag, 360, 260);
+        ctx.font = applyText(canvas, level.member.user.tag);
+        ctx.fillText(level.member.user.tag, 360, 260);
 
         //draw user avatar
         ctx.beginPath();
@@ -168,12 +163,12 @@ module.exports = {
         ctx.closePath();
         ctx.clip();
 
-        const avatar = await Canvas.loadImage(member.user.displayAvatarURL({format: 'png', size: 4096}));
+        const avatar = await Canvas.loadImage(level.member.user.displayAvatarURL({format: 'png', size: 4096}));
         ctx.drawImage(avatar, 100, 100, 250, 250);
 
         const attachment = new Discord.MessageAttachment(canvas.toBuffer(), `level.png`);
 
-        await message.channel.send(attachment);
+        await level.send(attachment);
     }
 }
 

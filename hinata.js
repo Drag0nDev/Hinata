@@ -1,8 +1,8 @@
 const {Client, Collection} = require('discord.js');
 const fs = require('fs');
 const config = require("./config.json");
-const colors = require("./Hinata.Core/misc/colors.js");
-const reactions = require('./Hinata.Core/misc/reactions.js')
+const colors = require("./Hinata.Core/misc/colors.json");
+const reactions = require('./Hinata.Core/misc/reactions.json')
 const log4js = require("log4js");
 
 const bot = new Client();

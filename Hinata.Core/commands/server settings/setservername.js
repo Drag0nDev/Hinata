@@ -10,7 +10,7 @@ module.exports = {
     examples: ['h!ssn Totally awesome server'],
     neededPermissions: neededPerm,
     run: async (bot, message, args) => {
-        let embed = new MessageEmbed().setColor(bot.embedColors.normal);
+        let embed = new MessageEmbed().setColor(bot.embedColors.embeds.normal);
 
         //simplify the guild
         let guild = message.guild;
@@ -19,7 +19,7 @@ module.exports = {
         if(!args[0])
             return message.channel.send(
                 embed.setDescription('Please give a new name for the server')
-                    .setColor(bot.embedColors.error)
+                    .setColor(bot.embedColors.embeds.error)
             );
 
         //new server name
@@ -33,12 +33,12 @@ module.exports = {
                 embed.setTitle(guild.name)
                     .setThumbnail(guild.iconURL())
                     .setDescription(`Successfully changed the name from **${oldName}** to **${updated.name}**`)
-                    .setColor(bot.embedColors.normal);
+                    .setColor(bot.embedColors.embeds.normal);
                 message.channel.send(embed);
             })
             .catch(err => {
                 embed.setDescription(err.message.toString().replace("Invalid Form Body\n", ""))
-                    .setColor(bot.embedColors.error);
+                    .setColor(bot.embedColors.embeds.error);
                 message.channel.send(embed);
             });
     }

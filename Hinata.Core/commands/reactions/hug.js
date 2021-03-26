@@ -1,5 +1,6 @@
 const {MessageEmbed} = require('discord.js');
 const {Servers} = require('../../misc/tools');
+const hug = require('../../misc/reactions.json').hug;
 
 module.exports = {
     //<editor-fold defaultstate="collapsed" desc="userinfo help">
@@ -9,45 +10,43 @@ module.exports = {
     usage: '[command | alias] <mention / id>',
     //</editor-fold>
     run: async (bot, message, args) => {
-        let embed = new MessageEmbed().setColor(bot.embedColors.normal);
-        let userMentions = [];
-        let text;
-        let members = '';
-
-        if (args[0]){
-            await Servers.getMembers(message, args, userMentions).then(membersPromise => {
-                members = membersPromise;
-            });
+        const reaction = {
+            embed: new MessageEmbed().setColor(bot.embedColors.embeds.normal),
+            userMentions: [],
+            members: '',
         }
 
+        if (args[0])
+            reaction.members = await Servers.getMembers(message, args, reaction.userMentions);
+
         if (message.mentions.everyone > 0)
-            members += '@everyone ';
+            reaction.members += '@everyone ';
 
-        let author = message.guild.members.cache.get(message.author.id);
+        reaction.author = message.guild.members.cache.get(message.author.id);
 
-        embed.setImage(getGif(bot).toString())
+        reaction.embed.setImage(getGif())
             .setFooter('Powered by lost hopes and dreams');
 
-        if (members.length === 0) {
-            userMentions.push(author.user.id)
-            text = `*hugs* ${author}!`;
+        if (reaction.members.length === 0) {
+            reaction.userMentions.push(reaction.author.user.id)
+            reaction.text = `*hugs* ${reaction.author}!`;
         } else
-            text = `${members}you have been hugged by **${author.nickname === null ? author.user.username : author.nickname}**!`;
+            reaction.text = `${reaction.members}you have been hugged by **${reaction.author.nickname === null ? reaction.author.user.username : reaction.author.nickname}**!`;
 
         await message.channel.send(
             {
-                content: text,
-                embed: embed,
+                content: reaction.text,
+                embed: reaction.embed,
                 allowedMentions: {
-                    users: userMentions,
+                    users: reaction.userMentions,
                 }
             }
         );
     }
 }
 
-function getGif(bot) {
-    return bot.reactions.hug[getRandom(bot.reactions.hug.length)];
+function getGif() {
+    return hug[getRandom(hug.length)];
 }
 
 function getRandom(max) {

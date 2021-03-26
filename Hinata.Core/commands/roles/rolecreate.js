@@ -17,12 +17,12 @@ module.exports = {
                 await message.channel.send(msg);
             },
             embed: new MessageEmbed().setTitle('Role create')
-                .setColor(bot.embedColors.normal)
+                .setColor(bot.embedColors.embeds.normal)
                 .setTimestamp(),
             str: args.join(' '),
             colors: {
-                normal: bot.embedColors.normal,
-                error: bot.embedColors.error
+                normal: bot.embedColors.embeds.normal,
+                error: bot.embedColors.embeds.error
             },
             regs: {
                 name: new RegExp('-n', 'i'),

@@ -13,14 +13,14 @@ module.exports = {
     neededPermissions: neededPerm,
     //</editor-fold>
     run: async (bot, message, args) => {
-        let embed = new MessageEmbed().setColor(bot.embedColors.normal);
+        let embed = new MessageEmbed().setColor(bot.embedColors.embeds.normal);
 
         if (!args[0])
-            return message.channel.send(embed.setColor(bot.embedColors.error)
+            return message.channel.send(embed.setColor(bot.embedColors.embeds.error)
                 .setDescription(`Please provide a channelId`));
 
         if (isNaN(parseInt(args[0]))){
-            return message.channel.send(embed.setColor(bot.embedColors.error)
+            return message.channel.send(embed.setColor(bot.embedColors.embeds.error)
                 .setDescription(`Please provide a valid channelId`));
         }
 

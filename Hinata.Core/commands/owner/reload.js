@@ -11,7 +11,7 @@ module.exports = {
     usage: '[command | alias] [all/cat/command] <command>',
     ownerOnly: true,
     run: async (bot, message, args) => {
-        let embed = new MessageEmbed().setColor(bot.embedColors.normal);
+        let embed = new MessageEmbed().setColor(bot.embedColors.embeds.normal);
         let sort = new RegExp('all|cat');
 
         if (sort.exec(args[0])) {
@@ -34,7 +34,7 @@ async function reload(bot, message, args, embed) {
 
     if (!command){
         return message.channel.send(embed.setTitle('Reload command')
-            .setColor(bot.embedColors.error)
+            .setColor(bot.embedColors.embeds.error)
             .setDescription(`No command with name **${args[0]}** found!`)
             .setTimestamp());
     }
@@ -57,7 +57,7 @@ async function reload(bot, message, args, embed) {
         logger.error(error);
 
         await message.channel.send(embed.setTitle('Reload command')
-            .setColor(bot.embedColors.error)
+            .setColor(bot.embedColors.embeds.error)
             .setDescription(`There was an error while reloading a command \`${command.name}\`:\n\`${error.message}\``)
             .setTimestamp());
     }
@@ -84,7 +84,7 @@ async function reloadCat(bot, message, args, embed) {
                 logger.error(error);
 
                 await message.channel.send(embed.setTitle('Reload command')
-                    .setColor(bot.embedColors.error)
+                    .setColor(bot.embedColors.embeds.error)
                     .setDescription(`There was an error while reloading a command \`${command[1].name}\`:\n\`${error.message}\``)
                     .setTimestamp());
             }
@@ -111,7 +111,7 @@ async function reloadAll(bot, message, args, embed) {
             logger.error(error);
 
             await message.channel.send(embed.setTitle('Reload command')
-                .setColor(bot.embedColors.error)
+                .setColor(bot.embedColors.embeds.error)
                 .setDescription(`There was an error while reloading a command \`${command[1].name}\`:\n\`${error.message}\``)
                 .setTimestamp());
         }

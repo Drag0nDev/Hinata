@@ -16,11 +16,11 @@ module.exports = {
                 await message.channel.send(msg);
             },
             embed: new MessageEmbed().setTitle('Emoji delete')
-                .setColor(bot.embedColors.normal)
+                .setColor(bot.embedColors.embeds.normal)
                 .setTimestamp(),
             colors: {
-                normal: bot.embedColors.normal,
-                error: bot.embedColors.error
+                normal: bot.embedColors.embeds.normal,
+                error: bot.embedColors.embeds.error
             },
             emoji: await message.guild.emojis.cache.find(emoji => emoji.name === args[0])
         };

@@ -9,7 +9,7 @@ module.exports = {
     usage: '[command | alias]',
     ownerOnly: true,
     run: async (bot, message) => {
-        let embed = new MessageEmbed().setTitle('Guilds').setColor(bot.embedColors.normal);
+        let embed = new MessageEmbed().setTitle('Guilds').setColor(bot.embedColors.embeds.normal);
         let servers = [];
 
         bot.guilds.cache.forEach(guild => {
@@ -43,7 +43,7 @@ function messageEditor(bot, message, embed, servers) {
             collector.on('collect', async (reaction, user) => {
                 let editEmbed = new MessageEmbed()
                     .setTitle('Guilds')
-                    .setColor(bot.embedColors.normal);
+                    .setColor(bot.embedColors.embeds.normal);
 
                 if (reaction.emoji.name === '▶') {
                     page++;

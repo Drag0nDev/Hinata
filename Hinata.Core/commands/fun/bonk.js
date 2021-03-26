@@ -11,7 +11,7 @@ module.exports = {
     run: async (bot, message, args) => {
         let embed = new MessageEmbed().setTitle('bonk')
             .setTimestamp()
-            .setColor(bot.embedColors.normal);
+            .setColor(bot.embedColors.embeds.normal);
 
         if (!args[0]) {
             embed.setDescription('Please mention a user or give his/her id!');
@@ -37,7 +37,7 @@ function getMentions(bot, message, input) {
             else {
                 let embed = new MessageEmbed().setTitle('bonk')
                     .setTimestamp()
-                    .setColor(bot.embedColors.normal)
+                    .setColor(bot.embedColors.embeds.normal)
                     .setDescription(`${message.author} <a:bonk:735549944814895115>, don't bonk my master!`);
                 await message.channel.send(embed);
             }
@@ -50,7 +50,7 @@ function getMentions(bot, message, input) {
                 }else {
                     let embed = new MessageEmbed().setTitle('bonk')
                         .setTimestamp()
-                        .setColor(bot.embedColors.normal)
+                        .setColor(bot.embedColors.embeds.normal)
                         .setDescription(`${message.author} <a:bonk:735549944814895115>, don't bonk my master!`);
                     await message.channel.send(embed);
                 }
