@@ -14,7 +14,7 @@ Hinata.Core/commands/testing/
 Hinata.Core/examples
 Hinata.Core/misc/Dosis
 Hinata.Core/Database/Backups
-snap
+snap/
 Hinata.Core/misc/images/custom/*
 Hinata.Core/misc/images/inventory/*
 node_modules/*

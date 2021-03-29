@@ -69,7 +69,6 @@ fs.readdir('./Hinata.Core/commands/', (err, dir) => {
                 if (bot.commands.get(cmdName).aliases && Array.isArray(bot.commands.get(cmdName).aliases)) {
                     bot.commands.get(cmdName).aliases.forEach(alias => {
                         bot.aliases.set(alias, cmdName);
-                        logger.info(`alias "${alias}" set for command "${cmdName}"`);
                     });
                 }
             });
@@ -113,7 +112,9 @@ process.on('unhandledRejection', error => {
 });
 
 process.on('DiscordAPIError', error => {
-    if (error.message === 'Cannot send an empty message')
+    const messages = ['Cannot send an empty message', 'Missing Permissions'];
+
+    if (messages.includes(error.message))
         return;
 
     logger.error(error);
