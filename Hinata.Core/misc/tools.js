@@ -367,7 +367,8 @@ const Logs = {
                         logger.error(`error in: ${member.guild.name}\n`, err);
                     });
                 }
-            }).catch();
+            })
+            .catch(err => {});
     },
     joinLeaveLog: async function (bot, member, embed) {
         await member.guild.fetchWebhooks()
@@ -390,7 +391,8 @@ const Logs = {
                         logger.error(`error in: ${member.guild.name}\n`, err);
                     });
                 }
-            }).catch();
+            })
+            .catch(err => {});
     },
     memberLog: async function (bot, member, embed) {
         await member.guild.fetchWebhooks()
@@ -413,7 +415,8 @@ const Logs = {
                         logger.error(`error in: ${member.guild.name}\n`, err);
                     });
                 }
-            }).catch();
+            })
+            .catch(err => {});
     },
     memberLogGuild: async function (bot, guild, embed) {
         await guild.fetchWebhooks()
@@ -436,7 +439,8 @@ const Logs = {
                         logger.error(`error in: ${guild.name}\n`, err);
                     });
                 }
-            }).catch();
+            })
+            .catch(err => {});
     },
     messageLog: async function (bot, guild, embed) {
         await guild.fetchWebhooks()
@@ -459,7 +463,8 @@ const Logs = {
                         logger.error(`error in: ${guild.name}\n`, err);
                     });
                 }
-            }).catch();
+            })
+            .catch(err => {});
     },
     serverLog: async function (bot, guild, embed) {
         await guild.fetchWebhooks()
@@ -482,7 +487,8 @@ const Logs = {
                         logger.error(`error in: ${guild.name}\n`, err);
                     });
                 }
-            }).catch();
+            })
+            .catch(err => {});
     },
     voiceLogChannel: async function (bot, guild, embed) {
         await guild.fetchWebhooks()
@@ -505,7 +511,8 @@ const Logs = {
                         logger.error(`error in: ${guild.name}\n`, err);
                     });
                 }
-            }).catch();
+            })
+            .catch(err => {});
     }
 }
 
