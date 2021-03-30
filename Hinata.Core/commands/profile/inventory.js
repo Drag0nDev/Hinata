@@ -10,7 +10,7 @@ module.exports = {
     category: 'profile',
     description: 'Shows your own profile',
     usage: '[command | alias]',
-    cooldown: 10,
+    cooldown: 5,
     run: async (bot, message, args) => {
         const inventory = {
             item: {

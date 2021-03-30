@@ -14,7 +14,7 @@ module.exports = {
         '**TOS breaking images will be removed without refund!**',
     cost: `${cost} ${config.currencyEmoji}`,
     usage: '[command | alias] <image link/image attachment>',
-    cooldown: 60,
+    cooldown: 120,
     run: async (bot, message, args) => {
         const acb = {
             send: async (msg) => {

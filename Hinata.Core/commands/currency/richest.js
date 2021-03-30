@@ -10,7 +10,7 @@ module.exports = {
         'To see the global leaderboard use ``global`` and for the server leaderboard use ``server``',
     usage: '[command | alias] <page>',
     examples: ['h!richest server', 'h!global 1'],
-    cooldown: 30,
+    cooldown: 10,
     run: async (bot, message, args) => {
         const lb = {
             send: async function (msg) {

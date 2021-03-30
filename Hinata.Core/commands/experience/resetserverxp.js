@@ -11,7 +11,7 @@ module.exports = {
     usage: '[command | alias] <Member mention/id>',
     examples: ['h!rsx all', 'h!rsx 418037700751261708', 'h!rsx @Drag0n#6666'],
     neededPermissions: neededPerm,
-    cooldown: 60,
+    cooldown: 30,
     run: async (bot, message, args) => {
         const reset = {
             send: async (msg) => {
