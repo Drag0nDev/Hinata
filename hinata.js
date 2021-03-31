@@ -118,4 +118,5 @@ process.on('DiscordAPIError', error => {
         return;
 
     logger.error(error);
+    logger.error(error.message)
 })

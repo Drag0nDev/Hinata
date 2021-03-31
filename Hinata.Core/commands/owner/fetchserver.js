@@ -79,8 +79,6 @@ module.exports = {
             if (!invite)
                 await createNew(guild).then(inv => {
                     invite = inv;
-                }).catch(error => {
-                    logger.error(error);
                 });
 
             fields.fields.push({

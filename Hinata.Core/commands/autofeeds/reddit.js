@@ -4,6 +4,7 @@ const Snooper = require('reddit-snooper');
 const config = require("../../../config.json");
 const {Autofeeds} = require('../../misc/dbObjects');
 const redditFeed = require('../../misc/redditAutofeed');
+const logger = require("log4js").getLogger();
 
 let neededPermissions = ['MANAGE_WEBHOOKS'];
 
@@ -104,9 +105,7 @@ module.exports = {
                             let webhook = webhooks.get(autofeed.webhookId);
 
                             await webhook.delete();
-                        }).catch(err => {
-                            logger.error(err);
-                        });
+                        }).catch(err => {});
                     Autofeeds.destroy({
                         where: {
                             id: autofeed.id

@@ -35,8 +35,14 @@ module.exports = {
                     }
                 }).then(autofeeeds => {
                     autofeeeds.forEach(async autofeed => {
-                            let server = await bot.guilds.cache.get(autofeed.serverId);
-                            let channel = await server.channels.cache.get(autofeed.channel);
+                            let server;
+                            let channel;
+                        
+                            server = await bot.guilds.cache.get(autofeed.serverId);
+
+                            if (!server) return;
+
+                            channel = await server.channels.cache.get(autofeed.channel);
 
                             if (channel) {
                                 if (post.data.subreddit === autofeed.subreddit) {
@@ -78,9 +84,7 @@ module.exports = {
                                                     }
                                                 });
                                             }
-                                        }).catch(err => {
-                                        logger.error(`error in: ${server.name}\n`, err);
-                                    });
+                                        }).catch(err => {});
                                 }
                             }
                         }

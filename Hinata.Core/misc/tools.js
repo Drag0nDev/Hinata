@@ -363,9 +363,7 @@ const Logs = {
                                 size: 4096
                             })
                         });
-                    await webhook.send(embed).catch(err => {
-                        logger.error(`error in: ${member.guild.name}\n`, err);
-                    });
+                    await webhook.send(embed).catch(err => {});
                 }
             })
             .catch(err => {});
@@ -387,9 +385,7 @@ const Logs = {
                                 size: 4096
                             })
                         });
-                    await webhook.send(embed).catch(err => {
-                        logger.error(`error in: ${member.guild.name}\n`, err);
-                    });
+                    await webhook.send(embed).catch(err => {});
                 }
             })
             .catch(err => {});
@@ -411,9 +407,7 @@ const Logs = {
                                 size: 4096
                             })
                         });
-                    await webhook.send(embed).catch(err => {
-                        logger.error(`error in: ${member.guild.name}\n`, err);
-                    });
+                    await webhook.send(embed).catch(err => {});
                 }
             })
             .catch(err => {});
@@ -435,9 +429,7 @@ const Logs = {
                                 size: 4096
                             })
                         });
-                    await webhook.send(embed).catch(err => {
-                        logger.error(`error in: ${guild.name}\n`, err);
-                    });
+                    await webhook.send(embed).catch(err => {});
                 }
             })
             .catch(err => {});
@@ -459,9 +451,7 @@ const Logs = {
                                 size: 4096
                             })
                         });
-                    await webhook.send(embed).catch(err => {
-                        logger.error(`error in: ${guild.name}\n`, err);
-                    });
+                    await webhook.send(embed).catch(err => {});
                 }
             })
             .catch(err => {});
@@ -483,9 +473,7 @@ const Logs = {
                                 size: 4096
                             })
                         });
-                    await webhook.send(embed).catch(err => {
-                        logger.error(`error in: ${guild.name}\n`, err);
-                    });
+                    await webhook.send(embed).catch(err => {});
                 }
             })
             .catch(err => {});
@@ -507,9 +495,7 @@ const Logs = {
                                 size: 4096
                             })
                         });
-                    await webhook.send(embed).catch(err => {
-                        logger.error(`error in: ${guild.name}\n`, err);
-                    });
+                    await webhook.send(embed).catch(err => {});
                 }
             })
             .catch(err => {});
