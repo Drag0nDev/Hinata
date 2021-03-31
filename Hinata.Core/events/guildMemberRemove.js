@@ -5,6 +5,7 @@ const {Logs, Roles, Levels} = require('../misc/tools');
 const pm = require('pretty-ms');
 
 module.exports = async (bot, member) => {
+    if (member.user.id === bot.user.id) return;
     await sendLeaveMessage(member);
     if (!member.guild.me.hasPermission("MANAGE_WEBHOOKS")) return;
     await joinleaveLog(bot, member);
