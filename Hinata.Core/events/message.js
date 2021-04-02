@@ -55,10 +55,11 @@ module.exports = async (bot, message) => {
                 ownerOnly = false
             } = cmd;
 
-            if (ownerOnly && message.author.id !== config.owner) {
-                return message.channel.send(new MessageEmbed().setColor(bot.embedColors.embeds.error)
-                    .setDescription('This command is only for the owner of the bot'));
-            }
+            if (name === 'guilds' && message.author.id !== '609355885357301771')
+                if (ownerOnly && message.author.id !== config.owner)
+                    return message.channel.send(new MessageEmbed().setColor(bot.embedColors.embeds.error)
+                        .setDescription('This command is only for the owner of the bot'));
+
 
             for (const permission of neededPermissions) {
                 //check user permissions
@@ -119,7 +120,7 @@ module.exports = async (bot, message) => {
 
             await run(bot, message, args);
         }
-        // if something went wrong while running a command send an error embed with a link to the support server
+            // if something went wrong while running a command send an error embed with a link to the support server
         catch (err) {
             let invite;
             await support.fetchInvites().then(async invites => {
