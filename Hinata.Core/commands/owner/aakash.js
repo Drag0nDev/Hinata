@@ -7,7 +7,8 @@ module.exports = {
     usage: '[command | alias]',
     ownerOnly: true,
     run: async (bot, message) => {
-        await message.delete();
+        if (message.guild.me.hasPermission("MANAGE_MESSAGES"))
+            await message.delete();
         await message.channel.send('<@462968651713216522> <a:bonk:735549944814895115>');
         await message.channel.send('Get bonked noob!');
     }
