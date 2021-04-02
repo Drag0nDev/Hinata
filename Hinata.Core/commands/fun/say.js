@@ -10,7 +10,7 @@ module.exports = {
         let userMentions = [];
         let roleMentions = [];
 
-        if (response.length < 1900) { //Discord limit is ~2000 chars.
+        if (0 < response.length < 1900) { //Discord limit is ~2000 chars.
             message.mentions.users.forEach(user => {
                 userMentions.push(user.id);
             });

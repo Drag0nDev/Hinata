@@ -17,6 +17,7 @@ module.exports = {
             },
             embed: new MessageEmbed().setColor(bot.embedColors.embeds.normal),
             date: new Date(),
+            age: {}
         }
 
         age.member = await Servers.getMember(message, args);
