@@ -75,7 +75,7 @@ module.exports = {
                 }
             });
 
-            shop.inventory.forEach(item => {
+            for (const item of shop.inventory) {
                 if (item.shopId === shop.db.id) {
                     shop.embed.setDescription('You already have this item in your inventory!')
                         .addField('Name', shop.db.name, true)
@@ -92,9 +92,7 @@ module.exports = {
 
                     shop.already = true;
                 }
-                if (shop.nextId < item.id)
-                    shop.nextId = item.id;
-            });
+            }
 
             if (!shop.already) {
                 shop.embed.setDescription('Do you want to buy this item?\n' +
@@ -126,7 +124,7 @@ module.exports = {
                             }
 
                             Inventory.create({
-                                invId: shop.nextId + 1,
+                                invId: shop.inventory.length + 1,
                                 userId: message.author.id,
                                 shopId: shop.db.id,
                                 categoryId: shop.db.category
