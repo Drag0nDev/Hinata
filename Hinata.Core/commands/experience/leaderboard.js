@@ -93,10 +93,10 @@ async function globalLb(bot, message, lb) {
 
 
     if (lb.page > lb.totalPages) {
-        embed.setColor(bot.embedColors.embeds.error)
+        lb.embed.setColor(bot.embedColors.embeds.error)
             .setDescription(`There are only **${lb.totalPages}** pages in total.\n` +
                 'Please pick another page!');
-        return message.channel.send(embed);
+        return message.channel.send(lb.embed);
     }
 
     lb.embed.setColor(bot.embedColors.embeds.normal)
@@ -137,13 +137,13 @@ function messageEditor(bot, message, lb) {
 
                 if (reaction.emoji.name === '▶') {
                     lb.page++;
-                    await pageEmbed(message, lb, lb.page);
+                    await pageEmbed(message, lb);
                     lb.editEmbed.setFooter(`Page ${lb.page + 1}/${lb.totalPages}`);
                 } else if (reaction.emoji.name === '◀') {
                     lb.page--;
                     if (lb.page < 0)
                         return;
-                    await pageEmbed(message, lb, lb.page);
+                    await pageEmbed(message, lb);
                     lb.editEmbed.setFooter(`Page ${lb.page + 1}/${lb.totalPages}`);
                 }
 
@@ -159,11 +159,30 @@ function messageEditor(bot, message, lb) {
 }
 
 async function pageEmbed(message, lb) {
-    for (let i = 10 * lb.page; (i < 10 + (10 * lb.page)) && (i < lb.dbUsers.length); i++) {
-        let memberTag = await getUserTag(message, lb.dbUsers[i].userId);
-        let level = Levels.getLevel(lb.dbUsers[i].xp);
+    switch (lb.variation) {
+        case "Global":
+            for (let i = 10 * lb.page; (i < 10 + (10 * lb.page)) && i < lb.dbUsers.length; i++) {
+                let xp = lb.dbUsers[i].xp;
+                let lvlXp = config.levelXp;
+                let level = lb.dbUsers[i].level;
+                let previousLvlXp = 0;
 
-        lb.editEmbed.addField(`${i + 1}. ${memberTag}`, `Level ${level}\n (${lb.dbUsers[i].xp}xp)`, true);
+                for (; level > 0; level--) {
+                    previousLvlXp = lvlXp + ((lvlXp / 2) * (level - 1));
+                    xp += previousLvlXp;
+                }
+
+                lb.editEmbed.addField(`${i + 1}. ${lb.dbUsers[i].userTag}`, `Level ${lb.dbUsers[i].level}\n(${xp}xp)`, true);
+            }
+            break;
+        case "Server":
+            for (let i = 10 * lb.page; (i < 10 + (10 * lb.page)) && (i < lb.dbUsers.length); i++) {
+                let memberTag = await getUserTag(message, lb.dbUsers[i].userId);
+                let level = Levels.getLevel(lb.dbUsers[i].xp);
+
+                lb.editEmbed.addField(`${i + 1}. ${memberTag}`, `Level ${level}\n (${lb.dbUsers[i].xp}xp)`, true);
+            }
+            break;
     }
 }
 
