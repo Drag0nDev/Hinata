@@ -9,7 +9,7 @@ module.exports = {
     description: 'Add an item to the shop.\n',
     usage: '[command | alias] <sortstyle> <name>',
     examples: ['h!shop -n diamond ring -c badge '],
-    cooldown: 15,
+    cooldown: 10,
     run: async (bot, message, args) => {
         let shop = {
             item: {

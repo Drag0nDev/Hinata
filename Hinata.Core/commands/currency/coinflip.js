@@ -9,9 +9,9 @@ module.exports = {
     category: 'currency',
     description: 'Guess if it will be \'heads\' or \'tails\'.\n' +
         'If you guessed right then the bet amount will be doubled.',
-    usage: '[command | alias] [amount]',
-    examples: ['h!cf 100'],
-    cooldown: 10,
+    usage: '[command | alias] [heads(h)/tails(t)] [amount]',
+    examples: ['h!cf t 100'],
+    cooldown: 5,
     run: async (bot, message, args) => {
         const cf = {
             send: async function (msg) {
@@ -27,14 +27,20 @@ module.exports = {
             results: ['heads', 'tails'],
             member: message.guild.members.cache.get(message.author.id),
             amount: args[1],
-            bet: args[0].toLowerCase(),
+            bet: args[0] ? args[0].toLowerCase() : null,
             emoji: config.currencyEmoji
         };
 
         if (cf.bet === 'h')
             cf.bet = 'heads';
-        if (cf.bet === 't')
+        else if (cf.bet === 't')
             cf.bet = 'tails';
+        else {
+            cf.embed.setColor(bot.embedColors.embeds.error)
+                .setDescription('Please provide the side you want to gamble on!');
+            return  cf.send(cf.embed);
+        }
+
 
         if (isNaN(parseInt(cf.amount))) {
             cf.embed.setColor(cf.colors.error)
