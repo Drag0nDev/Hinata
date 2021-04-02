@@ -279,7 +279,7 @@ function messageEditor(bot, message, shop) {
             });
 
             collector.on('end', collected => {
-                messageBot.reactions.removeAll().catch();
+                messageBot.reactions.removeAll();
             });
         });
 }

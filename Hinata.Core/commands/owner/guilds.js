@@ -61,7 +61,7 @@ function messageEditor(bot, message, embed, servers) {
             });
 
             collector.on('end', collected => {
-                messageBot.reactions.removeAll().catch();
+                messageBot.reactions.removeAll();
             });
         });
 }

@@ -158,7 +158,7 @@ function messageEditor(bot, message, lb) {
             });
 
             collector.on('end', () => {
-                messageBot.reactions.removeAll().catch();
+                messageBot.reactions.removeAll();
             });
         });
 }

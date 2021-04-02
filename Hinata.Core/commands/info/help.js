@@ -207,7 +207,7 @@ function messageEditor(bot, message, embed, categories, commands) {
             });
 
             collector.on('end', collected => {
-                messageBot.reactions.removeAll().catch();
+                messageBot.reactions.removeAll();
             });
         });
 }

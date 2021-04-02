@@ -64,7 +64,6 @@ module.exports = {
 
         daily.dbUser.dailyTaken = message.createdTimestamp;
         User.addDaily(daily.dbUser, daily.daily);
-        console.log(daily.dbUser.balance)
 
         daily.embed.setColor(bot.embedColors.embeds.normal)
             .setDescription(`You have claimed your daily of **${daily.daily} ${bot.currencyEmoji}**\n` +
