@@ -86,13 +86,13 @@ module.exports = {
             stat.embed.setAuthor(stat.botName, stat.avatar)
                 .setColor(bot.embedColors.embeds.normal)
                 .setThumbnail(stat.bot.avatar)
-                .setFooter(`© 2020-${stat.date.getFullYear()} Copyright: ${stat.dev.dev.username}#${stat.dev.dev.discriminator}\nVersion: ${version.version}`)
+                .setFooter(`© 2020-${stat.date.getFullYear()} Copyright: ${stat.dev.dev.username}#${stat.dev.dev.discriminator}\nVersion: ${version}`)
                 .addFields(stat.fields);
 
             stat.send(stat.embed);
         })
             .catch(err => {
             logger.error(err);
-        })
+        });
     }
 }
