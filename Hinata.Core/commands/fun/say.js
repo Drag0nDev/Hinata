@@ -6,7 +6,7 @@ module.exports = {
     examples: ['h!say Hello world'],
     cooldown: 10,
     run: async (bot, message, args) => {
-        let response = args.join(' ');
+        let response = args.length > 1 ? args.join(' ') : args[0];
         let userMentions = [];
         let roleMentions = [];
 

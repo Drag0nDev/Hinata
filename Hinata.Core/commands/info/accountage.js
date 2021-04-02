@@ -28,7 +28,7 @@ module.exports = {
 
         age.age.creation = age.member.user.createdTimestamp;
 
-        age.age.age = age.date.getTime() - age.creation;
+        age.age.age = age.date.getTime() - age.age.creation;
 
         age.agestr = pm(age.age.age, {
             verbose: true,
