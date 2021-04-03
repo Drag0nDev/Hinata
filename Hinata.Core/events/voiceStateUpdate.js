@@ -18,7 +18,7 @@ module.exports = async (bot, oldState, newState) => {
             await joinChannel(bot, oldState, newState, member, embed);
         else if (oldState.channelID !== newState.channelID && newState.channelID === null)
             await leaveChannel(bot, oldState, newState, member, embed);
-        else 
+        else
             await switchChannel(bot, oldState, newState, member, embed);
 
         await Logs.voiceLogChannel(bot, newState.guild, embed);
@@ -44,12 +44,14 @@ async function leaveChannel(bot, oldState, newState, member, embed) {
 }
 
 async function switchChannel(bot, oldState, newState, member, embed) {
-    const oldChannel = await newState.guild.channels.cache.get(oldState.channelID);
-    const newChannel = await newState.guild.channels.cache.get(newState.channelID);
+    let oldChannel, newChannel;
+    oldChannel = await newState.guild.channels.cache.get(oldState.channelID);
+    newChannel= await newState.guild.channels.cache.get(newState.channelID);
 
-    embed.setTitle('Member switched voice channel')
-        .setColor(bot.embedColors.logs.logChange)
-        .setDescription(`**${member.user.username}#${member.user.discriminator}** switched channel`)
-        .addField('Before', oldChannel.name, true)
-        .addField('After', newChannel.name, true);
+    if (oldChannel && newChannel)
+        embed.setTitle('Member switched voice channel')
+            .setColor(bot.embedColors.logs.logChange)
+            .setDescription(`**${member.user.username}#${member.user.discriminator}** switched channel`)
+            .addField('Before', oldChannel.name, true)
+            .addField('After', newChannel.name, true);
 }
