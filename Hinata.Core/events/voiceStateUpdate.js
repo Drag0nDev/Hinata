@@ -18,8 +18,10 @@ module.exports = async (bot, oldState, newState) => {
             await joinChannel(bot, oldState, newState, member, embed);
         else if (oldState.channelID !== newState.channelID && newState.channelID === null)
             await leaveChannel(bot, oldState, newState, member, embed);
-        else
+        else if (oldState.channelID !== newState.channelID)
             await switchChannel(bot, oldState, newState, member, embed);
+        else
+            return;
 
         await Logs.voiceLogChannel(bot, newState.guild, embed);
     } catch (err) {
@@ -30,23 +32,25 @@ module.exports = async (bot, oldState, newState) => {
 async function joinChannel(bot, oldState, newState, member, embed) {
     const channel = await newState.guild.channels.cache.get(newState.channelID);
 
-    embed.setTitle('Member joined voice channel')
-        .setColor(bot.embedColors.logs.logAdd)
-        .setDescription(`**${member.user.username}#${member.user.discriminator}** joined #${channel.name}`);
+    if (channel)
+        embed.setTitle('Member joined voice channel')
+            .setColor(bot.embedColors.logs.logAdd)
+            .setDescription(`**${member.user.username}#${member.user.discriminator}** joined #${channel.name}`);
 }
 
 async function leaveChannel(bot, oldState, newState, member, embed) {
     const channel = await newState.guild.channels.cache.get(oldState.channelID);
 
-    embed.setTitle('Member left voice channel')
-        .setColor(bot.embedColors.logs.logRemove)
-        .setDescription(`**${member.user.username}#${member.user.discriminator}** left #${channel.name}`);
+    if (channel)
+        embed.setTitle('Member left voice channel')
+            .setColor(bot.embedColors.logs.logRemove)
+            .setDescription(`**${member.user.username}#${member.user.discriminator}** left #${channel.name}`);
 }
 
 async function switchChannel(bot, oldState, newState, member, embed) {
     let oldChannel, newChannel;
     oldChannel = await newState.guild.channels.cache.get(oldState.channelID);
-    newChannel= await newState.guild.channels.cache.get(newState.channelID);
+    newChannel = await newState.guild.channels.cache.get(newState.channelID);
 
     if (oldChannel && newChannel)
         embed.setTitle('Member switched voice channel')
