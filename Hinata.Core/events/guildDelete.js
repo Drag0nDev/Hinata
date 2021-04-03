@@ -4,12 +4,12 @@ const {MessageEmbed} = require('discord.js');
 module.exports = async (bot, server) => {
     const post = {
         support: await bot.guilds.cache.get('645047329141030936'),
-        embed: new MessageEmbed().setTitle('New server joined')
+        embed: new MessageEmbed().setTitle('Left server')
             .setThumbnail(server.iconURL({
                 dynamic: true,
                 size: 4096
             }))
-            .setColor(bot.embedColors.logs.join),
+            .setColor(bot.embedColors.logs.leave),
         fields: [
             {
                 name: 'Name:',
