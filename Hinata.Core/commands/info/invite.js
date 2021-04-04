@@ -17,7 +17,6 @@ module.exports = {
                 //for everything
                 "ADMINISTRATOR",
                 //when the person cant give admin permissions or they dont want the bot to have it
-                "CREATE_INSTANT_INVITE",
                 "KICK_MEMBERS", "BAN_MEMBERS", "MUTE_MEMBERS",
                 "MANAGE_CHANNELS", "MANAGE_GUILD",
                 "ADD_REACTIONS",
@@ -33,6 +32,6 @@ module.exports = {
             message.channel.send(embed);
         }).catch(err => {
             logger.error(err);
-        })
+        });
     }
 }
