@@ -24,6 +24,10 @@ module.exports = {
             return message.channel.send(embed.setDescription(`No server id given`)
                 .setColor(bot.embedColors.embeds.error));
 
+        if (isNaN(parseInt(args[0])))
+            return message.channel.send(embed.setDescription(`Please provide a valid id!`)
+                .setColor(bot.embedColors.embeds.error));
+
         //see if bot is in the server
         if (!bot.guilds.cache.get(args[0]))
             return message.channel.send(embed.setDescription(`I am not in a server with id ${args[0]}`)

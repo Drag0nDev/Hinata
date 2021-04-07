@@ -55,11 +55,19 @@ module.exports = async (bot, message) => {
                 ownerOnly = false
             } = cmd;
 
-            if (name === 'guilds' && message.author.id !== '609355885357301771')
-                if (ownerOnly && message.author.id !== config.owner)
-                    return message.channel.send(new MessageEmbed().setColor(bot.embedColors.embeds.error)
-                        .setDescription('This command is only for the owner of the bot'));
+            let logging = `------------------------------\n` +
+                `Command: '${name}'\n` +
+                `Arguments: '${args.join(' ')}'\n` +
+                `User: '${message.author.tag}'\n` +
+                `Server: '${message.guild.name}'\n` +
+                `Guild ID: '${message.guild.id}'\n` +
+                `Channel: '${message.channel.name}'`;
 
+            logger.info(logging);
+            
+            if (ownerOnly && message.author.id !== config.owner)
+                return message.channel.send(new MessageEmbed().setColor(bot.embedColors.embeds.error)
+                    .setDescription('This command is only for the owner of the bot'));
 
             for (const permission of neededPermissions) {
                 //check user permissions
@@ -76,16 +84,6 @@ module.exports = async (bot, message) => {
                             `**Missing requirements:** ${permission}`));
                 }
             }
-
-            let logging = `------------------------------\n` +
-                `Command: '${name}'\n` +
-                `Arguments: '${args.join(' ')}'\n` +
-                `User: '${message.author.tag}'\n` +
-                `Server: '${message.guild.name}'\n` +
-                `Guild ID: '${message.guild.id}'\n` +
-                `Channel: '${message.channel.name}'`;
-
-            logger.info(logging);
 
             //format guildId-userId-commandName
             let cooldownString = `${message.guild.id}-${message.author.id}-${name}-${message.createdTimestamp}`;
