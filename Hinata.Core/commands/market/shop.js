@@ -63,7 +63,7 @@ async function shopMenu(bot, message, shop) {
             shop.str += '- ' + cat.name + '\n';
     }
 
-    shop.embed.setDescription('**Select a category to view its content.\n' +
+    await shop.embed.setDescription('**Select a category to view its content.\n' +
         'h!shop -c <category>**\n\n' + shop.str)
         .setColor(bot.embedColors.normal)
         .setTimestamp();
@@ -85,11 +85,11 @@ async function shopByName(bot, message, shop) {
         ]
     });
 
-    shop.embed.setColor(bot.embedColors.embeds.embeds.normal)
+    await shop.embed.setColor(bot.embedColors.embeds.embeds.normal)
         .setTimestamp();
 
     if (shop.db.length === 0) {
-        shop.embed.setDescription(`No items found with name **${shop.item.name}**!`)
+        await shop.embed.setDescription(`No items found with name **${shop.item.name}**!`)
             .setColor(bot.embedColors.embeds.error);
 
         return message.channel.send(shop.embed);
@@ -132,7 +132,7 @@ async function shopByCategory(bot, message, shop) {
     });
 
     if (shop.categoryDb === null || shop.categoryDb.name === 'hidden' || shop.categoryDb.name === 'custom') {
-        shop.embed.setDescription(`Category **${shop.item.category}** does not exist!`)
+        await shop.embed.setDescription(`Category **${shop.item.category}** does not exist!`)
             .setColor(bot.embedColors.embeds.error);
 
         return message.channel.send(shop.embed);
@@ -148,7 +148,7 @@ async function shopByCategory(bot, message, shop) {
         ]
     });
 
-    shop.embed.setColor(bot.embedColors.embeds.normal)
+    await shop.embed.setColor(bot.embedColors.embeds.normal)
         .setTimestamp();
 
     if (shop.db.length === 0 || shop.categoryDb.name === 'hidden' || shop.categoryDb.name === 'custom') {
@@ -192,7 +192,7 @@ async function shopByNameAndCat(bot, message, shop) {
     });
 
     if (shop.categoryDb === null || shop.categoryDb.name === 'hidden' || shop.categoryDb.name === 'custom') {
-        shop.embed.setDescription(`Category **${shop.item.category}** does not exist!`)
+        await shop.embed.setDescription(`Category **${shop.item.category}** does not exist!`)
             .setColor(bot.embedColors.error);
 
         return message.channel.send(shop.embed);
@@ -212,7 +212,7 @@ async function shopByNameAndCat(bot, message, shop) {
         ]
     });
 
-    shop.embed.setColor(bot.embedColors.embeds.embeds.normal)
+    await shop.embed.setColor(bot.embedColors.embeds.normal)
         .setTimestamp();
 
     if (shop.db.length === 0) {
