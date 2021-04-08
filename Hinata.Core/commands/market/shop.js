@@ -85,7 +85,7 @@ async function shopByName(bot, message, shop) {
         ]
     });
 
-    await shop.embed.setColor(bot.embedColors.embeds.embeds.normal)
+    await shop.embed.setColor(bot.embedColors.embeds.normal)
         .setTimestamp();
 
     if (shop.db.length === 0) {
