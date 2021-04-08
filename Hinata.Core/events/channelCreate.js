@@ -67,5 +67,8 @@ function getPermissions(allowed, denied) {
         }
     }
 
+    if (perms.length === 0)
+        perms = '​';
+
     return perms;
 }
