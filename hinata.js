@@ -5,7 +5,6 @@ const colors = require("./Hinata.Core/misc/colors.json");
 const reactions = require('./Hinata.Core/misc/reactions.json')
 const log4js = require('log4js');
 const topgg = require('@top-gg/sdk');
-const AutoPoster = require('topgg-autoposter');
 
 const bot = new Client();
 bot.commands = new Collection();
@@ -14,9 +13,6 @@ bot.embedColors = new Collection();
 bot.reactions = new Collection();
 bot.testingEmbed = new Collection();
 bot.subreddits = [];
-
-//initialize top.gg autoposter
-const ap = AutoPoster(config.topgg.token, bot);
 
 bot.categories = fs.readdirSync("./Hinata.Core/commands/");
 bot.embedColors = colors;
@@ -109,10 +105,6 @@ bot.login(config.token)
     }).catch(err => {
         logger.error(err)
     });
-
-ap.on('posted', () => {
-    logger.info('Posted stats to Top.gg!');
-});
 
 //error handling
 process.on('unhandledRejection', error => {

@@ -4,6 +4,8 @@ const {Timers, ServerSettings, Autofeeds} = require('../misc/dbObjects');
 const {Logs, Roles} = require('../misc/tools');
 const reddit = require('../misc/redditAutofeed');
 const shell = require('shelljs');
+const AutoPoster = require('topgg-autoposter');
+const {topgg} = require('../../config.json');
 
 module.exports = async bot => {
     let embed = new MessageEmbed()
@@ -46,6 +48,13 @@ module.exports = async bot => {
     } catch (error) {
         logger.error(error);
     }
+
+    //initialize top.gg autoposter
+    const ap = AutoPoster(topgg.token, bot);
+
+    ap.on('posted', () => {
+        logger.info('Posted stats to Top.gg!');
+    });
 };
 
 async function checkMutes(bot) {
