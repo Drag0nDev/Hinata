@@ -93,7 +93,7 @@ fs.readdir('./Hinata.Core/events', (err, files) => {
     files.forEach(file => {
         if (!file.endsWith('.js')) return;
 
-        const evt = require(`./Hinata.Core/events/discord/${file}`);
+        const evt = require(`./Hinata.Core/events/${file}`);
         let evtName = file.split('.')[0];
 
         logger.info(`Loaded event '${evtName}'.`);
