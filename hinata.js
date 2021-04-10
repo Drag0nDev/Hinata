@@ -3,7 +3,9 @@ const fs = require('fs');
 const config = require("./config.json");
 const colors = require("./Hinata.Core/misc/colors.json");
 const reactions = require('./Hinata.Core/misc/reactions.json')
-const log4js = require("log4js");
+const log4js = require('log4js');
+const topgg = require('@top-gg/sdk');
+const AutoPoster = require('topgg-autoposter');
 
 const bot = new Client();
 bot.commands = new Collection();
@@ -12,6 +14,9 @@ bot.embedColors = new Collection();
 bot.reactions = new Collection();
 bot.testingEmbed = new Collection();
 bot.subreddits = [];
+
+//initialize top.gg autoposter
+const ap = AutoPoster(config.topgg.token, bot);
 
 bot.categories = fs.readdirSync("./Hinata.Core/commands/");
 bot.embedColors = colors;
@@ -43,6 +48,7 @@ log4js.configure({
 
 const logger = log4js.getLogger();
 
+//load commands
 fs.readdir('./Hinata.Core/commands/', (err, dir) => {
     if (err) {
         logger.error(err);
@@ -77,7 +83,8 @@ fs.readdir('./Hinata.Core/commands/', (err, dir) => {
     });
 });
 
-fs.readdir('./Hinata.Core/events/', (err, files) => {
+//load events used by discord
+fs.readdir('./Hinata.Core/events', (err, files) => {
     if (err) {
         logger.error(err);
         return;
@@ -86,13 +93,13 @@ fs.readdir('./Hinata.Core/events/', (err, files) => {
     files.forEach(file => {
         if (!file.endsWith('.js')) return;
 
-        const evt = require(`./Hinata.Core/events/${file}`);
+        const evt = require(`./Hinata.Core/events/discord/${file}`);
         let evtName = file.split('.')[0];
 
         logger.info(`Loaded event '${evtName}'.`);
         bot.on(evtName, evt.bind(null, bot));
     });
-    logger.info('All events loaded!\n');
+    logger.info('All discord events loaded!\n');
 });
 
 //bot connection to discord
@@ -102,6 +109,10 @@ bot.login(config.token)
     }).catch(err => {
         logger.error(err)
     });
+
+ap.on('posted', () => {
+    logger.info('Posted stats to Top.gg!');
+});
 
 //error handling
 process.on('unhandledRejection', error => {

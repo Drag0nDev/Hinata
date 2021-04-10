@@ -11,12 +11,13 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@top-gg/sdk": "^3.0.9",
     "ascii-table": "0.0.9",
     "better-sqlite3": "^7.1.2",
     "canvas": "^2.6.1",
     "common-tags": "^1.8.0",
     "delay": "^4.4.0",
-    "discord.js": "^12.4.1",
+    "discord.js": "^12.5.3",
     "dotenv-flow": "^3.2.0",
     "enmap": "^5.4.1",
     "eslint": "^7.5.0",
@@ -28,7 +29,8 @@
     "reddit-snooper": "^1.0.1",
     "sequelize": "^6.3.5",
     "shelljs": "^0.8.4",
-    "sqlite3": "^5.0.0"
+    "sqlite3": "^5.0.0",
+    "topgg-autoposter": "^1.1.10"
   },
   "repository": {
     "type": "git",
