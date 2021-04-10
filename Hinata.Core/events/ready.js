@@ -3,8 +3,7 @@ const {MessageEmbed} = require('discord.js');
 const {Timers, ServerSettings, Autofeeds} = require('../misc/dbObjects');
 const {Logs, Roles} = require('../misc/tools');
 const reddit = require('../misc/redditAutofeed');
-const shell = require('shelljs');
-const AutoPoster = require('topgg-autoposter');
+const Topgg = require('@top-gg/sdk');
 const {topgg} = require('../../config.json');
 
 module.exports = async bot => {
@@ -49,12 +48,14 @@ module.exports = async bot => {
         logger.error(error);
     }
 
-    //initialize top.gg autoposter
-    const ap = AutoPoster(topgg.token, bot);
+    const api = new Topgg.Api(topgg.token);
 
-    ap.on('posted', () => {
-        logger.info('Posted stats to Top.gg!');
-    });
+    setInterval(() => {
+        api.postStats({
+            serverCount: bot.guilds.cache.size,
+            shardCount: bot.options.shardCount
+        })
+    }, 1800000);
 };
 
 async function checkMutes(bot) {
