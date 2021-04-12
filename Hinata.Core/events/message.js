@@ -153,7 +153,7 @@ module.exports = async (bot, message) => {
 };
 
 async function checkServer(message){
-    await Minor.dbAdd(message.author, message.guild);
+    await Minor.dbAdd(message.guild.members.cache.get(message.author.id), message.guild);
 }
 
 function globalLevel(message) {

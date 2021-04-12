@@ -21,7 +21,7 @@ module.exports = {
         balance.member = await Servers.getMember(message, args);
 
         if (!balance.member)
-            return balance.send(embed.setColor(bot.embedColors.embeds.error)
+            return balance.send(balance.embed.setColor(bot.embedColors.embeds.error)
                 .setDescription('Please provide a valid user ID or mention!'));
 
         balance.dbUser = await User.findOne({
