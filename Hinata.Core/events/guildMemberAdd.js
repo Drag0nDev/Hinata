@@ -44,7 +44,13 @@ async function sendWelcomeMessage(member) {
         }
     });
 
-    if (!settings.joinMessageChannel || !settings.joinMessage) return;
+    try {
+        if (!settings.joinMessageChannel || !settings.joinMessage) return;
+    } catch (e) {
+        console.log(settings);
+        return;
+    }
+
 
     let joinMessage = settings.joinMessage;
     let joinChannel = guild.channels.cache.get(settings.joinMessageChannel);

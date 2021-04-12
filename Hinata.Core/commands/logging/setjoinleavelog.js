@@ -26,7 +26,7 @@ module.exports = {
                 type: "text",
                 permissionOverwrites: [
                     {
-                        id: user.id,
+                        id: sjl.user.id,
                         allow: ['VIEW_CHANNEL', "MANAGE_CHANNELS"],
                     },
                     {
