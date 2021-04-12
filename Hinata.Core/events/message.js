@@ -1,7 +1,7 @@
 const {MessageEmbed} = require('discord.js');
 const config = require("../../config.json");
 const logger = require("log4js").getLogger();
-const {User, ServerUser, Rewards, ServerSettings} = require('../misc/dbObjects');
+const {User, ServerUser, Rewards, ServerSettings, Server} = require('../misc/dbObjects');
 const pm = require('parse-ms');
 const {Minor, Levels, Roles, Servers} = require('../misc/tools');
 
@@ -16,6 +16,9 @@ module.exports = async (bot, message) => {
     if (message.webhookID) return;
 
     try {
+        //check if the server is in the database
+        await checkServer(message);
+
         //check the global level of the user and if it already exists
         await checkUser(message);
         await globalLevel(message);
@@ -148,6 +151,10 @@ module.exports = async (bot, message) => {
         }
     }
 };
+
+async function checkServer(message){
+    await Minor.dbAdd(message.author, message.guild);
+}
 
 function globalLevel(message) {
     const lvlxp = config.levelXp;
