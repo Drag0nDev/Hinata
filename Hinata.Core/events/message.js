@@ -153,7 +153,36 @@ module.exports = async (bot, message) => {
 };
 
 async function checkServer(message){
-    await Minor.dbAdd(message.guild.members.cache.get(message.author.id), message.guild);
+    const member = await message.guild.members.cache.get(message.author.id);
+    const server = message.guild;
+
+    await ServerUser.findOrCreate({
+        where: {
+            userId: member.user.id,
+            guildId: member.guild.id
+        }
+    });
+    await User.findOrCreate({
+        where: {
+            userId: member.user.id
+        },
+        defaults: {
+            userTag: `${member.user.username}#${member.user.discriminator}`
+        }
+    });
+    await Server.findOrCreate({
+        where: {
+            serverId: server.id
+        },
+        defaults: {
+            serverName: server.name
+        }
+    });
+    await ServerSettings.findOrCreate({
+        where: {
+            serverId: server.id
+        }
+    });
 }
 
 function globalLevel(message) {
