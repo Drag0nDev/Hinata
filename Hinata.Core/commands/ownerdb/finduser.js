@@ -29,6 +29,7 @@ module.exports = {
                 userId: args[0]
             }
         }).then(async servers => {
+            console.log(servers)
             const serverId = servers[0].guildId;
             guild = await bot.guilds.cache.get(serverId);
         });
