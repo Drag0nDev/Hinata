@@ -2,6 +2,7 @@ const {Op} = require('sequelize')
 const {MessageEmbed} = require('discord.js');
 const {User, ServerUser} = require('../../misc/dbObjects');
 const {Minor} = require('../../misc/tools');
+const logger = require("log4js").getLogger();
 
 module.exports = {
     name: 'richest',
@@ -77,13 +78,13 @@ async function serverLb(bot, message, lb) {
     lb.totalPages = Math.ceil(lb.dbUsers.length / 10);
 
     if (lb.page > lb.totalPages) {
-        lb.embed.setColor(bot.embedColors.embeds.error)
+        await lb.embed.setColor(bot.embedColors.embeds.error)
             .setDescription(`There are only **${lb.totalPages}** pages in total.\n` +
                 'Please pick another page!');
         return message.channel.send(lb.embed);
     }
 
-    lb.embed.setColor(bot.embedColors.embeds.normal)
+    await lb.embed.setColor(bot.embedColors.embeds.normal)
         .setFooter(`Page ${lb.page + 1}/${lb.totalPages}`);
 
     for (let i = 10 * lb.page; (i < 10 + (10 * lb.page)) && i < lb.dbUsers.length; i++) {
@@ -108,13 +109,13 @@ async function globalLb(bot, message, lb) {
     lb.totalPages = Math.ceil(lb.dbUsers.length / 10);
 
     if (lb.page > lb.totalPages) {
-        lb.embed.setColor(bot.embedColors.embeds.error)
+        await lb.embed.setColor(bot.embedColors.embeds.error)
             .setDescription(`There are only **${lb.totalPages}** pages in total.\n` +
                 'Please pick another page!');
-        return message.channel.send(embed);
+        return message.channel.send(lb.embed);
     }
 
-    lb.embed.setColor(bot.embedColors.embeds.normal)
+    await lb.embed.setColor(bot.embedColors.embeds.normal)
         .setFooter(`Page ${lb.page + 1}/${lb.totalPages}`);
 
     for (let i = 10 * lb.page; (i < 10 + (10 * lb.page)) && i < lb.dbUsers.length; i++) {
@@ -158,7 +159,13 @@ function messageEditor(bot, message, lb) {
             });
 
             collector.on('end', () => {
-                messageBot.reactions.removeAll();
+                messageBot.reactions.removeAll()
+                    .catch(error => {
+                        if (error.message === "Missing Permissions") {
+                            return;
+                        }
+                        logger.error(error.message, 'in server', message.guild.name);
+                    });
             });
         });
 }

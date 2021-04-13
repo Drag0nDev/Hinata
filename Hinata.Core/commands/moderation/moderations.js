@@ -86,7 +86,7 @@ module.exports = {
         });
 
         moderations.description = `All warnings for server **${moderations.server.serverName}**.`;
-        moderations.embed.setColor(bot.embedColors.embeds.normal)
+        await moderations.embed.setColor(bot.embedColors.embeds.normal)
             .setDescription(moderations.description)
             .setTimestamp();
 
@@ -133,7 +133,13 @@ function messageEditor(bot, message, embed, timers, description, now) {
             });
 
             collector.on('end', collected => {
-                messageBot.reactions.removeAll();
+                messageBot.reactions.removeAll()
+                    .catch(error => {
+                        if (error.message === "Missing Permissions") {
+                            return;
+                        }
+                        logger.error(error.message, 'in server', message.guild.name);
+                    });
             });
         });
 }

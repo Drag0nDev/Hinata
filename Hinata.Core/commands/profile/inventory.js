@@ -112,7 +112,7 @@ async function inventoryByName(bot, message, inventory) {
         ]
     });
 
-    inventory.embed.setColor(bot.embedColors.embeds.normal)
+    await inventory.embed.setColor(bot.embedColors.embeds.normal)
         .setTimestamp();
 
     if (inventory.db.length === 0) {
@@ -154,7 +154,7 @@ async function inventoryByCategory(bot, message, inventory) {
     });
 
     if (inventory.categoryDb === null || inventory.categoryDb.name === 'hidden') {
-        inventory.embed.setDescription(`Category **${inventory.item.category}** does not exist!`)
+        await inventory.embed.setDescription(`Category **${inventory.item.category}** does not exist!`)
             .setColor(bot.embedColors.embeds.error);
 
         return message.channel.send(inventory.embed);
@@ -181,7 +181,7 @@ async function inventoryByCategory(bot, message, inventory) {
         ]
     });
 
-    inventory.embed.setColor(bot.embedColors.embeds.normal)
+    await inventory.embed.setColor(bot.embedColors.embeds.normal)
         .setTimestamp();
 
     if (inventory.db.length === 0 || inventory.categoryDb.name === 'hidden') {
@@ -193,7 +193,6 @@ async function inventoryByCategory(bot, message, inventory) {
     for (let i = 0; i < 10 && i < inventory.db.length; i++) {
         let item = inventory.db[i];
         let name = item.Shop.name === `${message.author.id}_custom_background` ? 'Custom background' : item.Shop.name;
-        console.log(item);
 
         if (item.image !== null) {
             inventory.embed.addField(name,
@@ -254,7 +253,7 @@ async function inventoryByNameAndCat(bot, message, inventory) {
         ]
     });
 
-    inventory.embed.setColor(bot.embedColors.embeds.normal)
+    await inventory.embed.setColor(bot.embedColors.embeds.normal)
         .setTimestamp();
 
     if (inventory.db.length === 0) {
@@ -319,7 +318,13 @@ function messageEditor(bot, message, inventory) {
             });
 
             collector.on('end', collected => {
-                messageBot.reactions.removeAll();
+                messageBot.reactions.removeAll()
+                    .catch(error => {
+                        if (error.message === "Missing Permissions") {
+                            return;
+                        }
+                        logger.error(error.message, 'in server', message.guild.name);
+                    });
             });
         });
 }

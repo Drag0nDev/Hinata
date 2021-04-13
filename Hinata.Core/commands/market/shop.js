@@ -2,6 +2,7 @@ const {MessageEmbed} = require('discord.js');
 const {Shop, Category} = require('../../misc/dbObjects');
 const {Minor} = require('../../misc/tools');
 const {Op} = require('sequelize');
+const logger = require("log4js").getLogger();
 
 module.exports = {
     name: 'shop',
@@ -279,7 +280,13 @@ function messageEditor(bot, message, shop) {
             });
 
             collector.on('end', collected => {
-                messageBot.reactions.removeAll();
+                messageBot.reactions.removeAll()
+                    .catch(error => {
+                        if (error.message === "Missing Permissions") {
+                            return;
+                        }
+                        logger.error(error.message, 'in server', message.guild.name);
+                    });
             });
         });
 }

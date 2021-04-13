@@ -1,6 +1,5 @@
-const config = require("../../../config.json")
-const {Permissions} = require('../../misc/tools');
 const {MessageEmbed} = require('discord.js');
+const logger = require("log4js").getLogger();
 
 module.exports = {
     name: 'guilds',
@@ -61,7 +60,13 @@ function messageEditor(bot, message, embed, servers) {
             });
 
             collector.on('end', collected => {
-                messageBot.reactions.removeAll();
+                messageBot.reactions.removeAll()
+                    .catch(error => {
+                        if (error.message === "Missing Permissions") {
+                            return;
+                        }
+                        logger.error(error.message, 'in server', message.guild.name);
+                    });
             });
         });
 }

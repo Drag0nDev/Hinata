@@ -56,7 +56,7 @@ async function showAll(bot, message, embed, variation) {
         }
     ).catch(async err => {
         logger.error(err);
-        embed.setColor(bot.embedColors.embeds.error)
+        await embed.setColor(bot.embedColors.embeds.error)
             .setDescription(`Please contact the bot developer to resolve the error that occured!\n` +
                 `error: **${err}**`)
             .setTimestamp();
@@ -98,7 +98,7 @@ async function showAll(bot, message, embed, variation) {
         });
 
         description = `All warnings for server **${server.serverName}**.`;
-        embed.setColor(bot.embedColors.embeds.normal)
+        await embed.setColor(bot.embedColors.embeds.normal)
             .setDescription(description)
             .setTimestamp();
     }
@@ -126,7 +126,7 @@ async function showUser(bot, message, memberId, embed, variation) {
         }
     ).catch(async err => {
         logger.error(err);
-        embed.setColor(bot.embedColors.embeds.error)
+        await embed.setColor(bot.embedColors.embeds.error)
             .setDescription(`Please contact the bot developer to resolve the error that occured!\n` +
                 `error: **${err}**`)
             .setTimestamp();
@@ -156,7 +156,7 @@ async function showUser(bot, message, memberId, embed, variation) {
             }
         });
 
-        embed.addField(
+        await embed.addField(
             `case ${warning.casenr}. ${user.userTag}`,
             `**Reason**: ${warning.reason}\n` +
             `**Moderator**: ${moderator.userTag}`,
@@ -171,7 +171,7 @@ async function showUser(bot, message, memberId, embed, variation) {
     });
 
     description = `All warnings for server **${server.serverName}**.`;
-    embed.setColor(bot.embedColors.embeds.normal)
+    await embed.setColor(bot.embedColors.embeds.normal)
         .setDescription(description)
         .setTimestamp();
 
@@ -217,7 +217,13 @@ function messageEditor(bot, message, embed, warnings, variation, description) {
             });
 
             collector.on('end', collected => {
-                messageBot.reactions.removeAll();
+                messageBot.reactions.removeAll()
+                    .catch(error => {
+                        if (error.message === "Missing Permissions") {
+                            return;
+                        }
+                        logger.error(error.message, 'in server', message.guild.name);
+                    });
             });
         });
 }
