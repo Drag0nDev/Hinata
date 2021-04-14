@@ -1,7 +1,5 @@
 const {MessageEmbed} = require('discord.js');
 const {User, ServerUser} = require('../../misc/dbObjects');
-const config = require("../../../config.json");
-const {Permissions} = require('../../misc/tools');
 
 module.exports = {
     name: 'finduser',
@@ -13,6 +11,7 @@ module.exports = {
     run: async (bot, message, args) => {
         let embed = new MessageEmbed()
         let guild;
+        let serverUser;
 
         if (!args[0]) {
             embed.setColor(bot.embedColors.embeds.error)
@@ -24,14 +23,14 @@ module.exports = {
         embed.setColor(bot.embedColors.embeds.normal)
             .setDescription(`Getting the info of user with id **${args[0]}**`);
 
-        await ServerUser.findAll({
+        serverUser = await ServerUser.findAll({
             where: {
                 userId: args[0]
             }
-        }).then(async servers => {
-            const serverId = servers[0].guildId;
-            guild = await bot.guilds.cache.get(serverId);
         });
+        const serverId = serverUser[0].guildId;
+        guild = await bot.guilds.cache.get(serverId);
+
 
         const userB = await guild.members.fetch({user: args[0], force: true});
 
