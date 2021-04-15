@@ -37,3 +37,8 @@ The bot has the following features:
 <dd>- custom color</dd>
 <dd>- buyable background in the market</dd>
 </dl>
+<br>
+<p style="text-decoration: underline; text-decoration: red;">
+I will not help with self hosting.<br>
+This project is meant to be visible for school purposes and will later be put on private.
+</p>

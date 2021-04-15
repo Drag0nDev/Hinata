@@ -99,7 +99,7 @@ module.exports = {
         });
 
         if (db.category === null) {
-            embed.setDescription(`The category **${item.category}** doesn't existh!`)
+            embed.setDescription(`The category **${item.category}** doesn't exist!`)
                 .setColor(bot.embedColors.embeds.error);
 
             return await message.channel.send(embed);

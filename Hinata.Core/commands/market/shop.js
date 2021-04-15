@@ -17,7 +17,7 @@ module.exports = {
                 name: '',
                 category: '',
             },
-            embed: new MessageEmbed().setTitle('Shop'),
+            embed: new MessageEmbed().setTitle('Shop').setColor(bot.embedColors.embeds.normal),
             nameReg: new RegExp('-n', 'i'),
             catReg: new RegExp('-c', 'i'),
             str: args.join(' '),

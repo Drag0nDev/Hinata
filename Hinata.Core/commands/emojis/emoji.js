@@ -5,8 +5,9 @@ module.exports = {
     name: 'emoji',
     aliases: ['e'],
     category: 'emojis',
-    description: 'Show a bigger version of an emoji.\n' +
-        'Only works with 1 emoji.',
+    description: 'Show a bigger version of a server emoji.\n' +
+        'Only works with 1 emoji.\n' +
+        'Does not work with general emojis',
     usage: '[command | alias] [name/id]',
     cooldown: 10,
     run: async (bot, message, args) => {

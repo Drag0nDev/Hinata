@@ -100,7 +100,7 @@ async function globalLb(bot, message, lb) {
         return message.channel.send(lb.embed);
     }
 
-    lb.embed.setColor(bot.embedColors.embeds.normal)
+    await lb.embed.setColor(bot.embedColors.embeds.normal)
         .setFooter(`Page ${lb.page + 1}/${lb.totalPages}`);
 
     for (let i = 10 * lb.page; (i < 10 + (10 * lb.page)) && i < lb.dbUsers.length; i++) {

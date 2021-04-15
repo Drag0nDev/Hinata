@@ -2,6 +2,7 @@ const {MessageEmbed} = require('discord.js');
 const config = require("../../../config.json");
 const AsciiTable = require('ascii-table');
 const {Minor} = require('../../misc/tools');
+const logger = require("log4js").getLogger();
 
 module.exports = {
     name: 'help',
@@ -201,8 +202,14 @@ function messageEditor(bot, message, embed, categories, commands) {
                     await pageSwitch(message, page, categories, editEmbed, commands);
                 }
 
-                if (Object.keys(editEmbed.fields).length !== 0) {
-                    await messageBot.edit(editEmbed);
+                if (editEmbed.fields.length !== 0) {
+                    await messageBot.edit(editEmbed)
+                        .catch(error => {
+                            if (error.message === "Missing Permissions") {
+                                return;
+                            }
+                            logger.error(error.message, 'in server', message.guild.name);
+                        });
                 }
             });
 

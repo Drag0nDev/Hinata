@@ -156,12 +156,6 @@ async function checkServer(message){
     const member = await message.guild.members.cache.get(message.author.id);
     const server = message.guild;
 
-    await ServerUser.findOrCreate({
-        where: {
-            userId: member.user.id,
-            guildId: member.guild.id
-        }
-    });
     await User.findOrCreate({
         where: {
             userId: member.user.id
@@ -181,6 +175,12 @@ async function checkServer(message){
     await ServerSettings.findOrCreate({
         where: {
             serverId: server.id
+        }
+    });
+    await ServerUser.findOrCreate({
+        where: {
+            userId: member.user.id,
+            guildId: member.guild.id
         }
     });
 }
