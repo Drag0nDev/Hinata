@@ -62,8 +62,9 @@ module.exports = async (bot, message) => {
                 `Command: '${name}'\n` +
                 `Arguments: '${args.join(' ')}'\n` +
                 `User: '${message.author.tag}'\n` +
+                `User ID: '${message.author.id}'` +
                 `Server: '${message.guild.name}'\n` +
-                `Guild ID: '${message.guild.id}'\n` +
+                `Server ID: '${message.guild.id}'\n` +
                 `Channel: '${message.channel.name}'`;
 
             logger.info(logging);
