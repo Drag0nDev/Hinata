@@ -29,7 +29,7 @@ module.exports = {
 
         reaction. author = await message.guild.members.cache.get(message.author.id);
 
-        embed.setImage(getGif())
+        reaction.embed.setImage(getGif())
             .setFooter('Powered by lost hopes and dreams');
 
         if (reaction.members.length === 0) {

@@ -13,6 +13,7 @@
   "dependencies": {
     "@top-gg/sdk": "^3.0.9",
     "ascii-table": "0.0.9",
+    "axios": "^0.21.1",
     "better-sqlite3": "^7.1.2",
     "canvas": "^2.6.1",
     "common-tags": "^1.8.0",
