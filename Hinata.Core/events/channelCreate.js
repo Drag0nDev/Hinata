@@ -23,16 +23,16 @@ module.exports = async (bot, channel) => {
             const permissions = channel.permissionOverwrites.get(keys[i]);
             const allowed = permissions.allow.toArray();
             const denied = permissions.deny.toArray();
-            const role = channel.guild.roles.cache.get(permissions.id);
-            const member = channel.guild.members.cache.get(permissions.id);
             let perms;
 
             switch (permissions.type) {
                 case 'role':
+                    const role = channel.guild.roles.cache.get(permissions.id);
                     perms = getPermissions(allowed, denied);
                     embed.addField(`Role override for ${role.name}`, perms);
                     break;
                 case 'member':
+                    const member = channel.guild.members.cache.get(permissions.id);
                     perms = getPermissions(allowed, denied);
                     embed.addField(`Role override for ${member.user.username}#${member.user.discriminator}`, perms);
                     break;
