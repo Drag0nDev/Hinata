@@ -27,12 +27,12 @@ module.exports = async (bot, channel) => {
 
             switch (permissions.type) {
                 case 'role':
-                    const role = channel.guild.roles.cache.get(permissions.id);
+                    const role = await channel.guild.roles.cache.get(permissions.id);
                     perms = getPermissions(allowed, denied);
                     embed.addField(`Role override for ${role.name}`, perms);
                     break;
                 case 'member':
-                    const member = channel.guild.members.cache.get(permissions.id);
+                    const member = await channel.guild.members.fetch(permissions.id);
                     perms = getPermissions(allowed, denied);
                     embed.addField(`Role override for ${member.user.username}#${member.user.discriminator}`, perms);
                     break;
