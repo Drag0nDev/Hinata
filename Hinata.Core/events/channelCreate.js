@@ -5,7 +5,6 @@ const {Logs} = require('../misc/tools');
 module.exports = async (bot, channel) => {
     try {
         if (!channel.guild.me.hasPermission("MANAGE_WEBHOOKS")) return;
-
         if (channel.type === 'dm') return;
 
         const type = channel.type.charAt(0).toUpperCase() + channel.type.slice(1);
@@ -28,16 +27,16 @@ module.exports = async (bot, channel) => {
             const member = channel.guild.members.cache.get(permissions.id);
             let perms;
 
-            if (!role) {
-                perms = getPermissions(allowed, denied);
-
-                embed.addField(`Role override for ${member.user.username}#${member.user.discriminator}`, perms);
-            } else {
-                perms = getPermissions(allowed, denied);
-
-                embed.addField(`Role override for ${role.name}`, perms);
+            switch (permissions.type) {
+                case 'role':
+                    perms = getPermissions(allowed, denied);
+                    embed.addField(`Role override for ${role.name}`, perms);
+                    break;
+                case 'member':
+                    perms = getPermissions(allowed, denied);
+                    embed.addField(`Role override for ${member.user.username}#${member.user.discriminator}`, perms);
+                    break;
             }
-
         }
 
         await Logs.serverLog(bot, channel.guild, embed);
