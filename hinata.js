@@ -6,7 +6,9 @@ const reactions = require('./Hinata.Core/misc/reactions.json')
 const log4js = require('log4js');
 const topgg = require('@top-gg/sdk');
 
-const bot = new Client();
+const bot = new Client({
+    shards: 1
+});
 bot.commands = new Collection();
 bot.aliases = new Collection();
 bot.embedColors = new Collection();
