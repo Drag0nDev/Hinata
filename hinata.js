@@ -7,7 +7,7 @@ const log4js = require('log4js');
 const topgg = require('@top-gg/sdk');
 
 const bot = new Client({
-    shards: 1
+    shards: "auto"
 });
 bot.commands = new Collection();
 bot.aliases = new Collection();
