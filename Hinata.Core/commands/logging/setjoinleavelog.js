@@ -21,6 +21,12 @@ module.exports = {
             guild: message.guild,
         };
 
+        sjl.db = await ServerSettings.findOne({
+            where: {
+                serverId: sjl.guild.id
+            }
+        });
+
         if (!args[0]) {
             sjl.channel = await sjl.guild.channels.create('join-leave-log', {
                 type: "text",
@@ -73,20 +79,14 @@ module.exports = {
                 })
             }).id;
 
-            sjl.embed.setTitle('Set join/leave log')
+            await sjl.embed.setTitle('Set join/leave log')
                 .setColor(bot.embedColors.embeds.normal)
                 .setDescription(`join/leave log channel set to <#${sjl.channel.id}>`);
         }
 
-        await ServerSettings.findOne({
-            where: {
-                serverId: sjl.guild.id
-            }
-        }).then(async server => {
-            server.joinLeaveLogChannel = sjl.joinLeaveLogChannel;
+        sjl.db.memberLogChannel = sjl.memberLogChannel.id;
 
-            server.save();
-        });
+        sjl.db.save();
 
         await sjl.send(sjl.embed);
     }

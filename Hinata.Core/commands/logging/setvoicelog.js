@@ -21,6 +21,12 @@ module.exports = {
             guild: message.guild,
         };
 
+        svl.db = await ServerSettings.findOne({
+            where: {
+                serverId: svl.guild.id
+            }
+        });
+
         if (!args[0]) {
             svl.channel = await svl.guild.channels.create('voice-log', {
                 type: "text",
@@ -77,15 +83,9 @@ module.exports = {
                 .setDescription(`Voice log channel set to <#${svl.channel.id}>`);
         }
 
-        await ServerSettings.findOne({
-            where: {
-                serverId: svl.guild.id
-            }
-        }).then(async server => {
-            server.voiceLogChannel = svl.voiceLogChannel;
+        svl.db.memberLogChannel = svl.memberLogChannel.id;
 
-            server.save();
-        });
+        svl.db.save();
 
         await svl.send(svl.embed);
     }

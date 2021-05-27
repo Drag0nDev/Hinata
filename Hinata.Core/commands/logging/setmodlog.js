@@ -21,6 +21,12 @@ module.exports = {
             guild: message.guild,
         };
 
+        sml.db = await ServerSettings.findOne({
+            where: {
+                serverId: sml.guild.id
+            }
+        });
+
         if (!args[0]) {
             sml.channel = await sml.guild.channels.create('mod-log', {
                 type: "text",
@@ -77,19 +83,9 @@ module.exports = {
                 .setDescription(`mod log channel set to <#${sml.channel.id}>`);
         }
 
-        try {
-            await ServerSettings.findOne({
-                where: {
-                    serverId: sml.guild.id
-                }
-            }).then(async server => {
-                server.modlogChannel = sml.modlogChannel;
+        sml.db.memberLogChannel = sml.memberLogChannel.id;
 
-                server.save();
-            });
-        } catch (err) {
-            logger.error(err);
-        }
+        sml.db.save();
 
 
         await sml.send(sml.embed);

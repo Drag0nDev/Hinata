@@ -21,6 +21,12 @@ module.exports = {
             guild: message.guild,
         };
 
+        ssl.db = await ServerSettings.findOne({
+            where: {
+                serverId: ssl.guild.id
+            }
+        });
+
         if (!args[0]) {
             ssl.channel = await ssl.guild.channels.create('server-log', {
                 type: "text",
@@ -77,15 +83,9 @@ module.exports = {
                 .setDescription(`Server log channel set to <#${ssl.channel.id}>`);
         }
 
-        await ServerSettings.findOne({
-            where: {
-                serverId: ssl.guild.id
-            }
-        }).then(async server => {
-            server.serverLogChannel = ssl.serverLogChannel;
+        ssl.db.memberLogChannel = ssl.memberLogChannel.id;
 
-            server.save();
-        });
+        ssl.db.save();
 
         await ssl.send(ssl.embed);
     }

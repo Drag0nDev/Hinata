@@ -21,6 +21,12 @@ module.exports = {
             guild: message.guild,
         };
 
+        sml.db = await ServerSettings.findOne({
+            where: {
+                serverId: sml.guild.id
+            }
+        });
+
         if (!args[0]) {
             sml.channel = await sml.guild.channels.create('member-log', {
                 type: "text",
@@ -50,7 +56,7 @@ module.exports = {
                     dynamic: true,
                     size: 4096
                 })
-            }).id;
+            });
         } else {
             if (!sml.chan.test(args[0])) {
                 return sml.embed.setTitle('Set member log')
@@ -71,22 +77,16 @@ module.exports = {
                     dynamic: true,
                     size: 4096
                 })
-            }).id;
+            });
 
             sml.embed.setTitle('Set member log')
                 .setColor(bot.embedColors.embeds.normal)
                 .setDescription(`member log channel set to <#${sml.channel.id}>`);
         }
 
-        await ServerSettings.findOne({
-            where: {
-                serverId: sml.guild.id
-            }
-        }).then(async server => {
-            server.memberLogChannel = sml.memberLogChannel;
+        sml.db.memberLogChannel = sml.memberLogChannel.id;
 
-            server.save();
-        });
+        sml.db.save();
 
         await sml.send(sml.embed);
     }
