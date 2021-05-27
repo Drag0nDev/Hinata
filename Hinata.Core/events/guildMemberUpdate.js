@@ -4,7 +4,7 @@ const {Compare, Logs} = require('../misc/tools');
 
 module.exports = async (bot, oldMember, newMember) => {
     try {
-        if (newMember.guild.me.hasPermission("MANAGE_WEBHOOKS")) return;
+        if (!newMember.guild.me.hasPermission("MANAGE_WEBHOOKS")) return;
         await updateCheck(bot, oldMember, newMember);
     } catch (err) {
         logger.error(err);
