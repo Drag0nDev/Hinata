@@ -7,7 +7,14 @@ const log4js = require('log4js');
 const topgg = require('@top-gg/sdk');
 
 const bot = new Client({
-    shardCount: 1
+    shardCount: 1,
+    ws: {
+        intents: [
+            'GUILDS', "GUILD_BANS", "DIRECT_MESSAGES", "GUILD_MEMBERS",
+            "GUILD_EMOJIS", "GUILD_WEBHOOKS", "GUILD_VOICE_STATES",
+            "GUILD_MESSAGES", "GUILD_MESSAGE_REACTIONS"
+        ],
+    }
 });
 bot.commands = new Collection();
 bot.aliases = new Collection();
