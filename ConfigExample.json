@@ -12,6 +12,9 @@
     "username": "<account username>",
     "password": "<account password>"
   },
+  "topgg": {
+    "token": "<topgg_token",
+  },
   "debug": false,
   "testing": false
 }
