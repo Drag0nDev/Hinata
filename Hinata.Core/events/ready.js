@@ -4,7 +4,7 @@ const {Timers, ServerSettings, Autofeeds} = require('../misc/dbObjects');
 const {Logs, Roles} = require('../misc/tools');
 const reddit = require('../misc/redditAutofeed');
 const autoPoster = require('topgg-autoposter');
-const topgg = require('../../config.json').topgg;
+const config = require('../../config.json');
 
 module.exports = async bot => {
     let embed = new MessageEmbed()
@@ -29,15 +29,17 @@ module.exports = async bot => {
         type: 'PLAYING'
     });
 
-    autofeeds = await Autofeeds.findAll({
-        group: ['subreddit']
-    });
+    if (config.reddit) {
+        autofeeds = await Autofeeds.findAll({
+            group: ['subreddit']
+        });
 
-    autofeeds.forEach(autofeed => {
-        const {subreddit} = autofeed;
-        bot.subreddits.push(subreddit);
-        reddit.run(bot, subreddit);
-    });
+        autofeeds.forEach(autofeed => {
+            const {subreddit} = autofeed;
+            bot.subreddits.push(subreddit);
+            reddit.run(bot, subreddit);
+        });
+    }
 
     await channel.send(embed);
 
@@ -49,7 +51,9 @@ module.exports = async bot => {
     }
 
     //post bot stats to top.gg
-    const ap = new autoPoster(topgg.token, bot);
+    if (config.topgg) {
+        const ap = new autoPoster(topgg.token, bot);
+    }
 };
 
 async function checkMutes(bot) {
