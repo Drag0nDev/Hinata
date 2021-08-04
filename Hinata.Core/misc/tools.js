@@ -588,7 +588,6 @@ const Permissions = {
         roleArray.sort((a, b) => b.position - a.position);
 
         if (roleArray[0].position < role.position) {
-            console.log(roleArray[0].position, role.position)
             return embed.setColor(bot.embedColors.embeds.error)
                 .setDescription('I can\'t assign this role due to role hierarchy!');
         }

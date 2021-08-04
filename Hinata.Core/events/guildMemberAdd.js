@@ -51,7 +51,6 @@ async function sendWelcomeMessage(member) {
         return;
     }
 
-
     let joinMessage = settings.joinMessage;
     let joinChannel = guild.channels.cache.get(settings.joinMessageChannel);
 

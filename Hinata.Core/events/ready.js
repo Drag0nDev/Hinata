@@ -52,7 +52,7 @@ module.exports = async bot => {
 
     //post bot stats to top.gg
     if (config.topgg) {
-        const ap = new autoPoster(topgg.token, bot);
+        const ap = new autoPoster(config.topgg.token, bot);
     }
 };
 

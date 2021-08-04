@@ -93,7 +93,6 @@ async function add(bot, message, args, embed) {
                 .setTimestamp();
         }
     } catch (err) {
-        console.log(err)
         embed.setColor(bot.embedColors.embeds.error)
             .setDescription('Please provide valid arguments')
             .setTimestamp();
