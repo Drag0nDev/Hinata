@@ -27,23 +27,22 @@ module.exports = {
             results: ['heads', 'tails'],
             member: message.guild.members.cache.get(message.author.id),
             amount: args[1],
-            bet: args[0] ? args[0].toLowerCase() : null,
+            bet: args[0] ? args[0].toLowerCase() : "",
             emoji: config.currencyEmoji
         };
 
-        if (cf.bet === 'h')
-            cf.bet = 'heads';
-        else if (cf.bet === 't')
-            cf.bet = 'tails';
+        if (cf.bet === 'h' || cf.bet === 'head') cf.bet = 'heads';
+        else if (cf.bet === 't') cf.bet = 'tails';
+        else if (cf.bet === 'heads' || cf.bet === 'tails') {}
         else {
-            cf.embed.setColor(bot.embedColors.embeds.error)
+            await cf.embed.setColor(bot.embedColors.embeds.error)
                 .setDescription('Please provide the side you want to gamble on!');
             return  cf.send(cf.embed);
         }
 
 
         if (isNaN(parseInt(cf.amount))) {
-            cf.embed.setColor(cf.colors.error)
+            await cf.embed.setColor(cf.colors.error)
                 .setDescription('Please provide a valid gamble amount');
             return cf.send(cf.embed);
         }
@@ -57,7 +56,7 @@ module.exports = {
         });
 
         if (cf.dbUser.balance < cf.amount || cf.amount < 1) {
-            cf.embed.setDescription(`You don't have enough ${cf.emoji} to do this command.\n` +
+            await cf.embed.setDescription(`You don't have enough ${cf.emoji} to do this command.\n` +
                 `Your balance is **${cf.dbUser.balance} ${cf.emoji}**.`)
                 .setColor(cf.colors.error);
             return cf.send(cf.embed);
@@ -68,14 +67,14 @@ module.exports = {
         if (cf.result === cf.bet){
             User.add(cf.dbUser, parseInt(cf.amount));
 
-            cf.embed.setColor(cf.colors.win);
+            await cf.embed.setColor(cf.colors.win);
         } else {
             User.remove(cf.dbUser, parseInt(cf.amount));
 
-            cf.embed.setColor(cf.colors.lose);
+            await cf.embed.setColor(cf.colors.lose);
         }
 
-        cf.embed.setDescription('Result')
+        await cf.embed.setDescription('Result')
             .addField('Bet', `${cf.amount} ${cf.emoji}`, true)
             .addField('Side', cf.result, true)
             .addField('New total', `${cf.dbUser.balance} ${cf.emoji}`, true);
