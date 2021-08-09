@@ -4,6 +4,7 @@ const version = require('../../../package.json').version;
 const pm = require('pretty-ms');
 const logger = require("log4js").getLogger();
 const {Dates} = require("../../misc/tools");
+const {User} = require('../../misc/dbObjects');
 
 module.exports = {
     name: 'stats',
@@ -31,8 +32,11 @@ module.exports = {
                 avatar: bot.user.avatarURL({
                     size: 4096,
                     dynamic: true
-                })
+                }),
+
             },
+            userCount: await User.count(),
+            serverCount: bot.guilds.cache.size,
             dev: {
                 dev: await bot.users.cache.get(config.owner)
             },
@@ -70,6 +74,12 @@ module.exports = {
                 name: 'Uptime',
                 value: stat.bot.uptime,
                 inline: true
+            },
+            {
+                name: 'Other',
+                value: `**User count**: ${stat.userCount}\n` +
+                    `**Server count**: ${stat.serverCount}`,
+                inline: true
             }
         );
 
@@ -83,7 +93,7 @@ module.exports = {
                     `• [**My invite link** - It's always fun with me in the server!](${link.toString()})`
             });
 
-            stat.embed.setAuthor(stat.botName, stat.avatar)
+            stat.embed.setAuthor(stat.bot.botName, stat.bot.avatar)
                 .setColor(bot.embedColors.embeds.normal)
                 .setThumbnail(stat.bot.avatar)
                 .setFooter(`© 2020-${stat.date.getFullYear()} Copyright: ${stat.dev.dev.username}#${stat.dev.dev.discriminator}\nVersion: ${version}`)
