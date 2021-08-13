@@ -25,7 +25,7 @@ module.exports = {
         }
 
         if (rm.regs.choice.test(args[0])){
-            rm.embed.setColor(bot.embedColors.embeds.error)
+            await rm.embed.setColor(bot.embedColors.embeds.error)
                 .setDescription('Please provide a valid argument!')
                 .setTimestamp();
 
@@ -44,12 +44,12 @@ module.exports = {
             } else if (parseInt(rm.regs.memberChoice.exec(args)[0])) {
                 await removeOne(bot, message, rm.member, rm.regs.memberChoice.exec(args[0])[0], rm.embed);
             } else {
-                rm.embed.setColor(bot.embedColors.embeds.error)
+                await rm.embed.setColor(bot.embedColors.embeds.error)
                     .setDescription('Please provide a valid argument!')
                     .setTimestamp();
             }
         } else {
-            rm.embed.setColor(bot.embedColors.embeds.error)
+            await rm.embed.setColor(bot.embedColors.embeds.error)
                 .setDescription('Please provide a valid argument!')
                 .setTimestamp();
         }
@@ -76,7 +76,7 @@ async function removeAll(bot, message, embed) {
             .setTimestamp();
     });
 
-    embed.setColor(bot.embedColors.embeds.normal)
+    await embed.setColor(bot.embedColors.embeds.normal)
         .setDescription(`All warnings for server **${message.guild.name}** successfully removed!`)
         .setTimestamp();
 }

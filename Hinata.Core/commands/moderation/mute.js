@@ -16,7 +16,7 @@ module.exports = {
                 await message.channel.send(msg);
             },
             embed: new MessageEmbed().setTitle('Mute'),
-            checkTemp: new RegExp('^[0-9]*[smhd]'),
+            checkTemp: new RegExp('^[0-9]+[smhd]'),
             reason: 'No reason provided',
             guild: message.guild,
         };

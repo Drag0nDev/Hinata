@@ -15,7 +15,7 @@ module.exports = {
             send: async (msg) => {
                 await message.channel.send(msg);
             },
-            checkTemp: new RegExp('^[0-9]*[smhd]'),
+            checkTemp: new RegExp('^[0-9]+[smhd]'),
             reason: 'No reason provided',
             embed: new MessageEmbed().setTimestamp().setColor(bot.embedColors.moderations.ban),
         }

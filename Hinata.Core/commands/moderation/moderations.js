@@ -37,7 +37,7 @@ module.exports = {
             }
         ).catch(async err => {
             logger.error(err);
-            moderations.embed.setColor(bot.embedColors.embeds.error)
+            await moderations.embed.setColor(bot.embedColors.embeds.error)
                 .setDescription(`Please contact the bot developer to resolve the error that occured!\n` +
                     `error: **${err}**`)
                 .setTimestamp();

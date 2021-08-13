@@ -21,7 +21,7 @@ module.exports = {
         }
 
         if (!args[0]){
-            ar.embed.setColor(bot.embedColors.embeds.error)
+            await ar.embed.setColor(bot.embedColors.embeds.error)
                 .setDescription('No arguments given')
                 .setTimestamp();
 
@@ -29,7 +29,7 @@ module.exports = {
         }
 
         if (!ar.reg.case.exec(args[0])){
-            ar.embed.setColor(bot.embedColors.embeds.error)
+            await ar.embed.setColor(bot.embedColors.embeds.error)
                 .setDescription('Please give a valid case number')
                 .setTimestamp();
 
@@ -40,7 +40,7 @@ module.exports = {
         await args.shift();
 
         if (!args[0]){
-            ar.embed.setColor(bot.embedColors.embeds.error)
+            await ar.embed.setColor(bot.embedColors.embeds.error)
                 .setDescription('Please give a reason')
                 .setTimestamp();
 
