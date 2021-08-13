@@ -39,22 +39,24 @@ module.exports = {
                 .setDescription(`You can't mute **${$mute.member.user.tag}** due to role hierarchy!`));
         }
 
-        $mute.muteRoleId = await ServerSettings.findOne({
+        $mute.settings = await ServerSettings.findOne({
             where: {
                 serverId: message.guild.id
             }
-        }).muteRoleId;
+        });
 
-        if (!$mute.muteRoleId) {
-            $mute.embed.setDescription('Please provide a valid muterole for this command to work')
+        console.log($mute.settings)
+
+        if (!$mute.settings.muteRoleId) {
+            await $mute.embed.setDescription('Please provide a valid muterole for this command to work')
                 .setColor(bot.embedColors.embeds.error);
             return message.channel.send($mute.embed);
         }
 
-        $mute.muteRole = $mute.guild.roles.cache.get($mute.muteRoleId);
+        $mute.muteRole = $mute.guild.roles.cache.get($mute.settings.muteRoleId);
 
         if(!$mute.muteRole) {
-            $mute.embed.setDescription('Please provide a valid muterole for this command to work')
+            await $mute.embed.setDescription('Please provide a valid muterole for this command to work')
                 .setColor(bot.embedColors.embeds.error);
             return message.channel.send($mute.embed);
         }
