@@ -45,8 +45,6 @@ module.exports = {
             }
         });
 
-        console.log($mute.settings)
-
         if (!$mute.settings.muteRoleId) {
             await $mute.embed.setDescription('Please provide a valid muterole for this command to work')
                 .setColor(bot.embedColors.embeds.error);
