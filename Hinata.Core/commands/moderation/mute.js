@@ -93,7 +93,7 @@ async function tempmute(bot, message, member, embed, muteRole, time, reason) {
 
     await Roles.giveRole(member, muteRole);
 
-    embed.setDescription(`**${member.user.tag}** is muted for **${$time} ${timeVal}** for reason: **${reason}**.`)
+    await embed.setDescription(`**${member.user.tag}** is muted for **${$time} ${timeVal}** for reason: **${reason}**.`)
         .setColor(bot.embedColors.embeds.normal);
 
     await member.createDM()
@@ -134,7 +134,7 @@ async function mute(bot, message, member, embed, muteRole, reason) {
 
     await Roles.giveRole(member, muteRole);
 
-    embed.setTitle('Mute')
+    await embed.setTitle('Mute')
         .setDescription(`**${member.user.tag}** is muted for reason: **${reason}**.`)
         .setColor(bot.embedColors.embeds.normal);
 
