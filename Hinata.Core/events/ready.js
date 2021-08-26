@@ -24,10 +24,10 @@ module.exports = async bot => {
 
     logger.info(`Logged in as ${bot.user.tag}!`);
 
-    /*await bot.user.setPresence({
+    await bot.user.setActivity({
         name: 'on a mission with Naruto-kun',
         type: 'PLAYING'
-    });*/
+    });
 
     if (config.reddit) {
         autofeeds = await Autofeeds.findAll({

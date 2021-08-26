@@ -14,8 +14,23 @@ const bot = new Client({
             "GUILD_EMOJIS", "GUILD_WEBHOOKS", "GUILD_VOICE_STATES",
             "GUILD_MESSAGES", "GUILD_MESSAGE_REACTIONS"
         ],
-    }
+    },
+    autoReconnect: true,
+    retryLimit: 10,
+    disableEveryone: true,
+    disabledEvents: [
+        'CHANNEL_PINS_UPDATE'
+    ],
+    fetchAllMembers: true,
+    presence: {
+        activity: {
+            name: '...Powering up',
+            type: 0
+        }
+    },
+    restTimeOffset: 0
 });
+
 bot.commands = new Collection();
 bot.aliases = new Collection();
 bot.embedColors = new Collection();
