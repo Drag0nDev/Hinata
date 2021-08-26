@@ -29,7 +29,7 @@ module.exports = async bot => {
         type: 'PLAYING'
     });
 
-    if (config.reddit) {
+    /*if (config.reddit) {
         autofeeds = await Autofeeds.findAll({
             group: ['subreddit']
         });
@@ -39,7 +39,7 @@ module.exports = async bot => {
             bot.subreddits.push(subreddit);
             reddit.run(bot, subreddit);
         });
-    }
+    }*/
 
     await channel.send(embed);
 
