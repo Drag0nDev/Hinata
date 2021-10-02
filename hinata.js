@@ -21,7 +21,7 @@ const bot = new Client({
     disabledEvents: [
         'CHANNEL_PINS_UPDATE'
     ],
-    fetchAllMembers: true,
+    fetchAllMembers: false,
     presence: {
         activity: {
             name: '...Powering up',

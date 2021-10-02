@@ -19,79 +19,81 @@ const snooper = new Snooper({
 module.exports = {
     run: async function (bot, subreddit) {
         snooper.watcher.getPostWatcher(subreddit)
-            .on('post', post => {
+            .on('post', async post => {
+                const {
+                    data
+                } = post;
+
                 const embed = new MessageEmbed()
-                    .setAuthor(`Author: u/${post.data.author}`)
+                    .setAuthor(`Author: u/${data.author}`)
                     .setTitle(`Post link`)
-                    .setURL(`https://www.reddit.com${post.data.permalink}`)
+                    .setURL(`https://www.reddit.com${data.permalink}`)
                     .setColor(bot.embedColors.embeds.normal)
-                    .setDescription(post.data.title)
-                    .setFooter(post.data.subreddit)
+                    .setDescription(data.title)
+                    .setFooter(data.subreddit)
                     .setTimestamp();
 
-                Autofeeds.findAll({
+                let autofeeds = await Autofeeds.findAll({
                     where: {
-                        subreddit: post.data.subreddit
+                        subreddit: data.subreddit
                     }
-                }).then(autofeeeds => {
-                    autofeeeds.forEach(async autofeed => {
-                            let server;
-                            let channel;
-                        
-                            server = await bot.guilds.cache.get(autofeed.serverId);
+                })
 
-                            if (!server) return;
+                for (let autofeed in autofeeds) {
+                    let server;
+                    let channel;
 
-                            channel = await server.channels.cache.get(autofeed.channel);
+                    server = await bot.guilds.cache.get(autofeed.serverId);
 
-                            if (channel) {
-                                if (post.data.subreddit === autofeed.subreddit) {
-                                    if (link.test(post.data.url)) {
-                                        if (post.data.over_18) {
-                                            if (channel.nsfw) {
-                                                embed.setImage(post.data.url);
-                                            }
-                                        } else {
-                                            embed.setImage(post.data.url);
-                                        }
+                    if (!server) return;
 
-                                        embed.setColor(bot.embedColors.logs.logChange);
-                                    } else if (post.data.url) {
-                                        embed.addField('​', post.data.url)
-                                            .setColor(bot.embedColors.logs.logChange);
-                                    } else if (post.data.selftext !== '') {
-                                        let content
-                                        if (post.data.selftext.length > 1018) {
-                                            content = `${post.data.selftext.substring(0, 1018)} \`...\``;
-                                        } else {
-                                            content = post.data.selftext;
-                                        }
+                    channel = await server.channels.cache.get(autofeed.channel);
 
-                                        embed.addField('​', content)
-                                            .setColor(bot.embedColors.logs.logAdd);
+                    if (channel) {
+                        if (post.data.subreddit === autofeed.subreddit) {
+                            if (link.test(post.data.url)) {
+                                if (data.over_18) {
+                                    if (channel.nsfw) {
+                                        embed.setImage(data.url);
                                     }
-
-                                    server.fetchWebhooks()
-                                        .then(async webhooks => {
-                                            const webhook = webhooks.get(autofeed.webhookId);
-
-                                            if (webhook) {
-                                                await webhook.send(embed);
-                                            } else {
-                                                await Autofeeds.destroy({
-                                                    where: {
-                                                        id: autofeed.id
-                                                    }
-                                                });
-                                            }
-                                        }).catch(err => {});
+                                } else {
+                                    embed.setImage(data.url);
                                 }
+
+                                embed.setColor(bot.embedColors.logs.logChange);
+                            } else if (post.data.url) {
+                                embed.addField('​', data.url)
+                                    .setColor(bot.embedColors.logs.logChange);
+                            } else if (data.selftext !== '') {
+                                let content
+                                if (data.selftext.length > 1018) {
+                                    content = `${data.selftext.substring(0, 1018)} \`...\``;
+                                } else {
+                                    content = data.selftext;
+                                }
+
+                                embed.addField('​', content)
+                                    .setColor(bot.embedColors.logs.logAdd);
                             }
+
+                            server.fetchWebhooks()
+                                .then(async webhooks => {
+                                    const webhook = webhooks.get(autofeed.webhookId);
+
+                                    if (webhook) {
+                                        await webhook.send(embed);
+                                    } else {
+                                        await Autofeeds.destroy({
+                                            where: {
+                                                id: autofeed.id
+                                            }
+                                        });
+                                    }
+                                }).catch(err => {});
                         }
-                    );
-                });
-            })
-            .on('error', error => {
+                    }
+                }
+            }).on('error', error => {
                 if (error === 'Requested too many items (reddit does not keep this large of a listing)')
                     return;
 
