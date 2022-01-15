@@ -29,7 +29,7 @@
     "pretty-ms": "^7.0.1",
     "reddit-snooper": "^1.0.1",
     "sequelize": "^6.3.5",
-    "shelljs": "^0.8.4",
+    "shelljs": "^0.8.5",
     "sqlite3": "^5.0.0",
     "topgg-autoposter": "^1.1.10"
   },
